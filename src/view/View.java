@@ -4,6 +4,7 @@ import java.awt.Robot;
 import java.util.ArrayList;
 import java.util.Hashtable;
 
+import dao.FloorMatrix;
 import dao.MobsDAO;
 import javafx.animation.Animation;
 import javafx.animation.Interpolator;
@@ -86,6 +87,7 @@ public class View extends Application{
 		Line ligneY = new Line(100, 0, -100, 0);
 		ligneY.setFill(Color.RED);
 		View.this.currentRoot.getChildren().addAll(ligneX, ligneY);
+		FloorMatrix.getInstance();
 		MobsDAO.getInstance(10);
 		currentScene.setOnMouseClicked(new EventHandler<MouseEvent>() {
 
@@ -100,18 +102,10 @@ public class View extends Application{
 
 			@Override
 			public void handle(KeyEvent arg0) {
-				double norme = 1;
-				
-				KeyCode code = arg0.getCode();
-				if(code.equals(KeyCode.W)) {
-					System.out.println(code);
-					MobsDAO.getInstance().setVectDeplacementJoueur(new Point3D(0, 0, norme));
-				}else if (code.equals(KeyCode.S)) {
-					MobsDAO.getInstance().setVectDeplacementJoueur(new Point3D(0, 0, -norme));
-				}else if (code.equals(KeyCode.A)) {
-					MobsDAO.getInstance().setVectDeplacementJoueur(new Point3D(-norme, 0, 0));
-				}else if (code.equals(KeyCode.D)) {
-					MobsDAO.getInstance().setVectDeplacementJoueur(new Point3D(norme, 0, 0));
+				if(arg0.getCode().equals(KeyCode.SPACE)) {
+					System.out.println("saute mob0");
+					MobsDAO.getInstance().getMobs().get(0).sauter();
+					indexBoiteDebug++;
 				}
 			}
 		});
@@ -120,12 +114,12 @@ public class View extends Application{
 				setCycleDuration(Duration.millis(500));
 			}
 			protected void interpolate(double frac) {
-				double isometricValue = -500;
+				double isometricValue = -800;
 				Camera currentCamera = View.this.currentCamera;
 				
 				//currentCamera.setTranslateX(isometricValue*frac);
 				currentCamera.setTranslateY(isometricValue*frac);
-				//currentCamera.setTranslateZ(isometricValue*frac);
+				currentCamera.setTranslateZ(isometricValue*frac);
 				
 				//currentCamera.setRotationAxis(Rotate.Y_AXIS);
 				//currentCamera.setRotate(80*frac);

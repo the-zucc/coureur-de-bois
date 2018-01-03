@@ -20,13 +20,13 @@ public class MobsDAO {
 	private MobsDAO(){
 		vectDeplacementJoueur = new Point3D(0,0,0);
 		mobs = new ArrayList<Mob>();
-		currentPlayer = new Player(1, "Laurier", new Point3D(0,0,0));
+		//currentPlayer = new Player(1, "Laurier", new Point3D(0,0,0));
 	}
 	private MobsDAO(int nombreMobsTest) {
 		vectDeplacementJoueur = new Point3D(0,0,0);
 		mobs = new ArrayList<Mob>();
-		currentPlayer = new Player(1, "Laurier", new Point3D(0,0,0));
-		View.getInstance().getCurrentRoot().getChildren().add(currentPlayer.getPlayerNode());
+		//currentPlayer = new Player(1, "Laurier", new Point3D(0,0,0));
+		//View.getInstance().getCurrentRoot().getChildren().add(currentPlayer.getPlayerNode());
 		for(int i = 0; i < nombreMobsTest; i++) {
 			int min = -500;
 			int max = 500;
@@ -53,8 +53,8 @@ public class MobsDAO {
 		}
 		return instance;
 	}
-	public void setVectDeplacementJoueur(Point3D vect) {
-		vectDeplacementJoueur = vect;
+	public void setDirectionJoueur(Direction dir) {
+		currentPlayer.setDirection(dir);
 	}
 	
 	
@@ -66,8 +66,7 @@ public class MobsDAO {
 			m.refresh();
 		}
 		//should refresh the player here
-		System.out.println(vectDeplacementJoueur.getX());
-		currentPlayer.refresh(vectDeplacementJoueur);
+		//currentPlayer.refresh();
 	}
 	/**
 	 * cette fonction retourne un {@link ArrayList} contenant tous les mobs du jeu

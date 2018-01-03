@@ -2,22 +2,29 @@ package entity;
 
 import java.util.concurrent.ThreadLocalRandom;
 
+import dao.FloorMatrix;
 import javafx.geometry.Point2D;
 import javafx.geometry.Point3D;
 import javafx.scene.Group;
 import javafx.scene.shape.Box;
 import javafx.scene.shape.TriangleMesh;
 
-public abstract class Mob {
+public abstract class Mob extends GameElement{
 	private Group mobNode;
 	private TriangleMesh mesh;
 	private Point3D position;
 	private Point3D cible;
 	private Point3D normeDeplacement;
+	private Point3D normeSaut;
+	private Point3D gravite;
+	private boolean saute;
 	private double degresAngleDirection;
 	
 	
+	
 	public Mob(Point3D position, double degresAngleDirection){
+		gravite = new Point3D(0,4,0);
+		normeSaut = new Point3D(0,0,0);
 		this.position = position;
 		this.normeDeplacement = new Point3D(0,0,0);
 		this.degresAngleDirection = degresAngleDirection;
@@ -25,10 +32,12 @@ public abstract class Mob {
 		this.mobNode.getChildren().addAll(new Box(100, 100, 100));
 	}
 	public Mob(Point3D position, Point3D cible){
+		gravite = new Point3D(0,4,0);
+		normeSaut = new Point3D(0,0,0);
 		this.position = position;
 		ciblerDestination(cible);
 		this.mobNode = new Group();
-		Box boite1 = new Box(5, 5, 5);
+		Box boite1 = new Box(25,25,25);
 		this.mobNode.getChildren().addAll(boite1);
 		boite1.setTranslateY(-boite1.getHeight()/2);
 	}
@@ -85,10 +94,26 @@ public abstract class Mob {
 		deplacer();
 		deplacerObjet3D();
 	}
+	public void sauter(){
+		saute = true;
+		normeSaut = new Point3D(0,-50,0);
+	}
 	/**
 	 * cette fonction déplace le mob
 	 */
 	private void deplacer(){
+		if(saute) {
+			position = position.add(normeSaut);
+			double floorHeight = FloorMatrix.getInstance().getHeighAt(position.getX(), position.getZ());
+			if(-(position.getY()-floorHeight) <= -(gravite.getY()+1) && -(normeSaut.getY()) <= 0) {
+				position = new Point3D(position.getX(), 0, position.getZ());
+				normeSaut = new Point3D(0,0,0);
+				saute = false;
+			}
+			else {
+				normeSaut = normeSaut.add(gravite);
+			}
+		}
 		if(position.distance(cible) < normeDeplacement.distance(Point3D.ZERO)){
 			position = cible;
 			normeDeplacement = Point3D.ZERO;
