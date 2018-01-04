@@ -9,9 +9,11 @@ public class Model implements Refreshable{
 	private static Model instance;
 	private ArrayList<Refreshable> gameElements;
 	private Player currentPlayer;
+	private FloorMatrix floorMatrix;
 	private Model() {
 		gameElements = new ArrayList<Refreshable>();
 		currentPlayer = new Player();
+		floorMatrix = new FloorMatrix(1000, 1000);
 	}
 	public static Model getInstance() {
 		if(instance == null)
@@ -23,6 +25,8 @@ public class Model implements Refreshable{
 		for(Refreshable r:gameElements) {
 			r.refresh();
 		}
-		
+	}
+	public FloorMatrix getFloorMatrix(){
+		return floorMatrix;
 	}
 }

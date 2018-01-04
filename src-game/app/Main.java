@@ -12,6 +12,8 @@ import javafx.stage.Stage;
 
 public class Main extends Application {
 	private Hashtable<String, Scene> scenes;
+	private String currentMode;
+	private Stage stage;
 	
 	public static void main(String[] args) {
 		launch(args);
@@ -21,7 +23,7 @@ public class Main extends Application {
 	public void start(Stage arg0) throws Exception {
 		Scene defaultGameScene = initializeGameScene(1280,720);
 		scenes.put("principal", defaultGameScene);
-		
+		stage = arg0;
 		arg0.setScene(defaultGameScene);
 		arg0.show();
 	}
@@ -36,5 +38,16 @@ public class Main extends Application {
 		returnVal.setCamera(camera);
 		return returnVal;
 	}
-
+	/**
+	 * sets the current window's "mode" to the specified mode
+	 * @param mode the title of the mode into which to switch the window.
+	 * @throws NonExistentScreenModeException if the mode is non existent.
+	 */
+	public void setScreenMode(String mode) throws NonExistentScreenModeException{
+		currentMode = mode;
+		if(scenes.containsKey(mode))
+			stage.setScene(scenes.get(mode));
+		else
+			throw new NonExistentScreenModeException();
+	}
 }
