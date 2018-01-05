@@ -57,7 +57,7 @@ public class Main extends Application {
 				setCycleDuration(Duration.millis(500));
 			}
 			protected void interpolate(double frac) {
-				double isometricValueZ = -400;
+				double isometricValueZ = -800;
 				double isometricValueY = -800;
 				Camera currentCamera = Main.this.scenes.get("principal").getCamera();
 				
@@ -68,7 +68,7 @@ public class Main extends Application {
 				//currentCamera.setRotationAxis(Rotate.Y_AXIS);
 				//currentCamera.setRotate(80*frac);
 				currentCamera.setRotationAxis(Rotate.X_AXIS);
-				currentCamera.setRotate(-60*frac);
+				currentCamera.setRotate(-45*frac);
 				//currentCamera.setRotationAxis(Rotate.Z_AXIS);
 				//currentCamera.setRotate(0*frac);
 			}
@@ -141,14 +141,18 @@ public class Main extends Application {
 					player.setRight(false);
 				else if(code.equals(KeyCode.SHIFT))
 					player.setIsRunning(false);
+//				else if(code.equals(KeyCode.DOWN)) {
+//					PerspectiveCamera camera = (PerspectiveCamera)scenes.get("principal").getCamera();
+//					camera.setRotationAxis(Rotate.X_AXIS);
+//					camera.setRotate(camera.getRotate()-5);
+//				}
 			}
-			
 		});
 		scene.setOnMouseMoved(new EventHandler<MouseEvent>() {
 
 			@Override
 			public void handle(MouseEvent arg0) {
-				System.out.println(arg0.getSceneX()+" "+arg0.getSceneY());
+				//System.out.println(arg0.getSceneX()+" "+arg0.getSceneY());
 			}
 			
 		});

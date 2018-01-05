@@ -49,12 +49,12 @@ public class Player implements Refreshable {
 	
 	public static Group buildElement3D() {
 		Group returnVal = new Group();
-		Box box1 = new Box(20,40,20);
-		Box box2 = new Box(30,2.5,30);
-		Box box3 = new Box(15, 15, 15);
-		box1.setTranslateY(-20);
-		box2.setTranslateY(-40);
-		box3.setTranslateY(-40);
+		Box box1 = new Box(20,20,20);
+		Box box2 = new Box(30,30,30);
+		Box box3 = new Box(30, 10, 10);
+		box1.setTranslateY(-12.5);
+		box2.setTranslateY(-35);
+		box3.setTranslateY(-10.75);
 		returnVal.getChildren().addAll(box1, box2, box3);
 		return returnVal;
 	}
@@ -73,15 +73,17 @@ public class Player implements Refreshable {
 			vectMovement = vectMovement.add(new Point3D(2,0,0));
 		if(isRunning)
 			vectMovement = vectMovement.add(vectMovement);
-		if(isJumping) {
-			Point3D resultPos = position.add(vectJumpAndGrav);
-			if(resultPos.getY() < 0 && resultPos.getY() > -Engine.getGlobalGravityVector().getY())
-				position = new Point3D(position.getX(), Model.getInstance().getFloorMatrix().getHeightAt(position), position.getZ());
-			else
+		if(isJumping)
+			if(-(position.getY()-0) <= -(Engine.getGlobalGravityVector().getY()+1) && -(vectJumpAndGrav.getY()) <= 0) {
+				position = new Point3D(position.getX(), 0, position.getZ());
+				vectJumpAndGrav = new Point3D(0,0,0);
+				isJumping = false;
+			}else {
 				vectJumpAndGrav = vectJumpAndGrav.add(Engine.getGlobalGravityVector());
-		}
-		position = position.add(vectMovement);
+			}
 		position = position.add(vectJumpAndGrav);
+		position = position.add(vectMovement);
+		
 		
 		element3D.setTranslateX(position.getX());
 		element3D.setTranslateY(position.getY());
