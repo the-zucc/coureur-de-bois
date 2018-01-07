@@ -1,30 +1,36 @@
 package entity;
 
+import java.util.concurrent.ThreadLocalRandom;
+
 import app.Main;
+import javafx.geometry.Bounds;
 import javafx.geometry.Point3D;
 import javafx.scene.Group;
+import javafx.scene.paint.Color;
+import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.Box;
+import javafx.scene.transform.Rotate;
 import model.Engine;
 import model.Model;
 import util.IdMaker;
 
-public class DefaultMob implements Refreshable{
+public class DefaultMob extends GameElement implements Refreshable{
 	private String id;
+	
 	//3D element
-	private Group element3D;
 	private Group parent;
 	
 	//positions and vectors
-	private Point3D position;
 	private Point3D target;
 	private Point3D vectMovement;
 	private Point3D vectGravityAndJump;
 	
 	//variables
 	private boolean isJumping;
+	private double orientation;
 	
 	public DefaultMob(Point3D position){
-		this.position = new Point3D(position.getX(), Model.getInstance().getFloorMatrix().getHeightAt(position), position.getZ());
+		super(new Point3D(position.getX(), Model.getInstance().getFloorMatrix().getHeightAt(position), position.getZ()));
 		vectMovement = new Point3D(0,0,0);
 		vectGravityAndJump = new Point3D(0,0,0);
 		element3D = buildElement3D();
@@ -36,6 +42,7 @@ public class DefaultMob implements Refreshable{
 		this.target = target;
 		Point3D vect = target.subtract(position).normalize();
 		vectMovement = vect;
+		updateOrientation();
 	}
 	
 	public void jump(){
@@ -60,7 +67,14 @@ public class DefaultMob implements Refreshable{
 		element3D.setTranslateZ(position.getZ());
 		if(position.distance(target) < vectMovement.distance(Point3D.ZERO)) {
 			position = target;
-			vectMovement = new Point3D(0,0,0);
+			//vectMovement = new Point3D(0,0,0);
+			
+			int min = Model.minCoordDebug;
+			int max = Model.maxCoordDebug;
+			double x = (double)ThreadLocalRandom.current().nextInt(min, max + 1);
+			double z = (double)ThreadLocalRandom.current().nextInt(min, max + 1);
+			Point3D pos = new Point3D(x, 0, z);
+			targetPoint(pos);
 		}
 	}
 	
@@ -85,14 +99,39 @@ public class DefaultMob implements Refreshable{
 			vectGravityAndJump.add(Engine.getGlobalGravityVector());
 		}
 	}
+	/**
+	 * this function sets the angle of rotation of the element3D object to the specified angle
+	 * @param degrees the desired angle of rotation 
+	 */
+	public void updateOrientation(double degrees) {
+		element3D.getTransforms().add(new Rotate(degrees, Rotate.Y_AXIS));
+	}
+	/**
+	 * this function sets the angle of rotation of the element3D object so that it faces the mob's target walking position
+	 */
+	public void updateOrientation() {
+		double angle = Math.toDegrees(Math.atan2(vectMovement.getX(), vectMovement.getZ()));
+		element3D.setRotationAxis(Rotate.Y_AXIS);
+		element3D.setRotate(angle);
+	}
+	public boolean isTouchingAMob() {
+		Bounds boundsInScene = element3D.localToScene(element3D.getBoundsInLocal());
+		for(Refreshable r:Model.getInstance().getRefreshables()){
+			if(r != this)
+				if(boundsInScene.intersects(((DefaultMob)r).getBounds()))
+					return true;
+		}
+		return false;
+	}
+	
+	public Bounds getBounds() {
+		return element3D.localToScene(element3D.getBoundsInLocal());
+	}
+	
 	public void updateJumpVect(){
 		if(isJumping){
 			//etc
 		}
-	}
-	
-	private void updateElementRootCoordinates(){
-		
 	}
 	
 //	public static Group buildElement3D(){
@@ -108,10 +147,17 @@ public class DefaultMob implements Refreshable{
 		Box box1 = new Box(20,20,20);
 		Box box2 = new Box(30,30,30);
 		Box box3 = new Box(30, 10, 10);
+		Box boxNose = new Box(5,7,5);
+		PhongMaterial materialHead = new PhongMaterial();
+		materialHead.setDiffuseColor(Color.PINK);
+		box2.setMaterial(materialHead);
+		boxNose.setMaterial(materialHead);
 		box1.setTranslateY(-12.5);
 		box2.setTranslateY(-35);
 		box3.setTranslateY(-10.75);
-		returnVal.getChildren().addAll(box1, box2, box3);
+		boxNose.setTranslateY(-35);
+		boxNose.setTranslateZ(17.5);
+		returnVal.getChildren().addAll(box1, box2, box3, boxNose);
 		return returnVal;
 	}
 }
