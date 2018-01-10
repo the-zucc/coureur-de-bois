@@ -69,10 +69,21 @@ public class DefaultMob extends GameElement implements Refreshable{
 	
 	@Override
 	public void update() {
-		position = position.add(vectMovement).add(vectGravityAndJump);
+		Point3D newPosition = position.add(vectMovement).add(vectGravityAndJump);
+		while(newPosition.getX() > Model.maxCoordDebug || newPosition.getX() < Model.minCoordDebug || newPosition.getZ() > Model.maxCoordDebug || newPosition.getZ() < Model.minCoordDebug) {
+			int min = Model.minCoordDebug;
+			int max = Model.maxCoordDebug;
+			double x = (double)ThreadLocalRandom.current().nextInt(min, max + 1);
+			double z = (double)ThreadLocalRandom.current().nextInt(min, max + 1);
+			Point3D pos = new Point3D(x, 0, z);
+			targetPoint(pos);
+			newPosition = position.add(vectMovement);
+		}
+		position = newPosition;
 		
 		//update the position of the collision box
 		collisionBox.setPosition(position);
+		correctCollisions();
 		element3D.setTranslateX(position.getX());
 		element3D.setTranslateY(position.getY());
 		element3D.setTranslateZ(position.getZ());

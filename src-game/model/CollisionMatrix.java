@@ -9,7 +9,7 @@ import javafx.geometry.Point3D;
 import javafx.scene.Node;
 import javafx.scene.shape.Box;
 
-public class FloorMatrix {
+public class CollisionMatrix {
 	
 	private static int mapDivisionWidth=100;
 	private static int mapDivisionHeight=100;
@@ -18,7 +18,7 @@ public class FloorMatrix {
 	
 	//for optimizing the collision detection system
 	private Vector<Vector<ArrayList<CollisionBox>>> mapDivisions;
-	private ArrayList<CollisionBox> universalCollisionVector;
+	private ArrayList<CollisionBox> universalCollisionList;
 	
 	public static int getMapDivisionWidth() {
 		return mapDivisionWidth;
@@ -33,12 +33,13 @@ public class FloorMatrix {
 		return mapDivisions.get(0).size();
 	}
 	
-	public FloorMatrix(int length, int height){
+	public CollisionMatrix(int length, int height){
 		//heightMatrix = new Vector<Vector<Double>>();
 		floor = new Box(length, 1, height);
 		int numberOfColumns = length / mapDivisionWidth;
 		System.out.println(numberOfColumns);
 		int numberOfRows = height / mapDivisionHeight;
+		universalCollisionList = new ArrayList<CollisionBox>();
 		mapDivisions = new Vector<Vector<ArrayList<CollisionBox>>>();
 		for(int i = 0; i < numberOfRows; i++) {
 			mapDivisions.add(new Vector<ArrayList<CollisionBox>>());
@@ -85,5 +86,8 @@ public class FloorMatrix {
 	}
 	public Vector<ArrayList<CollisionBox>> getRow(int row){
 		return mapDivisions.get(row);
+	}
+	public ArrayList<CollisionBox> getUniversalCollisionList(){
+		return universalCollisionList;
 	}
 }

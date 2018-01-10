@@ -64,39 +64,6 @@ public class Player extends GameElement implements Refreshable {
 		return boundsInScene.intersects(Model.getInstance().getFloor().getBoundsInLocal());
 	}
 	//debug
-	public boolean correctCollisions() {
-		Bounds boundsInScene = playerNode.localToScene(playerNode.getBoundsInLocal());
-		
-		int row = collisionBox.getMapDivisionRow();
-		int column = collisionBox.getMapDivisionColumn();
-		for(int i = row-1; i <= row+1; i++) {
-			if(i < Model.getInstance().getFloorMatrix().getNumberOfMapDivisionRows()-1 && i >= 0) {
-				Vector<ArrayList<CollisionBox>> divisionRow = Model.getInstance().getFloorMatrix().getRow(i);
-				for(int j = column-1; j <= column-1; j++) {
-					if(j < Model.getInstance().getFloorMatrix().getNumberOfMapDivisionColumns()-1 && j >= 0) {
-						ArrayList<CollisionBox> boxesFromDivision = divisionRow.get(j);
-						for(CollisionBox cb:boxesFromDivision) {
-							if(collisionBox.collides(cb)) {
-								position = position.add(cb.getCorrection(collisionBox));
-								collisionBox.setPosition(position);
-								return true;
-							}
-						}
-					}
-				}
-			}
-		}
-		
-//		for(GameElement ge:Model.getInstance().getGameElements()){
-//			if(ge != this)
-//				if(collisionBox.collides(ge.getCollisionBox())) {
-//					position = position.add(collisionBox.getCorrection(ge.getCollisionBox()));
-//					System.out.println(collisionBox.getCorrection(ge.getCollisionBox()));
-//					return true;
-//				}
-//		}
-		return false;
-	}
 	
 	public Group getElement3D() {
 		return element3D;
@@ -173,13 +140,11 @@ public class Player extends GameElement implements Refreshable {
 		}catch(NullPointerException npe) {
 			
 		}
-		
+		correctCollisions();
 		element3D.setTranslateX(position.getX());
 		element3D.setTranslateY(position.getY());
 		element3D.setTranslateZ(position.getZ());
-		if(correctCollisions()) {
-			System.out.println("collision");
-		}
+		
 		//dwAsdsdSystem.out.println(position.getX()+" "+position.getY()+" "+position.getZ());
 	}
 	

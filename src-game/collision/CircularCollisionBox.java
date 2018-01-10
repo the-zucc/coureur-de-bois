@@ -1,7 +1,7 @@
 package collision;
 
 import javafx.geometry.Point3D;
-import model.FloorMatrix;
+import model.CollisionMatrix;
 import model.Model;
 
 public class CircularCollisionBox extends CollisionBox {
@@ -11,7 +11,7 @@ public class CircularCollisionBox extends CollisionBox {
 	public CircularCollisionBox(Point3D position, double radius) {
 		super(position);
 		this.radius=radius;
-		if(radius > FloorMatrix.getMapDivisionHeight()/2 || radius > FloorMatrix.getMapDivisionWidth()/2) {
+		if(radius > CollisionMatrix.getMapDivisionHeight()/2 || radius > CollisionMatrix.getMapDivisionWidth()/2) {
 			tooBigForCollisionDetectionSystem = true;
 		}
 		else

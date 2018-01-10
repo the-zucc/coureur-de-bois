@@ -18,7 +18,7 @@ public class Model implements Refreshable{
 	private ArrayList<Refreshable> refreshables;
 	private ArrayList<GameElement> gameElements;
 	private Player currentPlayer;
-	private FloorMatrix floorMatrix;
+	private CollisionMatrix collisionMatrix;
 	
 	//all nodes of the scene. to get their positions and such.
 	private ArrayList<Node> gameElementNodes;
@@ -29,7 +29,7 @@ public class Model implements Refreshable{
 	private Model() {
 		refreshables = new ArrayList<Refreshable>();
 		//currentPlayer = new Player(Point3D.ZERO);
-		floorMatrix = new FloorMatrix(maxCoordDebug-minCoordDebug, maxCoordDebug-minCoordDebug);
+		collisionMatrix = new CollisionMatrix(maxCoordDebug-minCoordDebug, maxCoordDebug-minCoordDebug);
 	}
 	private Model(int nombreMobsDebug) {
 		
@@ -58,7 +58,7 @@ public class Model implements Refreshable{
 		Point3D pos = new Point3D(x, 0, z);
 		currentPlayer = new Player(pos);
 		gameElements.add(currentPlayer);
-		floorMatrix = new FloorMatrix(maxCoordDebug-minCoordDebug,maxCoordDebug-minCoordDebug);
+		collisionMatrix = new CollisionMatrix(maxCoordDebug-minCoordDebug,maxCoordDebug-minCoordDebug);
 	}
 	public static Model getInstance() {
 		if(instance == null)
@@ -70,10 +70,10 @@ public class Model implements Refreshable{
 		return instance;
 	}
 	public Box getFloor() {
-		return floorMatrix.getFloor();
+		return collisionMatrix.getFloor();
 	}
 	public Bounds getFloorBounds() {
-		return floorMatrix.getFloorBounds();
+		return collisionMatrix.getFloorBounds();
 	}
 	
 	/**
@@ -90,8 +90,8 @@ public class Model implements Refreshable{
 		return currentPlayer;
 	}
 	
-	public FloorMatrix getFloorMatrix(){
-		return floorMatrix;
+	public CollisionMatrix getFloorMatrix(){
+		return collisionMatrix;
 	}
 	public ArrayList<Refreshable> getRefreshables(){
 		return refreshables;

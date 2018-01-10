@@ -1,7 +1,7 @@
 package collision;
 
 import javafx.geometry.Point3D;
-import model.FloorMatrix;
+import model.CollisionMatrix;
 import model.Model;
 
 public abstract class CollisionBox {
@@ -26,8 +26,8 @@ public abstract class CollisionBox {
 	public void setPosition(Point3D position) {
 		this.position = position;
 		if(!tooBigForCollisionDetectionSystem) {
-			int newMapDivisionRow = ((int)(position.getZ()-Model.minCoordDebug))/FloorMatrix.getMapDivisionHeight();
-			int newMapDivisionColumn = ((int)(position.getX()-Model.minCoordDebug))/FloorMatrix.getMapDivisionWidth();
+			int newMapDivisionRow = ((int)(position.getZ()-Model.minCoordDebug))/CollisionMatrix.getMapDivisionHeight();
+			int newMapDivisionColumn = ((int)(position.getX()-Model.minCoordDebug))/CollisionMatrix.getMapDivisionWidth();
 			//if the collision box is in a different map division
 			if(newMapDivisionRow != mapDivisionRow || newMapDivisionColumn != mapDivisionColumn) {
 				//remove from the old division
@@ -39,7 +39,6 @@ public abstract class CollisionBox {
 				//System.out.println(mapDivisionRow+" "+mapDivisionColumn);
 			}
 		}
-		
 	}
 	
 	public Point3D getPosition() {

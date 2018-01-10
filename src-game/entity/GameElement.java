@@ -1,11 +1,15 @@
 package entity;
 
+import java.util.ArrayList;
+import java.util.ConcurrentModificationException;
+import java.util.Vector;
+
 import collision.CollisionBox;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point3D;
 import javafx.scene.Group;
 import javafx.scene.shape.Box;
-import model.FloorMatrix;
+import model.CollisionMatrix;
 import model.Model;
 
 public abstract class GameElement {
@@ -15,6 +19,7 @@ public abstract class GameElement {
 	private Group parent;
 	
 	protected Point3D position;
+	
 	protected CollisionBox collisionBox;
 	
 	public GameElement(Point3D position) {
@@ -28,15 +33,6 @@ public abstract class GameElement {
 		Group returnVal = new Group();
 		returnVal.getChildren().add(new Box(100,100,100));
 		return returnVal;
-	}
-	public boolean isTouchingAGameElement() {
-		Bounds boundsInScene = element3D.localToScene(element3D.getBoundsInLocal());
-		for(Refreshable r:Model.getInstance().getRefreshables()){
-			if(r != this)
-				if(boundsInScene.intersects(((DefaultMob)r).getBounds()))
-					return true;
-		}
-		return false;
 	}
 	/**
 	 * here is the method that is executed every time the model refreshes. it is common to all GameElement subclasses.
@@ -70,5 +66,32 @@ public abstract class GameElement {
 	}
 	public CollisionBox getCollisionBox() {
 		return collisionBox;
+	}
+	public void correctCollisions() {
+		int row = collisionBox.getMapDivisionRow();
+		int column = collisionBox.getMapDivisionColumn();
+		for(int i = row-1; i <= row+1; i++) {
+			if(i < Model.getInstance().getFloorMatrix().getNumberOfMapDivisionRows()-1 && i >= 0) {
+				Vector<ArrayList<CollisionBox>> divisionRow = Model.getInstance().getFloorMatrix().getRow(i);
+				for(int j = column-1; j <= column+1; j++)
+					if(j < Model.getInstance().getFloorMatrix().getNumberOfMapDivisionColumns()-1 && j >= 0) {
+						ArrayList<CollisionBox> boxesFromDivision = divisionRow.get(j);
+						while(true)
+							try {
+								for(CollisionBox cb:boxesFromDivision)
+									if(cb != collisionBox) {
+										if(collisionBox.collides(cb)) {
+											position = position.add(collisionBox.getCorrection(cb));
+											collisionBox.setPosition(position);
+										}
+									}
+								break;
+							}catch(ConcurrentModificationException cme) {
+								
+							}
+						
+					}
+			}
+		}
 	}
 }
