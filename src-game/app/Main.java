@@ -54,7 +54,7 @@ public class Main extends Application {
 		scenes.put("principal", defaultGameScene);
 		
 		//create a debug Model instance with a number of mobs
-		Model.newDebugInstance(2000);
+		Model.newDebugInstance(1000);
 		
 		stage = arg0;//so that the window is accessible at all times
 		

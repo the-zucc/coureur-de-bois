@@ -17,6 +17,6 @@ public class Engine {
 	 * this function should be called 60 times per second. It is responsible for updating the game objects and for drawing them on screen
 	 */
 	public static void MainLoop() {
-		Model.getInstance().refresh();
+		Model.getInstance().update();
 	}
 }

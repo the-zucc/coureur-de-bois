@@ -3,18 +3,21 @@ package entity;
 import java.util.concurrent.ThreadLocalRandom;
 
 import app.Main;
+import collision.CircularCollisionBox;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point3D;
 import javafx.scene.Group;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.Box;
+import javafx.scene.shape.Cylinder;
 import javafx.scene.transform.Rotate;
 import model.Engine;
 import model.Model;
 import util.IdMaker;
 
 public class DefaultMob extends GameElement implements Refreshable{
+	
 	private String id;
 	
 	//3D element
@@ -31,9 +34,14 @@ public class DefaultMob extends GameElement implements Refreshable{
 	
 	public DefaultMob(Point3D position){
 		super(new Point3D(position.getX(), Model.getInstance().getFloorMatrix().getHeightAt(position), position.getZ()));
+		
 		vectMovement = new Point3D(0,0,0);
 		vectGravityAndJump = new Point3D(0,0,0);
+		
 		element3D = buildElement3D();
+		//defining the collision box
+		collisionBox = new CircularCollisionBox(position, 15);
+		
 		parent = (Group)Main.getInstance().getScene("principal").getRoot();
 		parent.getChildren().addAll(element3D);
 	}
@@ -60,22 +68,26 @@ public class DefaultMob extends GameElement implements Refreshable{
 	}
 	
 	@Override
-	public void refresh() {
+	public void update() {
 		position = position.add(vectMovement).add(vectGravityAndJump);
+		
+		//update the position of the collision box
+		collisionBox.setPosition(position);
 		element3D.setTranslateX(position.getX());
 		element3D.setTranslateY(position.getY());
 		element3D.setTranslateZ(position.getZ());
-		if(position.distance(target) < vectMovement.distance(Point3D.ZERO)) {
-			position = target;
-			//vectMovement = new Point3D(0,0,0);
-			
-			int min = Model.minCoordDebug;
-			int max = Model.maxCoordDebug;
-			double x = (double)ThreadLocalRandom.current().nextInt(min, max + 1);
-			double z = (double)ThreadLocalRandom.current().nextInt(min, max + 1);
-			Point3D pos = new Point3D(x, 0, z);
-			targetPoint(pos);
-		}
+		if(target != null)
+			if(position.distance(target) < vectMovement.distance(Point3D.ZERO)) {
+				position = target;
+				//vectMovement = new Point3D(0,0,0);
+				
+				int min = Model.minCoordDebug;
+				int max = Model.maxCoordDebug;
+				double x = (double)ThreadLocalRandom.current().nextInt(min, max + 1);
+				double z = (double)ThreadLocalRandom.current().nextInt(min, max + 1);
+				Point3D pos = new Point3D(x, 0, z);
+				targetPoint(pos);
+			}
 	}
 	
 	/**

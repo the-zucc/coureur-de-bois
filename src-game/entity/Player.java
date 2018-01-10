@@ -1,6 +1,11 @@
 package entity;
 
+import java.util.ArrayList;
+import java.util.Vector;
+
 import app.Main;
+import collision.CircularCollisionBox;
+import collision.CollisionBox;
 import javafx.animation.Transition;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point3D;
@@ -27,6 +32,7 @@ public class Player extends GameElement implements Refreshable {
 		playerNode = buildPlayerNode();
 		element3D = new Group();
 		element3D.getChildren().add(playerNode);
+		collisionBox = new CircularCollisionBox(position, 15);
 		oldVectMovement = null;
 		vectJumpAndGrav = new Point3D(0,0,0);
 		((Group)Main.getInstance().getScene("principal").getRoot()).getChildren().add(element3D);
@@ -53,19 +59,42 @@ public class Player extends GameElement implements Refreshable {
 		}
 	}
 	public boolean isTouchingTheFloor() {
-		//[minX:-20.0, minY:-62.5, minZ:-20.0, width:40.0, height:65.0, depth:40.0, maxX:20.0, maxY:2.5, maxZ:20.0]
-		
 		Bounds boundsInScene = playerNode.localToScene(playerNode.getBoundsInLocal());
 		
 		return boundsInScene.intersects(Model.getInstance().getFloor().getBoundsInLocal());
 	}
 	//debug
-	public boolean isTouchingAMob() {
+	public boolean correctCollisions() {
 		Bounds boundsInScene = playerNode.localToScene(playerNode.getBoundsInLocal());
-		for(Refreshable r:Model.getInstance().getRefreshables()){
-			if(boundsInScene.intersects(((DefaultMob)r).getBounds()))
-				return true;
+		
+		int row = collisionBox.getMapDivisionRow();
+		int column = collisionBox.getMapDivisionColumn();
+		for(int i = row-1; i <= row+1; i++) {
+			if(i < Model.getInstance().getFloorMatrix().getNumberOfMapDivisionRows()-1 && i >= 0) {
+				Vector<ArrayList<CollisionBox>> divisionRow = Model.getInstance().getFloorMatrix().getRow(i);
+				for(int j = column-1; j <= column-1; j++) {
+					if(j < Model.getInstance().getFloorMatrix().getNumberOfMapDivisionColumns()-1 && j >= 0) {
+						ArrayList<CollisionBox> boxesFromDivision = divisionRow.get(j);
+						for(CollisionBox cb:boxesFromDivision) {
+							if(collisionBox.collides(cb)) {
+								position = position.add(cb.getCorrection(collisionBox));
+								collisionBox.setPosition(position);
+								return true;
+							}
+						}
+					}
+				}
+			}
 		}
+		
+//		for(GameElement ge:Model.getInstance().getGameElements()){
+//			if(ge != this)
+//				if(collisionBox.collides(ge.getCollisionBox())) {
+//					position = position.add(collisionBox.getCorrection(ge.getCollisionBox()));
+//					System.out.println(collisionBox.getCorrection(ge.getCollisionBox()));
+//					return true;
+//				}
+//		}
 		return false;
 	}
 	
@@ -74,25 +103,45 @@ public class Player extends GameElement implements Refreshable {
 	}
 	
 	public void updateOrientation() {
-		double angle = Math.toDegrees(Math.atan2(vectMovement.getX(), vectMovement.getZ()));
-		Transition animation = new Transition() {
-			{
-				setCycleDuration(Duration.millis(100));
-			}
+		double startAngle = playerNode.getRotate();
+		double finalAngle = Math.toDegrees(Math.atan2(vectMovement.getX(), vectMovement.getZ()));
+		final double deltaAngle = finalAngle-startAngle;
+		if(deltaAngle > 180) {
+			final double finalDeltaAngle = -(360-deltaAngle);
+			Transition animation = new Transition() {
+				{
+					setCycleDuration(Duration.millis(200));
+				}
 
-			@Override
-			protected void interpolate(double frac) {
-				playerNode.setRotationAxis(Rotate.Y_AXIS);
-				playerNode.setRotate(angle*frac);
-			}
-		};
-		animation.play();
+				@Override
+				protected void interpolate(double frac) {
+					playerNode.setRotationAxis(Rotate.Y_AXIS);
+					playerNode.setRotate(startAngle+finalDeltaAngle*frac);
+				}
+			};
+			animation.play();
+		}
+		else {
+			Transition animation = new Transition() {
+				{
+					setCycleDuration(Duration.millis(200));
+				}
+
+				@Override
+				protected void interpolate(double frac) {
+					playerNode.setRotationAxis(Rotate.Y_AXIS);
+					playerNode.setRotate(startAngle+deltaAngle*frac);
+				}
+			};
+			animation.play();
+		}
+		
 		
 	}
 	
 	
 	@Override
-	public void refresh() {
+	public void update() {
 		//debug
 		oldVectMovement = vectMovement;
 		vectMovement = new Point3D(0,0,0);
@@ -108,7 +157,6 @@ public class Player extends GameElement implements Refreshable {
 		if(isRunning)
 			vectMovement = vectMovement.add(vectMovement);
 		if(isJumping)
-			
 			if(position.getY() > 0) {
 				position = new Point3D(position.getX(), 0, position.getZ());
 				vectJumpAndGrav = new Point3D(0,0,0);
@@ -117,18 +165,21 @@ public class Player extends GameElement implements Refreshable {
 				vectJumpAndGrav = vectJumpAndGrav.add(Engine.getGlobalGravityVector());
 			}
 		position = position.add(vectMovement);
+		//update the position of the collision box
+		collisionBox.setPosition(position);
 		try {
-			if(!vectMovement.normalize().equals(oldVectMovement.normalize()))
+			if(!(!up && !down && !left && !right) && !vectMovement.normalize().equals(oldVectMovement.normalize()))
 				updateOrientation();
 		}catch(NullPointerException npe) {
 			
 		}
 		
-		
 		element3D.setTranslateX(position.getX());
 		element3D.setTranslateY(position.getY());
 		element3D.setTranslateZ(position.getZ());
-		System.out.println(isTouchingAMob());
+		if(correctCollisions()) {
+			System.out.println("collision");
+		}
 		//dwAsdsdSystem.out.println(position.getX()+" "+position.getY()+" "+position.getZ());
 	}
 	
@@ -140,9 +191,6 @@ public class Player extends GameElement implements Refreshable {
 		Box box3 = new Box(30, 10, 10);
 		
 		Box boxNose = new Box(5,5,5);
-		
-		
-		
 		
 		PhongMaterial materialHead = new PhongMaterial();
 		materialHead.setDiffuseColor(Color.PINK);
