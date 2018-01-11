@@ -35,7 +35,7 @@ public class Player extends GameElement implements Refreshable {
 		collisionBox = new CircularCollisionBox(position, 15);
 		oldVectMovement = null;
 		vectJumpAndGrav = new Point3D(0,0,0);
-		((Group)Main.getInstance().getScene("principal").getRoot()).getChildren().add(element3D);
+		((Group)Main.getInstance().getSubScene("principal").getRoot()).getChildren().add(element3D);
 	}
 	public void setUp(boolean value) {
 		up = value;

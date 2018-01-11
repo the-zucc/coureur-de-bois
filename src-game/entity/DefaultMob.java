@@ -42,7 +42,7 @@ public class DefaultMob extends GameElement implements Refreshable{
 		//defining the collision box
 		collisionBox = new CircularCollisionBox(position, 15);
 		
-		parent = (Group)Main.getInstance().getScene("principal").getRoot();
+		parent = (Group)Main.getInstance().getSubScene("principal").getRoot();
 		parent.getChildren().addAll(element3D);
 	}
 	

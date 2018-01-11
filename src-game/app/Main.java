@@ -12,12 +12,14 @@ import javafx.scene.Group;
 import javafx.scene.PerspectiveCamera;
 import javafx.scene.Scene;
 import javafx.scene.SceneAntialiasing;
+import javafx.scene.SubScene;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.Box;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.transform.Rotate;
 import javafx.stage.Stage;
 import javafx.util.Duration;
@@ -27,6 +29,7 @@ import model.Model;
 public class Main extends Application {
 
 	private static Main instance;
+	private Hashtable<String, SubScene> subScenes;
 	private Hashtable<String, Scene> scenes;
 	private String currentMode;
 	private Stage stage;
@@ -42,21 +45,30 @@ public class Main extends Application {
 	public Scene getScene(String mode) {
 		return scenes.get(mode);
 	}
+	public SubScene getSubScene(String mode) {
+		return subScenes.get(mode);
+	}
 
 	@Override
 	public void start(Stage arg0) throws Exception {
-		// this is here so that the window instance can be accessible at all times;
 		instance = this;
-		
+		stage = arg0;//so that the window is accessible at all times
 		//initializing the scene
-		Scene defaultGameScene = initializeGameScene(1280, 720);
+		int width = 1280;
+		int height = 720;
 		scenes = new Hashtable<String, Scene>();
+		subScenes = new Hashtable<String, SubScene>();
+		SubScene gameSubScene = initializeGameSubScene(width, height);
+		Scene defaultGameScene = initializeGameScene(width, height, gameSubScene);
+		subScenes.put("principal", gameSubScene);
 		scenes.put("principal", defaultGameScene);
 		
 		//create a debug Model instance with a number of mobs
 		Model.newDebugInstance(500);
 		
-		stage = arg0;//so that the window is accessible at all times
+		//for debug and testing purposes
+		((Group)scenes.get("principal").getRoot()).getChildren().add(new Rectangle(100, 100, 100, 100));
+		
 		
 		//floor, debug only
 		//create the floor box
@@ -67,15 +79,13 @@ public class Main extends Application {
 		floor.setMaterial(floorMaterial);
 		
 		//adding it to the scene
-		((Group) defaultGameScene.getRoot()).getChildren().add(floor);
+		((Group)subScenes.get("principal").getRoot()).getChildren().add(floor);
 		
 		//starting the controler loop
 		ControlerLoop loop = new ControlerLoop();
 		loop.start();
-		//setting the Id of the camera
-		defaultGameScene.getCamera().setId("camera");
 		
-		Model.getInstance().getCurrentPlayer().getElement3D().getChildren().add(defaultGameScene.getCamera());
+		Model.getInstance().getCurrentPlayer().getElement3D().getChildren().add(subScenes.get("principal").getCamera());
 		Animation animation = new Transition() {
 			{
 				setCycleDuration(Duration.millis(500));
@@ -83,7 +93,7 @@ public class Main extends Application {
 			protected void interpolate(double frac) {
 				double isometricValueZ = -400;
 				double isometricValueY = -400;
-				Camera currentCamera = Main.this.scenes.get("principal").getCamera();
+				Camera currentCamera = Main.this.subScenes.get("principal").getCamera();
 
 				// currentCamera.setTranslateX(isometricValue*frac);
 				currentCamera.setTranslateY(isometricValueY * frac);
@@ -99,13 +109,13 @@ public class Main extends Application {
 		};
 		animation.play();
 		//binds the game controls so that the player can move, jump, etc
-		bindGameControls(scenes.get("principal"));
+		bindGameControls(subScenes.get("principal").getScene());
 		
 		//set the scene to the game scene
 		arg0.setScene(defaultGameScene);
 		
 		//set fullscreen
-		arg0.setFullScreen(true);
+		//arg0.setFullScreen(true);
 		
 		//show the screen
 		arg0.show();
@@ -117,17 +127,23 @@ public class Main extends Application {
 	 * @param height the height of the scene
 	 * @return a game scene of size width by height
 	 */
-	public Scene initializeGameScene(double width, double height) {
+	public Scene initializeGameScene(double width, double height, SubScene subScene) {
 		Group root = new Group();
+		root.getChildren().add(subScene);
+		Scene returnVal = new Scene(root, width, height);
+		return returnVal;
+	}
+	public SubScene initializeGameSubScene(int width, int height) {
+		Group root3D = new Group();
+		SubScene screenScene = new SubScene(root3D, width, height, true, SceneAntialiasing.BALANCED);
 		PerspectiveCamera camera = new PerspectiveCamera(true);
-		Scene returnVal = new Scene(root, width, height, true, SceneAntialiasing.BALANCED);
 		camera.setNearClip(0.1);
 		camera.setFarClip(30000);
 		camera.setRotationAxis(Rotate.X_AXIS);
 		camera.setRotate(-45);
 		camera.setFieldOfView(74);
-		returnVal.setCamera(camera);
-		return returnVal;
+		screenScene.setCamera(camera);
+		return screenScene;
 	}
 	
 	/**
@@ -140,7 +156,7 @@ public class Main extends Application {
 	 */
 	public void setScreenMode(String mode) throws NonExistentScreenModeException {
 		currentMode = mode;
-		if (scenes.containsKey(mode))
+		if (subScenes.containsKey(mode))
 			stage.setScene(scenes.get(mode));
 		else
 			throw new NonExistentScreenModeException();
@@ -188,11 +204,16 @@ public class Main extends Application {
 					player.setRight(false);
 				else if(code.equals(KeyCode.SHIFT))
 					player.setIsRunning(false);
-				else if(code.equals(KeyCode.F11))
+				else if(code.equals(KeyCode.F11)) {
 					if(!stage.isFullScreen())
 						stage.setFullScreen(true);
 					else
 						stage.setFullScreen(false);
+					updateScreenResolution();
+				}
+				else if(code.equals(KeyCode.ESCAPE)) {
+					updateScreenResolution();
+				}
 //				else if(code.equals(KeyCode.DOWN)) {
 //					PerspectiveCamera camera = (PerspectiveCamera)scenes.get("principal").getCamera();
 //					camera.setRotationAxis(Rotate.X_AXIS);
@@ -208,6 +229,10 @@ public class Main extends Application {
 			}
 			
 		});
+	}
+	public void updateScreenResolution() {
+		subScenes.get("principal").setWidth(stage.getWidth());
+		subScenes.get("principal").setHeight(stage.getHeight());
 	}
 	
 }
