@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.concurrent.ThreadLocalRandom;
 
 import app.Main;
+import collision.CollisionMatrix;
 import entity.DefaultMob;
 import entity.GameElement;
 import entity.Player;
@@ -24,8 +25,8 @@ public class Model implements Refreshable{
 	private ArrayList<Node> gameElementNodes;
 	
 	//debug, remove this asap
-	public static int minCoordDebug = -500;
-	public static int maxCoordDebug = 500;
+	public static int minCoordDebug = -2000;
+	public static int maxCoordDebug = 2000;
 	private Model() {
 		refreshables = new ArrayList<Refreshable>();
 		//currentPlayer = new Player(Point3D.ZERO);

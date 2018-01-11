@@ -1,9 +1,8 @@
-package model;
+package collision;
 
 import java.util.ArrayList;
 import java.util.Vector;
 
-import collision.CollisionBox;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point3D;
 import javafx.scene.Node;
@@ -72,7 +71,12 @@ public class CollisionMatrix {
 	 * @param ge the element to remove
 	 */
 	public void removeFromDivision(int row, int column, CollisionBox cb) {
-		mapDivisions.get(row).get(column).remove(cb);
+		try{
+			mapDivisions.get(row).get(column).remove(cb);
+		}catch(ArrayIndexOutOfBoundsException aioobe){
+			System.out.println("could not find division to remove");
+		}
+		
 	}
 	
 	/**
@@ -82,7 +86,11 @@ public class CollisionMatrix {
 	 * @param ge the element to add
 	 */
 	public void addToDivision(int row, int column, CollisionBox cb) {
-		mapDivisions.get(row).get(column).add(cb);
+		try{
+			mapDivisions.get(row).get(column).add(cb);
+		}catch(ArrayIndexOutOfBoundsException aioobe){
+			System.out.println("could not find division to add");
+		}
 	}
 	public Vector<ArrayList<CollisionBox>> getRow(int row){
 		return mapDivisions.get(row);

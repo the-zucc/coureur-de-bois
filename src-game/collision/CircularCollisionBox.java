@@ -1,7 +1,6 @@
 package collision;
 
 import javafx.geometry.Point3D;
-import model.CollisionMatrix;
 import model.Model;
 
 public class CircularCollisionBox extends CollisionBox {

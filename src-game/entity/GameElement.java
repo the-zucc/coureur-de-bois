@@ -5,11 +5,11 @@ import java.util.ConcurrentModificationException;
 import java.util.Vector;
 
 import collision.CollisionBox;
+import collision.CollisionMatrix;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point3D;
 import javafx.scene.Group;
 import javafx.scene.shape.Box;
-import model.CollisionMatrix;
 import model.Model;
 
 public abstract class GameElement {
