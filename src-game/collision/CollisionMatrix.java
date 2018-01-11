@@ -5,14 +5,16 @@ import java.util.Vector;
 
 import javafx.geometry.Bounds;
 import javafx.geometry.Point3D;
+import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.shape.Box;
+import model.Model;
 
 public class CollisionMatrix {
 	
 	private static int mapDivisionWidth=100;
 	private static int mapDivisionHeight=100;
-	private Box floor;
+	private Group floor;
 	private Vector<Vector<Double>> heightMatrix;
 	
 	//for optimizing the collision detection system
@@ -34,18 +36,23 @@ public class CollisionMatrix {
 	
 	public CollisionMatrix(int length, int height){
 		//heightMatrix = new Vector<Vector<Double>>();
-		floor = new Box(length, 1, height);
+		floor = new Group();
+		floor.getChildren().addAll(new Box(length, 1, height));
 		int numberOfColumns = length / mapDivisionWidth;
 		System.out.println(numberOfColumns);
 		int numberOfRows = height / mapDivisionHeight;
 		universalCollisionList = new ArrayList<CollisionBox>();
 		mapDivisions = new Vector<Vector<ArrayList<CollisionBox>>>();
+		heightMatrix = new Vector<Vector<Double>>(); 
 		for(int i = 0; i < numberOfRows; i++) {
+			heightMatrix.add(new Vector<Double>());
 			mapDivisions.add(new Vector<ArrayList<CollisionBox>>());
 			for(int j = 0; j < numberOfColumns; j++) {
+				heightMatrix.get(i).add(100.0);
 				mapDivisions.get(i).add(new ArrayList<CollisionBox>());
 			}
 		}
+		
 //		for(int i = 0; i < height; i++){
 //			heightMatrix.add(new Vector<Double>());
 //			for(int j = 0; j < length; j++){
@@ -53,11 +60,10 @@ public class CollisionMatrix {
 //			}
 //		}
 	}
-	public double getHeightAt(Point3D position){
-		return 0;
-		//return heightMatrix.get((int)position.getZ()).get((int)position.getX());
+	public double getHeightAt(int row, int column){
+		return heightMatrix.get(row).get(column);
 	}
-	public Box getFloor() {
+	public Group getFloor() {
 		return floor;
 	}
 	public Bounds getFloorBounds() {

@@ -33,7 +33,7 @@ public class DefaultMob extends GameElement implements Refreshable{
 	private double orientation;
 	
 	public DefaultMob(Point3D position){
-		super(new Point3D(position.getX(), Model.getInstance().getFloorMatrix().getHeightAt(position), position.getZ()));
+		super(new Point3D(position.getX(), 0, position.getZ()));
 		
 		vectMovement = new Point3D(0,0,0);
 		vectGravityAndJump = new Point3D(0,0,0);
@@ -41,6 +41,11 @@ public class DefaultMob extends GameElement implements Refreshable{
 		element3D = buildElement3D();
 		//defining the collision box
 		collisionBox = new CircularCollisionBox(position, 15);
+		//refreshes the row and column division of the box.
+		collisionBox.setPosition(position);
+		
+		position = new Point3D(position.getX(), Model.getInstance().getFloorMatrix().getHeightAt(collisionBox.getMapDivisionRow(), collisionBox.getMapDivisionColumn()), position.getZ());
+		collisionBox.setPosition(position);
 		
 		parent = (Group)Main.getInstance().getSubScene("principal").getRoot();
 		parent.getChildren().addAll(element3D);
@@ -105,7 +110,7 @@ public class DefaultMob extends GameElement implements Refreshable{
 	 * this function refreshes the gravity vector, and fixes the height of the mob to the floor height if necessary.
 	 */
 	public void applyGravityIfPossible(){
-		double mapHeight = Model.getInstance().getFloorMatrix().getHeightAt(position);
+		double mapHeight = Model.getInstance().getFloorMatrix().getHeightAt(collisionBox.getMapDivisionRow(), collisionBox.getMapDivisionColumn());
 		if(vectGravityAndJump.getY() > 0){
 			//if map height at position is smaller than object height and if (height + gravity) < 0
 			if(Math.abs(position.getY()-mapHeight) > Math.abs(vectGravityAndJump.getY())){
@@ -113,7 +118,7 @@ public class DefaultMob extends GameElement implements Refreshable{
 				vectGravityAndJump = vectGravityAndJump.add(Engine.getGlobalGravityVector());
 			}
 			else if(Math.abs(position.getY()-mapHeight) < Math.abs(vectGravityAndJump.getY())){
-				position = new Point3D(position.getX(), Model.getInstance().getFloorMatrix().getHeightAt(position), position.getZ());
+				position = new Point3D(position.getX(), Model.getInstance().getFloorMatrix().getHeightAt(collisionBox.getMapDivisionRow(), collisionBox.getMapDivisionColumn()), position.getZ());
 				vectGravityAndJump = new Point3D(0,0,0);
 			}
 		}

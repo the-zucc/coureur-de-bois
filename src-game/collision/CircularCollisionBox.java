@@ -25,7 +25,7 @@ public class CircularCollisionBox extends CollisionBox {
 	@Override
 	protected boolean collidesCircularBox(CircularCollisionBox box) {
 		//inline function to get the most performance out of it
-		return Math.hypot(box.getPosition().getX()-position.getX(), box.getPosition().getZ()-position.getZ()) < (box.getRadius()+radius);
+		return Math.hypot(Math.hypot(box.getPosition().getX()-position.getX(), box.getPosition().getZ()-position.getZ()),box.getPosition().getY()-position.getY()) < (box.getRadius()+radius);
 	}
 	@Override
 	protected boolean collidesRectangularBox(RectangularCollisionBox box) {
@@ -45,7 +45,7 @@ public class CircularCollisionBox extends CollisionBox {
 		double distance = Math.hypot(box.getPosition().getX()-position.getX(), box.getPosition().getZ()-position.getZ());
 		double magnitude = distance - (box.getRadius()+radius);
 		double frac = magnitude/distance;
-		return new Point3D(frac*(box.getPosition().getX()-position.getX()), 0, frac*(box.getPosition().getZ()-position.getZ()));
+		return new Point3D(frac*(box.getPosition().getX()-position.getX()), frac*(box.getPosition().getY()-position.getY()), frac*(box.getPosition().getZ()-position.getZ()));
 	}
 
 	@Override

@@ -10,6 +10,7 @@ import javafx.animation.Transition;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point3D;
 import javafx.scene.Group;
+import javafx.scene.control.Label;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.Box;
@@ -145,7 +146,7 @@ public class Player extends GameElement implements Refreshable {
 		element3D.setTranslateY(position.getY());
 		element3D.setTranslateZ(position.getZ());
 		
-		//dwAsdsdSystem.out.println(position.getX()+" "+position.getY()+" "+position.getZ());
+		((Label)Main.getInstance().getDebugNode("label_position_player")).setText(Math.round(position.getX())+" "+Math.round(position.getY())+" "+Math.round(position.getZ())+"\njumping: "+isJumping);
 	}
 	
 	

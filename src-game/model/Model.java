@@ -11,6 +11,7 @@ import entity.Player;
 import entity.Refreshable;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point3D;
+import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.shape.Box;
 
@@ -33,7 +34,7 @@ public class Model implements Refreshable{
 		collisionMatrix = new CollisionMatrix(maxCoordDebug-minCoordDebug, maxCoordDebug-minCoordDebug);
 	}
 	private Model(int nombreMobsDebug) {
-		
+		collisionMatrix = new CollisionMatrix(maxCoordDebug-minCoordDebug,maxCoordDebug-minCoordDebug);
 		refreshables = new ArrayList<Refreshable>();
 		gameElements = new ArrayList<GameElement>();
 		
@@ -59,7 +60,7 @@ public class Model implements Refreshable{
 		Point3D pos = new Point3D(x, 0, z);
 		currentPlayer = new Player(pos);
 		gameElements.add(currentPlayer);
-		collisionMatrix = new CollisionMatrix(maxCoordDebug-minCoordDebug,maxCoordDebug-minCoordDebug);
+		
 	}
 	public static Model getInstance() {
 		if(instance == null)
@@ -70,7 +71,7 @@ public class Model implements Refreshable{
 		instance = new Model(nombreMobsDebug);
 		return instance;
 	}
-	public Box getFloor() {
+	public Group getFloor() {
 		return collisionMatrix.getFloor();
 	}
 	public Bounds getFloorBounds() {

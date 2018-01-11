@@ -9,10 +9,12 @@ import javafx.application.Application;
 import javafx.event.EventHandler;
 import javafx.scene.Camera;
 import javafx.scene.Group;
+import javafx.scene.Node;
 import javafx.scene.PerspectiveCamera;
 import javafx.scene.Scene;
 import javafx.scene.SceneAntialiasing;
 import javafx.scene.SubScene;
+import javafx.scene.control.Label;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
@@ -31,6 +33,7 @@ public class Main extends Application {
 	private static Main instance;
 	private Hashtable<String, SubScene> subScenes;
 	private Hashtable<String, Scene> scenes;
+	private Hashtable<String, Node> debugNodes;
 	private String currentMode;
 	private Stage stage;
 	
@@ -48,35 +51,53 @@ public class Main extends Application {
 	public SubScene getSubScene(String mode) {
 		return subScenes.get(mode);
 	}
+	public Node getDebugNode(String nodeKey) {
+		return debugNodes.get(nodeKey);
+	}
 
 	@Override
 	public void start(Stage arg0) throws Exception {
 		instance = this;
 		stage = arg0;//so that the window is accessible at all times
+		stage.setAlwaysOnTop(false);
+		
 		//initializing the scene
-		int width = 1280;
-		int height = 720;
+		int width = 640;
+		int height = 480;
 		scenes = new Hashtable<String, Scene>();
 		subScenes = new Hashtable<String, SubScene>();
+		debugNodes = new Hashtable<String, Node>();
 		SubScene gameSubScene = initializeGameSubScene(width, height);
 		Scene defaultGameScene = initializeGameScene(width, height, gameSubScene);
 		subScenes.put("principal", gameSubScene);
 		scenes.put("principal", defaultGameScene);
 		
 		//create a debug Model instance with a number of mobs
-		Model.newDebugInstance(500);
+		Model.newDebugInstance(1000);
 		
 		//for debug and testing purposes
-		((Group)scenes.get("principal").getRoot()).getChildren().add(new Rectangle(100, 100, 100, 100));
+		Label label = new Label("player position");
+		label.setTranslateX(50);
+		label.setTranslateY(50);
+		label.setTextFill(Color.BLUE);
+		label.setScaleX(2);
+		label.setScaleY(2);
+		debugNodes.put("label_position_player", label);
+		((Group)scenes.get("principal").getRoot()).getChildren().add(label);
+		
 		
 		
 		//floor, debug only
 		//create the floor box
-		Box floor = Model.getInstance().getFloor();
+		Group floor = Model.getInstance().getFloor();
 		//setting its material
 		PhongMaterial floorMaterial = new PhongMaterial();
 		floorMaterial.setDiffuseColor(Color.GREEN);
-		floor.setMaterial(floorMaterial);
+		for(Node n:floor.getChildren()){
+			if(n instanceof Box) {
+				((Box)n).setMaterial(floorMaterial);
+			}
+		}
 		
 		//adding it to the scene
 		((Group)subScenes.get("principal").getRoot()).getChildren().add(floor);
@@ -91,8 +112,8 @@ public class Main extends Application {
 				setCycleDuration(Duration.millis(500));
 			}
 			protected void interpolate(double frac) {
-				double isometricValueZ = -400;
-				double isometricValueY = -400;
+				double isometricValueZ = -500;
+				double isometricValueY = -500;
 				Camera currentCamera = Main.this.subScenes.get("principal").getCamera();
 
 				// currentCamera.setTranslateX(isometricValue*frac);
@@ -141,7 +162,7 @@ public class Main extends Application {
 		camera.setFarClip(30000);
 		camera.setRotationAxis(Rotate.X_AXIS);
 		camera.setRotate(-45);
-		camera.setFieldOfView(74);
+		camera.setFieldOfView(60);
 		screenScene.setCamera(camera);
 		return screenScene;
 	}
