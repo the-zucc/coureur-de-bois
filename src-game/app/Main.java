@@ -73,7 +73,7 @@ public class Main extends Application {
 		scenes.put("principal", defaultGameScene);
 		
 		//create a debug Model instance with a number of mobs
-		Model.newDebugInstance(1000);
+		Model.newDebugInstance(200, 200);
 		
 		//for debug and testing purposes
 		Label label = new Label("player position");
@@ -156,7 +156,7 @@ public class Main extends Application {
 	}
 	public SubScene initializeGameSubScene(int width, int height) {
 		Group root3D = new Group();
-		SubScene screenScene = new SubScene(root3D, width, height, true, SceneAntialiasing.BALANCED);
+		SubScene screenScene = new SubScene(root3D, width, height, true, SceneAntialiasing.DISABLED);
 		PerspectiveCamera camera = new PerspectiveCamera(true);
 		camera.setNearClip(0.1);
 		camera.setFarClip(30000);

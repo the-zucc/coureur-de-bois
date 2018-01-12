@@ -46,7 +46,7 @@ public abstract class CollisionBox {
 	
 	public Point3D getCorrection(CollisionBox arg0) {
 		if(arg0 instanceof SphericalCollisionBox) {
-			return getCorrectionCircularBox((SphericalCollisionBox)arg0);
+			return getCorrectionSphericalBox((SphericalCollisionBox)arg0);
 		}
 		else if(arg0 instanceof RectangularCollisionBox) {
 			return getCorrectionRectangularBox((RectangularCollisionBox)arg0);
@@ -54,12 +54,17 @@ public abstract class CollisionBox {
 		else if(arg0 instanceof DiagonalCollisionBox) {
 			return getCorrectionDiagonalBox((DiagonalCollisionBox)arg0);
 		}
+		else if(arg0 instanceof CylindricalCollisionBox) {
+			return getCorrectionCylindricalBox((CylindricalCollisionBox)arg0);
+		}
 		return null;
 	}
 	
+	
+
 	public boolean collides(CollisionBox arg0) {
 		if(arg0 instanceof SphericalCollisionBox) {
-			return collidesCircularBox((SphericalCollisionBox)arg0);
+			return collidesSphericalBox((SphericalCollisionBox)arg0);
 		}
 		else if(arg0 instanceof RectangularCollisionBox) {
 			return collidesRectangularBox((RectangularCollisionBox)arg0);
@@ -67,13 +72,18 @@ public abstract class CollisionBox {
 		else if(arg0 instanceof DiagonalCollisionBox) {
 			return collidesDiagonalBox((DiagonalCollisionBox)arg0);
 		}
+		else if(arg0 instanceof CylindricalCollisionBox) {
+			return collidesCylindricalBox((CylindricalCollisionBox)arg0);
+		}
 		return false;
 	}
-	protected abstract boolean collidesCircularBox(SphericalCollisionBox box);
+	protected abstract boolean collidesSphericalBox(SphericalCollisionBox box);
 	protected abstract boolean collidesRectangularBox(RectangularCollisionBox box);
 	protected abstract boolean collidesDiagonalBox(DiagonalCollisionBox box);
+	protected abstract boolean collidesCylindricalBox(CylindricalCollisionBox box);
 	
-	protected abstract Point3D getCorrectionCircularBox(SphericalCollisionBox box);
+	protected abstract Point3D getCorrectionSphericalBox(SphericalCollisionBox box);
 	protected abstract Point3D getCorrectionRectangularBox(RectangularCollisionBox box);
 	protected abstract Point3D getCorrectionDiagonalBox(DiagonalCollisionBox box);
+	protected abstract Point3D getCorrectionCylindricalBox(CylindricalCollisionBox arg0);
 }

@@ -16,7 +16,7 @@ public abstract class GameElement {
 	//3D element
 	protected Group element3D;
 	
-	private Group parent;
+	protected Group parent;
 	
 	protected Point3D position;
 	
@@ -38,22 +38,22 @@ public abstract class GameElement {
 	 * here is the method that is executed every time the model refreshes. it is common to all GameElement subclasses.
 	 * Everything added in this method will be applied to all subclasses. 
 	 */
-	public void refresh() {
-		update();
+	public void refresh(double deltaTime) {
+		update(deltaTime);
 	}
-	public abstract void update();
+	public abstract void update(double deltaTime);
+	
+	protected void updateElement3DPosition() {
+		element3D.setTranslateX(position.getX());
+		element3D.setTranslateY(position.getY());
+		element3D.setTranslateZ(position.getZ());
+	}
 	
 	/**
 	 * refreshes the FloorMatrix so that
 	 */
 	public void updateFloorMatrix() {
 		
-	}
-	public Group getParent() {
-		return parent;
-	}
-	public void setParent(Group parent) {
-		this.parent = parent;
 	}
 	public Point3D getPosition() {
 		return position;

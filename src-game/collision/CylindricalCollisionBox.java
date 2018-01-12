@@ -2,11 +2,18 @@ package collision;
 
 import javafx.geometry.Point3D;
 
-public class RectangularCollisionBox extends CollisionBox {
-	public RectangularCollisionBox(Point3D position) {
+public class CylindricalCollisionBox extends CollisionBox {
+	private double radius;
+	
+	public CylindricalCollisionBox(Point3D position, double radius) {
 		super(position);
+		this.radius = radius; 
 	}
-
+	
+	public double getRadius() {
+		return radius;
+	}
+	
 	@Override
 	protected boolean collidesSphericalBox(SphericalCollisionBox box) {
 		// TODO Auto-generated method stub
@@ -28,19 +35,19 @@ public class RectangularCollisionBox extends CollisionBox {
 	@Override
 	protected Point3D getCorrectionSphericalBox(SphericalCollisionBox box) {
 		// TODO Auto-generated method stub
-		return new Point3D(0,0,0);
+		return null;
 	}
 
 	@Override
 	protected Point3D getCorrectionRectangularBox(RectangularCollisionBox box) {
 		// TODO Auto-generated method stub
-		return new Point3D(0,0,0);
+		return null;
 	}
 
 	@Override
 	protected Point3D getCorrectionDiagonalBox(DiagonalCollisionBox box) {
 		// TODO Auto-generated method stub
-		return new Point3D(0,0,0);
+		return null;
 	}
 
 	@Override
@@ -54,4 +61,5 @@ public class RectangularCollisionBox extends CollisionBox {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
 }

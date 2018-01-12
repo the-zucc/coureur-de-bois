@@ -8,7 +8,7 @@ public class DiagonalCollisionBox extends CollisionBox {
 	}
 
 	@Override
-	protected boolean collidesCircularBox(SphericalCollisionBox box) {
+	protected boolean collidesSphericalBox(SphericalCollisionBox box) {
 		// TODO Auto-generated method stub
 		return false;
 	}
@@ -26,7 +26,7 @@ public class DiagonalCollisionBox extends CollisionBox {
 	}
 
 	@Override
-	protected Point3D getCorrectionCircularBox(SphericalCollisionBox box) {
+	protected Point3D getCorrectionSphericalBox(SphericalCollisionBox box) {
 		// TODO Auto-generated method stub
 		return new Point3D(0,0,0);
 	}
@@ -41,5 +41,17 @@ public class DiagonalCollisionBox extends CollisionBox {
 	protected Point3D getCorrectionDiagonalBox(DiagonalCollisionBox box) {
 		// TODO Auto-generated method stub
 		return new Point3D(0,0,0);
+	}
+
+	@Override
+	protected boolean collidesCylindricalBox(CylindricalCollisionBox box) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	protected Point3D getCorrectionCylindricalBox(CylindricalCollisionBox arg0) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

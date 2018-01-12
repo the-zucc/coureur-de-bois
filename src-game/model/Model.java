@@ -9,6 +9,7 @@ import entity.DefaultMob;
 import entity.GameElement;
 import entity.Player;
 import entity.Refreshable;
+import entity.Tree;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point3D;
 import javafx.scene.Group;
@@ -26,14 +27,14 @@ public class Model implements Refreshable{
 	private ArrayList<Node> gameElementNodes;
 	
 	//debug, remove this asap
-	public static int minCoordDebug = -2000;
-	public static int maxCoordDebug = 2000;
+	public static int minCoordDebug = -2500;
+	public static int maxCoordDebug = 2500;
 	private Model() {
 		refreshables = new ArrayList<Refreshable>();
 		//currentPlayer = new Player(Point3D.ZERO);
 		collisionMatrix = new CollisionMatrix(maxCoordDebug-minCoordDebug, maxCoordDebug-minCoordDebug);
 	}
-	private Model(int nombreMobsDebug) {
+	private Model(int nombreMobsDebug, int nombreArbresDebug) {
 		collisionMatrix = new CollisionMatrix(maxCoordDebug-minCoordDebug,maxCoordDebug-minCoordDebug);
 		refreshables = new ArrayList<Refreshable>();
 		gameElements = new ArrayList<GameElement>();
@@ -54,6 +55,15 @@ public class Model implements Refreshable{
 			refreshables.add(newMob);
 			gameElements.add(newMob);
 		}
+		//loop for generating multiple tree objects, for debug purposes
+		for(int i = 0; i < nombreArbresDebug; i++) {
+			double x = (double)ThreadLocalRandom.current().nextInt(min, max);
+			double z = (double)ThreadLocalRandom.current().nextInt(min, max);
+			Point3D pos = new Point3D(x, 0, z);
+			Tree newTree = new Tree(pos);
+			gameElements.add(newTree);
+		}
+		
 		//generating the player
 		double x = (double)ThreadLocalRandom.current().nextInt(min, max + 1);
 		double z = (double)ThreadLocalRandom.current().nextInt(min, max + 1);
@@ -67,8 +77,8 @@ public class Model implements Refreshable{
 			instance = new Model();
 		return instance;
 	}
-	public static Model newDebugInstance(int nombreMobsDebug) {
-		instance = new Model(nombreMobsDebug);
+	public static Model newDebugInstance(int nombreMobsDebug, int nombreArbresDebug) {
+		instance = new Model(nombreMobsDebug, nombreArbresDebug);
 		return instance;
 	}
 	public Group getFloor() {
@@ -80,12 +90,13 @@ public class Model implements Refreshable{
 	
 	/**
 	 * this function refreshes all the elements of the object's refreshables ArrayList as well as the currentPlayer object.
+	 * @param deltaTime 
 	 */
-	public void update() {
+	public void update(double deltaTime) {
 		for(Refreshable r:refreshables) {
-			r.update();
+			r.update(deltaTime);
 		}
-		currentPlayer.update();
+		currentPlayer.update(deltaTime);
 	}
 	
 	public Player getCurrentPlayer() {

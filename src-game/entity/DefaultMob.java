@@ -20,9 +20,6 @@ public class DefaultMob extends GameElement implements Refreshable{
 	
 	private String id;
 	
-	//3D element
-	private Group parent;
-	
 	//positions and vectors
 	private Point3D target;
 	private Point3D vectMovement;
@@ -73,8 +70,8 @@ public class DefaultMob extends GameElement implements Refreshable{
 	}
 	
 	@Override
-	public void update() {
-		Point3D newPosition = position.add(vectMovement).add(vectGravityAndJump);
+	public void update(double deltaTime) {
+		Point3D newPosition = position.add(vectMovement.multiply(deltaTime*60)).add(vectGravityAndJump);
 		while(newPosition.getX() > Model.maxCoordDebug || newPosition.getX() < Model.minCoordDebug || newPosition.getZ() > Model.maxCoordDebug || newPosition.getZ() < Model.minCoordDebug) {
 			int min = Model.minCoordDebug;
 			int max = Model.maxCoordDebug;

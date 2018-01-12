@@ -105,19 +105,20 @@ public class Player extends GameElement implements Refreshable {
 	
 	
 	@Override
-	public void update() {
+	public void update(double deltaTime) {
 		//debug
 		oldVectMovement = vectMovement;
 		vectMovement = new Point3D(0,0,0);
 		position = position.add(vectJumpAndGrav);
 		if(up)
-			vectMovement = vectMovement.add(new Point3D(0,0,4));
+			vectMovement = vectMovement.add(new Point3D(0,0,175));
 		else if(down)
-			vectMovement = vectMovement.add(new Point3D(0,0,-4));
+			vectMovement = vectMovement.add(new Point3D(0,0,-175));
 		if(left)
-			vectMovement = vectMovement.add(new Point3D(-4,0,0));
+			vectMovement = vectMovement.add(new Point3D(-175,0,0));
 		else if(right)
-			vectMovement = vectMovement.add(new Point3D(4,0,0));
+			vectMovement = vectMovement.add(new Point3D(175,0,0));
+		vectMovement = vectMovement.multiply(deltaTime);
 		if(isRunning)
 			vectMovement = vectMovement.add(vectMovement);
 		if(isJumping)

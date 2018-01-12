@@ -43,7 +43,13 @@ public class CollisionMatrix {
 	
 	public CollisionMatrix(int length, int height){
 		//heightMatrix = new Vector<Vector<Double>>();
-		floor = buildFloor(200, 200, 20, 20);
+		
+		int vertexheight = 50;
+		int vertexwidth = 50;
+		int cols = length/vertexheight;
+		int rows = length/vertexwidth;
+		
+		floor = buildFloor(rows, cols, vertexheight, vertexwidth);
 		//floor.getChildren().addAll(new Box(length, 1, height));
 		int numberOfColumns = length / mapDivisionWidth;
 		System.out.println(numberOfColumns);
@@ -99,18 +105,12 @@ public class CollisionMatrix {
 		float[][] yValues = new float[rows][cols];
 		for(int z = 0; z < rows; z++) {
 			for(int x = 0; x < cols; x++) {
-				float y = (float)ThreadLocalRandom.current().nextDouble()*100;
+				float y = (float)ThreadLocalRandom.current().nextDouble()*50;
 				yValues[z][x]=y;
 			}
 		}
 		for(int z = 0; z < rows-1; z++) {
 			TriangleMesh mesh = new TriangleMesh();
-//			float[] texCoords = {
-//		            0, 0,
-//		            0, 1,
-//		            1, 0,
-//		            1, 1
-//		    };
 			for(int x = 0; x < cols; x++) {
 				mesh.getPoints().addAll((float)((-x*width)-Model.minCoordDebug), yValues[z][x], (float)(((-z)*height)-Model.minCoordDebug));
 				mesh.getPoints().addAll((float)((-x*width)-Model.minCoordDebug), yValues[z+1][x], (float)(((-(z+1))*height)-Model.minCoordDebug));
@@ -130,7 +130,7 @@ public class CollisionMatrix {
 			meshView.setDrawMode(DrawMode.FILL);
 			meshView.setMaterial(new PhongMaterial(Color.DARKOLIVEGREEN));
 			meshView.setTranslateX(0);
-			meshView.setTranslateY(-50);
+			meshView.setTranslateY(-25);
 			meshView.setTranslateZ(0);
 			returnVal.getChildren().add(meshView);
 		}
