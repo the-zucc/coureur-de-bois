@@ -3,11 +3,11 @@ package collision;
 import javafx.geometry.Point3D;
 import model.Model;
 
-public class CircularCollisionBox extends CollisionBox {
+public class SphericalCollisionBox extends CollisionBox {
 	
 	private double radius;
 	
-	public CircularCollisionBox(Point3D position, double radius) {
+	public SphericalCollisionBox(Point3D position, double radius) {
 		super(position);
 		this.radius=radius;
 		if(radius > CollisionMatrix.getMapDivisionHeight()/2 || radius > CollisionMatrix.getMapDivisionWidth()/2) {
@@ -23,7 +23,7 @@ public class CircularCollisionBox extends CollisionBox {
 	}
 	
 	@Override
-	protected boolean collidesCircularBox(CircularCollisionBox box) {
+	protected boolean collidesCircularBox(SphericalCollisionBox box) {
 		//inline function to get the most performance out of it
 		return Math.hypot(Math.hypot(box.getPosition().getX()-position.getX(), box.getPosition().getZ()-position.getZ()),box.getPosition().getY()-position.getY()) < (box.getRadius()+radius);
 	}
@@ -40,7 +40,7 @@ public class CircularCollisionBox extends CollisionBox {
 	}
 
 	@Override
-	protected Point3D getCorrectionCircularBox(CircularCollisionBox box) {
+	protected Point3D getCorrectionCircularBox(SphericalCollisionBox box) {
 		// TODO Auto-generated method stub
 		double distance = Math.hypot(box.getPosition().getX()-position.getX(), box.getPosition().getZ()-position.getZ());
 		double magnitude = distance - (box.getRadius()+radius);

@@ -2,12 +2,19 @@ package collision;
 
 import java.util.ArrayList;
 import java.util.Vector;
+import java.util.concurrent.ThreadLocalRandom;
 
 import javafx.geometry.Bounds;
 import javafx.geometry.Point3D;
 import javafx.scene.Group;
 import javafx.scene.Node;
+import javafx.scene.paint.Color;
+import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.Box;
+import javafx.scene.shape.CullFace;
+import javafx.scene.shape.DrawMode;
+import javafx.scene.shape.MeshView;
+import javafx.scene.shape.TriangleMesh;
 import model.Model;
 
 public class CollisionMatrix {
@@ -36,8 +43,8 @@ public class CollisionMatrix {
 	
 	public CollisionMatrix(int length, int height){
 		//heightMatrix = new Vector<Vector<Double>>();
-		floor = new Group();
-		floor.getChildren().addAll(new Box(length, 1, height));
+		floor = buildFloor(200, 200, 20, 20);
+		//floor.getChildren().addAll(new Box(length, 1, height));
 		int numberOfColumns = length / mapDivisionWidth;
 		System.out.println(numberOfColumns);
 		int numberOfRows = height / mapDivisionHeight;
@@ -85,6 +92,52 @@ public class CollisionMatrix {
 		
 	}
 	
+	private static Group buildFloor(int cols, int rows, int colwidth, int rowheight) {
+		Group returnVal = new Group();
+		double height = rowheight;
+		double width = colwidth;
+		float[][] yValues = new float[rows][cols];
+		for(int z = 0; z < rows; z++) {
+			for(int x = 0; x < cols; x++) {
+				float y = (float)ThreadLocalRandom.current().nextDouble()*100;
+				yValues[z][x]=y;
+			}
+		}
+		for(int z = 0; z < rows-1; z++) {
+			TriangleMesh mesh = new TriangleMesh();
+//			float[] texCoords = {
+//		            0, 0,
+//		            0, 1,
+//		            1, 0,
+//		            1, 1
+//		    };
+			for(int x = 0; x < cols; x++) {
+				mesh.getPoints().addAll((float)((-x*width)-Model.minCoordDebug), yValues[z][x], (float)(((-z)*height)-Model.minCoordDebug));
+				mesh.getPoints().addAll((float)((-x*width)-Model.minCoordDebug), yValues[z+1][x], (float)(((-(z+1))*height)-Model.minCoordDebug));
+			}
+			mesh.getTexCoords().addAll(0,0);
+			for(int i=2;i<cols*2;i+=2) {  //add each segment
+		        //Vertices wound counter-clockwise which is the default front face of any Triange
+		        //These triangles live on the frontside of the line facing the camera
+		        mesh.getFaces().addAll(i,0,i-2,0,i+1,0); //add primary face
+		        mesh.getFaces().addAll(i+1,0,i-2,0,i-1,0); //add secondary Width face
+		        //Add the same faces but wind them clockwise so that the color looks correct when camera is rotated
+		        //These triangles live on the backside of the line facing away from initial the camera
+		        mesh.getFaces().addAll(i+1,0,i-2,0,i,0); //add primary face
+		        mesh.getFaces().addAll(i-1,0,i-2,0,i+1,0); //add secondary Width face
+		    }
+			MeshView meshView = new MeshView(mesh);
+			meshView.setDrawMode(DrawMode.FILL);
+			meshView.setMaterial(new PhongMaterial(Color.DARKOLIVEGREEN));
+			meshView.setTranslateX(0);
+			meshView.setTranslateY(-50);
+			meshView.setTranslateZ(0);
+			returnVal.getChildren().add(meshView);
+		}
+		
+		return returnVal;
+	}
+	
 	/**
 	 * add the specified {@link CollisionBox} to the desired map division.
 	 * @param row the row of the division into which to add the element
@@ -105,3 +158,4 @@ public class CollisionMatrix {
 		return universalCollisionList;
 	}
 }
+

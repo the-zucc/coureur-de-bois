@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Vector;
 
 import app.Main;
-import collision.CircularCollisionBox;
+import collision.SphericalCollisionBox;
 import collision.CollisionBox;
 import javafx.animation.Transition;
 import javafx.geometry.Bounds;
@@ -33,7 +33,7 @@ public class Player extends GameElement implements Refreshable {
 		playerNode = buildPlayerNode();
 		element3D = new Group();
 		element3D.getChildren().add(playerNode);
-		collisionBox = new CircularCollisionBox(position, 15);
+		collisionBox = new SphericalCollisionBox(position, 15);
 		oldVectMovement = null;
 		vectJumpAndGrav = new Point3D(0,0,0);
 		((Group)Main.getInstance().getSubScene("principal").getRoot()).getChildren().add(element3D);
@@ -59,11 +59,7 @@ public class Player extends GameElement implements Refreshable {
 			vectJumpAndGrav = vectJumpAndGrav.add(Engine.getGlobalJumpVector());
 		}
 	}
-	public boolean isTouchingTheFloor() {
-		Bounds boundsInScene = playerNode.localToScene(playerNode.getBoundsInLocal());
-		
-		return boundsInScene.intersects(Model.getInstance().getFloor().getBoundsInLocal());
-	}
+	
 	//debug
 	
 	public Group getElement3D() {

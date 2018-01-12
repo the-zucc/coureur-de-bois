@@ -3,7 +3,7 @@ package entity;
 import java.util.concurrent.ThreadLocalRandom;
 
 import app.Main;
-import collision.CircularCollisionBox;
+import collision.SphericalCollisionBox;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point3D;
 import javafx.scene.Group;
@@ -40,7 +40,7 @@ public class DefaultMob extends GameElement implements Refreshable{
 		
 		element3D = buildElement3D();
 		//defining the collision box
-		collisionBox = new CircularCollisionBox(position, 15);
+		collisionBox = new SphericalCollisionBox(position, 15);
 		//refreshes the row and column division of the box.
 		collisionBox.setPosition(position);
 		

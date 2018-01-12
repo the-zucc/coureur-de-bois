@@ -45,8 +45,8 @@ public abstract class CollisionBox {
 	}
 	
 	public Point3D getCorrection(CollisionBox arg0) {
-		if(arg0 instanceof CircularCollisionBox) {
-			return getCorrectionCircularBox((CircularCollisionBox)arg0);
+		if(arg0 instanceof SphericalCollisionBox) {
+			return getCorrectionCircularBox((SphericalCollisionBox)arg0);
 		}
 		else if(arg0 instanceof RectangularCollisionBox) {
 			return getCorrectionRectangularBox((RectangularCollisionBox)arg0);
@@ -58,8 +58,8 @@ public abstract class CollisionBox {
 	}
 	
 	public boolean collides(CollisionBox arg0) {
-		if(arg0 instanceof CircularCollisionBox) {
-			return collidesCircularBox((CircularCollisionBox)arg0);
+		if(arg0 instanceof SphericalCollisionBox) {
+			return collidesCircularBox((SphericalCollisionBox)arg0);
 		}
 		else if(arg0 instanceof RectangularCollisionBox) {
 			return collidesRectangularBox((RectangularCollisionBox)arg0);
@@ -69,11 +69,11 @@ public abstract class CollisionBox {
 		}
 		return false;
 	}
-	protected abstract boolean collidesCircularBox(CircularCollisionBox box);
+	protected abstract boolean collidesCircularBox(SphericalCollisionBox box);
 	protected abstract boolean collidesRectangularBox(RectangularCollisionBox box);
 	protected abstract boolean collidesDiagonalBox(DiagonalCollisionBox box);
 	
-	protected abstract Point3D getCorrectionCircularBox(CircularCollisionBox box);
+	protected abstract Point3D getCorrectionCircularBox(SphericalCollisionBox box);
 	protected abstract Point3D getCorrectionRectangularBox(RectangularCollisionBox box);
 	protected abstract Point3D getCorrectionDiagonalBox(DiagonalCollisionBox box);
 }
