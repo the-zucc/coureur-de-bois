@@ -44,8 +44,8 @@ public class CollisionMatrix {
 	public CollisionMatrix(int length, int height){
 		//heightMatrix = new Vector<Vector<Double>>();
 		
-		int vertexheight = 50;
-		int vertexwidth = 50;
+		int vertexheight = 10;
+		int vertexwidth = 10;
 		int cols = length/vertexheight;
 		int rows = length/vertexwidth;
 		
@@ -128,7 +128,25 @@ public class CollisionMatrix {
 		    }
 			MeshView meshView = new MeshView(mesh);
 			meshView.setDrawMode(DrawMode.FILL);
-			meshView.setMaterial(new PhongMaterial(Color.DARKOLIVEGREEN));
+			
+			PhongMaterial material = new PhongMaterial();
+//			int choice = z%4;
+//			switch(choice) {
+//			case 0:
+//				material.setDiffuseColor(Color.BROWN);
+//				break;
+//			case 1:
+//				material.setDiffuseColor(Color.CORAL);
+//				break;
+//			case 2:
+//				material.setDiffuseColor(Color.BLUEVIOLET);
+//				break;
+//			case 3:
+//				material.setDiffuseColor(Color.CYAN);
+//				break;
+//			}
+			material.setDiffuseColor(Color.GREEN);
+			meshView.setMaterial(material);
 			meshView.setTranslateX(0);
 			meshView.setTranslateY(-25);
 			meshView.setTranslateZ(0);

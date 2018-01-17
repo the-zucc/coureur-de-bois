@@ -77,6 +77,7 @@ public abstract class CollisionBox {
 		}
 		return false;
 	}
+	
 	protected abstract boolean collidesSphericalBox(SphericalCollisionBox box);
 	protected abstract boolean collidesRectangularBox(RectangularCollisionBox box);
 	protected abstract boolean collidesDiagonalBox(DiagonalCollisionBox box);

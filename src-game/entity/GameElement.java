@@ -11,10 +11,13 @@ import javafx.geometry.Point3D;
 import javafx.scene.Group;
 import javafx.scene.shape.Box;
 import model.Model;
+import util.IdMaker;
 
 public abstract class GameElement {
 	//3D element
 	protected Group element3D;
+	
+	protected String id;
 	
 	protected Group parent;
 	
@@ -22,7 +25,19 @@ public abstract class GameElement {
 	
 	protected CollisionBox collisionBox;
 	
+	protected double hp;
+	
+	protected static double xpReward = 0;
+	
+	protected int level = 0;
+	
+	public String getId() {
+		return id;
+	}
+	
 	public GameElement(Point3D position) {
+		hp = -1;
+		id = IdMaker.next();
 		this.position = position;
 	}
 	
@@ -43,7 +58,7 @@ public abstract class GameElement {
 	}
 	public abstract void update(double deltaTime);
 	
-	protected void updateElement3DPosition() {
+	public void updateElement3DPosition() {
 		element3D.setTranslateX(position.getX());
 		element3D.setTranslateY(position.getY());
 		element3D.setTranslateZ(position.getZ());
@@ -67,7 +82,8 @@ public abstract class GameElement {
 	public CollisionBox getCollisionBox() {
 		return collisionBox;
 	}
-	public void correctCollisions() {
+	public boolean correctCollisions() {
+		boolean returnVal = false;
 		int row = collisionBox.getMapDivisionRow();
 		int column = collisionBox.getMapDivisionColumn();
 		for(int i = row-1; i <= row+1; i++) {
@@ -81,6 +97,7 @@ public abstract class GameElement {
 								for(CollisionBox cb:boxesFromDivision)
 									if(cb != collisionBox) {
 										if(collisionBox.collides(cb)) {
+											returnVal = true;
 											position = position.add(collisionBox.getCorrection(cb));
 											collisionBox.setPosition(position);
 										}
@@ -89,9 +106,36 @@ public abstract class GameElement {
 							}catch(ConcurrentModificationException cme) {
 								
 							}
-						
 					}
 			}
 		}
+		return returnVal;
+	}
+	/**
+	 * deals damage to the element.
+	 * @param damage the amount of damage to deal to the element in HP
+	 * @return if the element's HP < 0 after the damage is dealt.
+	 */
+	public boolean dealDamage(double damage) {
+		if(hp != -1) {//this is to check if the element's HP has been defined externally
+			hp-=damage;
+			if(hp <=0) {//this would indicate that the mob is dead
+				delete();
+				try {
+					finalize();
+				} catch (Throwable e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				return true;
+			}
+		}
+		return false;
+	}
+	private void delete() {
+		Model.getInstance().deleteGameElement(this);
+	}
+	public double getXpReward() {
+		return xpReward;
 	}
 }

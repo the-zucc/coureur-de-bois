@@ -1,5 +1,7 @@
 package app;
 
+import java.awt.Dimension;
+import java.awt.Toolkit;
 import java.util.Hashtable;
 
 import entity.Player;
@@ -8,6 +10,7 @@ import javafx.animation.Transition;
 import javafx.application.Application;
 import javafx.event.EventHandler;
 import javafx.scene.Camera;
+import javafx.scene.Cursor;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.PerspectiveCamera;
@@ -15,6 +18,8 @@ import javafx.scene.Scene;
 import javafx.scene.SceneAntialiasing;
 import javafx.scene.SubScene;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
@@ -25,8 +30,10 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.transform.Rotate;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-import model.ControlerLoop;
+import model.Engine;
+import model.GraphicsLoop;
 import model.Model;
+import model.ModelLoop;
 
 public class Main extends Application {
 
@@ -36,6 +43,7 @@ public class Main extends Application {
 	private Hashtable<String, Node> debugNodes;
 	private String currentMode;
 	private Stage stage;
+	private Node cursor;
 	
 	public static Main getInstance() {
 		return instance;
@@ -60,20 +68,28 @@ public class Main extends Application {
 		instance = this;
 		stage = arg0;//so that the window is accessible at all times
 		stage.setAlwaysOnTop(false);
+		cursor = buildCursor();
 		
 		//initializing the scene
-		int width = 640;
-		int height = 480;
+		
+		//getting the screen dimensions
+		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+		int width = (int) screenSize.getWidth();
+		int height = (int) screenSize.getHeight();
+		
 		scenes = new Hashtable<String, Scene>();
 		subScenes = new Hashtable<String, SubScene>();
 		debugNodes = new Hashtable<String, Node>();
+		
 		SubScene gameSubScene = initializeGameSubScene(width, height);
 		Scene defaultGameScene = initializeGameScene(width, height, gameSubScene);
+		
 		subScenes.put("principal", gameSubScene);
 		scenes.put("principal", defaultGameScene);
+		((Group)defaultGameScene.getRoot()).getChildren().add(cursor);
 		
 		//create a debug Model instance with a number of mobs
-		Model.newDebugInstance(200, 200);
+		Model.newDebugInstance(500, 0);
 		
 		//for debug and testing purposes
 		Label label = new Label("player position");
@@ -102,18 +118,41 @@ public class Main extends Application {
 		//adding it to the scene
 		((Group)subScenes.get("principal").getRoot()).getChildren().add(floor);
 		
-		//starting the controler loop
-		ControlerLoop loop = new ControlerLoop();
-		loop.start();
+		//starting the thread to update the Model
+//		Thread mainThread = new Thread(new Runnable() {
+//
+//			@Override
+//			public void run() {
+//				ModelLoop loop = new ModelLoop();
+//				loop.start();
+//			}
+//			
+//		});
+//		mainThread.start();
+		//starting the graphics controler loop
+		GraphicsLoop graphics_loop = new GraphicsLoop();
+		graphics_loop.start();
 		
 		Model.getInstance().getCurrentPlayer().getElement3D().getChildren().add(subScenes.get("principal").getCamera());
+
+		//binds the game controls so that the player can move, jump, etc
+		bindGameControls(subScenes.get("principal").getScene());
+		
+		//set the scene to the game scene
+		arg0.setScene(defaultGameScene);
+		
+		//set fullscreen
+		arg0.setFullScreen(true);
+		
+		//show the screen
+		arg0.show();
 		Animation animation = new Transition() {
 			{
 				setCycleDuration(Duration.millis(500));
 			}
 			protected void interpolate(double frac) {
-				double isometricValueZ = -500;
-				double isometricValueY = -500;
+				double isometricValueZ = -350;
+				double isometricValueY = -350;
 				Camera currentCamera = Main.this.subScenes.get("principal").getCamera();
 
 				// currentCamera.setTranslateX(isometricValue*frac);
@@ -129,17 +168,6 @@ public class Main extends Application {
 			}
 		};
 		animation.play();
-		//binds the game controls so that the player can move, jump, etc
-		bindGameControls(subScenes.get("principal").getScene());
-		
-		//set the scene to the game scene
-		arg0.setScene(defaultGameScene);
-		
-		//set fullscreen
-		//arg0.setFullScreen(true);
-		
-		//show the screen
-		arg0.show();
 	}
 
 	/**
@@ -156,7 +184,7 @@ public class Main extends Application {
 	}
 	public SubScene initializeGameSubScene(int width, int height) {
 		Group root3D = new Group();
-		SubScene screenScene = new SubScene(root3D, width, height, true, SceneAntialiasing.DISABLED);
+		SubScene screenScene = new SubScene(root3D, width, height, true, SceneAntialiasing.BALANCED);
 		PerspectiveCamera camera = new PerspectiveCamera(true);
 		camera.setNearClip(0.1);
 		camera.setFarClip(30000);
@@ -188,6 +216,7 @@ public class Main extends Application {
 	 * @param scene the scene for which the conrols are to be binded.
 	 */
 	public void bindGameControls(Scene scene) {
+		scene.setCursor(Cursor.NONE);
 		scene.setOnKeyPressed(new EventHandler<KeyEvent>(){
 
 			@Override
@@ -206,11 +235,12 @@ public class Main extends Application {
 					player.setIsRunning(true);
 				else if(code.equals(KeyCode.SPACE))
 					player.jump();
+				arg0.consume();
 			}
 			
 		});
 		scene.setOnKeyReleased(new EventHandler<KeyEvent>() {
-
+			
 			@Override
 			public void handle(KeyEvent event) {
 				KeyCode code = event.getCode();
@@ -226,34 +256,123 @@ public class Main extends Application {
 				else if(code.equals(KeyCode.SHIFT))
 					player.setIsRunning(false);
 				else if(code.equals(KeyCode.F11)) {
-					if(!stage.isFullScreen())
+					if(!stage.isFullScreen()) {
 						stage.setFullScreen(true);
+						updateScreenResolution();
+					}
 					else
-						stage.setFullScreen(false);
-					updateScreenResolution();
+						exitFullScreen();
+					
 				}
 				else if(code.equals(KeyCode.ESCAPE)) {
-					updateScreenResolution();
+					exitFullScreen();
 				}
 //				else if(code.equals(KeyCode.DOWN)) {
 //					PerspectiveCamera camera = (PerspectiveCamera)scenes.get("principal").getCamera();
 //					camera.setRotationAxis(Rotate.X_AXIS);
 //					camera.setRotate(camera.getRotate()-5);
 //				}
+				event.consume();
 			}
 		});
 		scene.setOnMouseMoved(new EventHandler<MouseEvent>() {
+			
+			@Override
+			public void handle(MouseEvent arg0) {
+				Node cursor = Main.this.cursor;
+				double mouseX =arg0.getSceneX()+cursor.getBoundsInLocal().getWidth()/2 * cursor.getScaleX();
+				double mouseY = arg0.getSceneY()+cursor.getBoundsInLocal().getHeight()/2 * cursor.getScaleY();
+				moveCursor(mouseX,mouseY);
+				double y = arg0.getSceneY() - Main.this.stage.getHeight()/2;
+				double x = arg0.getSceneX() - Main.this.stage.getWidth()/2;
+				double angle = 0;
+				Model.getInstance().getCurrentPlayer().setRotation(Math.toDegrees(Math.atan2(y, x))+90);
+				arg0.consume();
+			}
+			
+		});
+		scene.setOnMouseDragged(new EventHandler<MouseEvent>() {
 
 			@Override
 			public void handle(MouseEvent arg0) {
-				//System.out.println(arg0.getSceneX()+" "+arg0.getSceneY());
+				Node cursor = Main.this.cursor;
+				double mouseX =arg0.getSceneX()+cursor.getBoundsInLocal().getWidth()/2 * cursor.getScaleX();
+				double mouseY = arg0.getSceneY()+cursor.getBoundsInLocal().getHeight()/2 * cursor.getScaleY();
+				moveCursor(mouseX,mouseY);
+				double y = arg0.getSceneY() - Main.this.stage.getHeight()/2;
+				double x = arg0.getSceneX() - Main.this.stage.getWidth()/2;
+				Model.getInstance().getCurrentPlayer().getPlayerNode().setRotationAxis(Rotate.Y_AXIS);
+				Model.getInstance().getCurrentPlayer().getPlayerNode().setRotate(Math.toDegrees(Math.atan2(y, x))+90);
+				arg0.consume();
+			}
+			
+		});
+		scene.setOnMouseClicked(new EventHandler<MouseEvent>() {
+
+			@Override
+			public void handle(MouseEvent arg0) {
+				try {
+					Node picked = arg0.getPickResult().getIntersectedNode(); 
+					String id = picked.getId();
+					while(id == null) {
+						picked = picked.getParent();
+						id = picked.getId();
+					}
+					//System.out.println(Model.getInstance().getGameElement(id).getPosition());
+					Model.getInstance().getCurrentPlayer().attack(Model.getInstance().getGameElement(id));
+				}catch(NullPointerException npe) {
+					System.out.println("No element here");
+				}
 			}
 			
 		});
 	}
+	/**
+	 * moves the cursor node (image) to the specified X and Y
+	 * @param x the new X
+	 * @param y the new Y
+	 */
+	public void moveCursor(double x, double y) {
+		cursor.setTranslateX(x);
+		cursor.setTranslateY(y);
+	}
+	/**
+	 * exits the fullscreen mode of the stage. it also centers the window on screen, as well as scales the subscene accordingly.
+	 */
+	public void exitFullScreen() {
+		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+		int width = (int) screenSize.getWidth();
+		int height = (int) screenSize.getHeight();
+		stage.setFullScreen(false);
+		stage.setHeight(height/2);
+		stage.setWidth(width/2);
+		stage.setX((width-stage.getWidth())/2);
+		stage.setY((height-stage.getHeight())/2);
+		updateScreenResolution();
+	}
+	/**
+	 * scales the subsene with the stage
+	 */
 	public void updateScreenResolution() {
 		subScenes.get("principal").setWidth(stage.getWidth());
 		subScenes.get("principal").setHeight(stage.getHeight());
 	}
-	
+	/**
+	 * builds the cursor node
+	 * @return the cursor node
+	 */
+	private static Node buildCursor() {
+		Group group = new Group();
+		Image image = new Image("res/cursor.png");
+		ImageView imageView = new ImageView(image);
+		double value = 0.25;
+		imageView.setTranslateX(-imageView.getBoundsInLocal().getHeight()/2);
+		imageView.setTranslateY(-imageView.getBoundsInLocal().getHeight()/2);
+		imageView.setScaleX(value);
+		imageView.setScaleY(value);
+		imageView.setScaleZ(value);
+		group.getChildren().add(imageView);
+		group.setMouseTransparent(true);
+		return group;
+	}
 }

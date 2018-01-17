@@ -18,8 +18,6 @@ import util.IdMaker;
 
 public class DefaultMob extends GameElement implements Refreshable{
 	
-	private String id;
-	
 	//positions and vectors
 	private Point3D target;
 	private Point3D vectMovement;
@@ -37,7 +35,7 @@ public class DefaultMob extends GameElement implements Refreshable{
 		
 		element3D = buildElement3D();
 		//defining the collision box
-		collisionBox = new SphericalCollisionBox(position, 15);
+		collisionBox = new SphericalCollisionBox(position, 20);
 		//refreshes the row and column division of the box.
 		collisionBox.setPosition(position);
 		
@@ -46,6 +44,12 @@ public class DefaultMob extends GameElement implements Refreshable{
 		
 		parent = (Group)Main.getInstance().getSubScene("principal").getRoot();
 		parent.getChildren().addAll(element3D);
+		element3D.setId(id);
+		
+		//defining gameplay features
+		//hp, level, xp reward, etc
+		level = ((int)Math.random())%4;
+		hp=level*10;
 	}
 	
 	public void targetPoint(Point3D target){
@@ -60,13 +64,6 @@ public class DefaultMob extends GameElement implements Refreshable{
 			isJumping = true;
 			vectGravityAndJump = Engine.getGlobalJumpVector();
 		}
-	}
-	/**
-	 * returns the current object's id
-	 * @return id of the current object
-	 */
-	public String getId() {
-		return id;
 	}
 	
 	@Override
@@ -86,9 +83,6 @@ public class DefaultMob extends GameElement implements Refreshable{
 		//update the position of the collision box
 		collisionBox.setPosition(position);
 		correctCollisions();
-		element3D.setTranslateX(position.getX());
-		element3D.setTranslateY(position.getY());
-		element3D.setTranslateZ(position.getZ());
 		if(target != null)
 			if(position.distance(target) < vectMovement.distance(Point3D.ZERO)) {
 				position = target;
@@ -135,18 +129,10 @@ public class DefaultMob extends GameElement implements Refreshable{
 	 * this function sets the angle of rotation of the element3D object so that it faces the mob's target walking position
 	 */
 	public void updateOrientation() {
+		System.out.println(Math.atan2(vectMovement.getX(), vectMovement.getZ()));
 		double angle = Math.toDegrees(Math.atan2(vectMovement.getX(), vectMovement.getZ()));
 		element3D.setRotationAxis(Rotate.Y_AXIS);
 		element3D.setRotate(angle);
-	}
-	public boolean isTouchingAMob() {
-		Bounds boundsInScene = element3D.localToScene(element3D.getBoundsInLocal());
-		for(Refreshable r:Model.getInstance().getRefreshables()){
-			if(r != this)
-				if(boundsInScene.intersects(((DefaultMob)r).getBounds()))
-					return true;
-		}
-		return false;
 	}
 	
 	public Bounds getBounds() {
@@ -184,5 +170,8 @@ public class DefaultMob extends GameElement implements Refreshable{
 		boxNose.setTranslateZ(17.5);
 		returnVal.getChildren().addAll(box1, box2, box3, boxNose);
 		return returnVal;
+	}
+	public double getXpReward(){
+		return level*10 + hp*5;
 	}
 }

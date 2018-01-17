@@ -39,7 +39,6 @@ public class SphericalCollisionBox extends CollisionBox {
 	
 	@Override
 	protected boolean collidesRectangularBox(RectangularCollisionBox box) {
-		// TODO Auto-generated method stub
 		return false;
 	}
 	
@@ -63,7 +62,16 @@ public class SphericalCollisionBox extends CollisionBox {
 
 	@Override
 	protected boolean collidesCylindricalBox(CylindricalCollisionBox box) {
+		double boxRadius = box.getRadius();
 		
+		double currentBoxUpperBound = box.getPosition().getY() + box.getHeight()/2;
+		double currentBoxLowerBound = box.getPosition().getY() - box.getHeight()/2;
+		if(position.getY() > currentBoxUpperBound && position.getY() < currentBoxLowerBound)
+			if(Math.hypot(position.getX()-position.getX(), position.getZ()-position.getZ())<radius+box.getRadius())
+				return true;
+		if(position.getY()+boxRadius > currentBoxUpperBound && position.getY()+boxRadius < currentBoxLowerBound) 
+			if(Math.hypot(position.getX()-position.getX(), position.getZ()-position.getZ())<box.getRadius())
+				return true;
 		return false;
 	}
 

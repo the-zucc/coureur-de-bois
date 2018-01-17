@@ -1,5 +1,6 @@
 package model;
 
+import javafx.application.Platform;
 import javafx.geometry.Point3D;
 
 public class Engine {
@@ -14,9 +15,16 @@ public class Engine {
 		return globalJumpVector;
 	}
 	/**
+	 * 
+	 */
+	public static void mainLoop(double deltaTime) {
+		Model.getInstance().update(deltaTime);
+	}
+	/**
 	 * this function should be called 60 times per second. It is responsible for updating the game objects and for drawing them on screen
 	 */
-	public static void MainLoop(double deltaTime) {
+	public static void mainLoop_Graphics(double deltaTime) {
 		Model.getInstance().update(deltaTime);
+		Model.getInstance().updateGraphics();
 	}
 }
