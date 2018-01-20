@@ -17,6 +17,7 @@ public class GameLoop extends AnimationTimer {
 	@Override
 	public void start() {
 		lastFrameNanoseconds = System.nanoTime();
+		super.start();
 	}
 	
 	@Override

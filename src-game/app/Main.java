@@ -279,10 +279,6 @@ public class Main extends Application {
 			
 			@Override
 			public void handle(MouseEvent arg0) {
-				Node cursor = Main.this.cursor;
-				double mouseX =arg0.getSceneX()+cursor.getBoundsInLocal().getWidth()/2 * cursor.getScaleX();
-				double mouseY = arg0.getSceneY()+cursor.getBoundsInLocal().getHeight()/2 * cursor.getScaleY();
-				moveCursor(mouseX,mouseY);
 				double y = arg0.getSceneY() - Main.this.stage.getHeight()/2;
 				double x = arg0.getSceneX() - Main.this.stage.getWidth()/2;
 				double angle = 0;

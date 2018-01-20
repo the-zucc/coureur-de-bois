@@ -92,8 +92,10 @@ public abstract class GameElement {
 				for(int j = column-1; j <= column+1; j++)
 					if(j < Model.getInstance().getFloorMatrix().getNumberOfMapDivisionColumns()-1 && j >= 0) {
 						ArrayList<CollisionBox> boxesFromDivision = divisionRow.get(j);
+						int tryCount = 0;
 						while(true)
 							try {
+								tryCount++;
 								for(CollisionBox cb:boxesFromDivision)
 									if(cb != collisionBox) {
 										if(collisionBox.collides(cb)) {
@@ -102,9 +104,11 @@ public abstract class GameElement {
 											collisionBox.setPosition(position);
 										}
 									}
+
 								break;
 							}catch(ConcurrentModificationException cme) {
-								
+								if(tryCount > 10)
+									position = position.add(new Point3D(0,10,0));
 							}
 					}
 			}

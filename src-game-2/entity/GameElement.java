@@ -9,8 +9,7 @@ public abstract class GameElement{
 	
 	//instance variables
 	private String id;
-	private Point3D position;
-	
+	protected Point3D position;
 	
 	protected GameElement(Point3D position) {
 		this.position = position;
@@ -27,9 +26,7 @@ public abstract class GameElement{
 	 * builds the {@link GameComponent} of the object
 	 * @return a {@link GameComponent} representing the element's 3D visuals 
 	 */
-	public static GameComponent buildComponent() {
-		return null;
-	};
+	public abstract GameComponent buildComponent();
 	/**
 	 * returns the position of the element
 	 * @return a {@link Point3D} containing the element's position
