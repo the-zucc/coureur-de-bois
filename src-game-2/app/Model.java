@@ -42,7 +42,7 @@ public class Model implements Updateable{
 		double gridColumnWidth=100;
 		double gridColumnHeight=100;
 		
-		collisionGrid = new CollisionGrid(mapWidth, mapHeight, (int)(mapWidth/gridColumnWidth), (int)(mapWidth/gridColumnWidth));
+		collisionGrid = CollisionGrid.newInstance(mapWidth, mapHeight, (int)(mapWidth/gridColumnWidth), (int)(mapWidth/gridColumnWidth));
 		for(int i = 0; i < mobCount; i++) {
 			double x = (double)ThreadLocalRandom.current().nextInt((int)-(mapWidth/2), (int)mapWidth/2);
 			double z = (double)ThreadLocalRandom.current().nextInt((int)-(mapHeight/2), (int)mapHeight/2);

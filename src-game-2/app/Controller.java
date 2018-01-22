@@ -15,7 +15,7 @@ import javafx.util.Duration;
 
 public class Controller extends Application{
 		
-	public static double debug_gameCameraDistance = 1000;
+	public static double debug_gameCameraDistance = 800;
 	
 	private static Stage applicationWindow;
 	
@@ -29,6 +29,7 @@ public class Controller extends Application{
 
 	@Override
 	public void start(Stage arg0) throws Exception {
+		
 		//instanciate the model
 		Model model = Model.getInstance();
 		//instanciate the game scene
@@ -52,7 +53,6 @@ public class Controller extends Application{
 		
 		//show the window.
 		arg0.show();
-		
 	}
 	
 	/**

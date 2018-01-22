@@ -1,5 +1,6 @@
 package entity;
 
+import collision.SphericalCollisionBox;
 import javafx.geometry.Point3D;
 import javafx.scene.paint.Color;
 import util.Updateable;
@@ -17,6 +18,7 @@ public class Player extends GameElement implements Updateable {
 	public Player(Point3D position, Color hatColor) {
 		super(position);
 		this.hatColor = hatColor;
+		collisionBox = new SphericalCollisionBox(position, 20);
 	}
 	
 	
@@ -26,6 +28,8 @@ public class Player extends GameElement implements Updateable {
 		runIfIsRunning();
 		updateGravityJumpVector();
 		move();
+		updateCollisionGrid();
+		correctCollisions();
 	}
 
 	@Override

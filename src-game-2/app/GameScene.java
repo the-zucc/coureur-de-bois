@@ -38,7 +38,7 @@ public class GameScene extends SubScene implements Updateable {
 	private static GameScene instance;
 	public static GameScene getInstance() {
 		if(instance == null) {
-			instance = new GameScene(new Group(), 1280, 720, SceneAntialiasing.BALANCED);
+			instance = new GameScene(new Group(), 1280, 720, SceneAntialiasing.DISABLED);
 		}
 		return instance;
 	}
@@ -52,8 +52,8 @@ public class GameScene extends SubScene implements Updateable {
 	
 	private Group gameEnvRoot;
 	private PerspectiveCamera gameCamera;
-	private static double floorSectionWidth = 5;
-	private static double floorSectionHeight = 5;
+	private static double floorSectionWidth = 50;
+	private static double floorSectionHeight = 50;
 	
 	
 	private GameScene(Parent arg0, double arg1, double arg2, SceneAntialiasing arg4) {

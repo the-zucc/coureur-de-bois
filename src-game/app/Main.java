@@ -12,6 +12,7 @@ import javafx.event.EventHandler;
 import javafx.scene.Camera;
 import javafx.scene.Cursor;
 import javafx.scene.Group;
+import javafx.scene.ImageCursor;
 import javafx.scene.Node;
 import javafx.scene.PerspectiveCamera;
 import javafx.scene.Scene;
@@ -86,10 +87,11 @@ public class Main extends Application {
 		
 		subScenes.put("principal", gameSubScene);
 		scenes.put("principal", defaultGameScene);
+		defaultGameScene.setCursor(new ImageCursor(new Image("res/cursor.png")));
 		((Group)defaultGameScene.getRoot()).getChildren().add(cursor);
 		
 		//create a debug Model instance with a number of mobs
-		Model.newDebugInstance(500, 0);
+		Model.newDebugInstance(500, 10);
 		
 		//for debug and testing purposes
 		Label label = new Label("player position");
@@ -216,7 +218,7 @@ public class Main extends Application {
 	 * @param scene the scene for which the conrols are to be binded.
 	 */
 	public void bindGameControls(Scene scene) {
-		scene.setCursor(Cursor.NONE);
+		
 		scene.setOnKeyPressed(new EventHandler<KeyEvent>(){
 
 			@Override
