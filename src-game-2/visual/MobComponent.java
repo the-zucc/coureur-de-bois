@@ -1,7 +1,12 @@
 package visual;
 
+import app.GameScene;
 import app.Model;
+import app.UI;
+import javafx.event.EventHandler;
+import javafx.geometry.Bounds;
 import javafx.geometry.Point3D;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.Box;
@@ -25,6 +30,22 @@ public class MobComponent extends GameComponent implements Updateable{
 		boxNose.setTranslateY(-35);
 		boxNose.setTranslateZ(17.5);
 		getChildren().addAll(box1, box2, box3, boxNose);
+		this.setOnMouseEntered(new EventHandler<MouseEvent>(){
+
+			@Override
+			public void handle(MouseEvent arg0) {
+				UI.getInstance().addUiNode(new InformationPane(Model.getInstance().getElement(getId())));
+			}
+			
+		});
+		this.setOnMouseExited(new EventHandler<MouseEvent>() {
+
+			@Override
+			public void handle(MouseEvent arg0) {
+				UI.getInstance().removeUiNode(getId()+"_info");
+			}
+			
+		});
 	}
 	
 	@Override
@@ -33,5 +54,8 @@ public class MobComponent extends GameComponent implements Updateable{
 		this.setTranslateX(position.getX());
 		this.setTranslateY(position.getY());
 		this.setTranslateZ(position.getZ());
-	}	
+	}
+	public static InformationPane buildInformationPane(MobComponent mob) {
+		return null;
+	}
 }

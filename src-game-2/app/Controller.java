@@ -33,6 +33,10 @@ public class Controller extends Application{
 		Model model = Model.getInstance();
 		//instanciate the game scene
 		GameScene gameScene = GameScene.getInstance();
+		
+		//instanciate the UI
+		UI ui = UI.getInstance();
+		
 		//refresh the gameElements list from theMmodel instance
 		long nanoTime = System.nanoTime(); 
 		model.update(nanoTime);
@@ -41,39 +45,16 @@ public class Controller extends Application{
 		//start the game loop
 		GameLoop.getInstance().start();
 		//start 
-		arg0.setScene(GameScene.getInstance());
+		arg0.setScene(ui);
 		//define that the application window is the current stage
 		applicationWindow = arg0;
 		GameScene.getInstance().setCameraOnPlayer(GameScene.getInstance().getGameCamera(), Model.getInstance().getCurrentPlayer().getId());
-		//setCameraToSee(GameScene.getInstance().getGameCamera());
+		
 		//show the window.
 		arg0.show();
 		
 	}
-//	private static void setCameraToSee(PerspectiveCamera camera) {
-//		Animation animation = new Transition() {
-//			{
-//				setCycleDuration(Duration.millis(500));
-//			}
-//			protected void interpolate(double frac) {
-//				double isometricValueZ = -350;
-//				double isometricValueY = -350;
-//				double angle = -45; 
-//
-//				// currentCamera.setTranslateX(isometricValue*frac);
-//				camera.setTranslateY(isometricValueY * frac);
-//				camera.setTranslateZ(isometricValueZ * frac);
-//
-//				// camera.setRotationAxis(Rotate.Y_AXIS);
-//				// camera.setRotate(80*frac);
-//				camera.setRotationAxis(Rotate.X_AXIS);
-//				camera.setRotate(angle * frac);
-//				// currentCamera.setRotationAxis(Rotate.Z_AXIS);
-//				// currentCamera.setRotate(0*frac);
-//			}
-//		};
-//		animation.play();
-//	}
+	
 	/**
 	 * exits the fullscreen mode of the applicationWindow. it also centers the window on screen, as well as scales the subscene accordingly.
 	 */
@@ -92,7 +73,7 @@ public class Controller extends Application{
 	 * scales the subsene with the stage
 	 */
 	public static void updateScreenResolution() {
-		GameScene.getInstance().getGameViewPort().setWidth(applicationWindow.getWidth());
-		GameScene.getInstance().getGameViewPort().setHeight(applicationWindow.getHeight());
+		GameScene.getInstance().setWidth(applicationWindow.getWidth());
+		GameScene.getInstance().setHeight(applicationWindow.getHeight());
 	}
 }

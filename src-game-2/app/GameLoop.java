@@ -25,6 +25,7 @@ public class GameLoop extends AnimationTimer {
 		double deltaTime = (arg0 - lastFrameNanoseconds)/1e9;
 		Model.getInstance().update(deltaTime);
 		GameScene.getInstance().update(deltaTime);
+		UI.getInstance().update(deltaTime);
 	}
 
 }

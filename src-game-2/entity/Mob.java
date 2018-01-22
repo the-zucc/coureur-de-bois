@@ -23,7 +23,7 @@ public class Mob extends GameElement implements Updateable {
 		this.level = level;
 		this.color = color;
 		
-		movement = new Point3D(ThreadLocalRandom.current().nextInt(), 0, ThreadLocalRandom.current().nextInt()).normalize();
+		//movement = new Point3D(ThreadLocalRandom.current().nextInt(), 0, ThreadLocalRandom.current().nextInt()).normalize();
 	}
 	@Override
 	public void update(double deltaTime) {
@@ -34,6 +34,10 @@ public class Mob extends GameElement implements Updateable {
 		return new MobComponent(color);
 	}
 	private void move() {
-		position = position.add(movement);
+		if(movement != null)
+			position = position.add(movement);
+	}
+	public double getHp() {
+		return hp;
 	}
 }
