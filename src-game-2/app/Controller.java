@@ -42,7 +42,7 @@ public class Controller extends Application{
 		long nanoTime = System.nanoTime(); 
 		model.update(nanoTime);
 		//refresh the gameComponents list from the GameScene instance
-		gameScene.update(nanoTime);
+		gameScene.setupInitialComponents();
 		//start the game loop
 		GameLoop.getInstance().start();
 		//start 

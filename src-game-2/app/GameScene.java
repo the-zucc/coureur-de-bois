@@ -1,9 +1,11 @@
 package app;
 
+import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.concurrent.ThreadLocalRandom;
 
-import entity.GameElement;
+import entity.Entity;
+import entity.LivingEntity;
 import entity.Player;
 import javafx.event.EventHandler;
 import javafx.geometry.Point3D;
@@ -32,13 +34,14 @@ import javafx.scene.transform.Rotate;
 import util.Updateable;
 import visual.GameComponent;
 import visual.PlayerComponent;
+import visual.UpdateableComponent;
 
 public class GameScene extends SubScene implements Updateable {
 	//for singleton implementation
 	private static GameScene instance;
 	public static GameScene getInstance() {
 		if(instance == null) {
-			instance = new GameScene(new Group(), 1280, 720, SceneAntialiasing.DISABLED);
+			instance = new GameScene(new Group(), 1280, 720, SceneAntialiasing.BALANCED);
 		}
 		return instance;
 	}
@@ -47,13 +50,14 @@ public class GameScene extends SubScene implements Updateable {
 		return instance;
 	}
 	//instance variables
-	private Hashtable<String, GameComponent> gameComponents;
+	private Hashtable<String, GameComponent> gameComponentsHashtable;
+	private ArrayList<GameComponent> gameComponents;
 	
 	
 	private Group gameEnvRoot;
 	private PerspectiveCamera gameCamera;
-	private static double floorSectionWidth = 50;
-	private static double floorSectionHeight = 50;
+	private static double floorSectionWidth = 100;
+	private static double floorSectionHeight = 100;
 	
 	
 	private GameScene(Parent arg0, double arg1, double arg2, SceneAntialiasing arg4) {
@@ -61,16 +65,14 @@ public class GameScene extends SubScene implements Updateable {
 		super(arg0, arg1, arg2, true, arg4);
 		
 		//defining the gameComponents and the uINodes Hashtables
-		gameComponents = new Hashtable<String, GameComponent>();
-		
+		gameComponentsHashtable = new Hashtable<String, GameComponent>();
+		gameComponents = new ArrayList<GameComponent>();
 		
 		//defining custom class attributes
 		
 		
 		gameEnvRoot = (Group)this.getRoot();//the root of the game environment (passed as argument to the subscene below)
 								//it holds all the game elements' components
-		
-		
 		
 		gameCamera = buildGameCamera();//build the game camera
 		
@@ -85,47 +87,63 @@ public class GameScene extends SubScene implements Updateable {
 		//debug
 		gameEnvRoot.getChildren().add(new Label("2fdshajflhdsjaklhjkl"));
 	}
+	public void setupInitialComponents() {
+		for(Entity e:Model.getInstance().getGameElements()) {
+			updateComponentOfElement(e);
+		}
+	}
+	
 	/**
 	 * updates the game components of the game subscene
 	 */
 	public void updateGraphics(double deltaTime) {
-		for(GameElement ge:Model.getInstance().getGameElements()) {
-			updateComponentOfElement(ge);
+		Entity e;
+		for(int i = 0; i < gameComponents.size(); i++) {
+			GameComponent gc = gameComponents.get(i);
+			e = Model.getInstance().getEntity(gc.getId());
+			if(e == null) {
+				gameComponents.remove(gc);
+				gameComponentsHashtable.remove(gc.getId());
+				gameEnvRoot.getChildren().remove(gc);
+			}
+			else
+				updateComponentOfElement(e);
 			//((Updateable) component).update(deltaTime);
 		}
 	}
+	
 	/**
-	 * updates the specified {@link GameElement}'s corresponding element's position and state.
-	 * @param ge the {@link GameElement} of which to update the component
+	 * updates the specified {@link Entity}'s corresponding element's position and state.
+	 * @param ge the {@link Entity} of which to update the component
 	 */
-	private void updateComponentOfElement(GameElement ge) {
-		GameComponent component = gameComponents.get(ge.getId());
+	private void updateComponentOfElement(Entity e) {
+		GameComponent component = gameComponentsHashtable.get(e.getId());
 		if(component == null) {
-			component = ge.buildComponent();
-			component.setId(ge.getId());
-			gameComponents.put(ge.getId(), component);
+			component = e.buildComponent();
+			component.setId(e.getId());
+			gameComponentsHashtable.put(component.getId(), component);
+			gameComponents.add(component);
 			gameEnvRoot.getChildren().add(component);
 		}
-		if(component instanceof Updateable) {
-			Point3D position = ge.getPosition();
-			component.setTranslateX(position.getX());
-			component.setTranslateY(position.getY());
-			component.setTranslateZ(position.getZ());
+		if(component instanceof UpdateableComponent) {
+			((UpdateableComponent) component).update(e);
 		}
 	}
+	
 	/**
 	 * returns a reference to the component corresponding to the specified component/element ID.
 	 * @param id the id of the component
 	 * @return the component corresponding to the specified id
 	 */
 	public GameComponent getComponent(String id) {
-		return gameComponents.get(id);
+		return gameComponentsHashtable.get(id);
 	}
 	
 	@Override
 	public void update(double deltaTime) {
 		updateGraphics(deltaTime);
 	}
+	
 	/**
 	 * Builds the {@link PerspectiveCamera} of the game scene.
 	 * @return the camera to add to the desired scene or subscene
@@ -197,7 +215,7 @@ public class GameScene extends SubScene implements Updateable {
 //				material.setDiffuseColor(Color.CYAN);
 //				break;
 //			}
-			material.setDiffuseColor(Color.GREEN);
+			material.setDiffuseColor(Color.FLORALWHITE);
 			meshView.setMaterial(material);
 			meshView.setTranslateX(0);
 			meshView.setTranslateY(-25);
@@ -209,7 +227,7 @@ public class GameScene extends SubScene implements Updateable {
 	}
 	
 	public void setCameraOnPlayer(Camera camera, String id) {
-		gameComponents.get(id).getChildren().add(camera);
+		gameComponentsHashtable.get(id).getChildren().add(camera);
 	}
 	
 	public void addUINode(Node node) {

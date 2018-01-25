@@ -15,12 +15,10 @@ import util.Updateable;
 import visual.GameComponent;
 import visual.MobComponent;
 
-public class Mob extends GameElement implements Updateable {
-	private double hp;
-	private double xpReward;
+public class Mob extends LivingEntity implements Updateable {
+	
 	private int level;
 	private Color color;
-	private Point3D movement;
 
 	public Mob(Point3D position, double hp, double xpReward, int level, Color color) {
 		super(position);
@@ -28,7 +26,9 @@ public class Mob extends GameElement implements Updateable {
 		this.xpReward = xpReward;
 		this.level = level;
 		this.color = color;
-		this.collisionBox = new SphericalCollisionBox(position, 20);
+		this.collisionBox = new SphericalCollisionBox(getId(),position, 20);
+		
+		//debug
 		movement = new Point3D(ThreadLocalRandom.current().nextInt(), 0, ThreadLocalRandom.current().nextInt()).normalize();
 	}
 	@Override
@@ -41,10 +41,7 @@ public class Mob extends GameElement implements Updateable {
 	public GameComponent buildComponent() {
 		return new MobComponent(color);
 	}
-	private void move() {
-		if(movement != null)
-			position = position.add(movement);
-	}
+	
 	/**
 	 * removes the collisionBox from its old section in the CollisionGrid instance,
 	 * and adds the collisionBox to its new section. This is for optimizing, to
@@ -55,5 +52,13 @@ public class Mob extends GameElement implements Updateable {
 	
 	public double getHp() {
 		return hp;
+	}
+	@Override
+	protected void updateMovementVector() {
+		
+	}
+	@Override
+	public double getXpReward() {
+		return xpReward;
 	}
 }

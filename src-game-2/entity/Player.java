@@ -7,25 +7,24 @@ import util.Updateable;
 import visual.GameComponent;
 import visual.PlayerComponent;
 
-public class Player extends GameElement implements Updateable {
+public class Player extends LivingEntity implements Updateable {
 	
-	private static double movementSpeed = 10; 
+	private static double movementSpeed = 10;
 	private Color hatColor;
-	private Point3D movementVector;
-	private Point3D gravityJumpVector;
-	boolean up, down, left, right, isRunning, isJumping, newOrientation;
+	private boolean up, down, left, right, newOrientation;
 	
 	public Player(Point3D position, Color hatColor) {
 		super(position);
 		this.hatColor = hatColor;
-		collisionBox = new SphericalCollisionBox(position, 20);
+		collisionBox = new SphericalCollisionBox(getId(), position, 20);
 	}
-	
 	
 	@Override
 	public void update(double deltaTime) {
+		
 		updateMovementVector();
 		runIfIsRunning();
+		updateAngleDegrees();
 		updateGravityJumpVector();
 		move();
 		updateCollisionGrid();
@@ -56,55 +55,51 @@ public class Player extends GameElement implements Updateable {
 	public void setIsRunning(boolean value) {
 		isRunning = value;
 	}
-	
-	private void move() {
-		if(movementVector != null)
-			position = position.add(movementVector);
-		if(gravityJumpVector != null)
-			position = position.add(gravityJumpVector);
-	}
 	/**
 	 * updates the movement vector with the new orientation of the player using the boolean values up, down left, right
 	 */
-	private void updateMovementVector() {
+	protected void updateMovementVector() {
 		double angle = Math.toRadians(45);
 		if(up) {
 			if(up && right) {
-				movementVector = new Point3D(Math.cos(angle) * movementSpeed, 0, Math.sin(angle) * movementSpeed);
+				movement = new Point3D(Math.cos(angle) * movementSpeed, 0, Math.sin(angle) * movementSpeed);
 				return;
 			}
 			else if(up && left) {
-				movementVector = new Point3D(-Math.cos(angle) * movementSpeed, 0, Math.sin(angle) * movementSpeed);
+				movement = new Point3D(-Math.cos(angle) * movementSpeed, 0, Math.sin(angle) * movementSpeed);
 				return;
 			}
-			movementVector = new Point3D(0, 0, movementSpeed);
+			movement = new Point3D(0, 0, movementSpeed);
 			return;
 		}
 		else if(down) {
 			if(down && right) {
-				movementVector = new Point3D(Math.cos(angle) * movementSpeed, 0, -Math.sin(angle) * movementSpeed);
+				movement = new Point3D(Math.cos(angle) * movementSpeed, 0, -Math.sin(angle) * movementSpeed);
 				return;
 			}
 			else if(down && left) {
-				movementVector = new Point3D(-Math.cos(angle) * movementSpeed, 0, -Math.sin(angle) * movementSpeed);
+				movement = new Point3D(-Math.cos(angle) * movementSpeed, 0, -Math.sin(angle) * movementSpeed);
 				return;
 			}
-			movementVector = new Point3D(0, 0, -movementSpeed);
+			movement = new Point3D(0, 0, -movementSpeed);
 			return;
 		}
 		else if(right)
-			movementVector = new Point3D(movementSpeed, 0, 0);
+			movement = new Point3D(movementSpeed, 0, 0);
 		else if(left)
-			movementVector = new Point3D(-movementSpeed, 0, 0);
+			movement = new Point3D(-movementSpeed, 0, 0);
 		else
-			movementVector = null;
+			movement = null;
 	}
+	
 	private void runIfIsRunning() {
-		if(movementVector != null)
+		if(movement != null)
 			if(isRunning)
-				movementVector = movementVector.add(movementVector);
+				movement = movement.add(movement);
 	}
-	private void updateGravityJumpVector(){
-		
+	
+	@Override
+	public double getXpReward() {
+		return 100 * level + maxHp;
 	}
 }

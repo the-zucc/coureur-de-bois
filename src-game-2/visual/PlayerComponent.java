@@ -1,12 +1,17 @@
 package visual;
 
+import entity.Entity;
+import entity.LivingEntity;
+import entity.Player;
+import javafx.geometry.Point3D;
 import javafx.scene.Group;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.Box;
+import javafx.scene.transform.Rotate;
 import util.Updateable;
 
-public class PlayerComponent extends GameComponent implements Updateable {
+public class PlayerComponent extends LivingComponent{
 	
 	//the player 3D element
 	private Group playerNode;
@@ -21,21 +26,25 @@ public class PlayerComponent extends GameComponent implements Updateable {
 		boxHat.setTranslateY(-51.25);
 		boxHat2.setTranslateY(-57.5);
 		
+		//color for the skin of the player
+		PhongMaterial materialHead = new PhongMaterial();
+		materialHead.setDiffuseColor(Color.PINK);
+		
 		//box for the player's nose
 		Box boxNose = new Box(5,5,5);
-		boxNose.setTranslateY(-12.5);
+		boxNose.setTranslateY(-27.5);
 		boxNose.setTranslateZ(17.5);
+		boxNose.setMaterial(materialHead);
 		
 		//box for the player head
 		Box boxHead = new Box(30,30,30);
 		boxHead.setTranslateY(-35);
-		PhongMaterial materialHead = new PhongMaterial();
-		materialHead.setDiffuseColor(Color.PINK);
 		boxHead.setMaterial(materialHead);
 		
 		//constructing the player's head
 		playerHead = new Group();
 		playerHead.getChildren().addAll(boxHead, boxNose, boxHat, boxHat2);
+		
 		
 		//material for the hat
 		PhongMaterial hatMaterial = new PhongMaterial();
@@ -53,14 +62,24 @@ public class PlayerComponent extends GameComponent implements Updateable {
 		
 		//adding children to the returnValue
 		
-		playerNode.getChildren().addAll(box1, box3, boxHat2, playerHead);
+		playerNode.getChildren().addAll(box1, box3, playerHead);
 		getChildren().add(playerNode);
 	}
-
+	
 	@Override
-	public void update(double deltaTime) {
-		
+	public void update(Entity e) {
+		if(e instanceof Player) {
+			Point3D position = e.getPosition();
+			setTranslateX(position.getX());
+			setTranslateY(position.getY());
+			setTranslateZ(position.getZ());
+			playerNode.setRotationAxis(Rotate.Y_AXIS);
+			playerNode.setRotate(((LivingEntity) e).getAngleDegrees());
+		}
+		else
+			System.out.println("wrong entity type for component");
 	}
+	
 	public Group getPlayerNode() {
 		return playerNode;
 	}

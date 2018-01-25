@@ -11,14 +11,14 @@ import util.IdMaker;
 import util.Updateable;
 import visual.GameComponent;
 
-public abstract class GameElement{
+public abstract class Entity{
 	
 	//instance variables
 	private String id;
 	protected Point3D position;
 	protected CollisionBox collisionBox;
 	
-	protected GameElement(Point3D position) {
+	protected Entity(Point3D position) {
 		this.position = position;
 		id = IdMaker.next();
 	}
@@ -74,7 +74,9 @@ public abstract class GameElement{
 		}
 		return returnVal;
 	}
-
+	public CollisionBox getCollisionBox() {
+		return collisionBox;
+	}
 	protected void updateCollisionGrid(){
 		collisionBox.setPosition(position);
 	}

@@ -1,5 +1,6 @@
 package app;
 
+import collision.CollisionGrid;
 import javafx.animation.AnimationTimer;
 
 public class GameLoop extends AnimationTimer {
@@ -24,6 +25,7 @@ public class GameLoop extends AnimationTimer {
 	public void handle(long arg0) {
 		double deltaTime = (arg0 - lastFrameNanoseconds)/1e9;
 		Model.getInstance().update(deltaTime);
+		CollisionGrid.getInstance().update();
 		GameScene.getInstance().update(deltaTime);
 		UI.getInstance().update(deltaTime);
 	}

@@ -1,7 +1,11 @@
 package collision;
 
 import java.util.ArrayList;
+import java.util.Hashtable;
 import java.util.Vector;
+
+import app.Model;
+import entity.Entity;
 
 public class CollisionGrid {
 	
@@ -27,8 +31,11 @@ public class CollisionGrid {
 	//for optimizing the collision detection system
 	private Vector<Vector<ArrayList<CollisionBox>>> mapDivisions;
 	private ArrayList<CollisionBox> universalCollisionList;
+	private ArrayList<CollisionBox> collisionBoxes;
+	
 	public CollisionGrid(double mapWidth, double mapHeight, int columnCount, int rowCount) {
 		//build the collision grid like in the old code
+		collisionBoxes = new ArrayList<CollisionBox>();
 		universalCollisionList = new ArrayList<CollisionBox>();
 		mapDivisions = new Vector<Vector<ArrayList<CollisionBox>>>();
 		heightMatrix = new Vector<Vector<Double>>(); 
@@ -41,6 +48,26 @@ public class CollisionGrid {
 			}
 		}
 	}
+	
+	public void update() {
+		for(Entity e:Model.getInstance().getGameElements()) {
+			if(!collisionBoxes.contains(e.getCollisionBox())) {
+				CollisionBox cb = e.getCollisionBox();
+				collisionBoxes.add(e.getCollisionBox());
+			}
+		}
+		for(CollisionBox cb:collisionBoxes) {
+			Model model = Model.getInstance();
+			Entity e = model.getEntity(cb.getId()); 
+			if(e == null) {
+				collisionBoxes.remove(cb.getId());
+				removeFromDivision(cb.getMapDivisionRow(), cb.getMapDivisionColumn(), cb);
+			}
+			//else
+			//	cb.setPosition(e.getPosition());
+		}
+	}
+	
 	public static int getMapDivisionWidth() {
 		return mapDivisionWidth;
 	}
@@ -59,7 +86,6 @@ public class CollisionGrid {
 		}catch(ArrayIndexOutOfBoundsException aioobe){
 			//System.out.println("could not find division to remove");
 		}
-		
 	}
 	/**
 	 * add the specified {@link CollisionBox} to the desired map division.
@@ -86,5 +112,10 @@ public class CollisionGrid {
 	}
 	public int getNumberOfMapDivisionColumns(){
 		return mapDivisions.get(0).size();
+	}
+	public void addCollisionBox(CollisionBox cb) {
+		this.collisionBoxes.add(cb);
+		if(cb.tooBigForCollisionDetectionSystem)
+			universalCollisionList.add(cb);
 	}
 }

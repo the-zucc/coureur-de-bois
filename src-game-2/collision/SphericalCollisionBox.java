@@ -7,8 +7,8 @@ public class SphericalCollisionBox extends CollisionBox {
 	
 	private double radius;
 	
-	public SphericalCollisionBox(Point3D position, double radius) {
-		super(position);
+	public SphericalCollisionBox(String id, Point3D position, double radius) {
+		super(id, position);
 		this.radius=radius;
 		if(radius > CollisionGrid.getMapDivisionHeight()/2 || radius > CollisionGrid.getMapDivisionWidth()/2) {
 			tooBigForCollisionDetectionSystem = true;

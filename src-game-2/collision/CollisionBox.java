@@ -9,6 +9,7 @@ public abstract class CollisionBox {
 	protected boolean tooBigForCollisionDetectionSystem;
 	private int mapDivisionRow;
 	private int mapDivisionColumn;
+	private String id;
 	
 	public int getMapDivisionRow() {
 		return mapDivisionRow;
@@ -18,8 +19,9 @@ public abstract class CollisionBox {
 		return mapDivisionColumn;
 	}
 	
-	public CollisionBox(Point3D position) {
-		position = position;
+	public CollisionBox(String id, Point3D position) {
+		this.id = id;
+		this.position = position;
 	}
 	
 	public void setPosition(Point3D position) {
@@ -87,4 +89,8 @@ public abstract class CollisionBox {
 	protected abstract Point3D getCorrectionRectangularBox(RectangularCollisionBox box);
 	protected abstract Point3D getCorrectionDiagonalBox(DiagonalCollisionBox box);
 	protected abstract Point3D getCorrectionCylindricalBox(CylindricalCollisionBox arg0);
+
+	public String getId() {
+		return id;
+	}
 }

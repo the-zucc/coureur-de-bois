@@ -3,8 +3,8 @@ package collision;
 import javafx.geometry.Point3D;
 
 public class RectangularCollisionBox extends CollisionBox {
-	public RectangularCollisionBox(Point3D position) {
-		super(position);
+	public RectangularCollisionBox(String id, Point3D position) {
+		super(id, position);
 	}
 
 	@Override

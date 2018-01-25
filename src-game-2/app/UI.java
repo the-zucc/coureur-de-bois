@@ -2,6 +2,8 @@ package app;
 
 import java.util.Hashtable;
 
+import entity.Entity;
+import entity.LivingEntity;
 import entity.Player;
 import javafx.event.EventHandler;
 import javafx.scene.Group;
@@ -17,7 +19,7 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.transform.Rotate;
 import util.Updateable;
-import visual.InformationPane;
+import visual.FloatingUINode;
 import visual.PlayerComponent;
 
 public class UI extends Scene implements Updateable{
@@ -38,7 +40,7 @@ public class UI extends Scene implements Updateable{
 	
 	//instance variables
 	private Hashtable<String, Node> uINodes;
-	private Hashtable<String, InformationPane> informationPanes;
+	private Hashtable<String, FloatingUINode> floatingUINodes;
 	private Group uIRoot;
 	private SubScene gameViewPort;
 	private double mouseX;
@@ -47,7 +49,7 @@ public class UI extends Scene implements Updateable{
 	public UI(Parent root, double width, double height, boolean depthBuffer, SceneAntialiasing antiAliasing) {
 		super(root, width, height, depthBuffer, SceneAntialiasing.DISABLED);
 		uINodes = new Hashtable<String, Node>();
-		informationPanes = new Hashtable<String, InformationPane>();
+		floatingUINodes = new Hashtable<String, FloatingUINode>();
 		
 		uIRoot = (Group)root;//the root of the whole UI. it holds the UI labels and all, as well as the game subscene
 		
@@ -58,21 +60,21 @@ public class UI extends Scene implements Updateable{
 		bindGameControls(this);
 	}
 	public void addUiNode(Node element) {
-		if(element instanceof InformationPane)
-			informationPanes.put(element.getId(), (InformationPane)element);
+		if(element instanceof FloatingUINode)
+			floatingUINodes.put(element.getId(), (FloatingUINode)element);
 		uINodes.put(element.getId(), element);
 		uIRoot.getChildren().add(element);
 	}
 	public void removeUiNode(String id) {
 		uIRoot.getChildren().remove(uINodes.get(id));
 		uINodes.remove(id);
-		if(informationPanes.containsKey(id))
-			informationPanes.remove(id);
+		if(floatingUINodes.containsKey(id))
+			floatingUINodes.remove(id);
 	}
 	@Override
 	public void update(double deltaTime) {
 		//System.out.println("X:"+Controller.getApplicationWindow().getX()+" Y:"+Controller.getApplicationWindow().getY());
-		for(InformationPane p:informationPanes.values()) {
+		for(FloatingUINode p:floatingUINodes.values()) {
 			p.update(deltaTime);
 		}
 	}
@@ -140,6 +142,7 @@ public class UI extends Scene implements Updateable{
 				event.consume();
 			}
 		});
+		
 		scene.setOnMouseMoved(new EventHandler<MouseEvent>() {
 			
 			@Override
@@ -149,8 +152,11 @@ public class UI extends Scene implements Updateable{
 				double y = arg0.getSceneY() - Controller.getApplicationWindow().getHeight()/2;
 				double x = arg0.getSceneX() - Controller.getApplicationWindow().getWidth()/2;
 				Group player = ((PlayerComponent)GameScene.getInstance().getComponent(Model.getInstance().getCurrentPlayer().getId())).getPlayerNode();
+				Group head = ((PlayerComponent)GameScene.getInstance().getComponent(Model.getInstance().getCurrentPlayer().getId())).getPlayerHead();
 				player.setRotationAxis(Rotate.Y_AXIS);
-				player.setRotate(Math.toDegrees(Math.atan2(y, x))+90);
+				double anglePlayer = player.getRotate();
+				head.setRotationAxis(Rotate.Y_AXIS);
+				head.setRotate(Math.toDegrees(Math.atan2(y, x))+90 - player.getRotate());
 				
 				arg0.consume();
 			}
@@ -165,8 +171,11 @@ public class UI extends Scene implements Updateable{
 				double y = arg0.getSceneY() - Controller.getApplicationWindow().getHeight()/2;
 				double x = arg0.getSceneX() - Controller.getApplicationWindow().getWidth()/2;
 				Group player = ((PlayerComponent)GameScene.getInstance().getComponent(Model.getInstance().getCurrentPlayer().getId())).getPlayerNode();
+				Group head = ((PlayerComponent)GameScene.getInstance().getComponent(Model.getInstance().getCurrentPlayer().getId())).getPlayerHead();
 				player.setRotationAxis(Rotate.Y_AXIS);
-				player.setRotate(Math.toDegrees(Math.atan2(y, x))+90);
+				double anglePlayer = player.getRotate();
+				head.setRotationAxis(Rotate.Y_AXIS);
+				head.setRotate(Math.toDegrees(Math.atan2(y, x))+90 - player.getRotate());
 				
 				arg0.consume();
 			}
@@ -183,8 +192,10 @@ public class UI extends Scene implements Updateable{
 						picked = picked.getParent();
 						id = picked.getId();
 					}
-					System.out.println(Model.getInstance().getElement(id).getPosition());
-					//Model.getInstance().getCurrentPlayer().attack(Model.getInstance().getElement(id));
+					System.out.println(id);
+					Entity e = Model.getInstance().getEntity(id);
+					if(e instanceof LivingEntity)
+						Model.getInstance().getCurrentPlayer().attack((LivingEntity)e);
 				}catch(NullPointerException npe) {
 					System.out.println("No element here");
 				}

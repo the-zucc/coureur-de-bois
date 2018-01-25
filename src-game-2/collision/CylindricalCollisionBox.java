@@ -7,8 +7,8 @@ public class CylindricalCollisionBox extends CollisionBox {
 	private double radius;
 	private double height;
 	
-	public CylindricalCollisionBox(Point3D position, double radius, double height){
-		super(position);
+	public CylindricalCollisionBox(String id, Point3D position, double radius, double height){
+		super(id, position);
 		this.radius = radius;
 		this.height = height;
 	}

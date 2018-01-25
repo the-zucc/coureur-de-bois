@@ -3,8 +3,8 @@ package collision;
 import javafx.geometry.Point3D;
 
 public class DiagonalCollisionBox extends CollisionBox {
-	public DiagonalCollisionBox(Point3D position) {
-		super(position);
+	public DiagonalCollisionBox(String id, Point3D position) {
+		super(id, position);
 	}
 
 	@Override

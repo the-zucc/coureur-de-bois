@@ -13,7 +13,7 @@ import javafx.scene.shape.Box;
 import util.Updateable;
 import visual.GameComponent;
 
-public class MobComponent extends GameComponent implements Updateable{
+public class MobComponent extends LivingComponent implements Updateable{
 
 	public MobComponent(Color color) {
 		Box box1 = new Box(20,20,20);
@@ -34,7 +34,7 @@ public class MobComponent extends GameComponent implements Updateable{
 
 			@Override
 			public void handle(MouseEvent arg0) {
-				UI.getInstance().addUiNode(new InformationPane(Model.getInstance().getElement(getId())));
+				UI.getInstance().addUiNode(new FloatingUINode(Model.getInstance().getEntity(getId())));
 			}
 			
 		});
@@ -50,12 +50,12 @@ public class MobComponent extends GameComponent implements Updateable{
 	
 	@Override
 	public void update(double deltaTime) {
-		Point3D position = Model.getInstance().getElement(getId()).getPosition();
+		Point3D position = Model.getInstance().getEntity(getId()).getPosition();
 		this.setTranslateX(position.getX());
 		this.setTranslateY(position.getY());
 		this.setTranslateZ(position.getZ());
 	}
-	public static InformationPane buildInformationPane(MobComponent mob) {
+	public static FloatingUINode buildInformationPane(MobComponent mob) {
 		return null;
 	}
 }

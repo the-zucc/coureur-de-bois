@@ -5,7 +5,7 @@ import java.util.Hashtable;
 import java.util.concurrent.ThreadLocalRandom;
 
 import collision.CollisionGrid;
-import entity.GameElement;
+import entity.Entity;
 import entity.Mob;
 import entity.Player;
 import javafx.geometry.Point3D;
@@ -18,14 +18,14 @@ public class Model implements Updateable{
 	
 	public static Model getInstance() {
 		if(instance == null) {
-			instance = new Model(5000, 5000, 5, 2000, 10);
+			instance = new Model(5000, 5000, 5, 1500, 10);
 		}
 		return instance;
 	}
 	
 	//instance variables
-	private ArrayList<GameElement> gameElements;
-	private Hashtable<String,GameElement> gameElementsHashtable;
+	private ArrayList<Entity> entities;
+	private Hashtable<String,Entity> gameElementsHashtable;
 	private CollisionGrid collisionGrid;
 	private Player currentPlayer;
 	private double mapWidth;
@@ -36,8 +36,8 @@ public class Model implements Updateable{
 		this.mapWidth = mapWidth;
 		
 		//initialize the lists of elements
-		gameElements = new ArrayList<GameElement>();
-		gameElementsHashtable = new Hashtable<String, GameElement>();
+		entities = new ArrayList<Entity>();
+		gameElementsHashtable = new Hashtable<String, Entity>();
 		
 		double gridColumnWidth=100;
 		double gridColumnHeight=100;
@@ -59,8 +59,8 @@ public class Model implements Updateable{
 		addElement(currentPlayer);
 	}
 	
-	public ArrayList<GameElement> getGameElements(){
-		return gameElements;
+	public ArrayList<Entity> getGameElements(){
+		return entities;
 	}
 	
 	/**
@@ -68,7 +68,7 @@ public class Model implements Updateable{
 	 * @param id the id of the element to get
 	 * @return the GameElement that has the specified ID.
 	 */
-	public GameElement getElement(String id) {
+	public Entity getEntity(String id) {
 		return gameElementsHashtable.get(id);
 	}
 	
@@ -76,9 +76,19 @@ public class Model implements Updateable{
 	 * adds the specified gameElement to the model
 	 * @param ge the Element to add to the model
 	 */
-	public void addElement(GameElement ge) {
-		gameElements.add(ge);
+	public void addElement(Entity ge) {
+		entities.add(ge);
 		gameElementsHashtable.put(ge.getId(), ge);
+	}
+	/**
+	 * removes the 
+	 * @param id
+	 */
+	public void removeElement(String id) {
+		Entity ge = gameElementsHashtable.get(id);
+		gameElementsHashtable.remove(id);
+		entities.remove(ge);
+		
 	}
 	public double getMapWidth() {
 		return mapWidth;
@@ -88,7 +98,7 @@ public class Model implements Updateable{
 	}
 	@Override
 	public void update(double deltaTime) {
-		for (GameElement ge: gameElements) {
+		for (Entity ge: entities) {
 			if(ge instanceof Updateable)
 				((Updateable) ge).update(deltaTime);
 		}
