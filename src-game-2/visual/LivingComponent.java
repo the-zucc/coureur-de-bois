@@ -1,11 +1,9 @@
 package visual;
 
-import app.Model;
 import entity.Entity;
 import entity.LivingEntity;
 import javafx.geometry.Point3D;
 import javafx.scene.transform.Rotate;
-import util.Updateable;
 
 public abstract class LivingComponent extends GameComponent implements UpdateableComponent{
 
@@ -17,7 +15,7 @@ public abstract class LivingComponent extends GameComponent implements Updateabl
 			setTranslateY(position.getY());
 			setTranslateZ(position.getZ());
 			setRotationAxis(Rotate.Y_AXIS);
-			setRotate(((LivingEntity) e).getAngleDegrees());
+			setRotate(((LivingEntity) e).getAngleDegrees()+90);
 		}
 		else
 			System.out.println("wrong entity type for component");

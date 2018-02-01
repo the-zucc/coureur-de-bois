@@ -2,7 +2,6 @@ package visual;
 
 import app.Controller;
 import app.GameScene;
-import app.UI;
 import entity.Entity;
 import entity.Mob;
 import javafx.geometry.Bounds;
@@ -10,7 +9,6 @@ import javafx.scene.Group;
 import javafx.scene.control.Label;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
-import javafx.stage.Screen;
 import util.Updateable;
 
 /**

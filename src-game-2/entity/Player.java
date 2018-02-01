@@ -21,7 +21,6 @@ public class Player extends LivingEntity implements Updateable {
 	
 	@Override
 	public void update(double deltaTime) {
-		
 		updateMovementVector();
 		runIfIsRunning();
 		updateAngleDegrees();

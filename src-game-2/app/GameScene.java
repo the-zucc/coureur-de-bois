@@ -5,35 +5,22 @@ import java.util.Hashtable;
 import java.util.concurrent.ThreadLocalRandom;
 
 import entity.Entity;
-import entity.LivingEntity;
-import entity.Player;
-import javafx.event.EventHandler;
-import javafx.geometry.Point3D;
 import javafx.scene.Camera;
-import javafx.scene.Cursor;
 import javafx.scene.Group;
-import javafx.scene.ImageCursor;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.PerspectiveCamera;
-import javafx.scene.Scene;
 import javafx.scene.SceneAntialiasing;
 import javafx.scene.SubScene;
 import javafx.scene.control.Label;
-import javafx.scene.image.Image;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
-import javafx.scene.shape.Box;
 import javafx.scene.shape.DrawMode;
 import javafx.scene.shape.MeshView;
 import javafx.scene.shape.TriangleMesh;
 import javafx.scene.transform.Rotate;
 import util.Updateable;
 import visual.GameComponent;
-import visual.PlayerComponent;
 import visual.UpdateableComponent;
 
 public class GameScene extends SubScene implements Updateable {
@@ -41,7 +28,7 @@ public class GameScene extends SubScene implements Updateable {
 	private static GameScene instance;
 	public static GameScene getInstance() {
 		if(instance == null) {
-			instance = new GameScene(new Group(), 1280, 720, SceneAntialiasing.BALANCED);
+			instance = new GameScene(new Group(), 1280, 720, SceneAntialiasing.DISABLED);
 		}
 		return instance;
 	}
@@ -152,11 +139,11 @@ public class GameScene extends SubScene implements Updateable {
 		double distance = Controller.debug_gameCameraDistance;
 		PerspectiveCamera returnVal = new PerspectiveCamera(true);
 		returnVal.setNearClip(0.1);
-		returnVal.setFarClip(4000);
-		returnVal.setTranslateY(-distance);
+		returnVal.setFarClip(40000);
+		returnVal.setTranslateY(-distance/3);
 		returnVal.setTranslateZ(-distance);
 		returnVal.setRotationAxis(Rotate.X_AXIS);
-		returnVal.setRotate(-45);
+		returnVal.setRotate(-17);
 		return returnVal;
 	}
 	

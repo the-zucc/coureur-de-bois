@@ -3,15 +3,10 @@ package app;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 
-import javafx.animation.Animation;
-import javafx.animation.Transition;
 import javafx.application.Application;
-import javafx.scene.Camera;
-import javafx.scene.PerspectiveCamera;
-import javafx.scene.Scene;
-import javafx.scene.transform.Rotate;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.stage.Stage;
-import javafx.util.Duration;
 
 public class Controller extends Application{
 		
@@ -51,6 +46,8 @@ public class Controller extends Application{
 		applicationWindow = arg0;
 		GameScene.getInstance().setCameraOnPlayer(GameScene.getInstance().getGameCamera(), Model.getInstance().getCurrentPlayer().getId());
 		
+		setupScreenResizing();
+		
 		//show the window.
 		arg0.show();
 	}
@@ -75,5 +72,23 @@ public class Controller extends Application{
 	public static void updateScreenResolution() {
 		GameScene.getInstance().setWidth(applicationWindow.getWidth());
 		GameScene.getInstance().setHeight(applicationWindow.getHeight());
+	}
+	private void setupScreenResizing(){
+		applicationWindow.heightProperty().addListener(new ChangeListener<Number>(){
+
+			@Override
+			public void changed(ObservableValue<? extends Number> arg0, Number arg1, Number arg2) {
+				GameScene.getInstance().setHeight(arg2.doubleValue());
+			}
+			
+		});
+		applicationWindow.widthProperty().addListener(new ChangeListener<Number>(){
+
+			@Override
+			public void changed(ObservableValue<? extends Number> arg0, Number arg1, Number arg2) {
+				GameScene.getInstance().setWidth(arg2.doubleValue());
+			}
+			
+		});
 	}
 }

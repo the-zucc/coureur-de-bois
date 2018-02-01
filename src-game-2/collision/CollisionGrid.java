@@ -1,7 +1,6 @@
 package collision;
 
 import java.util.ArrayList;
-import java.util.Hashtable;
 import java.util.Vector;
 
 import app.Model;

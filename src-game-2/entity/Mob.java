@@ -1,13 +1,7 @@
 package entity;
 
-import java.util.ArrayList;
-import java.util.ConcurrentModificationException;
-import java.util.Vector;
 import java.util.concurrent.ThreadLocalRandom;
 
-import app.Model;
-import collision.CollisionBox;
-import collision.CollisionGrid;
 import collision.SphericalCollisionBox;
 import javafx.geometry.Point3D;
 import javafx.scene.paint.Color;
@@ -34,6 +28,7 @@ public class Mob extends LivingEntity implements Updateable {
 	@Override
 	public void update(double deltaTime) {
 		move();
+		updateAngleDegrees();
 		updateCollisionGrid();
 		correctCollisions();
 	}

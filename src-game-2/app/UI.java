@@ -195,7 +195,8 @@ public class UI extends Scene implements Updateable{
 					System.out.println(id);
 					Entity e = Model.getInstance().getEntity(id);
 					if(e instanceof LivingEntity)
-						Model.getInstance().getCurrentPlayer().attack((LivingEntity)e);
+						if(e != Model.getInstance().getCurrentPlayer())
+							Model.getInstance().getCurrentPlayer().attack((LivingEntity)e);
 				}catch(NullPointerException npe) {
 					System.out.println("No element here");
 				}

@@ -8,7 +8,6 @@ import collision.CollisionBox;
 import collision.CollisionGrid;
 import javafx.geometry.Point3D;
 import util.IdMaker;
-import util.Updateable;
 import visual.GameComponent;
 
 public abstract class Entity{

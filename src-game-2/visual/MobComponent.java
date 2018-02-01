@@ -1,17 +1,14 @@
 package visual;
 
-import app.GameScene;
 import app.Model;
 import app.UI;
 import javafx.event.EventHandler;
-import javafx.geometry.Bounds;
 import javafx.geometry.Point3D;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.Box;
 import util.Updateable;
-import visual.GameComponent;
 
 public class MobComponent extends LivingComponent implements Updateable{
 
@@ -24,12 +21,22 @@ public class MobComponent extends LivingComponent implements Updateable{
 		materialHead.setDiffuseColor(Color.PINK);
 		box2.setMaterial(materialHead);
 		boxNose.setMaterial(materialHead);
+		
 		box1.setTranslateY(-12.5);
 		box2.setTranslateY(-35);
 		box3.setTranslateY(-10.75);
+		
 		boxNose.setTranslateY(-35);
 		boxNose.setTranslateZ(17.5);
-		getChildren().addAll(box1, box2, box3, boxNose);
+		
+		//hair
+		PhongMaterial materialHair = new PhongMaterial(Color.ORANGERED);
+		Box boxHair = new Box(34, 5, 34);
+		//Box boxHair2 = new Box(5, )
+		boxHair.setMaterial(materialHair);
+		boxHair.setTranslateY(-50);
+		
+		getChildren().addAll(box1, box2, box3, boxNose, boxHair);
 		this.setOnMouseEntered(new EventHandler<MouseEvent>(){
 
 			@Override
@@ -44,7 +51,6 @@ public class MobComponent extends LivingComponent implements Updateable{
 			public void handle(MouseEvent arg0) {
 				UI.getInstance().removeUiNode(getId()+"_info");
 			}
-			
 		});
 	}
 	

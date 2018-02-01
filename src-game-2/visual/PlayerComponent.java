@@ -9,7 +9,6 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.Box;
 import javafx.scene.transform.Rotate;
-import util.Updateable;
 
 public class PlayerComponent extends LivingComponent{
 	
@@ -74,7 +73,7 @@ public class PlayerComponent extends LivingComponent{
 			setTranslateY(position.getY());
 			setTranslateZ(position.getZ());
 			playerNode.setRotationAxis(Rotate.Y_AXIS);
-			playerNode.setRotate(((LivingEntity) e).getAngleDegrees());
+			playerNode.setRotate(((LivingEntity) e).getAngleDegrees()-90);
 		}
 		else
 			System.out.println("wrong entity type for component");
