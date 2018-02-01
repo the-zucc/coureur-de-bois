@@ -35,9 +35,4 @@ public class SphericalCollisionBox extends CollisionBox {
 		double frac = magnitude/distance;
 		return new Point3D(frac*(box.getPosition().getX()-position.getX()), frac*(box.getPosition().getY()-position.getY()), frac*(box.getPosition().getZ()-position.getZ()));
 	}
-	
-	
-	
-
-	
 }
