@@ -50,15 +50,6 @@ public abstract class CollisionBox {
 		if(arg0 instanceof SphericalCollisionBox) {
 			return getCorrectionSphericalBox((SphericalCollisionBox)arg0);
 		}
-		else if(arg0 instanceof RectangularCollisionBox) {
-			return getCorrectionRectangularBox((RectangularCollisionBox)arg0);
-		}
-		else if(arg0 instanceof DiagonalCollisionBox) {
-			return getCorrectionDiagonalBox((DiagonalCollisionBox)arg0);
-		}
-		else if(arg0 instanceof CylindricalCollisionBox) {
-			return getCorrectionCylindricalBox((CylindricalCollisionBox)arg0);
-		}
 		return null;
 	}
 	
@@ -68,27 +59,12 @@ public abstract class CollisionBox {
 		if(arg0 instanceof SphericalCollisionBox) {
 			return collidesSphericalBox((SphericalCollisionBox)arg0);
 		}
-		else if(arg0 instanceof RectangularCollisionBox) {
-			return collidesRectangularBox((RectangularCollisionBox)arg0);
-		}
-		else if(arg0 instanceof DiagonalCollisionBox) {
-			return collidesDiagonalBox((DiagonalCollisionBox)arg0);
-		}
-		else if(arg0 instanceof CylindricalCollisionBox) {
-			return collidesCylindricalBox((CylindricalCollisionBox)arg0);
-		}
 		return false;
 	}
 	
 	protected abstract boolean collidesSphericalBox(SphericalCollisionBox box);
-	protected abstract boolean collidesRectangularBox(RectangularCollisionBox box);
-	protected abstract boolean collidesDiagonalBox(DiagonalCollisionBox box);
-	protected abstract boolean collidesCylindricalBox(CylindricalCollisionBox box);
 	
 	protected abstract Point3D getCorrectionSphericalBox(SphericalCollisionBox box);
-	protected abstract Point3D getCorrectionRectangularBox(RectangularCollisionBox box);
-	protected abstract Point3D getCorrectionDiagonalBox(DiagonalCollisionBox box);
-	protected abstract Point3D getCorrectionCylindricalBox(CylindricalCollisionBox arg0);
 
 	public String getId() {
 		return id;

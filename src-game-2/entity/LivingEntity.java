@@ -60,6 +60,7 @@ public abstract class LivingEntity extends Entity {
 	protected void updateAngleDegrees() {
 		if(movement != null)
 			angleDegrees = new Point3D(movement.getX(), 0, movement.getZ()).angle(Rotate.X_AXIS);
+		System.out.println(angleDegrees);
 	}
 	
 	public double getAngleDegrees() {
