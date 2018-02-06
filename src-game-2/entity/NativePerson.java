@@ -26,5 +26,11 @@ public class NativePerson extends LivingEntity {
 		// TODO Auto-generated method stub
 		return 0;
 	}
+
+	@Override
+	public void update(double deltaTime) {
+		// TODO Auto-generated method stub
+		
+	}
 	
 }

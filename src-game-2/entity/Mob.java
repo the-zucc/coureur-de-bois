@@ -9,7 +9,7 @@ import util.Updateable;
 import visual.GameComponent;
 import visual.MobComponent;
 
-public class Mob extends LivingEntity implements Updateable {
+public class Mob extends LivingEntity{
 	
 	private int level;
 	private Color color;

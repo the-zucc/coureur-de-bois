@@ -3,9 +3,10 @@ package entity;
 import app.Model;
 import javafx.geometry.Point3D;
 import javafx.scene.transform.Rotate;
+import util.Updateable;
 import visual.GameComponent;
 
-public abstract class LivingEntity extends Entity {
+public abstract class LivingEntity extends Entity implements Updateable{
 	
 	protected double hp;//current health points
 	

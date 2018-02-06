@@ -136,7 +136,7 @@ public class GameScene extends SubScene implements Updateable {
 	 * @return the camera to add to the desired scene or subscene
 	 */
 	private static PerspectiveCamera buildGameCamera() {
-		double distance = Controller.debug_gameCameraDistance;
+		double distance = Controller.gameCameraDistance;
 		PerspectiveCamera returnVal = new PerspectiveCamera(true);
 		returnVal.setNearClip(0.1);
 		returnVal.setFarClip(40000);

@@ -7,7 +7,7 @@ import util.Updateable;
 import visual.GameComponent;
 import visual.PlayerComponent;
 
-public class Player extends LivingEntity implements Updateable {
+public class Player extends LivingEntity {
 	
 	private static double movementSpeed = 10;
 	private Color hatColor;
