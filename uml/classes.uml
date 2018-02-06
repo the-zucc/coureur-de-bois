@@ -1,0 +1,140 @@
+@startuml
+
+skinparam class {
+    BackgroundColor #ffffff
+    ArrowColor #000000
+    BorderColor #000000
+}
+skinparam stereotypeCBackgroundColor<<Singleton>> #FF7700
+package javafx{
+    package javafx.scene #5f6021{
+        class Scene
+        class SubScene
+    }
+    package javafx.geometry{
+        class Point3D
+    }
+    package application{
+        class Application
+    }
+}
+
+package entity #888888{
+    abstract class Entity{
+        # position:Point3D
+        # id:String
+        # collisionBox:CollisionBox
+        + getId():String
+        + getPosition():Point3D
+    }
+    Point3D <-- Entity
+    LivingEntity <|-down- Entity
+    class LivingEntity{
+        # hp:double
+        # xpReward:double
+        # move():void
+        # update():void
+        # dealdamage(double):void
+    }
+    Mob <|-left- LivingEntity
+    note bottom:classe générique pour\nles entités vivantes
+    class Mob{
+        eatFood(Food):void
+
+    }
+    Player <|-down- LivingEntity
+    class Player{
+        + setUp(boolean):void
+        + setDown(boolean):void
+        + setLeft(boolean):void
+        + setRight(boolean ):void
+        + update(double):void
+        + attack(LivingEntity):void
+    }
+    class NativePerson{
+        + trade();
+    }
+    NativePerson <|-- LivingEntity
+}
+package app #e25846{
+    class Model<<Singleton>>{
+        - {static} Instance:Model
+        + getInstance():Model
+    }
+    class UI<<Singleton>>{
+        - {static} Instance:Model
+        + getInstance():Model
+    }
+    UI <|-- Scene
+    class GameScene<<Singleton>>{
+        - {static} Instance:GameScene
+        + getInstance():GameScene
+    }
+    GameScene <|-- SubScene
+    UI -right-> GameScene
+    class Controller{
+        applicationWindow:javafx.stage.Stage
+    }
+    note left:la classe Controller\ninitialise les Singletons\ndans le bon ordre
+    Controller --> UI: "initialise"
+    Controller --> GameScene
+    Controller --> Model
+}
+package collision #888888{
+    class CollisionGrid{
+        collisionBoxes:ArrayList<CollisionBox>
+    }
+    CollisionGrid *-up- CollisionBox
+    abstract class CollisionBox{
+        {abstract}collidesSphericalBox():boolean
+        {abstract}collidesCubeBox():boolean
+        {abstract}collidesCapsuleBox():boolean
+        {abstract}getCorrectionSphericalBox():Point3D
+        {abstract}getCorrectionCubeBox():Point3D
+        {abstract}getCorrectionCapsuleBox():Point3D
+    }
+    class SphericalCollisionBox{
+
+    }
+    SphericalCollisionBox <|-down- CollisionBox
+    class CapsuleCollisionBox{
+
+    }
+    CollisionBox --|> CapsuleCollisionBox
+    CubeCollisionBox <|-left- CollisionBox
+}
+CollisionBox <-- Entity
+package visual #888888{
+    abstract class Component{
+        - id:String
+        + getId():String
+        - position:Point3D
+    }
+    class PlayerComponent{
+        + PlayerComponent(String)
+    }
+}
+
+Entity-->Component
+package item #337777{
+    abstract class Item{
+    }
+    abstract class Weapon{
+        
+    }
+    Weapon <|-- Item
+    abstract class MeeleeWeapon{
+
+    }
+    MeeleeWeapon <|-right-Weapon
+    abstract class RangedWeapon{
+
+    }
+    RangedWeapon <|-left- Weapon
+    abstract class Food{
+
+    }
+    Food <|-left- Item
+}
+
+@enduml
