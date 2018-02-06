@@ -134,7 +134,6 @@ package entity #888888{
 
     'les autochtones dans le jeu
     class NativePerson{
-        - 
         + trade(Item):Item
     }
     NativePerson <|-left- Npc
