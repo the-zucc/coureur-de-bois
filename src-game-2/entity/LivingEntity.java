@@ -1,5 +1,6 @@
 package entity;
 
+import app.GameLogic;
 import app.Model;
 import javafx.geometry.Point3D;
 import javafx.scene.transform.Rotate;
@@ -26,8 +27,6 @@ public abstract class LivingEntity extends Entity implements Updateable{
 	
 	protected int level; 
 	
-	protected Point3D gravityAndJump;
-	
 	protected Point3D movement;
 	
 	
@@ -40,6 +39,11 @@ public abstract class LivingEntity extends Entity implements Updateable{
 
 	@Override
 	public abstract GameComponent buildComponent();
+	
+	public void jump(){
+		this.gravity = new Point3D(GameLogic.getJump().getX(), GameLogic.getJump().getY(), GameLogic.getJump().getZ());
+	}
+	 
 	
 	protected void move() {
 		if(movement != null)
@@ -54,14 +58,10 @@ public abstract class LivingEntity extends Entity implements Updateable{
 		
 	}
 	
-	protected void fall() {
-		
-	}
-	
 	protected void updateAngleDegrees() {
 		if(movement != null)
 			angleDegrees = new Point3D(movement.getX(), 0, movement.getZ()).angle(Rotate.X_AXIS);
-		System.out.println(angleDegrees);
+		//System.out.println(angleDegrees);
 	}
 	
 	public double getAngleDegrees() {

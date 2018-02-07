@@ -92,11 +92,12 @@ package util{
 package entity #888888{
     'entité générique
     abstract class Entity{
-        # position:Point3D
         # id:String
+        # position:Point3D
         # collisionBox:CollisionBox
         + getId():String
         + getPosition():Point3D
+        + {abstract} buildComponent():Component
     }
     Point3D <-down- Entity
     
@@ -197,7 +198,8 @@ package visual #888888{
         + getId():String
         - position:Point3D
     }
-    Entity -right-> Component
+    'Entity -right-> Component
+    Component <|-left- Group
     class PlayerComponent{
         + PlayerComponent(String)
     }
@@ -205,7 +207,8 @@ package visual #888888{
     class MooseComponent{
 
     }
-    MooseComponent <|-- Component
+    MooseComponent <|-up- Component
+
     
 }
 
@@ -213,28 +216,31 @@ package visual #888888{
 package item #337777{
     abstract class Item{
     }
+    
+    Human *-- Item: "1..*"
+
     abstract class Wearable{
 
     }
-    Wearable <|-down- Item
+    Wearable <|-right- Item
     abstract class Weapon{
         
     }
-    Weapon <|-- Wearable
+    Weapon <|-right- Wearable
     abstract class MeleeWeapon{
 
     }
-    MeleeWeapon <|-right-Weapon
+    MeleeWeapon <|-down-Weapon
     abstract class RangedWeapon{
 
     }
-    RangedWeapon <|-left- Weapon
-    abstract class Food{
+    RangedWeapon <|-up- Weapon
+    abstract class Consumable{
 
     }
-    Food <|-left- Item
+    Consumable <|-up- Item
     
-    Human *-- Item: "1..*"
+    
 }
 
 

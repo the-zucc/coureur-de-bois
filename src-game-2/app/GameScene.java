@@ -28,7 +28,7 @@ public class GameScene extends SubScene implements Updateable {
 	private static GameScene instance;
 	public static GameScene getInstance() {
 		if(instance == null) {
-			instance = new GameScene(new Group(), 1280, 720, SceneAntialiasing.DISABLED);
+			instance = new GameScene(new Group(), 1280, 720, SceneAntialiasing.BALANCED);
 		}
 		return instance;
 	}
@@ -140,10 +140,10 @@ public class GameScene extends SubScene implements Updateable {
 		PerspectiveCamera returnVal = new PerspectiveCamera(true);
 		returnVal.setNearClip(0.1);
 		returnVal.setFarClip(40000);
-		returnVal.setTranslateY(-distance/3);
+		returnVal.setTranslateY(-distance/*/3*/);
 		returnVal.setTranslateZ(-distance);
 		returnVal.setRotationAxis(Rotate.X_AXIS);
-		returnVal.setRotate(-17);
+		returnVal.setRotate(/*-17*/-45);
 		return returnVal;
 	}
 	

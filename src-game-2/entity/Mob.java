@@ -2,6 +2,7 @@ package entity;
 
 import java.util.concurrent.ThreadLocalRandom;
 
+import app.Model;
 import collision.SphericalCollisionBox;
 import javafx.geometry.Point3D;
 import javafx.scene.paint.Color;
@@ -13,6 +14,7 @@ public class Mob extends LivingEntity{
 	
 	private int level;
 	private Color color;
+	private Point3D target;
 
 	public Mob(Point3D position, double hp, double xpReward, int level, Color color) {
 		super(position);
@@ -23,14 +25,32 @@ public class Mob extends LivingEntity{
 		this.collisionBox = new SphericalCollisionBox(getId(),position, 20);
 		
 		//debug
-		movement = new Point3D(ThreadLocalRandom.current().nextInt(), 0, ThreadLocalRandom.current().nextInt()).normalize();
+		//movement = new Point3D(ThreadLocalRandom.current().nextInt(), 0, ThreadLocalRandom.current().nextInt()).normalize();
+		
 	}
 	@Override
 	public void update(double deltaTime) {
 		move();
+		fall();
 		updateAngleDegrees();
 		updateCollisionGrid();
 		correctCollisions();
+		Point3D point = Model.getInstance().getCurrentPlayer().getPosition();
+		if(position.distance(point) < 500)
+			setTarget(point);
+		if(ThreadLocalRandom.current().nextDouble()<0.0003)
+			jump();
+		//else
+			//movement = new Point3D(ThreadLocalRandom.current().nextDouble()/10, 0, ThreadLocalRandom.current().nextDouble()/10);
+	}
+	@Override
+	protected void move(){
+		super.move();
+		if(movement != null && target != null){
+			if(position.distance(target) < movement.distance(Point3D.ZERO)){
+				movement = null;
+			}
+		}
 	}
 	@Override
 	public GameComponent buildComponent() {
@@ -55,5 +75,10 @@ public class Mob extends LivingEntity{
 	@Override
 	public double getXpReward() {
 		return xpReward;
+	}
+	public void setTarget(Point3D target){
+		this.target = target;
+		movement = target.subtract(position).normalize();
+		//System.out.println(movement);
 	}
 }

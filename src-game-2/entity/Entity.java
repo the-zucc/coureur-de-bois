@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.ConcurrentModificationException;
 import java.util.Vector;
 
+import app.GameLogic;
+import app.Model;
 import collision.CollisionBox;
 import collision.CollisionGrid;
 import javafx.geometry.Point3D;
@@ -16,6 +18,7 @@ public abstract class Entity{
 	private String id;
 	protected Point3D position;
 	protected CollisionBox collisionBox;
+	protected Point3D gravity;
 	
 	protected Entity(Point3D position) {
 		this.position = position;
@@ -78,5 +81,21 @@ public abstract class Entity{
 	}
 	protected void updateCollisionGrid(){
 		collisionBox.setPosition(position);
+	}
+	protected void fall(){
+		if(position.getY() < 0){
+			if(gravity == null)
+				gravity = new Point3D(GameLogic.getGravity().getX(), GameLogic.getGravity().getY(), GameLogic.getGravity().getZ());
+			else
+				gravity = gravity.add(GameLogic.getGravity());
+		}
+		if(gravity != null){
+			position = position.add(gravity);
+			if(position.getY() > 0){
+				position = new Point3D(position.getX(), 0, position.getZ());
+				gravity = null;
+			}
+		}
+		
 	}
 }

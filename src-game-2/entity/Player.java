@@ -23,6 +23,7 @@ public class Player extends LivingEntity {
 	public void update(double deltaTime) {
 		updateMovementVector();
 		runIfIsRunning();
+		fall();
 		updateAngleDegrees();
 		updateGravityJumpVector();
 		move();

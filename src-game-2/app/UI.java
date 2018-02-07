@@ -100,8 +100,8 @@ public class UI extends Scene implements Updateable{
 					player.setRight(true);
 				else if(code.equals(KeyCode.SHIFT))
 					player.setIsRunning(true);
-//				else if(code.equals(KeyCode.SPACE))
-//					player.jump();
+				else if(code.equals(KeyCode.SPACE))
+					player.jump();
 				arg0.consume();
 			}
 			
