@@ -36,7 +36,7 @@ public class Mob extends LivingEntity{
 		updateCollisionGrid();
 		correctCollisions();
 		Point3D point = Model.getInstance().getCurrentPlayer().getPosition();
-		if(position.distance(point) < 500)
+		//if(position.distance(point) < 500)
 			setTarget(point);
 		if(ThreadLocalRandom.current().nextDouble()<0.0003)
 			jump();

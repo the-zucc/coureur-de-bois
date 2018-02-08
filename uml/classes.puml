@@ -45,7 +45,7 @@ package javafx{
         class Application{
         
         }
-        Application *-- Stage:"1..*"
+        Application *-- Stage : "1..*"
     }
 }
 
@@ -98,6 +98,7 @@ package entity #888888{
         + getId():String
         + getPosition():Point3D
         + {abstract} buildComponent():Component
+        # fall():void
     }
     Point3D <-down- Entity
     
@@ -109,6 +110,7 @@ package entity #888888{
         # update():void
         # dealdamage(double):void
         - die():void
+        - jump():void
     }
     LivingEntity <|-down- Entity
     
@@ -123,13 +125,13 @@ package entity #888888{
         + setUp(boolean):void
         + setDown(boolean):void
         + setLeft(boolean):void
-        + setRight(boolean ):void
+        + setRight(boolean):void
         + attack(LivingEntity):void
     }
     Player <|-left- Human
     
     abstract class Npc{
-        - behavior:Behavior
+
     }
     Npc <|-down- Human
 
@@ -140,22 +142,54 @@ package entity #888888{
     NativePerson <|-left- Npc
 
     'Mobs comme des animaux, des créatures, etc
-    abstract class Mob{
-        - {abstract} eatFood(Food):void
-        - {abstract} targetFood(Food):void
-        - {abstract} walk():void
-        
+    abstract class Animal{
+        - {abstract} targetFood():void
     }
-    Mob <|-left- LivingEntity
+    Animal <|-left- LivingEntity
     class Deer{
 
     }
-    Deer <|-down- Mob
+    Deer <|-- VegetableEater
     class Moose{
 
     }
-    Moose <|-left- Mob
+    Moose <|-left- VegetableEater
+    class MeatEater{
 
+    }
+    MeatEater <|-up-Animal
+    class Fox{
+
+    }
+    Fox <|-left- MeatEater
+    class Wolf{
+
+    }
+    Wolf <|-left- MeatEater
+    class VegetableEater{
+
+    }
+    VegetableEater <|-left- Animal
+    class Bear{
+
+    }
+    Bear <|-left- MeatEater
+    class Rabbit{
+
+    }
+    Rabbit <|-- VegetableEater
+    abstract class Tree{
+
+    }
+    Tree <|-right- Entity
+    class Bouleau{
+
+    }
+    Bouleau <|-- Tree
+    class Sapin{
+
+    }
+    Sapin <|-- Tree
 }
 
 package collision #888888{
@@ -177,6 +211,7 @@ package collision #888888{
         {abstract}getCorrectionCapsuleBox():Point3D
 
     }
+    Entity -right-> CollisionBox
 
     'sphère
     class SphericalCollisionBox{
@@ -187,7 +222,7 @@ package collision #888888{
     class CapsuleCollisionBox{
 
     }
-    CollisionBox -left-|> CapsuleCollisionBox
+    CollisionBox -right-|> CapsuleCollisionBox
     'CubeCollisionBox <|-left- CollisionBox
 }
 'CollisionBox -right-> Entity
@@ -244,9 +279,5 @@ package item #337777{
 }
 
 
-package behavior{
-    abstract class Behavior{
-        
-    }
-}
+
 @enduml
