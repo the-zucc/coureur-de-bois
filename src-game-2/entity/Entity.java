@@ -91,11 +91,10 @@ public abstract class Entity{
 		}
 		if(gravity != null){
 			position = position.add(gravity);
-			if(position.getY() > 0){
-				position = new Point3D(position.getX(), 0, position.getZ());
-				gravity = null;
-			}
 		}
-		
+		if(position.getY() > 0){
+			position = new Point3D(position.getX(), 0, position.getZ());
+			gravity = null;
+		}
 	}
 }

@@ -5,6 +5,209 @@ skinparam class {
     BorderColor #000000
 }
 skinparam stereotypeCBackgroundColor<<Singleton>> #FF7700
+
+
+package util{
+    interface Updateable{
+        + update(double):void
+    }
+    class IdMaker{
+        - {static} id:int
+        + {static} nextId():String
+    }
+}
+
+'entitÈs de jeu
+package entity #888888{
+    abstract class Entity{
+        # id:String
+        # position:Point3D
+        # collisionBox:CollisionBox
+        + getId():String
+        + getPosition():Point3D
+        + {abstract} buildComponent():Component
+        # fall():void
+    }
+    Point3D <-right- Entity
+    package entity.item #337777{
+        abstract class Item{
+            owner:Human
+        }
+        Item <|-left- Entity
+        
+
+        abstract class Wearable{
+
+        }
+        Wearable <|-left- Item
+        abstract class Weapon{
+            name:String
+            setOwner(Human):void
+        }
+        Weapon <|-left- Wearable
+        abstract class MeleeWeapon{
+            swing()
+        }
+        MeleeWeapon <|-down-Weapon
+        abstract class RangedWeapon{
+            shoot(double, double, double, double):void
+        }
+        RangedWeapon <|-up- Weapon
+        abstract class Consumable{
+            getConsumed()
+        }
+        Consumable <|-up- Item
+        class Apple{
+            
+        }
+    }
+    'entitÈ gÈnÈrique
+    
+    
+    
+    abstract class LivingEntity{
+        # hp:double
+        # xpReward:double
+        # move():void
+        # update():void
+        # dealdamage(double):void
+        - die():void
+        - jump():void
+    }
+    LivingEntity <|-down- Entity
+    
+    'les humains du jeu
+    abstract class Human{
+        - inventory:ArrayList<Item>
+    }
+    Human *-right- Item: "1..*"
+    Human <|-right- LivingEntity
+
+    'le joueur incarne un humain
+    class Player{
+        + setUp(boolean):void
+        + setDown(boolean):void
+        + setLeft(boolean):void
+        + setRight(boolean):void
+        + attack(LivingEntity):void
+    }
+    Player <|-left- Human
+    
+    abstract class Npc{
+        
+    }
+    Npc <|-down- Human
+
+    'les autochtones dans le jeu
+    class NativePerson{
+        + trade(Item):Item
+    }
+    NativePerson <|-left- Npc
+
+    abstract class Animal{
+    }
+    Animal <|-down- LivingEntity
+    class Deer{
+
+    }
+    Deer <|-- VegetableEater
+    class Moose{
+
+    }
+    Moose <|-down- VegetableEater
+    class MeatEater{
+
+    }
+    MeatEater <|-left-Animal
+    class Fox{
+
+    }
+    Fox <|-down- MeatEater
+    class Wolf{
+
+    }
+    Wolf <|-down- MeatEater
+    class VegetableEater{
+        
+    }
+    VegetableEater <|-left- Animal
+    class Bear{
+
+    }
+    Bear <|-down- MeatEater
+    class Rabbit{
+
+    }
+    Rabbit <|-- VegetableEater
+    abstract class Tree{
+
+    }
+    Tree <|-up- Entity
+    class Bouleau{
+
+    }
+    Bouleau <|-left- Tree
+    class Sapin{
+
+    }
+    Sapin <|-left- Tree
+}
+
+package entity.collision #888888{
+    'grille de collisions
+    class CollisionGrid<<Singleton>>{
+        collisionBoxes:ArrayList<CollisionBox>
+    }
+    CollisionGrid "1" *-up- "n"CollisionBox
+    
+    'boite de collision gÈnÈrique
+    abstract class CollisionBox{
+
+        {abstract}collidesSphericalBox():boolean
+        '{abstract}collidesCubeBox():boolean
+        {abstract}collidesCapsuleBox():boolean
+        
+        {abstract}getCorrectionSphericalBox():Point3D
+        '{abstract}getCorrectionCubeBox():Point3D
+        {abstract}getCorrectionCapsuleBox():Point3D
+
+    }
+    Entity -left-> CollisionBox
+
+    'sphËre
+    class SphericalCollisionBox{
+
+    }
+    SphericalCollisionBox <|-down- CollisionBox
+    'capsule
+    class CapsuleCollisionBox{
+
+    }
+    CollisionBox -left-|> CapsuleCollisionBox
+    'CubeCollisionBox <|-left- CollisionBox
+}
+'CollisionBox -right-> Entity
+
+package visual #888888{
+    abstract class Component{
+        - id:String
+        + getId():String
+        - position:Point3D
+    }
+    'Entity -right-> Component
+    Component <|-left- Group
+    class PlayerComponent{
+        + PlayerComponent(String)
+    }
+    PlayerComponent -left-|> Component
+    class MooseComponent{
+
+    }
+    MooseComponent <|-up- Component
+
+}
+@enduml
+@startuml
 'javafx, la base de l'engin graphique du programme
 package javafx{
     
@@ -64,7 +267,7 @@ package app #e25846{
         - {static} Instance:GameScene
         + getInstance():GameScene
     }
-    'note bottom:pour permettre de superposer\ndu rendu 3D ‡ du rendu 2D,\nune scËne en 2D est nÈcessaire.\nOn ajoute simplement un noeud\n qui sera une <i>SubScene ‡ la scËne\n2D. Elle sera manipulÈe comme\nun objet 2D, mais aura les fonctionnalitÈs\nd'une scËne en 3D\n(donc l'ajout de noeuds sera possible)
+    'note bottom:pour permettre de superposer\ndu rendu 3D ù du rendu 2D,\nune scùne en 2D est nùcessaire.\nOn ajoute simplement un noeud\n qui sera une <i>SubScene ù la scùne\n2D. Elle sera manipulùe comme\nun objet 2D, mais aura les fonctionnalitùs\nd'une scùne en 3D\n(donc l'ajout de noeuds sera possible)
     GameScene <|-- SubScene
     
     UI -left-> GameScene
@@ -77,207 +280,4 @@ package app #e25846{
     Controller -left-> Model
     Controller -left-|> Application
 }
-
-package util{
-    interface Updateable{
-        + update(double):void
-    }
-    class IdMaker{
-        - {static} id:int
-        + {static} nextId():String
-    }
-}
-
-'entitÈs de jeu
-package entity #888888{
-    'entitÈ gÈnÈrique
-    abstract class Entity{
-        # id:String
-        # position:Point3D
-        # collisionBox:CollisionBox
-        + getId():String
-        + getPosition():Point3D
-        + {abstract} buildComponent():Component
-        # fall():void
-    }
-    Point3D <-down- Entity
-    
-    
-    abstract class LivingEntity{
-        # hp:double
-        # xpReward:double
-        # move():void
-        # update():void
-        # dealdamage(double):void
-        - die():void
-        - jump():void
-    }
-    LivingEntity <|-down- Entity
-    
-    'les humains du jeu
-    abstract class Human{
-        - inventory:ArrayList<Item>
-    }
-    Human <|-down- LivingEntity
-
-    'le joueur incarne un humain
-    class Player{
-        + setUp(boolean):void
-        + setDown(boolean):void
-        + setLeft(boolean):void
-        + setRight(boolean):void
-        + attack(LivingEntity):void
-    }
-    Player <|-left- Human
-    
-    abstract class Npc{
-
-    }
-    Npc <|-down- Human
-
-    'les autochtones dans le jeu
-    class NativePerson{
-        + trade(Item):Item
-    }
-    NativePerson <|-left- Npc
-
-    'Mobs comme des animaux, des crÈatures, etc
-    abstract class Animal{
-        - {abstract} targetFood():void
-    }
-    Animal <|-left- LivingEntity
-    class Deer{
-
-    }
-    Deer <|-- VegetableEater
-    class Moose{
-
-    }
-    Moose <|-left- VegetableEater
-    class MeatEater{
-
-    }
-    MeatEater <|-up-Animal
-    class Fox{
-
-    }
-    Fox <|-left- MeatEater
-    class Wolf{
-
-    }
-    Wolf <|-left- MeatEater
-    class VegetableEater{
-
-    }
-    VegetableEater <|-left- Animal
-    class Bear{
-
-    }
-    Bear <|-left- MeatEater
-    class Rabbit{
-
-    }
-    Rabbit <|-- VegetableEater
-    abstract class Tree{
-
-    }
-    Tree <|-right- Entity
-    class Bouleau{
-
-    }
-    Bouleau <|-- Tree
-    class Sapin{
-
-    }
-    Sapin <|-- Tree
-}
-
-package collision #888888{
-    'grille de collisions
-    class CollisionGrid<<Singleton>>{
-        collisionBoxes:ArrayList<CollisionBox>
-    }
-    CollisionGrid "1" *-up- "n"CollisionBox
-    
-    'boite de collision gÈnÈrique
-    abstract class CollisionBox{
-
-        {abstract}collidesSphericalBox():boolean
-        {abstract}collidesCubeBox():boolean
-        {abstract}collidesCapsuleBox():boolean
-        
-        {abstract}getCorrectionSphericalBox():Point3D
-        {abstract}getCorrectionCubeBox():Point3D
-        {abstract}getCorrectionCapsuleBox():Point3D
-
-    }
-    Entity -right-> CollisionBox
-
-    'sphËre
-    class SphericalCollisionBox{
-
-    }
-    SphericalCollisionBox <|-down- CollisionBox
-    'capsule
-    class CapsuleCollisionBox{
-
-    }
-    CollisionBox -right-|> CapsuleCollisionBox
-    'CubeCollisionBox <|-left- CollisionBox
-}
-'CollisionBox -right-> Entity
-
-package visual #888888{
-    abstract class Component{
-        - id:String
-        + getId():String
-        - position:Point3D
-    }
-    'Entity -right-> Component
-    Component <|-left- Group
-    class PlayerComponent{
-        + PlayerComponent(String)
-    }
-    PlayerComponent -left-|> Component
-    class MooseComponent{
-
-    }
-    MooseComponent <|-up- Component
-
-    
-}
-
-
-package item #337777{
-    abstract class Item{
-    }
-    
-    Human *-- Item: "1..*"
-
-    abstract class Wearable{
-
-    }
-    Wearable <|-right- Item
-    abstract class Weapon{
-        
-    }
-    Weapon <|-right- Wearable
-    abstract class MeleeWeapon{
-
-    }
-    MeleeWeapon <|-down-Weapon
-    abstract class RangedWeapon{
-
-    }
-    RangedWeapon <|-up- Weapon
-    abstract class Consumable{
-
-    }
-    Consumable <|-up- Item
-    
-    
-}
-
-
-
 @enduml
