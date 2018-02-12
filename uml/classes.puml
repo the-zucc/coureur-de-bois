@@ -7,15 +7,7 @@ skinparam class {
 skinparam stereotypeCBackgroundColor<<Singleton>> #FF7700
 
 
-package util{
-    interface Updateable{
-        + update(double):void
-    }
-    class IdMaker{
-        - {static} id:int
-        + {static} nextId():String
-    }
-}
+
 
 'entitÈs de jeu
 package entity #888888{
@@ -27,37 +19,71 @@ package entity #888888{
         + getPosition():Point3D
         + {abstract} buildComponent():Component
         # fall():void
+        # correctCollisions():void
     }
-    Point3D <-right- Entity
+    
     package entity.item #337777{
         abstract class Item{
             owner:Human
         }
-        Item <|-left- Entity
+        Item <|-- Entity
         
 
         abstract class Wearable{
 
         }
-        Wearable <|-left- Item
+        Wearable <|-- Item
         abstract class Weapon{
-            name:String
+            # {static}name:String
             setOwner(Human):void
+            attack():void
         }
-        Weapon <|-left- Wearable
+        Weapon <|-- Wearable
         abstract class MeleeWeapon{
             swing()
         }
-        MeleeWeapon <|-down-Weapon
+        MeleeWeapon <|--Weapon
         abstract class RangedWeapon{
-            shoot(double, double, double, double):void
+            {abstract}shoot(double, double, double, double):void
         }
-        RangedWeapon <|-up- Weapon
+        RangedWeapon <|-- Weapon
         abstract class Consumable{
-            getConsumed()
+            getConsumed(LivingEntity consumingEntity)
         }
-        Consumable <|-up- Item
+        Consumable <|-- Item
+        abstract class Fruit{
+            size:FruitSize
+            Fruit():Fruit
+        }
+        Fruit <|-- Consumable
         class Apple{
+
+        }
+        Apple <|-- Fruit
+        class Berry{
+
+        }
+        Berry <|-- Fruit
+        class Blueberry{
+
+        }
+        Blueberry <|-- Berry
+        class Blackberry{
+        }
+        Blackberry <|-- Berry
+        class TallEatableGrass{
+
+        }
+        TallEatableGrass <|-- Fruit
+        enum FruitSize{
+            VERY_SMALL
+            SMALL
+            MEDIUM
+            LARGE
+            VERY_LARGE
+            HUGE
+            getRandomSize(boolean):FruitSize
+            'boolean is: gaussian distributed probabilities?
             
         }
     }
@@ -69,19 +95,19 @@ package entity #888888{
         # hp:double
         # xpReward:double
         # move():void
-        # update():void
+        # date():void
         # dealdamage(double):void
-        - die():void
-        - jump():void
+        # die():void
+        # jump():void
     }
-    LivingEntity <|-down- Entity
+    LivingEntity <|-- Entity
     
     'les humains du jeu
     abstract class Human{
-        - inventory:ArrayList<Item>
+        # inventory:ArrayList<Item>
     }
-    Human *-right- Item: "1..*"
-    Human <|-right- LivingEntity
+    Human *-- Item: "1..*"
+    Human <|-- LivingEntity
 
     'le joueur incarne un humain
     class Player{
@@ -91,120 +117,171 @@ package entity #888888{
         + setRight(boolean):void
         + attack(LivingEntity):void
     }
-    Player <|-left- Human
+    Player <|-- Human
     
     abstract class Npc{
         
     }
-    Npc <|-down- Human
+    Npc <|-- Human
 
     'les autochtones dans le jeu
-    class NativePerson{
+    class Aboriginal{
         + trade(Item):Item
+        # group:HumanGroup
+        
     }
-    NativePerson <|-left- Npc
+    Aboriginal <|-- Npc
 
     abstract class Animal{
     }
-    Animal <|-down- LivingEntity
+    Animal <|-- LivingEntity
     class Deer{
 
     }
-    Deer <|-- VegetableEater
+    Deer <|-- Herbivore
     class Moose{
 
     }
-    Moose <|-down- VegetableEater
-    class MeatEater{
-
+    Moose <|-- Herbivore
+    class Beaver{
+        givePelt():Item
     }
-    MeatEater <|-left-Animal
+    Beaver <|-- Herbivore
+    class Carnivore{
+        -prey:LivingEntity
+        +getPrey():LivingEntity
+    }
+    Carnivore <|--Animal
     class Fox{
 
     }
-    Fox <|-down- MeatEater
+    Fox <|-- Carnivore
     class Wolf{
 
     }
-    Wolf <|-down- MeatEater
-    class VegetableEater{
-        
+    Wolf <|-- Carnivore
+    class Herbivore{
+
     }
-    VegetableEater <|-left- Animal
+    Herbivore <|-- Animal
     class Bear{
 
     }
-    Bear <|-down- MeatEater
+    Bear <|-- Carnivore
     class Rabbit{
 
     }
-    Rabbit <|-- VegetableEater
+    Rabbit <|-- Herbivore
+    abstract class Plant{
+        
+    }
+    Plant <|-- Entity
+    Plant "1" *-- "n" Fruit
     abstract class Tree{
 
     }
-    Tree <|-up- Entity
+    Tree <|-- Plant
     class Bouleau{
 
     }
-    Bouleau <|-left- Tree
+    Bouleau <|-- Tree
     class Sapin{
 
     }
-    Sapin <|-left- Tree
-}
-
-package entity.collision #888888{
-    'grille de collisions
-    class CollisionGrid<<Singleton>>{
-        collisionBoxes:ArrayList<CollisionBox>
+    Sapin <|-- Tree
+    class AppleTree{
+        # dropApple():void
+        + getHit(double damage, MeeleeWeapon mw):void
+        + 
     }
-    CollisionGrid "1" *-up- "n"CollisionBox
-    
-    'boite de collision gÈnÈrique
-    abstract class CollisionBox{
-
-        {abstract}collidesSphericalBox():boolean
-        '{abstract}collidesCubeBox():boolean
-        {abstract}collidesCapsuleBox():boolean
+    AppleTree <|-- Tree
+    package humangroup{
+        class HumanGroup{
+            members:ArrayList<Aboriginal>
+            HumanGroup(ArrayList<Aboriginal>):HumanGroup
+            'for with members
+            HumanGroup(ArrayList<Aboriginal>, double):HumanGroup
+            'for with members and area radius
+            getMembers():ArrayList<Aboriginal>
+            getPosition():Point3D
+            getRadius():double
+        }
+    }
+    package entity.collision #888888{
+        'grille de collisions
+        class CollisionGrid<<Singleton>>{
+            collisionBoxes:ArrayList<CollisionBox>
+        }
+        CollisionGrid "1" *-- "n"CollisionBox
         
-        {abstract}getCorrectionSphericalBox():Point3D
-        '{abstract}getCorrectionCubeBox():Point3D
-        {abstract}getCorrectionCapsuleBox():Point3D
+        'boite de collision gÈnÈrique
+        abstract class CollisionBox{
 
+            {abstract}collidesSphericalBox():boolean
+            '{abstract}collidesCubeBox():boolean
+            {abstract}collidesCapsuleBox():boolean
+            
+            {abstract}getCorrectionSphericalBox():Point3D
+            '{abstract}getCorrectionCubeBox():Point3D
+            {abstract}getCorrectionCapsuleBox():Point3D
+
+        }
+        CollisionBox <-- Entity 
+
+        'sphËre
+        class SphericalCollisionBox{
+
+        }
+        SphericalCollisionBox <|-- CollisionBox
+        'capsule
+        class CapsuleCollisionBox{
+
+        }
+        CollisionBox --|> CapsuleCollisionBox
+        'CubeCollisionBox <|-- CollisionBox
     }
-    Entity -left-> CollisionBox
-
-    'sphËre
-    class SphericalCollisionBox{
-
-    }
-    SphericalCollisionBox <|-down- CollisionBox
-    'capsule
-    class CapsuleCollisionBox{
-
-    }
-    CollisionBox -left-|> CapsuleCollisionBox
-    'CubeCollisionBox <|-left- CollisionBox
+'CollisionBox --> Entity
 }
-'CollisionBox -right-> Entity
 
+package visual{
+    class Component
+}
+
+package javafx{
+    package javafx.scene{
+        class Group
+    }
+    Component <|-- Group
+    package javafx.geometry{
+        class Point3D
+        Point3D <-- Entity
+    }
+}
+package util{
+    interface dateable{
+        + date(double):void
+    }
+    class IdMaker{
+        - {static} id:int
+        + {static} nextId():String
+    }
+}
 package visual #888888{
     abstract class Component{
-        - id:String
+        # id:String
         + getId():String
-        - position:Point3D
+        # position:Point3D
     }
-    'Entity -right-> Component
-    Component <|-left- Group
+    'Entity --> Component
+    
     class PlayerComponent{
         + PlayerComponent(String)
     }
-    PlayerComponent -left-|> Component
+    PlayerComponent --|> Component
     class MooseComponent{
 
     }
-    MooseComponent <|-up- Component
-
+    MooseComponent <|-- Component
 }
 @enduml
 @startuml
@@ -219,26 +296,28 @@ package javafx{
     package javafx.scene #ffffff{
         class Scene
         note top:graphe de scËne qui\npossËde un noeud\nracine qui possËde\ndes enfants
-        Stage -left-> Scene
+        Stage --> Scene
         
         
-        abstract class Node
-        note right:classe\ngÈnÈrique\npour\nles\nnoeuds
-        Parent *-down- Node:"1..*"
+        abstract class Node{
+
+        }
+        'note:classe\ngÈnÈrique\npour\nles\nnoeuds
+        Parent *-- Node:"1..*"
 
         class SubScene
         note bottom:graphe de scËne\nqui agit comme\nun noeud 2D au sein\nd'une scËne, mais qui\nest aussi une scËne\nen soi.
-        SubScene <|-left- Node
-        SubScene <|-up- Scene
+        SubScene <|-- Node
+        SubScene <|-- Scene
 
         abstract class Parent
         note top:indique\nque le\nnoeud\na des\nenfants 
-        Parent <|-down-Node
-        Scene -right-> Parent
+        Parent <|--Node
+        Scene --> Parent
         
-        abstract class Group
+        class Gro
         note top:utilisÈ dans\nle contexte\nactuel, sert\nsimplement\n‡ dÈclarer\nles positions\navec des\ncoordonnÈes\nX,Y,Z 
-        Group <|-left- Parent
+        Gro <|-- Parent
     }
     
     package javafx.geometry{
@@ -248,12 +327,13 @@ package javafx{
         class Application{
         
         }
-        Application *-- Stage : "1..*"
+        Application "    1..*" *-- Stage: "une application\npeut possÈder\nplusieurs fenÍtres"
     }
 }
 
 'package de l'application
 package app #e25846{
+    skinparam stereotypeCBackgroundColor<<Singleton>> #FF7700
     class Model<<Singleton>>{
         - {static} Instance:Model
         + getInstance():Model
@@ -267,17 +347,17 @@ package app #e25846{
         - {static} Instance:GameScene
         + getInstance():GameScene
     }
-    'note bottom:pour permettre de superposer\ndu rendu 3D ù du rendu 2D,\nune scùne en 2D est nùcessaire.\nOn ajoute simplement un noeud\n qui sera une <i>SubScene ù la scùne\n2D. Elle sera manipulùe comme\nun objet 2D, mais aura les fonctionnalitùs\nd'une scùne en 3D\n(donc l'ajout de noeuds sera possible)
+    note bottom:pour permettre de superposer\ndu rendu 3D ‡ du rendu 2D,\nune scËne en 2D est nÈcessaire.\nOn ajoute simplement un noeud\n qui sera une <i>SubScene ‡ la scËne\n2D. Elle sera manipulÈe comme\nun objet 2D, mais aura les fonctionnalitÈs\nd'une scËne en 3D\n(donc l'ajout de noeuds sera possible)
     GameScene <|-- SubScene
     
-    UI -left-> GameScene
+    UI --> GameScene
     class Controller{
         applicationWindow:javafx.stage.Stage
     }
-    'note left:la classe <i>Controller\ninitialise les Singletons\ndans le bon ordre
+    'note :la classe <i>Controller\ninitialise les Singletons\ndans le bon ordre
     Controller --> UI
     Controller --> GameScene: "initialise"
-    Controller -left-> Model
-    Controller -left-|> Application
+    Controller --> Model
+    Controller --|> Application
 }
 @enduml
