@@ -11,6 +11,8 @@ skinparam stereotypeCBackgroundColor<<Singleton>> #FF7700
 
 'entités de jeu
 package entity #888888{
+    
+    
     abstract class Entity{
         # id:String
         # position:Point3D
@@ -27,18 +29,18 @@ package entity #888888{
             owner:Human
         }
         Item <|-- Entity
-        
 
-        abstract class Wearable{
+        interface Wearable{
 
         }
-        Wearable <|-- Item
+        
         abstract class Weapon{
             # {static}name:String
             setOwner(Human):void
             attack():void
         }
         Weapon <|-- Wearable
+        Weapon <|-- Item
         abstract class MeleeWeapon{
             swing()
         }
@@ -60,6 +62,7 @@ package entity #888888{
 
         }
         Apple <|-- Fruit
+        Apple <|-- Wearable
         class Berry{
 
         }
@@ -69,12 +72,10 @@ package entity #888888{
         }
         Blueberry <|-- Berry
         class Blackberry{
-        }
-        Blackberry <|-- Berry
-        class TallEatableGrass{
 
         }
-        TallEatableGrass <|-- Fruit
+        Blackberry <|-- Berry
+        
         enum FruitSize{
             VERY_SMALL
             SMALL
@@ -89,13 +90,11 @@ package entity #888888{
     }
     'entité générique
     
-    
-    
     abstract class LivingEntity{
         # hp:double
         # xpReward:double
         # move():void
-        # date():void
+        # update():void
         # dealdamage(double):void
         # die():void
         # jump():void
@@ -195,18 +194,27 @@ package entity #888888{
         + 
     }
     AppleTree <|-- Tree
-    package humangroup{
-        class HumanGroup{
-            members:ArrayList<Aboriginal>
-            HumanGroup(ArrayList<Aboriginal>):HumanGroup
-            'for with members
-            HumanGroup(ArrayList<Aboriginal>, double):HumanGroup
-            'for with members and area radius
-            getMembers():ArrayList<Aboriginal>
-            getPosition():Point3D
-            getRadius():double
-        }
+    class TallEatableGrass{
+
     }
+    TallEatableGrass <|-- Plant
+    class Bush{
+
+    }
+    Bush <|--Plant
+    class BerryBush{
+
+    }
+    BerryBush <|-- Bush
+    class BlackberryBush{
+
+    }
+    BlackberryBush <|-- BerryBush
+    class BlueberryBush{
+
+    }
+    BlueberryBush <|-- BerryBush
+    
     package entity.collision #888888{
         'grille de collisions
         class CollisionGrid<<Singleton>>{
@@ -240,6 +248,23 @@ package entity #888888{
         CollisionBox --|> CapsuleCollisionBox
         'CubeCollisionBox <|-- CollisionBox
     }
+    package humangroup{
+        class HumanGroup{
+            members:ArrayList<Aboriginal>
+            movingTo:Point3D
+            HumanGroup(ArrayList<Aboriginal>):HumanGroup
+            'for with members
+            HumanGroup(ArrayList<Aboriginal>, double):HumanGroup
+            'for with members and area radius
+            getMembers():ArrayList<Aboriginal>
+            getPosition():Point3D
+            getRadius():double
+            startMovingTo(Point3D):void
+            isMoving():boolean
+            get
+        }
+        'HumanGroup --> Point3D
+    }
 'CollisionBox --> Entity
 }
 
@@ -251,15 +276,16 @@ package javafx{
     package javafx.scene{
         class Group
     }
-    Component <|-- Group
+    Component <|-up- Group
     package javafx.geometry{
         class Point3D
         Point3D <-- Entity
+        Point3D <-- HumanGroup
     }
 }
 package util{
-    interface dateable{
-        + date(double):void
+    interface updateable{
+        + update(double):void
     }
     class IdMaker{
         - {static} id:int
@@ -272,16 +298,16 @@ package visual #888888{
         + getId():String
         # position:Point3D
     }
-    'Entity --> Component
+    Entity --> Component
     
     class PlayerComponent{
         + PlayerComponent(String)
     }
-    PlayerComponent --|> Component
+    PlayerComponent <|-up- Component
     class MooseComponent{
 
     }
-    MooseComponent <|-- Component
+    MooseComponent <|-up- Component
 }
 @enduml
 @startuml
@@ -359,5 +385,43 @@ package app #e25846{
     Controller --> GameScene: "initialise"
     Controller --> Model
     Controller --|> Application
+}
+@enduml
+@startuml
+skinparam class {
+    BackgroundColor #ffffff
+    ArrowColor #000000
+    BorderColor #000000
+}
+package entity{
+    interface Attachable{
+        # onAttach():void
+    }
+    interface FoodChainMember{
+        shouldScanForFood():boolean
+        scanForFood():void
+    }
+    interface Prey{
+        + getTargeted():void
+        + scanForPredators():Predator
+        + startRunningFromPredator(Predator):void
+    }
+    interface Predator{
+        + getLevelInFoodChain():int
+        # targetAnimal(Animal):void
+        # startAttackAnimal(Animal):void
+        # scanForPrey():Prey
+    }
+    class Wolf
+    Wolf <|-- FoodChainMember
+    Wolf <|-- Predator
+    class Fox
+    Fox <|-- FoodChainMember
+    Fox <|-- Prey
+    Fox <|-- Predator
+    class Rabbit
+    Rabbit <|-- FoodChainMember
+    Rabbit <|-- Prey
+    Rabbit <|-- Attachable
 }
 @enduml
