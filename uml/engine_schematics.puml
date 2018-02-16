@@ -1,0 +1,77 @@
+@startuml
+'javafx, la base de l'engin graphique du programme
+package javafx{
+    
+    package javafx.stage{
+        class Stage
+        note bottom:fenêtre\nd'application
+    }
+
+    package javafx.scene #ffffff{
+        class Scene
+        note top:graphe de scène qui\npossède un noeud\nracine qui possède\ndes enfants
+        Stage --> Scene
+        
+        
+        abstract class Node{
+
+        }
+        'note:classe\ngénérique\npour\nles\nnoeuds
+        Parent *-- Node:"1..*"
+
+        class SubScene
+        note bottom:graphe de scène\nqui agit comme\nun noeud 2D au sein\nd'une scène, mais qui\nest aussi une scène\nen soi.
+        SubScene <|-- Node
+        SubScene <|-- Scene
+
+        abstract class Parent
+        note top:indique\nque le\nnoeud\na des\nenfants 
+        Parent <|--Node
+        Scene --> Parent
+        
+        class Gro
+        note top:utilisé dans\nle contexte\nactuel, sert\nsimplement\nà déclarer\nles positions\navec des\ncoordonnées\nX,Y,Z 
+        Gro <|-- Parent
+    }
+    
+    package javafx.geometry{
+        class Point3D
+    }
+    package application{
+        class Application{
+        
+        }
+        Application "    1..*" *-- Stage: "une application\npeut posséder\nplusieurs fenêtres"
+    }
+}
+
+'package de l'application
+package app #e25846{
+    skinparam stereotypeCBackgroundColor<<Singleton>> #FF7700
+    class Model<<Singleton>>{
+        - {static} Instance:Model
+        + getInstance():Model
+    }
+    class UI<<Singleton>>{
+        - {static} Instance:Model
+        + getInstance():Model
+    }
+    UI <|-- Scene
+    class GameScene<<Singleton>>{
+        - {static} Instance:GameScene
+        + getInstance():GameScene
+    }
+    note bottom:pour permettre de superposer\ndu rendu 3D à du rendu 2D,\nune scène en 2D est nécessaire.\nOn ajoute simplement un noeud\n qui sera une <i>SubScene à la scène\n2D. Elle sera manipulée comme\nun objet 2D, mais aura les fonctionnalités\nd'une scène en 3D\n(donc l'ajout de noeuds sera possible)
+    GameScene <|-- SubScene
+    
+    UI --> GameScene
+    class Controller{
+        applicationWindow:javafx.stage.Stage
+    }
+    'note :la classe <i>Controller\ninitialise les Singletons\ndans le bon ordre
+    Controller --> UI
+    Controller --> GameScene: "initialise"
+    Controller --> Model
+    Controller --|> Application
+}
+@enduml

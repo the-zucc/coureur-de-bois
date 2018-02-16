@@ -1,0 +1,81 @@
+@startuml Classes 2
+package entity{
+    class Entity
+    interface AttachableEntity
+    interface Item
+    package entity.living{
+        
+        class LivingEntity
+        LivingEntity <|-- Entity
+
+        package entity.living.animal{
+            
+            class Animal
+            Animal <|-left- LivingEntity
+            'INTERFACES HERE
+            interface FoodChainMember{
+                'shouldScanForFood():boolean
+                'scanForFoodAndStartEatingIfNecessary():void
+            }
+            interface Prey{
+                # scanForIncomingPredators():Predator
+                # startRunningFromPredator(Predator):void
+            }
+            Prey <|-- FoodChainMember
+            interface Predator{
+                + getLevelInFoodChain():int
+                # targetAnimal(Animal):void
+                # startAttackAnimal(Animal):void
+                # scanForPrey():Prey
+            }
+            Predator <|-- FoodChainMember
+            
+            'HEBIVORE AND CARNIVORE
+            class Herbivore
+            Herbivore <|-- Animal
+            Herbivore <|-- Prey
+            class Carnivore
+            Carnivore <|-- Animal
+            Carnivore <|-- Predator
+
+            'HERBIVORES HERE
+            class Moose
+            Moose <|-- Herbivore
+            class Rabbit
+            Rabbit <|-- Herbivore
+
+            'CARNIVORES HERE
+            class Fox
+            Fox <|-- Carnivore
+            Fox <|-- Prey
+            class Wolf
+            Wolf <|-- Carnivore
+        }
+        package entity.living.human{
+            class Human
+            Human <|-- LivingEntity
+            class Player
+            Player <|-- Human
+            Npc <|-- Human
+        }
+    }
+    package entity.static{
+        class StaticEntity
+        StaticEntity <|-- Entity
+        interface EatableStatic{
+        }
+        class TallGrass
+        TallGrass <|-- StaticEntity
+        TallGrass <|-- EatableStatic
+    }
+    package entity.item{
+        
+        class DefaultItem
+        DefaultItem <|-- Entity
+    }
+    
+}
+package visual{
+
+}
+@enduml

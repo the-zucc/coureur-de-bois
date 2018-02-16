@@ -1,0 +1,42 @@
+@startuml
+skinparam class {
+    BackgroundColor #ffffff
+    ArrowColor #000000
+    BorderColor #000000
+}
+package entity{
+    interface AttachableEntity{
+        # onAttach():void
+        # onDetach():void
+    }
+    interface FoodChainMember{
+        shouldScanForFood():boolean
+        scanForFood():void
+    }
+    interface Prey{
+        + getTargeted():void
+        + scanForPredators():Predator
+        + startRunningFromPredator(Predator):void
+    }
+    Prey <|-- FoodChainMember
+    interface Predator{
+        + getLevelInFoodChain():int
+        # targetAnimal(Animal):void
+        # startAttackAnimal(Animal):void
+        # scanForPrey():Prey
+    }
+    Predator <|-- FoodChainMember
+    class Wolf
+    Wolf <|-- Predator
+    class Fox
+    Fox <|-- Prey
+    Fox <|-- Predator
+    class Rabbit
+    Rabbit <|-- Prey
+    Rabbit <|-- AttachableEntity
+    class Moose
+    Moose <|-- Prey
+    class Beaver
+    Beaver <|-- Prey
+}
+@enduml
