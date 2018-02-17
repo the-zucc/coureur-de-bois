@@ -6,11 +6,14 @@ import java.awt.Toolkit;
 import javafx.application.Application;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.scene.effect.BlendMode;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 public class Controller extends Application{
 	
-	public static double gameCameraDistance = 1500;
+	public static double gameCameraDistance = 800;
 	
 	private static Stage applicationWindow;
 	
@@ -29,7 +32,6 @@ public class Controller extends Application{
 		Model model = Model.getInstance();
 		//instanciate the game scene
 		GameScene gameScene = GameScene.getInstance();
-		
 		//instanciate the UI
 		UI ui = UI.getInstance();
 		
@@ -42,6 +44,7 @@ public class Controller extends Application{
 		GameLoop.getInstance().start();
 		//start 
 		arg0.setScene(ui);
+		arg0.initStyle(StageStyle.TRANSPARENT);
 		//define that the application window is the current stage
 		applicationWindow = arg0;
 		GameScene.getInstance().setCameraOnPlayer(GameScene.getInstance().getGameCamera(), Model.getInstance().getCurrentPlayer().getId());

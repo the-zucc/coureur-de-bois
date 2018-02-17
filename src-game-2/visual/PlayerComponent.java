@@ -5,6 +5,7 @@ import entity.LivingEntity;
 import entity.Player;
 import javafx.geometry.Point3D;
 import javafx.scene.Group;
+import javafx.scene.PointLight;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.Box;
@@ -63,6 +64,11 @@ public class PlayerComponent extends LivingComponent{
 		
 		playerNode.getChildren().addAll(box1, box3, playerHead);
 		getChildren().add(playerNode);
+		/*
+		PointLight light = new PointLight(Color.AQUAMARINE);
+		light.setTranslateY(-75);
+		getChildren().add(light);
+		*/
 	}
 	
 	@Override

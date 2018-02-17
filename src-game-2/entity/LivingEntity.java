@@ -43,7 +43,10 @@ public abstract class LivingEntity extends Entity implements Updateable{
 	public void jump(){
 		this.gravity = new Point3D(GameLogic.getJump().getX(), GameLogic.getJump().getY(), GameLogic.getJump().getZ());
 	}
-	 
+	
+	protected void setUp() {
+		
+	}
 	
 	protected void move() {
 		if(movement != null)

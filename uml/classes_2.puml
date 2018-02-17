@@ -1,16 +1,66 @@
 @startuml Classes 2
 package entity{
-    class Entity
-    interface AttachableEntity
-    interface Item
-    package entity.living{
+    class Entity{
+        + Entity(Point3D):Entity
+        ==
+        - id:String
+        + getId():String
+        --
+        # position:Point3D
+        + getPosition():Point3D
+        --
+        # collisionBox:CollisionBox
+        + getCollisionBox():CollisionBox
+        --
+        # component:Component
+        # {abstract} buildComponent():Component
+        + getComponent():Component
+        --
+        # update(double):void
+        # fall():void
+        # correctCollisions():void
+    }
+    interface AttachableEntity{
+        onAttach():void
+        onDetach():void
+    }
+    
+    interface LevelRestrictedAttachable{    
+        getMinimumLevel():int
+    }
+    LevelRestrictedAttachable <|-- AttachableEntity
+    interface Item{
+        onAddToInventory(Human, ArrayList<Item>):void
+        onRemoveFromInventory(Human, ArrayList<Item>):void
         
-        class LivingEntity
+    }
+
+    package entity.living{
+
+        abstract class LivingEntity{
+            # hp:double
+            # xpReward:double
+            ==
+            # move():void
+            + getAttacked(double, LivingEntity):void
+            # die():void
+            # jump():void
+            ==
+            # setUp(boolean):void
+            # setDown(boolean):void
+            # setLeft(boolean):void
+            # setRight(boolean):void
+        }
         LivingEntity <|-- Entity
+        interface UserControllable{
+            + onMouseMoved(MouseEvent):void
+            + onKeyPressed(KeyEvent):void
+        }
 
         package entity.living.animal{
-            
-            class Animal
+            abstract class Animal{
+                + onDeath():void
+            }
             Animal <|-left- LivingEntity
             'INTERFACES HERE
             interface FoodChainMember{
@@ -31,10 +81,12 @@ package entity{
             Predator <|-- FoodChainMember
             
             'HEBIVORE AND CARNIVORE
-            class Herbivore
+            abstract class Herbivore{
+                
+            }
             Herbivore <|-- Animal
             Herbivore <|-- Prey
-            class Carnivore
+            abstract class Carnivore
             Carnivore <|-- Animal
             Carnivore <|-- Predator
 
@@ -52,30 +104,75 @@ package entity{
             Wolf <|-- Carnivore
         }
         package entity.living.human{
-            class Human
+            abstract class Human{
+                - Level:int
+                + getLevel():int
+                + tradeItem(Item):Item
+                + Hashtable<String,String>:stats
+                + 
+            }
             Human <|-- LivingEntity
-            class Player
+            class Player{
+                
+            }
             Player <|-- Human
+            Player <|-- UserControllable
+            class Npc{
+                - publiclyShownItems:ArrayList<Item>
+                + getFriendliness(Human):double
+                + getPubliclyShownItems():ArrayList<Item>
+                # choosePubliclyShownItems():ArrayList<Item>
+            }
             Npc <|-- Human
         }
     }
     package entity.static{
-        class StaticEntity
+        class StaticEntity{
+        }
         StaticEntity <|-- Entity
         interface EatableStatic{
+            + onGetEaten(LivingEntity):void
         }
         class TallGrass
         TallGrass <|-- StaticEntity
         TallGrass <|-- EatableStatic
+        class FirTree{
+            
+        }
+        FirTree <|-- StaticEntity
+        class Pine{
+            Pine(double):Pine
+            buildComponent(double, String):Component
+        }
+        Pine <|-- StaticEntity
+        class Tipi{
+            buildComponent(double, String):Component
+        }
+        Tipi <|-- StaticEntity
     }
     package entity.item{
-        
-        class DefaultItem
+        class DefaultItem{
+        }
         DefaultItem <|-- Entity
     }
     
 }
+package javafx{
+    package javafx.scene{
+        class Group
+    }
+}
 package visual{
-
+    package visual.component{
+        class Component{
+            - id:string
+            + Component(String):Component
+            + getId():String
+        }
+        Component <|-- Group
+    }
+    package visual.info{
+        
+    }
 }
 @enduml

@@ -4,6 +4,7 @@ import app.Model;
 import app.UI;
 import javafx.event.EventHandler;
 import javafx.geometry.Point3D;
+import javafx.scene.PointLight;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
@@ -35,6 +36,14 @@ public class MobComponent extends LivingComponent implements Updateable{
 		//Box boxHair2 = new Box(5, )
 		boxHair.setMaterial(materialHair);
 		boxHair.setTranslateY(-50);
+		/*
+		if(Math.random() < 0.003) {
+			PointLight light = new PointLight(Color.DARKRED);
+			light.setTranslateY(-25);
+			getChildren().add(light);
+		}
+		*/
+		
 		
 		getChildren().addAll(box1, box2, box3, boxNose, boxHair);
 		this.setOnMouseEntered(new EventHandler<MouseEvent>(){

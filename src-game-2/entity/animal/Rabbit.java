@@ -34,4 +34,10 @@ public class Rabbit extends LivingEntity implements Prey {
 		return 0;
 	}
 
+	@Override
+	public void function_test_prey() {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

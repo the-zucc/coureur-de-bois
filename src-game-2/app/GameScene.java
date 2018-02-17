@@ -10,6 +10,7 @@ import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.PerspectiveCamera;
+import javafx.scene.PointLight;
 import javafx.scene.SceneAntialiasing;
 import javafx.scene.SubScene;
 import javafx.scene.control.Label;
@@ -17,6 +18,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.DrawMode;
 import javafx.scene.shape.MeshView;
+import javafx.scene.shape.Sphere;
 import javafx.scene.shape.TriangleMesh;
 import javafx.scene.transform.Rotate;
 import util.Updateable;
@@ -60,7 +62,23 @@ public class GameScene extends SubScene implements Updateable {
 		
 		gameEnvRoot = (Group)this.getRoot();//the root of the game environment (passed as argument to the subscene below)
 								//it holds all the game elements' components
+		/*
+		PointLight light1 = new PointLight();
+		light1.setColor(Color.ORANGE);
+		light1.setRotate(45);
 		
+		PointLight light2 = new PointLight();
+		light2.setColor(Color.RED);
+		light2.setRotate(45);
+		Group light2Group = new Group();
+		light2Group.getChildren().addAll(new Sphere(50), light2);
+		
+		Group lightGroup = new Group();
+		lightGroup.getChildren().addAll(light1, light2Group);
+		lightGroup.setTranslateZ(0);
+		
+		gameEnvRoot.getChildren().add(lightGroup);
+		*/
 		gameCamera = buildGameCamera();//build the game camera
 		
 		setCamera(gameCamera);//setup the game scene to use the built camera
