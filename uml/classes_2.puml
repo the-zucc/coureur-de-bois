@@ -29,11 +29,7 @@ package entity{
         getMinimumLevel():int
     }
     LevelRestrictedAttachable <|-- AttachableEntity
-    interface Item{
-        onAddToInventory(Human, ArrayList<Item>):void
-        onRemoveFromInventory(Human, ArrayList<Item>):void
-        
-    }
+    
 
     package entity.living{
 
@@ -107,9 +103,13 @@ package entity{
             abstract class Human{
                 - Level:int
                 + getLevel():int
-                + tradeItem(Item):Item
-                + Hashtable<String,String>:stats
-                + 
+                + stats:Hashtable<String, double>
+                + itemsStatModifiers:Hashtable<String, double>
+                ==
+                + tradeItem(Item, Human):Item
+                ==
+                - wornItems:ArrayList<Item>
+                + getWornItems():ArrayList<Item>
             }
             Human <|-- LivingEntity
             class Player{
@@ -128,6 +128,7 @@ package entity{
     }
     package entity.static{
         class StaticEntity{
+
         }
         StaticEntity <|-- Entity
         interface EatableStatic{
@@ -151,9 +152,34 @@ package entity{
         Tipi <|-- StaticEntity
     }
     package entity.item{
-        class DefaultItem{
+        class Inventory{
+            - items:ArrayList<Item>
+            + getItems():ArrayList<Item>
+            --
         }
-        DefaultItem <|-- Entity
+        interface Item{
+            onAddToInventory(Human, ArrayList<Item>):void
+            onRemoveFromInventory(Human, ArrayList<Item>):void
+            
+        }
+        interface StackableItem{
+            getCount():int
+            add(int):void
+        }
+        interface ConsumableItem{
+            + onConsume():Hashtable<String, double>
+        }
+        
+        class Apple{
+        }
+        Apple <|-- Entity
+        Apple <|-- StackableItem
+        Apple <|-- ConsumableItem
+        class Sword{
+
+        }
+        Sword <|-- Entity
+        Sword <|-- Item
     }
     
 }
