@@ -78,11 +78,14 @@ package entity{
             
             'HEBIVORE AND CARNIVORE
             abstract class Herbivore{
-                
+                # startWalkingTo(Point3D):void
+                + targetEatableStatic(EatableStatic):void
             }
             Herbivore <|-- Animal
             Herbivore <|-- Prey
-            abstract class Carnivore
+            abstract class Carnivore{
+
+            }
             Carnivore <|-- Animal
             Carnivore <|-- Predator
 
@@ -134,6 +137,7 @@ package entity{
         interface EatableStatic{
             + onGetEaten(LivingEntity):void
         }
+        Herbivore --> EatableStatic
         class TallGrass
         TallGrass <|-- StaticEntity
         TallGrass <|-- EatableStatic
@@ -153,18 +157,33 @@ package entity{
     }
     package entity.item{
         class Inventory{
-            - items:ArrayList<Item>
-            + getItems():ArrayList<Item>
+            - items:Hashtable<String,Item>
+            + getItems():Hashable<String,Item>
             --
+            + addItem(Item):void
+            + getItem(String):Item
+            + removeItem(String):void
+            'the following function removes the Item
+            'with the specified Id and returns it to the user.
+            + popItem(String):Item
+            'calls the onItemTraded() method on the target inventory and replaces the item in this inventory 
+            + tradeItem(Item, String, Inventory):Item
+            + onItemTraded(Item):Item
         }
         interface Item{
-            onAddToInventory(Human, ArrayList<Item>):void
-            onRemoveFromInventory(Human, ArrayList<Item>):void
-            
+            'function called whenever the Item is added to an inventory
+            + onAddToInventory(Human, Inventory):void
+            'called when an Item is removed from an inventory.
+            'used for things such as placing the Item in the world, etc.
+            + onRemoveFromInventory(Human, Inventory):void
         }
         interface StackableItem{
             getCount():int
+            'adds the argument to the count of the object
             add(int):void
+            'push: adds getCount() of the passed argument to the count of the current Item.
+            'returns if the push was successful
+            push(StackableItem):boolean
         }
         interface ConsumableItem{
             + onConsume():Hashtable<String, double>
@@ -198,7 +217,12 @@ package visual{
         Component <|-- Group
     }
     package visual.info{
-        
+        class InfoPane{
+            - visible:boolean
+            + isVisible():boolean
+
+        }
+        InfoPane <|-- Group
     }
 }
 @enduml
