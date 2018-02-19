@@ -13,7 +13,7 @@ import javafx.stage.StageStyle;
 
 public class Controller extends Application{
 	
-	public static double gameCameraDistance = 800;
+	public static double gameCameraDistance = 1500;
 	
 	private static Stage applicationWindow;
 	

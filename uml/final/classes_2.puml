@@ -1,0 +1,321 @@
+@startuml Classes
+package entity{
+    class Légende{
+        - private
+        # protected
+        + public
+        {abstract} abstract
+        {static} static
+    }
+    class Entity{
+        + Entity(Point3D):Entity
+        ==
+        - id:String
+        + getId():String
+        --
+        # position:Point3D
+        + getPosition():Point3D
+        --
+        # collisionBox:CollisionBox
+        + getCollisionBox():CollisionBox
+        --
+        # component:Component
+        # {abstract} buildComponent():Component
+        + getComponent():Component
+        --
+        # update(double):void
+        # fall():void
+        # correctCollisions():void
+        --
+        onMouseEntered(MouseEvent):void
+        onMouseExit(MouseEvent)
+    }
+    package entity.attachable{
+        interface Attachable{
+            onAttach(AttachableReceiver):void
+            onDetach(AttachableReceiver):void
+            onUpdate(AttachableReceiver):void
+        }
+        interface LevelRestrictedAttachable{    
+            getMinimumLevel():int
+            canHumanReceive(Human):boolean
+        }
+        LevelRestrictedAttachable <|-- Attachable
+        interface AttachableReceiver{
+            onReceive(Attachable):void
+            updateAttachables():void
+        }
+    }
+    package entity.item{
+        class Inventory{
+            - items:Hashtable<String,Item>
+            + getItems():Hashable<String,Item>
+            --
+            + addItem(Item):void
+            + getItem(String):Item
+            + removeItem(String):void
+            'the following function removes the Item
+            'with the specified Id and returns it to the user.
+            + popItem(String):Item
+            'calls the onItemTraded() method on the target inventory and replaces the item in this inventory 
+            + tradeItem(Item, String, Inventory):Item
+            + onItemTraded(Item):Item
+        }
+        abstract class Item{
+            'function called whenever the Item is added to an inventory
+            + {abstract}onAddToInventory(Human, Inventory):void
+            'called when an Item is removed from an inventory.
+            'used for things such as placing the Item in the world, etc.
+            + {abstract}onRemoveFromInventory(Human, Inventory):void
+        }
+        Item <|-- Entity
+        Inventory "1" *-- "n" Item
+        
+        interface Stackable{
+            getCount():int
+            'adds the argument to the count of the object
+            add(int):void
+            'push: adds getCount() of the passed argument to the count of the current Item.
+            'returns if the push was successful
+            push(Stackable):boolean
+        }
+        interface Consumable{
+            + onConsume():double
+        }
+        class Apple{
+        }
+        Apple <|-- Item
+        Apple <|-- Stackable
+        Apple <|-- Consumable
+        abstract class Weapon{
+            
+        }
+        Weapon <|-- Attachable
+        Weapon <|-- Item
+        interface DamagingEntity{
+            # onHit(LivingEntity):void
+            # getDamage():double
+        }
+        class Sword{
+            + startSwing():void
+            # continueSwing():void
+            # isSwinging():void
+            # isSwingDone():boolean
+            # checkForLivingEntityHits():LivingEntity
+            # onHit(LivingEntity):void
+            # onSwingEnded():void
+        }
+        Sword <|-- Weapon
+        Sword <|-- DamagingEntity
+        abstract class RangedWeapon{
+            # shoot(double, double, double, double):void
+            # reload():void
+            - loaded:boolean
+            + isLoaded():boolean
+        }
+        RangedWeapon <|-- Weapon
+        class Bow{
+            - ammunitionSource:Arrow
+            - findAmmunitionSource(Inventory):Arrow
+        }
+        Bow <|-- RangedWeapon
+        class Arrow{
+            + Arrow(double, double, double, double):Arrow
+            - hit(LivingEntity):void
+        }
+        Arrow <|-- Item
+        Arrow <|-- Stackable
+    }
+    package entity.living{
+
+        abstract class LivingEntity{
+            # hp:double
+            # xpReward:double
+            ==
+            # move():void
+            + getAttacked(double, LivingEntity):void
+            # onDeath():void
+            # jump():void
+            ==
+            # setUp(boolean):void
+            # setDown(boolean):void
+            # setLeft(boolean):void
+            # setRight(boolean):void
+        }
+        LivingEntity <|-- Entity
+        package entity.living.animal{
+            enum State{
+                WALKING
+                WATCHING_AROUND
+                --
+                WAITING
+                SMELLING_GROUND
+                EATING_EATABLESTATIC
+                RUNNING_FROM_PREDATOR
+                --
+                RUNNING_AFTER_PREY
+                WALKING_TO_PREY
+                SEARCHING_FOR_PREY
+                ATTACKING_PREY
+                ==
+                getRandomState_predator():State
+                getRandomState_prey():State
+            }
+            abstract class Animal{
+                # nanosecondsWhenStateWasChosen:long
+                # state:State
+                # running:boolean
+                # walking:boolean
+                # {abstract}shouldChangeState():boolean
+                # {abstract}chooseNextState():State
+                # updateState():void
+                # startWalkingTo(Point3D):void
+                # startRunningTo(Point3D):void
+                'the following method should be used to check if the prey is moving,
+                'in the event that a predator would be after it. 
+                + getState():State
+            }
+            Animal <|-left- LivingEntity
+            Animal --> State
+            'INTERFACES HERE
+            package entity.living.animal.foodchain{
+                interface FoodChainMember{
+                    'shouldScanForFood():boolean
+                    'scanForFoodAndStartEatingIfNecessary():void
+                }
+                interface Prey{
+                    # scanForIncomingPredators():Predator
+                    # startRunningFromPredator(Predator):void
+                }
+                Prey <|-- FoodChainMember
+                interface Predator{
+                    + getLevelInFoodChain():int
+                    # targetPrey(Prey):void
+                    # startRunningAfterPrey(Prey):void
+                    # scanForPrey():Prey
+                    + getTargetedPrey():Prey
+                }
+                Predator <|-- FoodChainMember
+            }
+            'HEBIVORE AND CARNIVORE
+            abstract class Herbivore{
+                + targetEatableStatic(EatableStatic):void
+                + eat(EatableStatic):void
+            }
+            Herbivore <|-- Animal
+            Herbivore <|-- Prey
+            abstract class Carnivore{
+
+            }
+            Carnivore <|-- Animal
+            Carnivore <|-- Predator
+
+            'HERBIVORES HERE
+            class Moose
+            Moose <|-- Herbivore
+            class Rabbit
+            note right:le joueur pourra\navoir un lapin\ncomme animal\nde compagnie
+            Rabbit <|-- Herbivore
+            Rabbit <|-- Attachable
+            'CARNIVORES HERE
+            class Fox
+            Fox <|-- Carnivore
+            Fox <|-- Prey
+            class Wolf
+            Wolf <|-- Carnivore
+        }
+        
+        interface UserControllable{
+            + onMouseMoved(MouseEvent):void
+            + onKeyPressed(KeyEvent):void
+        }
+        package entity.living.human{
+            abstract class Human{
+                - Level:int
+                + getLevel():int
+                + stats:Hashtable<String, double>
+                + itemsStatModifiers:Hashtable<String, double>
+                ==
+                + tradeItem(Item, Human):Item
+                ==
+                - wornItems:ArrayList<Item>
+                + getWornItems():ArrayList<Item>
+                -
+                - currentWeapon:Weapon
+                + getCurrentWeapon():Weapon
+            }
+            Human <|-- LivingEntity
+            class Player{
+                
+            }
+            Player <|-- Human
+            Player <|-- UserControllable
+            class Npc{
+                - publiclyShownItems:ArrayList<Item>
+                + getFriendliness(Human):double
+                + getPubliclyShownItems():ArrayList<Item>
+                # choosePubliclyShownItems():ArrayList<Item>
+            }
+            Npc <|-- Human
+        }
+    }
+    
+    
+    package entity.static{
+        class StaticEntity{
+
+        }
+        StaticEntity <|-- Entity
+        interface EatableStatic{
+            + onGetEaten(Herbivore):void
+        }
+        Herbivore --> EatableStatic
+        class TallGrass
+        TallGrass <|-- StaticEntity
+        TallGrass <|-- EatableStatic
+        class FirTree{
+            
+        }
+        FirTree <|-- StaticEntity
+        class Pine{
+            Pine(double):Pine
+            buildComponent(double, String):Component
+        }
+        Pine <|-- StaticEntity
+        class Tipi{
+            buildComponent(double, String):Component
+        }
+        Tipi <|-- StaticEntity
+        class AppleTree{
+            - apples:Hashtable<String, Apple>
+            - RandomizeApples(int):Hashtable<String, Apple>
+            + getApples():Hashtable<String, Apple>
+
+        }
+        AppleTree <|-- StaticEntity
+    }
+}
+package javafx{
+    package javafx.scene{
+        class Group
+    }
+}
+package visual{
+    package visual.component{
+        class Component{
+            - id:string
+            + Component(String):Component
+            + getId():String
+        }
+        Component <|-- Group
+    }
+    package visual.info{
+        class InfoPane{
+            - visible:boolean
+            + isVisible():boolean
+
+        }
+        InfoPane <|-- Group
+    }
+}
+@enduml

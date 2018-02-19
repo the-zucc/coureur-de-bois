@@ -1,0 +1,130 @@
+@startuml items
+package entity{
+    class Légende{
+        - private
+        # protected
+        + public
+        {abstract} abstract
+        {static} static
+    }
+    class Entity{
+        + Entity(Point3D):Entity
+        ==
+        - id:String
+        + getId():String
+        --
+        # position:Point3D
+        + getPosition():Point3D
+        --
+        # collisionBox:CollisionBox
+        + getCollisionBox():CollisionBox
+        --
+        # component:Component
+        # {abstract} buildComponent():Component
+        + getComponent():Component
+        --
+        # update(double):void
+        # fall():void
+        # correctCollisions():void
+        --
+        onMouseEntered(MouseEvent):void
+        onMouseExit(MouseEvent)
+    }
+    package entity.attachable{
+        interface Attachable{
+            onAttach(AttachableReceiver):void
+            onDetach(AttachableReceiver):void
+            onUpdate(AttachableReceiver):void
+        }
+        interface LevelRestrictedAttachable{    
+            getMinimumLevel():int
+            canHumanReceive(Human):boolean
+        }
+        LevelRestrictedAttachable <|-- Attachable
+        interface AttachableReceiver{
+            onReceive(Attachable):void
+            updateAttachables():void
+        }
+    }
+    package entity.item{
+        class Inventory{
+            - items:Hashtable<String,Item>
+            + getItems():Hashable<String,Item>
+            --
+            + addItem(Item):void
+            + getItem(String):Item
+            + removeItem(String):void
+            'the following function removes the Item
+            'with the specified Id and returns it to the user.
+            + popItem(String):Item
+            'calls the onItemTraded() method on the target inventory and replaces the item in this inventory 
+            + tradeItem(Item, String, Inventory):Item
+            + onItemTraded(Item):Item
+        }
+        abstract class Item{
+            'function called whenever the Item is added to an inventory
+            + {abstract}onAddToInventory(Human, Inventory):void
+            'called when an Item is removed from an inventory.
+            'used for things such as placing the Item in the world, etc.
+            + {abstract}onRemoveFromInventory(Human, Inventory):void
+        }
+        Item <|-- Entity
+        Inventory "1" *-- "n" Item
+        
+        interface Stackable{
+            getCount():int
+            'adds the argument to the count of the object
+            add(int):void
+            'push: adds getCount() of the passed argument to the count of the current Item.
+            'returns if the push was successful
+            push(Stackable):boolean
+        }
+        interface Consumable{
+            + onConsume():double
+        }
+        class Apple{
+        }
+        Apple <|-- Item
+        Apple <|-- Stackable
+        Apple <|-- Consumable
+        abstract class Weapon{
+            
+        }
+        Weapon <|-- Attachable
+        Weapon <|-- Item
+        interface DamagingEntity{
+            # onHit(LivingEntity):void
+            # getDamage():double
+        }
+        class Sword{
+            + startSwing():void
+            # continueSwing():void
+            # isSwinging():void
+            # isSwingDone():boolean
+            # checkForLivingEntityHits():LivingEntity
+            # onHit(LivingEntity):void
+            # onSwingEnded():void
+        }
+        Sword <|-- Weapon
+        Sword <|-- DamagingEntity
+        abstract class RangedWeapon{
+            # shoot(double, double, double, double):void
+            # reload():void
+            - loaded:boolean
+            + isLoaded():boolean
+        }
+        RangedWeapon <|-- Weapon
+        class Bow{
+            - ammunitionSource:Arrow
+            - findAmmunitionSource(Inventory):Arrow
+        }
+        Bow <|-- RangedWeapon
+        class Arrow{
+            + Arrow(double, double, double, double):Arrow
+            - hit(LivingEntity):void
+        }
+        Arrow <|-- Item
+        Arrow <|-- Stackable
+    }
+}
+@enduml
