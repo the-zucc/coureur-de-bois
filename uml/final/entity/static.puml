@@ -8,7 +8,7 @@ class Légende{
 }
 package entity{
     
-    abstract class Entity{
+    abstract class Entity #888888{
         + Entity(Point3D):Entity
         ==
         - id:String
@@ -30,6 +30,36 @@ package entity{
         --
         onMouseEntered(MouseEvent):void
         onMouseExit(MouseEvent):void
+    }
+    
+    package entity.static{
+        class StaticEntity{
+
+        }
+        StaticEntity --|> Entity
+        interface EatableStatic{
+            + onGetEaten(Herbivore):void
+        }
+        class TallGrass
+        TallGrass --|> StaticEntity
+        TallGrass --|> EatableStatic
+        class FirTree{
+            
+        }
+        FirTree --|> StaticEntity
+        class Pine{
+        }
+        Pine --|> StaticEntity
+        class Tipi{
+        }
+        Tipi --|> StaticEntity
+        class AppleTree{
+            - apples:Hashtable<String, Apple>
+            - RandomizeApples(int):Hashtable<String, Apple>
+            + getApples():Hashtable<String, Apple>
+
+        }
+        AppleTree --|> StaticEntity
     }
     package entity.item{
         class Inventory{
@@ -53,37 +83,11 @@ package entity{
             'used for things such as placing the Item in the world, etc.
             + {abstract}onRemoveFromInventory(Human, Inventory):void
         }
-        Item <|-up- Entity
-        Inventory "1" *-up- "n" Item
-    }
-    package entity.static{
-        class StaticEntity{
-
-        }
-        StaticEntity <|-- Entity
-        interface EatableStatic{
-            + onGetEaten(Herbivore):void
-        }
-        class TallGrass
-        TallGrass <|-- StaticEntity
-        TallGrass <|-- EatableStatic
-        class FirTree{
-            
-        }
-        FirTree <|-- StaticEntity
-        class Pine{
-        }
-        Pine <|-- StaticEntity
-        class Tipi{
-        }
-        Tipi <|-- StaticEntity
-        class AppleTree{
-            - apples:Hashtable<String, Apple>
-            - RandomizeApples(int):Hashtable<String, Apple>
-            + getApples():Hashtable<String, Apple>
-
-        }
-        AppleTree <|-- StaticEntity
+        Item --|> Entity
+        Inventory "1" *-- "n" Item
+        class Apple
+        Apple --|> Item
+        Apple --> AppleTree
     }
     package entity.living{
         package entity.living.animal{
