@@ -35,7 +35,7 @@ package entity{
     }
     package entity.item{
         class Item
-        Item <|-- Entity
+        Item --|> Entity
     }
     package entity.living{
         abstract class LivingEntity{
@@ -52,7 +52,7 @@ package entity{
             # setLeft(boolean):void
             # setRight(boolean):void
         }
-        LivingEntity <|-- Entity
+        LivingEntity --|> Entity
         package entity.living.animal{
             abstract class Animal{
                 # nanosecondsWhenStateWasChosen:long
@@ -68,7 +68,7 @@ package entity{
                 'in the event that a predator would be after it. 
                 + getState():State
             }
-            Animal <|-- LivingEntity
+            Animal --|> LivingEntity
         }
         package entity.living.human{
             abstract class Human{
@@ -85,13 +85,13 @@ package entity{
                 - currentWeapon:Weapon
                 + getCurrentWeapon():Weapon
             }
-            Human <|-- LivingEntity
-            Human <|-- 2DComponentOwner
+            Human --|> LivingEntity
+            Human --|> 2DComponentOwner
         }
     }
     package entity.static{
         class StaticEntity
-        StaticEntity <|-- Entity
+        StaticEntity --|> Entity
     }
 }
 package javafx{
@@ -105,14 +105,14 @@ package visual{
         + Component(String):Component
         + getId():String
     }
-    Component <|-- Group
-    Entity --> Component
+    Component --|> Group
+    Entity <-- Component
 
     class 2DComponent{
         - visible:boolean
         + isVisible():boolean
 
     }
-    2DComponent <|-- Component
+    2DComponent --|> Component
 }
 @enduml
