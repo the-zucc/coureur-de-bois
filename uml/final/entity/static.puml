@@ -1,0 +1,98 @@
+@startuml Statics
+class Légende{
+    - private
+    # protected
+    + public
+    {abstract} abstract
+    {static} static
+}
+package entity{
+    
+    class Entity{
+        + Entity(Point3D):Entity
+        ==
+        - id:String
+        + getId():String
+        --
+        # position:Point3D
+        + getPosition():Point3D
+        --
+        # collisionBox:CollisionBox
+        + getCollisionBox():CollisionBox
+        --
+        # component:Component
+        # {abstract} buildComponent():Component
+        + getComponent():Component
+        --
+        # update(double):void
+        # fall():void
+        # correctCollisions():void
+        --
+        onMouseEntered(MouseEvent):void
+        onMouseExit(MouseEvent)
+    }
+    package entity.item{
+        class Inventory{
+            - items:Hashtable<String,Item>
+            + getItems():Hashable<String,Item>
+            --
+            + addItem(Item):void
+            + getItem(String):Item
+            + removeItem(String):void
+            'the following function removes the Item
+            'with the specified Id and returns it to the user.
+            + popItem(String):Item
+            'calls the onItemTraded() method on the target inventory and replaces the item in this inventory 
+            + tradeItem(Item, String, Inventory):Item
+            + onItemTraded(Item):Item
+        }
+        abstract class Item{
+            'function called whenever the Item is added to an inventory
+            + {abstract}onAddToInventory(Human, Inventory):void
+            'called when an Item is removed from an inventory.
+            'used for things such as placing the Item in the world, etc.
+            + {abstract}onRemoveFromInventory(Human, Inventory):void
+        }
+        Item <|-up- Entity
+        Inventory "1" *-up- "n" Item
+    }
+    package entity.static{
+        class StaticEntity{
+
+        }
+        StaticEntity <|-- Entity
+        interface EatableStatic{
+            + onGetEaten(Herbivore):void
+        }
+        class TallGrass
+        TallGrass <|-- StaticEntity
+        TallGrass <|-- EatableStatic
+        class FirTree{
+            
+        }
+        FirTree <|-- StaticEntity
+        class Pine{
+        }
+        Pine <|-- StaticEntity
+        class Tipi{
+        }
+        Tipi <|-- StaticEntity
+        class AppleTree{
+            - apples:Hashtable<String, Apple>
+            - RandomizeApples(int):Hashtable<String, Apple>
+            + getApples():Hashtable<String, Apple>
+
+        }
+        AppleTree <|-- StaticEntity
+    }
+    package entity.living{
+        package entity.living.animal{
+            abstract class Herbivore{
+                + targetEatableStatic(EatableStatic):void
+                + eat(EatableStatic):void
+            }
+            Herbivore -up-> EatableStatic
+        }
+    }
+}
+@enduml

@@ -1,0 +1,91 @@
+@startuml entity
+package entity{
+    class Légende{
+        - private
+        # protected
+        + public
+        {abstract} abstract
+        {static} static
+    }
+    class Entity{
+        + Entity(Point3D):Entity
+        ==
+        - id:String
+        + getId():String
+        --
+        # position:Point3D
+        + getPosition():Point3D
+        --
+        # collisionBox:CollisionBox
+        + getCollisionBox():CollisionBox
+        --
+        # component:Component
+        # {abstract} buildComponent():Component
+        + getComponent():Component
+        --
+        # update(double):void
+        # fall():void
+        # correctCollisions():void
+        --
+        onMouseEntered(MouseEvent):void
+        onMouseExit(MouseEvent)
+    }
+    
+    package entity.item{
+        class Item
+        Item <|-- Entity
+    }
+    package entity.living{
+        abstract class LivingEntity{
+            # hp:double
+            # xpReward:double
+            ==
+            # move():void
+            + getAttacked(double, LivingEntity):void
+            # onDeath():void
+            # jump():void
+            ==
+            # setUp(boolean):void
+            # setDown(boolean):void
+            # setLeft(boolean):void
+            # setRight(boolean):void
+        }
+        LivingEntity <|-- Entity
+        package entity.living.animal{
+            class Animal
+            Animal <|-- LivingEntity
+        }
+        package entity.living.human{
+            class Human
+            Human <|-- LivingEntity
+        }
+    }
+    package entity.static{
+        class StaticEntity
+        StaticEntity <|-- Entity
+    }
+}
+package javafx{
+    package javafx.scene{
+        class Group
+    }
+}
+package visual{
+    package visual.component{
+        class Component{
+            - id:string
+            + Component(String):Component
+            + getId():String
+        }
+        Component <|-- Group
+    }
+    package visual.info{
+        class InfoPane{
+            - visible:boolean
+            + isVisible():boolean
+
+        }
+        InfoPane <|-- Group
+    }
+}
+@enduml
