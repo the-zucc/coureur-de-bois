@@ -1,49 +1,47 @@
 @startuml
 'javafx, la base de l'engin graphique du programme
-package javafx{
+package javafx.stage{
+    class Stage
+    'note bottom:fenêtre\nd'application
+}
+
+package javafx.scene #ffffff{
+    class Scene
+    'note top:graphe de scène qui\npossède un noeud\nracine qui possède\ndes enfants
+    Stage --> Scene
     
-    package javafx.stage{
-        class Stage
-        'note bottom:fenêtre\nd'application
-    }
-
-    package javafx.scene #ffffff{
-        class Scene
-        'note top:graphe de scène qui\npossède un noeud\nracine qui possède\ndes enfants
-        Stage --> Scene
-        
-        
-        abstract class Node{
-
-        }
-        'note:classe\ngénérique\npour\nles\nnoeuds
-        Parent *-- Node:"1..*"
-
-        class SubScene
-        'note bottom:graphe de scène\nqui agit comme\nun noeud 2D au sein\nd'une scène, mais qui\nest aussi une scène\nen soi.
-        SubScene <|-- Node
-        SubScene <|-- Scene
-        SubScene --> Parent
-
-        abstract class Parent
-        'note left:indique\nque le\nnoeud\na des\nenfants 
-        Parent <|--Node
-        Scene --> Parent
-        
-        class Group
-        'note top:utilisé dans\nle contexte\nactuel, sert\nsimplement\nà déclarer\nles positions\navec des\ncoordonnées\nX,Y,Z 
-        Group <|-- Parent
-    }
     
-    package javafx.geometry{
-        class Point3D
+    abstract class Node{
+
     }
-    package application{
-        class Application{
-        
-        }
-        Application "    1..*" *-- Stage: "une application\npeut posséder\nplusieurs fenêtres"
+    'note:classe\ngénérique\npour\nles\nnoeuds
+    Parent *-- Node:"1..*"
+
+    class SubScene
+    'note bottom:graphe de scène\nqui agit comme\nun noeud 2D au sein\nd'une scène, mais qui\nest aussi une scène\nen soi.
+    SubScene <|-- Node
+    SubScene <|-- Scene
+    SubScene --> Parent
+
+    abstract class Parent
+    'note left:indique\nque le\nnoeud\na des\nenfants 
+    Parent <|--Node
+    Scene --> Parent
+    
+    class Group
+    'note top:utilisé dans\nle contexte\nactuel, sert\nsimplement\nà déclarer\nles positions\navec des\ncoordonnées\nX,Y,Z 
+    Group <|-- Parent
+}
+
+package javafx.geometry{
+    class Point3D
+}
+package javafx.application{
+    class Application{
+
     }
+    Application "1" *-- "n" Stage
+    ': "une application\npeut posséder\nplusieurs fenêtres"
 }
 
 'package de l'application
@@ -78,7 +76,7 @@ package app{
 package visual{
     package visual.component{
         class Component{
-            - id:string
+            - id:String
             + Component(String):Component
             + getId():String
         }

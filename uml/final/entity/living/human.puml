@@ -8,7 +8,7 @@ class Légende{
 }
 package entity{
     
-    class Entity{
+    abstract class Entity{
         + Entity(Point3D):Entity
         ==
         - id:String
@@ -29,7 +29,7 @@ package entity{
         # correctCollisions():void
         --
         onMouseEntered(MouseEvent):void
-        onMouseExit(MouseEvent)
+        onMouseExit(MouseEvent):void
     }
     package entity.item{
         class Inventory{
@@ -78,7 +78,7 @@ package entity{
                 ==
                 - wornItems:ArrayList<Item>
                 + getWornItems():ArrayList<Item>
-                -
+                --
                 - currentWeapon:Weapon
                 + getCurrentWeapon():Weapon
             }

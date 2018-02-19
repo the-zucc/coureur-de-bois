@@ -1,5 +1,5 @@
 @startuml animal
-class Légende{
+class LÃ©gende{
         - private
         # protected
         + public
@@ -7,7 +7,7 @@ class Légende{
         {static} static
     }
 package entity{
-    class Entity{
+    abstract class Entity{
         + Entity(Point3D):Entity
         ==
         - id:String
@@ -28,7 +28,7 @@ package entity{
         # correctCollisions():void
         --
         onMouseEntered(MouseEvent):void
-        onMouseExit(MouseEvent)
+        onMouseExit(MouseEvent):void
     }
     package entity.attachable{
         interface Attachable{

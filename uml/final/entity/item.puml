@@ -7,7 +7,7 @@ package entity{
         {abstract} abstract
         {static} static
     }
-    class Entity{
+    abstract class Entity{
         + Entity(Point3D):Entity
         ==
         - id:String
@@ -28,7 +28,7 @@ package entity{
         # correctCollisions():void
         --
         onMouseEntered(MouseEvent):void
-        onMouseExit(MouseEvent)
+        onMouseExit(MouseEvent):void
     }
     package entity.attachable{
         interface Attachable{
