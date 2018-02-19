@@ -1,13 +1,13 @@
 @startuml entity
+class Légende{
+    - private
+    # protected
+    + public
+    {abstract} abstract
+    {static} static
+}
 package entity{
-    class Légende{
-        - private
-        # protected
-        + public
-        {abstract} abstract
-        {static} static
-    }
-    abstract class Entity{
+    abstract class Entity #888888{
         + Entity(Point3D):Entity
         ==
         - id:String
@@ -54,7 +54,20 @@ package entity{
         }
         LivingEntity <|-- Entity
         package entity.living.animal{
-            class Animal
+            abstract class Animal{
+                # nanosecondsWhenStateWasChosen:long
+                # state:State
+                # running:boolean
+                # walking:boolean
+                # {abstract}shouldChangeState():boolean
+                # {abstract}chooseNextState():State
+                # updateState():void
+                # startWalkingTo(Point3D):void
+                # startRunningTo(Point3D):void
+                'the following method should be used to check if the prey is moving,
+                'in the event that a predator would be after it. 
+                + getState():State
+            }
             Animal <|-- LivingEntity
         }
         package entity.living.human{
@@ -73,6 +86,7 @@ package entity{
                 + getCurrentWeapon():Weapon
             }
             Human <|-- LivingEntity
+            Human <|-- 2DComponentOwner
         }
     }
     package entity.static{

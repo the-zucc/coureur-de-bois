@@ -1,5 +1,5 @@
 @startuml animal
-class Légende{
+class L�gende{
         - private
         # protected
         + public
@@ -7,7 +7,7 @@ class Légende{
         {static} static
     }
 package entity{
-    abstract class Entity{
+    abstract class Entity #888888{
         + Entity(Point3D):Entity
         ==
         - id:String
@@ -133,8 +133,10 @@ package entity{
             'HERBIVORES HERE
             class Moose
             Moose <|-- Herbivore
-            class Rabbit
-            ' note top:le joueur pourra\navoir un lapin\ncomme animal\nde compagnie
+            class Rabbit{
+                - hop(double, double, double):void
+            }
+            'note top:le joueur pourra\navoir un lapin\ncomme animal\nde compagnie
             Rabbit <|-- Herbivore
             Rabbit <|-- Attachable
             'CARNIVORES HERE

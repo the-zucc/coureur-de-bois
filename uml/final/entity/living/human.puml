@@ -1,5 +1,5 @@
 @startuml human
-class Légende{
+class Lï¿½gende{
     - private
     # protected
     + public
@@ -7,8 +7,10 @@ class Légende{
     {static} static
 }
 package entity{
-    
-    abstract class Entity{
+    interface 2DComponentOwner{
+        + build2DComponent():2DComponent
+    }
+    abstract class Entity #888888{
         + Entity(Point3D):Entity
         ==
         - id:String
@@ -84,6 +86,7 @@ package entity{
             }
             Human <|-- LivingEntity
             Human --> Inventory
+            Human <|-- 2DComponentOwner
             class Player{
                 
             }
