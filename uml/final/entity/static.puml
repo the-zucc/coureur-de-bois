@@ -62,20 +62,7 @@ package entity{
         AppleTree --|> StaticEntity
     }
     package entity.item{
-        class Inventory{
-            - items:Hashtable<String,Item>
-            + getItems():Hashable<String,Item>
-            --
-            + addItem(Item):void
-            + getItem(String):Item
-            + removeItem(String):void
-            'the following function removes the Item
-            'with the specified Id and returns it to the user.
-            + popItem(String):Item
-            'calls the onItemTraded() method on the target inventory and replaces the item in this inventory 
-            + tradeItem(Item, String, Inventory):Item
-            + onItemTraded(Item):Item
-        }
+        
         abstract class Item{
             'function called whenever the Item is added to an inventory
             + {abstract}onAddToInventory(Human, Inventory):void
@@ -84,7 +71,6 @@ package entity{
             + {abstract}onRemoveFromInventory(Human, Inventory):void
         }
         Item --|> Entity
-        Inventory "1" *-- "n" Item
         class Apple
         Apple --|> Item
         Apple --> AppleTree

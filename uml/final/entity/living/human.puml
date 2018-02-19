@@ -1,5 +1,5 @@
 @startuml human
-class Lï¿½gende{
+class Légende{
     - private
     # protected
     + public
@@ -32,6 +32,23 @@ package entity{
         --
         onMouseEntered(MouseEvent):void
         onMouseExit(MouseEvent):void
+    }
+    package entity.attachable{
+        interface Attachable{
+            onAttach(AttachableReceiver):void
+            onDetach(AttachableReceiver):void
+            onUpdate(AttachableReceiver):void
+        }
+        interface LevelRestrictedAttachable{    
+            getMinimumLevel():int
+            canHumanReceive(Human):boolean
+        }
+        LevelRestrictedAttachable --|> Attachable
+        interface AttachableReceiver{
+            onReceive(Attachable):void
+            updateAttachables():void
+        }
+        AttachableReceiver "1" *-- "n" Attachable
     }
     package entity.item{
         class Inventory{
@@ -87,6 +104,7 @@ package entity{
             Human --|> LivingEntity
             Human <-- Inventory
             Human --|> 2DComponentOwner
+            Human --|> AttachableReceiver
             class Player{
                 
             }

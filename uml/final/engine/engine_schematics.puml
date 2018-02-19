@@ -1,36 +1,44 @@
 @startuml
+class LÈgende{
+    - private
+    # protected
+    + public
+    {abstract} abstract
+    {static} static
+}
 'javafx, la base de l'engin graphique du programme
 package javafx.stage{
     class Stage
-    'note bottom:fenÍtre\nd'application
+    'note bottom:fenùtre\nd'application
 }
 
 package javafx.scene #ffffff{
     class Scene
-    'note top:graphe de scËne qui\npossËde un noeud\nracine qui possËde\ndes enfants
-    Stage --> Scene
+    'note top:graphe de scùne qui\npossùde un noeud\nracine qui possùde\ndes enfants
+    Stage <-- Scene
     
     
     abstract class Node{
 
     }
-    'note:classe\ngÈnÈrique\npour\nles\nnoeuds
-    Parent *-- Node:"1..*"
+    'note:classe\ngùnùrique\npour\nles\nnoeuds
+    Parent "1" *-- "n" Node
+    ':"1..*"
 
     class SubScene
     'note bottom:graphe de scËne\nqui agit comme\nun noeud 2D au sein\nd'une scËne, mais qui\nest aussi une scËne\nen soi.
-    SubScene <|-- Node
-    SubScene <|-- Scene
-    SubScene --> Parent
+    SubScene --|> Node
+    SubScene --|> Scene
+    SubScene <-- Parent
 
     abstract class Parent
     'note left:indique\nque le\nnoeud\na des\nenfants 
-    Parent <|--Node
-    Scene --> Parent
+    Parent --|>Node
+    Scene <-- Parent
     
     class Group
-    'note top:utilisÈ dans\nle contexte\nactuel, sert\nsimplement\n‡ dÈclarer\nles positions\navec des\ncoordonnÈes\nX,Y,Z 
-    Group <|-- Parent
+    'note top:utilisù dans\nle contexte\nactuel, sert\nsimplement\nù dùclarer\nles positions\navec des\ncoordonnùes\nX,Y,Z 
+    Group --|> Parent
 }
 
 package javafx.geometry{
@@ -41,7 +49,7 @@ package javafx.application{
 
     }
     Application "1" *-- "n" Stage
-    ': "une application\npeut possÈder\nplusieurs fenÍtres"
+    ': "une application\npeut possùder\nplusieurs fenùtres"
 }
 
 'package de l'application
@@ -49,28 +57,30 @@ package app{
     skinparam stereotypeCBackgroundColor<<Singleton>> #FF7700
     class Model<<Singleton>>{
         - {static} Instance:Model
-        + getInstance():Model
+        + {static}getInstance():Model
     }
     class UI<<Singleton>>{
         - {static} Instance:Model
-        + getInstance():Model
+        + {static}getInstance():Model
     }
-    UI <|-- Scene
+    UI --|> Scene
     class GameScene<<Singleton>>{
         - {static} Instance:GameScene
-        + getInstance():GameScene
+        + {static}getInstance():GameScene
     }
-    'note bottom:pour permettre de superposer\ndu rendu 3D ‡ du rendu 2D,\nune scËne en 2D est nÈcessaire.\nOn ajoute simplement un noeud\nqui sera une <i>SubScene ‡ la scËne\n2D. Elle sera manipulÈe comme\nun objet 2D, mais aura les fonctionnalitÈs\nd'une scËne en 3D\n(donc l'ajout d'enfants sera possible)
-    GameScene <|-- SubScene
-    GameScene --> Model
-    UI --> GameScene
+    'note bottom:pour permettre de superposer\ndu rendu 3D ‡ du rendu 2D,\nune scËne en 2D est nÈcessaire.\nOn ajoute simplement un noeud\nqui sera une <i>SubScene</i> ‡ la scËne\n2D. Elle sera manipulÈe comme\nun objet 2D, mais aura les fonctionnalitÈs\nd'une scËne en 3D (donc l'ajout\nd'enfants 3D sera possible)
+    GameScene --|> SubScene
+    GameScene <-- Model
+    UI <-- GameScene
     class Controller{
-        applicationWindow:javafx.stage.Stage
+        - {static}applicationWindow:javafx.stage.Stage
+        + {static}getApplicationWindow():javafx.stage.Stage
     }
     'note :la classe <i>Controller\ninitialise les Singletons\ndans le bon ordre
-    Controller --> UI
-    Controller --> GameScene: "initialise"
-    Controller --> Model
+    Controller <-- UI
+    Controller <-- GameScene
+    ': "initialise"
+    Controller <-- Model
     Controller --|> Application
 }
 package visual{
@@ -80,7 +90,8 @@ package visual{
             + Component(String):Component
             + getId():String
         }
-        Component <|-- Group
+        Component "n" --* "1" GameScene
+        Component --|> Group
     }
     package visual.info{
         class 2DComponent{
@@ -88,8 +99,35 @@ package visual{
             + isVisible():boolean
 
         }
-        2DComponent <|-- Group
+        2DComponent --|> Component
     }
     UI *-- 2DComponent
+}
+package entity{
+    abstract class Entity #888888{
+        + Entity(Point3D):Entity
+        ==
+        - id:String
+        + getId():String
+        --
+        # position:Point3D
+        + getPosition():Point3D
+        --
+        # collisionBox:CollisionBox
+        + getCollisionBox():CollisionBox
+        --
+        # component:Component
+        # {abstract} buildComponent():Component
+        + getComponent():Component
+        --
+        # update(double):void
+        # fall():void
+        # correctCollisions():void
+        --
+        onMouseEntered(MouseEvent):void
+        onMouseExit(MouseEvent):void
+    }
+    Model "1" *-- "n" Entity
+    'Entity <-- Component
 }
 @enduml
