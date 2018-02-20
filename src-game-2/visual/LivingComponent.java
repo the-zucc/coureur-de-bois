@@ -1,11 +1,11 @@
 package visual;
 
 import entity.Entity;
-import entity.LivingEntity;
+import entity.living.LivingEntity;
 import javafx.geometry.Point3D;
 import javafx.scene.transform.Rotate;
 
-public abstract class LivingComponent extends GameComponent implements UpdateableComponent{
+public abstract class LivingComponent extends Component implements UpdateableComponent{
 
 	@Override
 	public void update(Entity e) {

@@ -1,17 +1,23 @@
-package entity;
+package entity.living.human;
 
+import app.Model;
 import collision.SphericalCollisionBox;
+import entity.UserControllable;
+import entity.living.LivingEntity;
 import javafx.geometry.Point3D;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import util.Updateable;
-import visual.GameComponent;
+import visual.Component;
 import visual.PlayerComponent;
 
-public class Player extends LivingEntity {
+public class Player extends LivingEntity implements UserControllable{
 	
 	private static double movementSpeed = 10;
 	private Color hatColor;
-	private boolean up, down, left, right, newOrientation;
+	
 	
 	public Player(Point3D position, Color hatColor) {
 		super(position);
@@ -32,29 +38,11 @@ public class Player extends LivingEntity {
 	}
 
 	@Override
-	public GameComponent buildComponent() {
+	public Component buildComponent() {
 		return new PlayerComponent(hatColor);
 	}
 	
-	public void setUp(boolean value) {
-		up = value;
-		newOrientation = true;
-	}
-	public void setDown(boolean value) {
-		down = value;
-		newOrientation = true;
-	}
-	public void setLeft(boolean value) {
-		left = value;
-		newOrientation = true;
-	}
-	public void setRight(boolean value) {
-		right = value;
-		newOrientation = true;
-	}
-	public void setIsRunning(boolean value) {
-		isRunning = value;
-	}
+	
 	/**
 	 * updates the movement vector with the new orientation of the player using the boolean values up, down left, right
 	 */
@@ -101,5 +89,41 @@ public class Player extends LivingEntity {
 	@Override
 	public double getXpReward() {
 		return 100 * level + maxHp;
+	}
+
+	@Override
+	public void onMouseMoved(MouseEvent me) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onKeyDown(KeyEvent ke) {
+		// TODO Auto-generated method stub
+		KeyCode code = ke.getCode();
+		if(code.equals(KeyCode.W))
+			this.setUp(true);
+		else if(code.equals(KeyCode.A))
+			this.setLeft(true);
+		else if(code.equals(KeyCode.S))
+			this.setDown(true);
+		else if(code.equals(KeyCode.D))
+			this.setRight(true);
+		else if(code.equals(KeyCode.SHIFT))
+			this.setIsRunning(true);
+		else if(code.equals(KeyCode.SPACE))
+			this.jump();
+		ke.consume();
+	}
+
+	@Override
+	public void onKeyUp(KeyEvent ke) {
+		
+	}
+
+	@Override
+	public void onMouseClicked(MouseEvent me) {
+		// TODO Auto-generated method stub
+		
 	}
 }

@@ -3,7 +3,7 @@ package visual;
 import app.Controller;
 import app.GameScene;
 import entity.Entity;
-import entity.Mob;
+import entity.living.Mob;
 import javafx.geometry.Bounds;
 import javafx.scene.Group;
 import javafx.scene.control.Label;
@@ -19,7 +19,7 @@ public class FloatingUINode extends Group implements Updateable{
 	
 	private static double margin = 5;
 	private Entity linkedEntity;
-	private GameComponent linkedComponent;
+	private Component linkedComponent;
 	private static double textScale = 1.5;
 	private Label hpLabel;
 	

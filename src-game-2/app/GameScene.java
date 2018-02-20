@@ -5,6 +5,7 @@ import java.util.Hashtable;
 import java.util.concurrent.ThreadLocalRandom;
 
 import entity.Entity;
+import javafx.geometry.Point3D;
 import javafx.scene.Camera;
 import javafx.scene.Group;
 import javafx.scene.Node;
@@ -22,7 +23,7 @@ import javafx.scene.shape.Sphere;
 import javafx.scene.shape.TriangleMesh;
 import javafx.scene.transform.Rotate;
 import util.Updateable;
-import visual.GameComponent;
+import visual.Component;
 import visual.UpdateableComponent;
 
 public class GameScene extends SubScene implements Updateable {
@@ -39,23 +40,26 @@ public class GameScene extends SubScene implements Updateable {
 		return instance;
 	}
 	//instance variables
-	private Hashtable<String, GameComponent> gameComponentsHashtable;
-	private ArrayList<GameComponent> gameComponents;
+	private Hashtable<String, Component> gameComponentsHashtable;
+	private ArrayList<Component> gameComponents;
 	
 	
 	private Group gameEnvRoot;
 	private PerspectiveCamera gameCamera;
-	private static double floorSectionWidth = 100;
-	private static double floorSectionHeight = 100;
-	
+	private static double floorSectionWidth = 10;
+	private static double floorSectionHeight = 10;
+	private static Point3D[][][] heightMatrix;
+	public static Point3D[][][] getHeightMatrix(){
+		return heightMatrix;
+	}
 	
 	private GameScene(Parent arg0, double arg1, double arg2, SceneAntialiasing arg4) {
 		//create the scene
 		super(arg0, arg1, arg2, true, arg4);
 		
 		//defining the gameComponents and the uINodes Hashtables
-		gameComponentsHashtable = new Hashtable<String, GameComponent>();
-		gameComponents = new ArrayList<GameComponent>();
+		gameComponentsHashtable = new Hashtable<String, Component>();
+		gameComponents = new ArrayList<Component>();
 		
 		//defining custom class attributes
 		
@@ -104,7 +108,7 @@ public class GameScene extends SubScene implements Updateable {
 	public void updateGraphics(double deltaTime) {
 		Entity e;
 		for(int i = 0; i < gameComponents.size(); i++) {
-			GameComponent gc = gameComponents.get(i);
+			Component gc = gameComponents.get(i);
 			e = Model.getInstance().getEntity(gc.getId());
 			if(e == null) {
 				gameComponents.remove(gc);
@@ -122,7 +126,7 @@ public class GameScene extends SubScene implements Updateable {
 	 * @param ge the {@link Entity} of which to update the component
 	 */
 	private void updateComponentOfElement(Entity e) {
-		GameComponent component = gameComponentsHashtable.get(e.getId());
+		Component component = gameComponentsHashtable.get(e.getId());
 		if(component == null) {
 			component = e.buildComponent();
 			component.setId(e.getId());
@@ -140,7 +144,7 @@ public class GameScene extends SubScene implements Updateable {
 	 * @param id the id of the component
 	 * @return the component corresponding to the specified id
 	 */
-	public GameComponent getComponent(String id) {
+	public Component getComponent(String id) {
 		return gameComponentsHashtable.get(id);
 	}
 	
@@ -158,10 +162,10 @@ public class GameScene extends SubScene implements Updateable {
 		PerspectiveCamera returnVal = new PerspectiveCamera(true);
 		returnVal.setNearClip(0.1);
 		returnVal.setFarClip(40000);
-		returnVal.setTranslateY(-distance/*/3*/);
+		returnVal.setTranslateY(-distance/3);
 		returnVal.setTranslateZ(-distance);
 		returnVal.setRotationAxis(Rotate.X_AXIS);
-		returnVal.setRotate(/*-17*/-45);
+		returnVal.setRotate(-17);
 		return returnVal;
 	}
 	
@@ -177,25 +181,38 @@ public class GameScene extends SubScene implements Updateable {
 		Group returnVal = new Group();
 		double height = rowheight;
 		double width = colwidth;
-		float[][] yValues = new float[rows][cols];
+		float[][] tempHeightMatrix = new float[rows][cols];
 		for(int z = 0; z < rows; z++) {
 			for(int x = 0; x < cols; x++) {
 				float y = (float)ThreadLocalRandom.current().nextDouble()*50;
-				yValues[z][x]=y;
+				tempHeightMatrix[z][x]=y;
 			}
 		}
+		heightMatrix = new Point3D[rows][cols][3];
 		for(int z = 0; z < rows-1; z++) {
 			TriangleMesh mesh = new TriangleMesh();
+			
 			for(int x = 0; x < cols; x++) {
-				mesh.getPoints().addAll((float)((-x*width)-(-Model.getInstance().getMapWidth()/2)), yValues[z][x], (float)(((-z)*height)-(-Model.getInstance().getMapHeight()/2)));
-				mesh.getPoints().addAll((float)((-x*width)-(-Model.getInstance().getMapWidth()/2)), yValues[z+1][x], (float)(((-(z+1))*height)-(-Model.getInstance().getMapHeight()/2)));
+				if(x%2 == 0){
+					heightMatrix[z][x][0] = new Point3D((-x*width)-(-Model.getInstance().getMapWidth()/2), tempHeightMatrix[z][x], ((-z)*height)-(-Model.getInstance().getMapHeight()/2));
+					heightMatrix[z][x][1] = new Point3D((-(x+1)*width)-(-Model.getInstance().getMapWidth()/2), tempHeightMatrix[z][x+1], ((-z)*height)-(-Model.getInstance().getMapHeight()/2));
+					heightMatrix[z][x][2] = new Point3D((-x*width)-(-Model.getInstance().getMapWidth()/2), tempHeightMatrix[z+1][x], ((-(z+1))*height)-(-Model.getInstance().getMapHeight()/2));
+				}
+				else{
+					heightMatrix[z][x][0] = new Point3D((-x*width)-(-Model.getInstance().getMapWidth()/2), tempHeightMatrix[z+1][x], ((-z)*height)-(-Model.getInstance().getMapHeight()/2));
+					heightMatrix[z][x][1] = new Point3D((-(x-1)*width)-(-Model.getInstance().getMapWidth()/2), tempHeightMatrix[z+1][x-1], ((-z)*height)-(-Model.getInstance().getMapHeight()/2));
+					heightMatrix[z][x][2] = new Point3D((-x*width)-(-Model.getInstance().getMapWidth()/2), tempHeightMatrix[z][x], ((-z)*height)-(-Model.getInstance().getMapHeight()/2));
+				}
+				
+				mesh.getPoints().addAll((float)((-x*width)-(-Model.getInstance().getMapWidth()/2)), tempHeightMatrix[z][x], (float)(((-z)*height)-(-Model.getInstance().getMapHeight()/2)));
+				mesh.getPoints().addAll((float)((-x*width)-(-Model.getInstance().getMapWidth()/2)), tempHeightMatrix[z+1][x], (float)(((-(z+1))*height)-(-Model.getInstance().getMapHeight()/2)));
 			}
 			mesh.getTexCoords().addAll(0,0);
 			for(int i=2;i<cols*2;i+=2) {  //add each segment
 		        //Vertices wound counter-clockwise which is the default front face of any Triange
 		        //These triangles live on the frontside of the line facing the camera
-		        mesh.getFaces().addAll(i,0,i-2,0,i+1,0); //add primary face
-		        mesh.getFaces().addAll(i+1,0,i-2,0,i-1,0); //add secondary Width face
+		        //mesh.getFaces().addAll(i,0,i-2,0,i+1,0); //add primary face
+		        //mesh.getFaces().addAll(i+1,0,i-2,0,i-1,0); //add secondary Width face
 		        //Add the same faces but wind them clockwise so that the color looks correct when camera is rotated
 		        //These triangles live on the backside of the line facing away from initial the camera
 		        mesh.getFaces().addAll(i+1,0,i-2,0,i,0); //add primary face
@@ -220,7 +237,7 @@ public class GameScene extends SubScene implements Updateable {
 //				material.setDiffuseColor(Color.CYAN);
 //				break;
 //			}
-			material.setDiffuseColor(Color.FLORALWHITE);
+			material.setDiffuseColor(Color.GREEN);
 			meshView.setMaterial(material);
 			meshView.setTranslateX(0);
 			meshView.setTranslateY(-25);

@@ -1,11 +1,12 @@
-package entity;
+package entity.living;
 
 import app.GameLogic;
 import app.Model;
+import entity.Entity;
 import javafx.geometry.Point3D;
 import javafx.scene.transform.Rotate;
 import util.Updateable;
-import visual.GameComponent;
+import visual.Component;
 
 public abstract class LivingEntity extends Entity implements Updateable{
 	
@@ -29,7 +30,27 @@ public abstract class LivingEntity extends Entity implements Updateable{
 	
 	protected Point3D movement;
 	
+	protected boolean up, down, left, right, newOrientation;
 	
+	public void setUp(boolean value) {
+		up = value;
+		newOrientation = true;
+	}
+	public void setDown(boolean value) {
+		down = value;
+		newOrientation = true;
+	}
+	public void setLeft(boolean value) {
+		left = value;
+		newOrientation = true;
+	}
+	public void setRight(boolean value) {
+		right = value;
+		newOrientation = true;
+	}
+	public void setIsRunning(boolean value) {
+		isRunning = value;
+	}
 	
 	
 	protected LivingEntity(Point3D position) {
@@ -38,7 +59,7 @@ public abstract class LivingEntity extends Entity implements Updateable{
 	}
 
 	@Override
-	public abstract GameComponent buildComponent();
+	public abstract Component buildComponent();
 	
 	public void jump(){
 		this.gravity = new Point3D(GameLogic.getJump().getX(), GameLogic.getJump().getY(), GameLogic.getJump().getZ());
@@ -64,6 +85,8 @@ public abstract class LivingEntity extends Entity implements Updateable{
 	protected void updateAngleDegrees() {
 		if(movement != null)
 			angleDegrees = new Point3D(movement.getX(), 0, movement.getZ()).angle(Rotate.X_AXIS);
+		else
+			angleDegrees = -90;
 		//System.out.println(angleDegrees);
 	}
 	

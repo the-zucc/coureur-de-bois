@@ -3,8 +3,8 @@ package app;
 import java.util.Hashtable;
 
 import entity.Entity;
-import entity.LivingEntity;
-import entity.Player;
+import entity.living.LivingEntity;
+import entity.living.human.Player;
 import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.ImageCursor;

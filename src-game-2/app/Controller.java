@@ -3,6 +3,7 @@ package app;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 
+import collision.CollisionGrid;
 import javafx.application.Application;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -13,7 +14,7 @@ import javafx.stage.StageStyle;
 
 public class Controller extends Application{
 	
-	public static double gameCameraDistance = 1500;
+	public static double gameCameraDistance = 800;
 	
 	private static Stage applicationWindow;
 	
@@ -32,6 +33,7 @@ public class Controller extends Application{
 		Model model = Model.getInstance();
 		//instanciate the game scene
 		GameScene gameScene = GameScene.getInstance();
+		CollisionGrid.getInstance().initFloorVertices();
 		//instanciate the UI
 		UI ui = UI.getInstance();
 		

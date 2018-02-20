@@ -6,8 +6,8 @@ import java.util.concurrent.ThreadLocalRandom;
 
 import collision.CollisionGrid;
 import entity.Entity;
-import entity.Mob;
-import entity.Player;
+import entity.living.Mob;
+import entity.living.human.Player;
 import javafx.geometry.Point3D;
 import javafx.scene.paint.Color;
 import util.Updateable;
@@ -18,7 +18,7 @@ public class Model implements Updateable{
 	
 	public static Model getInstance() {
 		if(instance == null) {
-			instance = new Model(5000, 5000, 5, 1500, 10);
+			instance = new Model(5000, 5000, 5, 800, 10);
 		}
 		return instance;
 	}
@@ -45,9 +45,10 @@ public class Model implements Updateable{
 		collisionGrid = CollisionGrid.newInstance(mapWidth, mapHeight, (int)(mapWidth/gridColumnWidth), (int)(mapWidth/gridColumnWidth));
 		for(int i = 0; i < mobCount; i++) {
 			double x = (double)ThreadLocalRandom.current().nextInt((int)-(mapWidth/2), (int)mapWidth/2);
+			double y = (double)ThreadLocalRandom.current().nextInt((int)-(mapWidth/2), (int)mapWidth/2);
 			double z = (double)ThreadLocalRandom.current().nextInt((int)-(mapHeight/2), (int)mapHeight/2);
 			
-			Point3D position = new Point3D(x, 0, z);
+			Point3D position = new Point3D(x, y, z);
 			Mob newMob = new Mob(position, 100, 100, 1, Color.AQUA);
 			
 			addElement(newMob);

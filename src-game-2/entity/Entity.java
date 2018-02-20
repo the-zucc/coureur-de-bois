@@ -10,7 +10,7 @@ import collision.CollisionBox;
 import collision.CollisionGrid;
 import javafx.geometry.Point3D;
 import util.IdMaker;
-import visual.GameComponent;
+import visual.Component;
 
 public abstract class Entity{
 	
@@ -18,6 +18,7 @@ public abstract class Entity{
 	private String id;
 	protected Point3D position;
 	protected CollisionBox collisionBox;
+	protected Component component;
 	protected Point3D gravity;
 	
 	protected Entity(Point3D position) {
@@ -32,10 +33,10 @@ public abstract class Entity{
 		return id;
 	}
 	/**
-	 * builds the {@link GameComponent} of the object
-	 * @return a {@link GameComponent} representing the element's 3D visuals 
+	 * builds the {@link Component} of the object
+	 * @return a {@link Component} representing the element's 3D visuals 
 	 */
-	public abstract GameComponent buildComponent();
+	public abstract Component buildComponent();
 	/**
 	 * returns the position of the element
 	 * @return a {@link Point3D} containing the element's position
@@ -96,5 +97,10 @@ public abstract class Entity{
 			position = new Point3D(position.getX(), 0, position.getZ());
 			gravity = null;
 		}
+		//position = new Point3D(position.getX(), CollisionGrid.getInstance().getHeightAt(position), position.getZ());
+	}
+	public void update(double deltaTime){
+		fall();
+		correctCollisions();
 	}
 }

@@ -3,8 +3,11 @@ package collision;
 import java.util.ArrayList;
 import java.util.Vector;
 
+import app.GameScene;
 import app.Model;
 import entity.Entity;
+import javafx.geometry.Point3D;
+import javafx.scene.input.MouseEvent;
 
 public class CollisionGrid {
 	
@@ -26,7 +29,7 @@ public class CollisionGrid {
 	private static int mapDivisionHeight=100;
 	
 	//instance variables
-	private Vector<Vector<Double>> heightMatrix;
+	private Point3D[][][] floorVertices;
 	//for optimizing the collision detection system
 	private Vector<Vector<ArrayList<CollisionBox>>> mapDivisions;
 	private ArrayList<CollisionBox> universalCollisionList;
@@ -37,17 +40,20 @@ public class CollisionGrid {
 		collisionBoxes = new ArrayList<CollisionBox>();
 		universalCollisionList = new ArrayList<CollisionBox>();
 		mapDivisions = new Vector<Vector<ArrayList<CollisionBox>>>();
-		heightMatrix = new Vector<Vector<Double>>(); 
+		//heightMatrix = new Vector<Vector<Double>>();
+		
 		for(int i = 0; i < rowCount; i++) {
-			heightMatrix.add(new Vector<Double>());
+			//heightMatrix.add(new Vector<Double>());
 			mapDivisions.add(new Vector<ArrayList<CollisionBox>>());
 			for(int j = 0; j < columnCount; j++) {
-				heightMatrix.get(i).add(100.0);
+				//heightMatrix.get(i).add(100.0);
 				mapDivisions.get(i).add(new ArrayList<CollisionBox>());
 			}
 		}
 	}
-	
+	public void initFloorVertices(){
+		floorVertices = GameScene.getHeightMatrix();
+	}
 	public void update() {
 		for(Entity e:Model.getInstance().getGameElements()) {
 			if(!collisionBoxes.contains(e.getCollisionBox())) {
@@ -116,5 +122,16 @@ public class CollisionGrid {
 		this.collisionBoxes.add(cb);
 		if(cb.tooBigForCollisionDetectionSystem)
 			universalCollisionList.add(cb);
+	}
+	public double getHeightAt(Point3D arg0){
+		Point3D[] currentTriangle = floorVertices[1][1];
+		Point3D p0 = currentTriangle[0];
+		Point3D vect1 = p0.subtract(currentTriangle[1]);
+		Point3D vect2 = p0.subtract(currentTriangle[2]);
+		Point3D normal = vect1.crossProduct(vect2).normalize();
+		
+		double returnVal = (normal.getX()*(arg0.getX()-p0.getX())+normal.getZ()*(arg0.getZ()-p0.getZ()))/normal.getY() + p0.getY();
+		
+		return returnVal;
 	}
 }

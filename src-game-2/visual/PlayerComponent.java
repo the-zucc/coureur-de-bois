@@ -1,8 +1,8 @@
 package visual;
 
 import entity.Entity;
-import entity.LivingEntity;
-import entity.Player;
+import entity.living.LivingEntity;
+import entity.living.human.Player;
 import javafx.geometry.Point3D;
 import javafx.scene.Group;
 import javafx.scene.PointLight;

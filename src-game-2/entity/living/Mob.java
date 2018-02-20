@@ -1,4 +1,4 @@
-package entity;
+package entity.living;
 
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -7,7 +7,7 @@ import collision.SphericalCollisionBox;
 import javafx.geometry.Point3D;
 import javafx.scene.paint.Color;
 import util.Updateable;
-import visual.GameComponent;
+import visual.Component;
 import visual.MobComponent;
 
 public class Mob extends LivingEntity{
@@ -63,7 +63,7 @@ public class Mob extends LivingEntity{
 		}
 	}
 	@Override
-	public GameComponent buildComponent() {
+	public Component buildComponent() {
 		return new MobComponent(color);
 	}
 	

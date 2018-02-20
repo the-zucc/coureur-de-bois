@@ -1,13 +1,18 @@
-package entity;
+package entity.living.animal;
 
 import entity.living.LivingEntity;
 import javafx.geometry.Point3D;
 import visual.Component;
 
-public class NativePerson extends LivingEntity {
+public abstract class Animal extends LivingEntity {
 
-	protected NativePerson(Point3D position) {
+	protected Animal(Point3D position) {
 		super(position);
+	}
+
+	@Override
+	public void update(double deltaTime) {
+		
 	}
 
 	@Override
@@ -28,10 +33,4 @@ public class NativePerson extends LivingEntity {
 		return 0;
 	}
 
-	@Override
-	public void update(double deltaTime) {
-		// TODO Auto-generated method stub
-		
-	}
-	
 }
