@@ -97,7 +97,8 @@ public abstract class Entity{
 			position = new Point3D(position.getX(), 0, position.getZ());
 			gravity = null;
 		}
-		//position = new Point3D(position.getX(), CollisionGrid.getInstance().getHeightAt(position), position.getZ());
+		//System.out.println(CollisionGrid.getInstance().getHeightAt(position));
+		position = new Point3D(position.getX(), CollisionGrid.getInstance().getHeightAt(position), position.getZ());
 	}
 	public void update(double deltaTime){
 		fall();

@@ -47,7 +47,14 @@ public class GameScene extends SubScene implements Updateable {
 	private Group gameEnvRoot;
 	private PerspectiveCamera gameCamera;
 	private static double floorSectionWidth = 10;
+	public static double getFloorSectionWidth() {
+		return floorSectionWidth;
+	}
+	public static double getFloorSectionHeight() {
+		return floorSectionHeight;
+	}
 	private static double floorSectionHeight = 10;
+	
 	private static Point3D[][][] heightMatrix;
 	public static Point3D[][][] getHeightMatrix(){
 		return heightMatrix;
@@ -197,12 +204,18 @@ public class GameScene extends SubScene implements Updateable {
 					heightMatrix[z][x][0] = new Point3D((-x*width)-(-Model.getInstance().getMapWidth()/2), tempHeightMatrix[z][x], ((-z)*height)-(-Model.getInstance().getMapHeight()/2));
 					heightMatrix[z][x][1] = new Point3D((-(x+1)*width)-(-Model.getInstance().getMapWidth()/2), tempHeightMatrix[z][x+1], ((-z)*height)-(-Model.getInstance().getMapHeight()/2));
 					heightMatrix[z][x][2] = new Point3D((-x*width)-(-Model.getInstance().getMapWidth()/2), tempHeightMatrix[z+1][x], ((-(z+1))*height)-(-Model.getInstance().getMapHeight()/2));
+					
 				}
 				else{
 					heightMatrix[z][x][0] = new Point3D((-x*width)-(-Model.getInstance().getMapWidth()/2), tempHeightMatrix[z+1][x], ((-z)*height)-(-Model.getInstance().getMapHeight()/2));
 					heightMatrix[z][x][1] = new Point3D((-(x-1)*width)-(-Model.getInstance().getMapWidth()/2), tempHeightMatrix[z+1][x-1], ((-z)*height)-(-Model.getInstance().getMapHeight()/2));
 					heightMatrix[z][x][2] = new Point3D((-x*width)-(-Model.getInstance().getMapWidth()/2), tempHeightMatrix[z][x], ((-z)*height)-(-Model.getInstance().getMapHeight()/2));
+					System.out.println("next triangle odd");
 				}
+				for(Point3D p:heightMatrix[z][x]){
+					System.out.println(p);
+				}
+				System.out.println("===");
 				
 				mesh.getPoints().addAll((float)((-x*width)-(-Model.getInstance().getMapWidth()/2)), tempHeightMatrix[z][x], (float)(((-z)*height)-(-Model.getInstance().getMapHeight()/2)));
 				mesh.getPoints().addAll((float)((-x*width)-(-Model.getInstance().getMapWidth()/2)), tempHeightMatrix[z+1][x], (float)(((-(z+1))*height)-(-Model.getInstance().getMapHeight()/2)));
