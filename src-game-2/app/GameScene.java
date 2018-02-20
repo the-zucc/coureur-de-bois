@@ -207,7 +207,7 @@ public class GameScene extends SubScene implements Updateable {
 					
 				}
 				else{
-					heightMatrix[z][x][0] = new Point3D((-x*width)-(-Model.getInstance().getMapWidth()/2), tempHeightMatrix[z+1][x], ((-z)*height)-(-Model.getInstance().getMapHeight()/2));
+					heightMatrix[z][x][0] = new Point3D((-x*width)-(-Model.getInstance().getMapWidth()/2), tempHeightMatrix[z+1][x], ((-z+1)*height)-(-Model.getInstance().getMapHeight()/2));
 					heightMatrix[z][x][1] = new Point3D((-(x-1)*width)-(-Model.getInstance().getMapWidth()/2), tempHeightMatrix[z+1][x-1], ((-z)*height)-(-Model.getInstance().getMapHeight()/2));
 					heightMatrix[z][x][2] = new Point3D((-x*width)-(-Model.getInstance().getMapWidth()/2), tempHeightMatrix[z][x], ((-z)*height)-(-Model.getInstance().getMapHeight()/2));
 					System.out.println("next triangle odd");

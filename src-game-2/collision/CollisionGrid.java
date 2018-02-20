@@ -124,11 +124,19 @@ public class CollisionGrid {
 			universalCollisionList.add(cb);
 	}
 	public double getHeightAt(Point3D arg0){
+		int newMapDivisionRow = (int) (((int)(arg0.getZ()-(-Model.getInstance().getMapHeight()/2)))/GameScene.getFloorSectionWidth());
+		int newMapDivisionColumn = (int) ((int)(arg0.getX()-(-Model.getInstance().getMapWidth()/2))/GameScene.getFloorSectionWidth());
 		int row = (int) (arg0.getZ()-(Model.getInstance().getMapHeight()/2)/GameScene.getFloorSectionHeight());
 		int column = (int) (arg0.getX()-(Model.getInstance().getMapWidth()/2)/GameScene.getFloorSectionWidth());
-		Point3D[] currentTriangle = floorVertices[0][0];
+		Point3D[] currentTriangle = floorVertices[newMapDivisionRow][newMapDivisionColumn];
 		Point3D p0 = currentTriangle[0];
-		Point3D vect1 = p0.subtract(currentTriangle[1]);
+		Point3D vect1 = null;
+		try {
+			vect1 = p0.subtract(currentTriangle[1]);
+		}
+		catch(NullPointerException npe){
+			System.out.println("yo");
+		}
 		Point3D vect2 = p0.subtract(currentTriangle[2]);
 		Point3D normal = vect1.crossProduct(vect2).normalize();
 		System.out.println("p0 "+p0);
