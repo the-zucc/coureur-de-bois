@@ -94,11 +94,12 @@ public abstract class Entity{
 			position = position.add(gravity);
 		}
 		if(position.getY() > 0){
-			position = new Point3D(position.getX(), 0, position.getZ());
+			position = new Point3D(position.getX(), CollisionGrid.getInstance().getHeightAt(position), position.getZ());
 			gravity = null;
 		}
 		//System.out.println(CollisionGrid.getInstance().getHeightAt(position));
-		position = new Point3D(position.getX(), CollisionGrid.getInstance().getHeightAt(position), position.getZ());
+		//if(this == Model.getInstance().getCurrentPlayer())
+			//position = new Point3D(position.getX(), CollisionGrid.getInstance().getHeightAt(position), position.getZ());
 	}
 	public void update(double deltaTime){
 		fall();
