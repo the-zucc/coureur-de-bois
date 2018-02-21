@@ -15,7 +15,7 @@ import visual.PlayerComponent;
 
 public class Player extends LivingEntity implements UserControllable{
 	
-	private static double movementSpeed = 10;
+	private static double movementSpeed = 5;
 	private Color hatColor;
 	
 	

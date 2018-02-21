@@ -17,11 +17,13 @@ import javafx.scene.SubScene;
 import javafx.scene.control.Label;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
+import javafx.scene.shape.Cylinder;
 import javafx.scene.shape.DrawMode;
 import javafx.scene.shape.MeshView;
 import javafx.scene.shape.Sphere;
 import javafx.scene.shape.TriangleMesh;
 import javafx.scene.transform.Rotate;
+import javafx.scene.transform.Translate;
 import util.Updateable;
 import visual.Component;
 import visual.UpdateableComponent;
@@ -172,10 +174,10 @@ public class GameScene extends SubScene implements Updateable {
 		PerspectiveCamera returnVal = new PerspectiveCamera(true);
 		returnVal.setNearClip(0.1);
 		returnVal.setFarClip(40000);
-		returnVal.setTranslateY(-distance/3);
-		returnVal.setTranslateZ(-distance);
+		returnVal.setTranslateY(/*-distance/3*/-distance);
+		//returnVal.setTranslateZ(-distance);
 		returnVal.setRotationAxis(Rotate.X_AXIS);
-		returnVal.setRotate(-17);
+		returnVal.setRotate(/*-17*/-90);
 		return returnVal;
 	}
 	
@@ -194,7 +196,7 @@ public class GameScene extends SubScene implements Updateable {
 		float[][] tempHeightMatrix = new float[rows][cols];
 		for(int z = 0; z < rows; z++) {
 			for(int x = 0; x < cols; x++) {
-				float y = (float)ThreadLocalRandom.current().nextDouble()*50;
+				float y = (float)ThreadLocalRandom.current().nextDouble()*15;
 				tempHeightMatrix[z][x]=y;
 			}
 		}
@@ -214,10 +216,13 @@ public class GameScene extends SubScene implements Updateable {
 					heightMatrix[z][x][1][2] = new Point3D((-x*width)-(-Model.getInstance().getMapWidth()/2), tempHeightMatrix[z][x], ((-z)*height)-(-Model.getInstance().getMapHeight()/2));
 					//System.out.println("next triangle odd");
 				}
-				//for(Point3D p:heightMatrix[z][x]){
-				//	System.out.println(p);
-				//}
-				//System.out.println("===");
+				for(Point3D[] ps:heightMatrix[z][x]){
+					for(Point3D p:ps){
+						System.out.println(p);
+					}
+					
+				}
+				System.out.println("===");
 				
 				mesh.getPoints().addAll((float)((-x*width)-(-Model.getInstance().getMapWidth()/2)), tempHeightMatrix[z][x], (float)(((-z)*height)-(-Model.getInstance().getMapHeight()/2)));
 				mesh.getPoints().addAll((float)((-x*width)-(-Model.getInstance().getMapWidth()/2)), tempHeightMatrix[z+1][x], (float)(((-(z+1))*height)-(-Model.getInstance().getMapHeight()/2)));
@@ -234,7 +239,7 @@ public class GameScene extends SubScene implements Updateable {
 		        mesh.getFaces().addAll(i-1,0,i-2,0,i+1,0); //add secondary Width face
 		    }
 			MeshView meshView = new MeshView(mesh);
-			meshView.setDrawMode(DrawMode.FILL);
+			meshView.setDrawMode(DrawMode.LINE);
 			
 			PhongMaterial material = new PhongMaterial();
 //			int choice = z%4;
@@ -255,7 +260,7 @@ public class GameScene extends SubScene implements Updateable {
 			material.setDiffuseColor(Color.GREEN);
 			meshView.setMaterial(material);
 			meshView.setTranslateX(0);
-			meshView.setTranslateY(-25);
+			meshView.setTranslateY(-7.5);
 			meshView.setTranslateZ(0);
 			returnVal.getChildren().add(meshView);
 		}
@@ -268,5 +273,25 @@ public class GameScene extends SubScene implements Updateable {
 	
 	public void addUINode(Node node) {
 		
+	}
+	
+	public void createConnection(Point3D origin, Point3D target, PhongMaterial material) {
+	    Point3D yAxis = new Point3D(0, 1, 0);
+	    Point3D diff = target.subtract(origin);
+	    double height = diff.magnitude();
+
+	    Point3D mid = target.midpoint(origin);
+	    Translate moveToMidpoint = new Translate(mid.getX(), mid.getY(), mid.getZ());
+
+	    Point3D axisOfRotation = diff.crossProduct(yAxis);
+	    double angle = Math.acos(diff.normalize().dotProduct(yAxis));
+	    Rotate rotateAroundCenter = new Rotate(-Math.toDegrees(angle), axisOfRotation);
+
+	    Cylinder line = new Cylinder(1, height);
+
+	    line.getTransforms().addAll(moveToMidpoint, rotateAroundCenter);
+	    line.setMaterial(material);
+
+	    ((Group)this.getRoot()).getChildren().addAll(line);
 	}
 }

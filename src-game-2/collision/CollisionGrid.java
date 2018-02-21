@@ -8,6 +8,8 @@ import app.Model;
 import entity.Entity;
 import javafx.geometry.Point3D;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.paint.Color;
+import javafx.scene.paint.PhongMaterial;
 
 public class CollisionGrid {
 	
@@ -126,26 +128,31 @@ public class CollisionGrid {
 	public double getHeightAt(Point3D arg0){
 		try {
 			//Point3D arg1_debug = new Point3D(-(Model.getInstance().getMapWidth()/2)+150, 0, -(Model.getInstance().getMapHeight()/2)+150);
-			int newMapDivisionRow = (int) (((int)(arg0.getZ()-(-Model.getInstance().getMapHeight()/2)))/GameScene.getFloorSectionWidth());
-			int newMapDivisionColumn = (int) ((int)(arg0.getX()-(-Model.getInstance().getMapWidth()/2))/GameScene.getFloorSectionWidth());
+			int row = (int) (((int)((-arg0.getZ())-(-Model.getInstance().getMapHeight()/2)))/GameScene.getFloorSectionWidth());
+			int column = (int) ((int)((-arg0.getX())-(-Model.getInstance().getMapWidth()/2))/GameScene.getFloorSectionWidth());
 			//int row = (int) (arg0.getZ()-(Model.getInstance().getMapHeight()/2)/GameScene.getFloorSectionHeight());
 			//int column = (int) (arg0.getX()-(Model.getInstance().getMapWidth()/2)/GameScene.getFloorSectionWidth());
 			//System.out.println(arg1_debug);
 			//System.out.println("row "+newMapDivisionRow);
 			//System.out.println("column "+newMapDivisionColumn);
-			Point3D[][] currentTwoTriangles = floorVertices[newMapDivisionRow][newMapDivisionColumn];
+			Point3D[][] currentTwoTriangles = floorVertices[row][column];
 			
 			int xmod = (int) (arg0.getX()%GameScene.getFloorSectionWidth());
 			int ymod = (int) (arg0.getZ()%GameScene.getFloorSectionHeight());
 			Point3D[] currentTriangle = null;
 			System.out.println("xmod:"+xmod);
 			System.out.println("ymod:"+ymod);
-			if(xmod < -ymod) {
+			if(xmod < ymod) {
 				currentTriangle = currentTwoTriangles[0];
+				//GameScene.getInstance().createConnection(arg0, currentTwoTriangles[1][0], new PhongMaterial(Color.WHITE));
+				System.out.println("triangle0");
 			}
 			else{
 				currentTriangle = currentTwoTriangles[1];
+				//GameScene.getInstance().createConnection(arg0, currentTwoTriangles[0][0], new PhongMaterial(Color.WHITE));
+				System.out.println("triangle1");
 			}
+			currentTriangle = currentTwoTriangles[0];
 			Point3D p0 = currentTriangle[0];
 			Point3D vect1 = null;
 			try {
@@ -153,20 +160,21 @@ public class CollisionGrid {
 			}
 			catch(NullPointerException npe){
 				System.out.println(arg0);
-				System.out.println("row "+newMapDivisionRow);
-				System.out.println("column "+newMapDivisionColumn);
+				System.out.println("row "+row);
+				System.out.println("column "+column);
 				System.out.println("yo");
 			}
 			Point3D vect2 = p0.subtract(currentTriangle[2]);
 			Point3D normal = vect1.crossProduct(vect2).normalize();
-			//System.out.println("p0 "+p0);
-			//System.out.println("vect1 "+vect1);
-			//System.out.println("vect2 "+vect2);
-			//System.out.println("===triangle===\n");
-			for(Point3D p:currentTriangle) {
-				//System.out.println("point: "+p);
-			}
 			/*
+			System.out.println("p0 "+p0);
+			System.out.println("vect1 "+vect1);
+			System.out.println("vect2 "+vect2);
+			System.out.println("===triangle===\n");
+			for(Point3D p:currentTriangle) {
+				System.out.println("point: "+p);
+			}
+			
 			System.out.println("\n===calculs===");
 			System.out.println("p0: "+p0);
 			System.out.println("vect1: "+vect1);
@@ -175,9 +183,11 @@ public class CollisionGrid {
 			System.out.println("arg0: "+arg0);
 			*/
 			//Point3D modulo = arg0.subtract(p0);
-			double letD = normal.getX()*p0.getX()+normal.getY()*p0.getY()+normal.getZ()*p0.getZ();
-			double returnVal = ((normal.getX() * (arg0.getX()-p0.getX()) + normal.getZ() * (arg0.getZ()-p0.getZ()) - letD)/-normal.getY()) + p0.getY();
+			
+			//double letD = normal.getX()*p0.getX()+normal.getY()*p0.getY()+normal.getZ()*p0.getZ();
+			double returnVal = ((normal.getX() * (arg0.getX()-p0.getX()) + normal.getZ() * (arg0.getZ()-p0.getZ())/* - letD*/)/-normal.getY()) + p0.getY();
 			System.out.println("returnVal "+returnVal);
+			GameScene.getInstance().createConnection(p0, arg0,new PhongMaterial(Color.BLACK));
 			return returnVal;
 		}catch(Exception e) {
 			System.out.println("exception caught, fix needed");
