@@ -138,21 +138,32 @@ public class CollisionGrid {
 			Point3D[][] currentTwoTriangles = floorVertices[row][column];
 			
 			int xmod = (int) (arg0.getX()%GameScene.getFloorSectionWidth());
+			if(xmod < 0){
+				xmod+=GameScene.getFloorSectionWidth();
+			}
+			
 			int ymod = (int) (arg0.getZ()%GameScene.getFloorSectionHeight());
+			if(ymod < 0){
+				ymod+=GameScene.getFloorSectionHeight();
+			}
+			
 			Point3D[] currentTriangle = null;
 			System.out.println("xmod:"+xmod);
 			System.out.println("ymod:"+ymod);
 			if(xmod < ymod) {
-				currentTriangle = currentTwoTriangles[0];
+				currentTriangle = floorVertices[row][column+1][0];
 				//GameScene.getInstance().createConnection(arg0, currentTwoTriangles[1][0], new PhongMaterial(Color.WHITE));
 				System.out.println("triangle0");
+				/*for(Point3D p:currentTriangle){
+					System.out.println(p);
+				}*/
 			}
 			else{
 				currentTriangle = currentTwoTriangles[1];
 				//GameScene.getInstance().createConnection(arg0, currentTwoTriangles[0][0], new PhongMaterial(Color.WHITE));
 				System.out.println("triangle1");
 			}
-			currentTriangle = currentTwoTriangles[0];
+			//currentTriangle = currentTwoTriangles[0];
 			Point3D p0 = currentTriangle[0];
 			Point3D vect1 = null;
 			try {
@@ -186,8 +197,9 @@ public class CollisionGrid {
 			
 			//double letD = normal.getX()*p0.getX()+normal.getY()*p0.getY()+normal.getZ()*p0.getZ();
 			double returnVal = ((normal.getX() * (arg0.getX()-p0.getX()) + normal.getZ() * (arg0.getZ()-p0.getZ())/* - letD*/)/-normal.getY()) + p0.getY();
-			System.out.println("returnVal "+returnVal);
+			//System.out.println("returnVal "+returnVal);
 			GameScene.getInstance().createConnection(p0, arg0,new PhongMaterial(Color.BLACK));
+			
 			return returnVal;
 		}catch(Exception e) {
 			System.out.println("exception caught, fix needed");

@@ -174,10 +174,10 @@ public class GameScene extends SubScene implements Updateable {
 		PerspectiveCamera returnVal = new PerspectiveCamera(true);
 		returnVal.setNearClip(0.1);
 		returnVal.setFarClip(40000);
-		returnVal.setTranslateY(/*-distance/3*/-distance);
-		//returnVal.setTranslateZ(-distance);
+		returnVal.setTranslateY(-distance/3/*-distance*/);
+		returnVal.setTranslateZ(-distance);
 		returnVal.setRotationAxis(Rotate.X_AXIS);
-		returnVal.setRotate(/*-17*/-90);
+		returnVal.setRotate(-17/*-90*/);
 		return returnVal;
 	}
 	
@@ -209,14 +209,16 @@ public class GameScene extends SubScene implements Updateable {
 					heightMatrix[z][x][0][0] = new Point3D((-x*width)-(-Model.getInstance().getMapWidth()/2), tempHeightMatrix[z][x], ((-z)*height)-(-Model.getInstance().getMapHeight()/2));
 					heightMatrix[z][x][0][1] = new Point3D((-(x+1)*width)-(-Model.getInstance().getMapWidth()/2), tempHeightMatrix[z][x+1], ((-z)*height)-(-Model.getInstance().getMapHeight()/2));
 					heightMatrix[z][x][0][2] = new Point3D((-x*width)-(-Model.getInstance().getMapWidth()/2), tempHeightMatrix[z+1][x], ((-(z+1))*height)-(-Model.getInstance().getMapHeight()/2));
+					
 				}
 				if(x >= 1){
-					heightMatrix[z][x][1][0] = new Point3D((-x*width)-(-Model.getInstance().getMapWidth()/2), tempHeightMatrix[z+1][x], ((-z+1)*height)-(-Model.getInstance().getMapHeight()/2));
+					heightMatrix[z][x][1][0] = new Point3D((-x*width)-(-Model.getInstance().getMapWidth()/2), tempHeightMatrix[z+1][x], ((-(z+1))*height)-(-Model.getInstance().getMapHeight()/2));
 					heightMatrix[z][x][1][1] = new Point3D((-(x-1)*width)-(-Model.getInstance().getMapWidth()/2), tempHeightMatrix[z+1][x-1], ((-z)*height)-(-Model.getInstance().getMapHeight()/2));
 					heightMatrix[z][x][1][2] = new Point3D((-x*width)-(-Model.getInstance().getMapWidth()/2), tempHeightMatrix[z][x], ((-z)*height)-(-Model.getInstance().getMapHeight()/2));
 					//System.out.println("next triangle odd");
 				}
 				for(Point3D[] ps:heightMatrix[z][x]){
+					System.out.println("triangle:");
 					for(Point3D p:ps){
 						System.out.println(p);
 					}
@@ -225,7 +227,13 @@ public class GameScene extends SubScene implements Updateable {
 				System.out.println("===");
 				
 				mesh.getPoints().addAll((float)((-x*width)-(-Model.getInstance().getMapWidth()/2)), tempHeightMatrix[z][x], (float)(((-z)*height)-(-Model.getInstance().getMapHeight()/2)));
+				System.out.println("point1:"+new Point3D((float)((x*width)-(Model.getInstance().getMapWidth()/2)), tempHeightMatrix[z][x], (float)(((-z)*height)-(-Model.getInstance().getMapHeight()/2))));
 				mesh.getPoints().addAll((float)((-x*width)-(-Model.getInstance().getMapWidth()/2)), tempHeightMatrix[z+1][x], (float)(((-(z+1))*height)-(-Model.getInstance().getMapHeight()/2)));
+				System.out.println("point2:"+new Point3D((float)((x*width)-(Model.getInstance().getMapWidth()/2)), tempHeightMatrix[z+1][x], (float)(((-(z+1))*height)-(-Model.getInstance().getMapHeight()/2))));
+				if(z == 0){
+					System.out.println(new Point3D((float)((-x*width)-(-Model.getInstance().getMapWidth()/2)), tempHeightMatrix[z][x], (float)(((-z)*height)-(-Model.getInstance().getMapHeight()/2))));
+				}
+					//GameScene.getInstance().createConnection(Point3D.ZERO, new Point3D((float)((-x*width)-(-Model.getInstance().getMapWidth()/2)), tempHeightMatrix[z][x], (float)(((-z)*height)-(-Model.getInstance().getMapHeight()/2))), null);
 			}
 			mesh.getTexCoords().addAll(0,0);
 			for(int i=2;i<cols*2;i+=2) {  //add each segment
@@ -239,7 +247,7 @@ public class GameScene extends SubScene implements Updateable {
 		        mesh.getFaces().addAll(i-1,0,i-2,0,i+1,0); //add secondary Width face
 		    }
 			MeshView meshView = new MeshView(mesh);
-			meshView.setDrawMode(DrawMode.LINE);
+			meshView.setDrawMode(DrawMode.FILL);
 			
 			PhongMaterial material = new PhongMaterial();
 //			int choice = z%4;
@@ -293,5 +301,21 @@ public class GameScene extends SubScene implements Updateable {
 	    line.setMaterial(material);
 
 	    ((Group)this.getRoot()).getChildren().addAll(line);
+	}
+	public void addMeshView(Point3D[][] triangles){
+		for(Point3D[] triangle:triangles){
+			TriangleMesh mesh = new TriangleMesh();
+			
+			for(Point3D p:triangle){
+				mesh.getPoints().addAll((float)p.getX(), (float)p.getY(), (float)p.getZ());
+			}
+			mesh.getFaces().addAll(2,0,1,1,0,2);
+			mesh.getTexCoords().addAll(0,0);
+			//System.out.println(triangle);
+			MeshView meshview = new MeshView(mesh);
+			meshview.setDrawMode(DrawMode.FILL);
+			
+			((Group)getRoot()).getChildren().add(meshview);
+		}
 	}
 }
