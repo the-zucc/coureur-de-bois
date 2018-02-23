@@ -174,10 +174,10 @@ public class GameScene extends SubScene implements Updateable {
 		PerspectiveCamera returnVal = new PerspectiveCamera(true);
 		returnVal.setNearClip(0.1);
 		returnVal.setFarClip(40000);
-		returnVal.setTranslateY(/*-distance/3*/-distance);
-		//returnVal.setTranslateZ(-distance);
+		returnVal.setTranslateY(-distance/3/*-distance*/);
+	returnVal.setTranslateZ(-distance);
 		returnVal.setRotationAxis(Rotate.X_AXIS);
-		returnVal.setRotate(/*-17*/-90);
+		returnVal.setRotate(-17/*-90*/);
 		return returnVal;
 	}
 	
@@ -204,7 +204,14 @@ public class GameScene extends SubScene implements Updateable {
 		//generate random heights
 		for(int z = 0; z < rows+1; z++) {
 			for(int x = 0; x < cols+1; x++) {
-				float y = (float)ThreadLocalRandom.current().nextDouble()*15;
+				float y;
+				if(x < 0){
+					y = (float)ThreadLocalRandom.current().nextDouble()*15;
+				}
+				else{
+					y = (float)ThreadLocalRandom.current().nextDouble()*150;
+				}
+				
 				tempHeightMatrix[z][x]=y;
 			}
 		}
@@ -261,8 +268,9 @@ public class GameScene extends SubScene implements Updateable {
 				System.out.println("p2: "+p2);
 				//Point3D p3 = heightMatrix[zIndex][x][0][2];
 				
-				mesh.getPoints().addAll((float)p1.getX(), (float)p1.getY(), (float)p1.getZ());
+				
 				mesh.getPoints().addAll((float)p2.getX(), (float)p2.getY(), (float)p2.getZ());
+				mesh.getPoints().addAll((float)p1.getX(), (float)p1.getY(), (float)p1.getZ());
 				//mesh.getPoints().addAll((float)p3.getX(), (float)p3.getY(), (float)p3.getZ());
 				//GameScene.getInstance().createConnection(Point3D.ZERO, new Point3D((float)((-x*width)-(-Model.getInstance().getMapWidth()/2)), tempHeightMatrix[z][x], (float)(((-z)*height)-(-Model.getInstance().getMapHeight()/2))), null);
 			}
@@ -278,7 +286,7 @@ public class GameScene extends SubScene implements Updateable {
 		        mesh.getFaces().addAll(i-1,0,i-2,0,i+1,0); //add secondary Width face
 		    }
 			MeshView meshView = new MeshView(mesh);
-			meshView.setDrawMode(DrawMode.LINE);
+			meshView.setDrawMode(DrawMode.FILL);
 			
 			PhongMaterial material = new PhongMaterial();
 //			int choice = z%4;
