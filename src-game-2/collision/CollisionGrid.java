@@ -127,14 +127,20 @@ public class CollisionGrid {
 	}
 	public double getHeightAt(Point3D arg0){
 		try {
-			//Point3D arg1_debug = new Point3D(-(Model.getInstance().getMapWidth()/2)+150, 0, -(Model.getInstance().getMapHeight()/2)+150);
-			int row = (int) (((int)((-arg0.getZ())-(-Model.getInstance().getMapHeight()/2)))/GameScene.getFloorSectionWidth());
-			int column = (int) ((int)((-arg0.getX())-(-Model.getInstance().getMapWidth()/2))/GameScene.getFloorSectionWidth());
-			//int row = (int) (arg0.getZ()-(Model.getInstance().getMapHeight()/2)/GameScene.getFloorSectionHeight());
-			//int column = (int) (arg0.getX()-(Model.getInstance().getMapWidth()/2)/GameScene.getFloorSectionWidth());
-			//System.out.println(arg1_debug);
-			//System.out.println("row "+newMapDivisionRow);
-			//System.out.println("column "+newMapDivisionColumn);
+			double mapHeight = Model.getInstance().getMapHeight();
+			double mapWidth = Model.getInstance().getMapWidth();
+			
+			GameScene.getInstance();
+			double rowHeight = GameScene.getFloorSectionHeight();
+			GameScene.getInstance();
+			double rowWidth = GameScene.getFloorSectionWidth();
+			
+			
+			int row = (int)((-arg0.getZ()+mapHeight/2)/rowHeight);
+			int column = (int)((arg0.getX()+mapWidth/2)/rowWidth);
+			System.out.println("row:"+row);
+			System.out.println("column:"+column);
+			
 			Point3D[][] currentTwoTriangles = floorVertices[row][column];
 			
 			int xmod = (int) (arg0.getX()%GameScene.getFloorSectionWidth());
@@ -151,41 +157,24 @@ public class CollisionGrid {
 			System.out.println("xmod:"+xmod);
 			System.out.println("ymod:"+ymod);
 			if(xmod < ymod) {
-				currentTriangle = floorVertices[row][column+1][0];
-				//GameScene.getInstance().createConnection(arg0, currentTwoTriangles[1][0], new PhongMaterial(Color.WHITE));
+				currentTriangle = currentTwoTriangles[0];
 				System.out.println("triangle0");
-				/*for(Point3D p:currentTriangle){
-					System.out.println(p);
-				}*/
 			}
 			else{
 				currentTriangle = currentTwoTriangles[1];
-				//GameScene.getInstance().createConnection(arg0, currentTwoTriangles[0][0], new PhongMaterial(Color.WHITE));
 				System.out.println("triangle1");
 			}
-			//currentTriangle = currentTwoTriangles[0];
 			Point3D p0 = currentTriangle[0];
-			Point3D vect1 = null;
-			try {
-				vect1 = p0.subtract(currentTriangle[1]);
-			}
-			catch(NullPointerException npe){
-				System.out.println(arg0);
-				System.out.println("row "+row);
-				System.out.println("column "+column);
-				System.out.println("yo");
-			}
+			
+			Point3D vect1 = p0.subtract(currentTriangle[1]);
 			Point3D vect2 = p0.subtract(currentTriangle[2]);
 			Point3D normal = vect1.crossProduct(vect2).normalize();
-			/*
-			System.out.println("p0 "+p0);
-			System.out.println("vect1 "+vect1);
-			System.out.println("vect2 "+vect2);
+			
 			System.out.println("===triangle===\n");
 			for(Point3D p:currentTriangle) {
 				System.out.println("point: "+p);
 			}
-			
+			/*
 			System.out.println("\n===calculs===");
 			System.out.println("p0: "+p0);
 			System.out.println("vect1: "+vect1);
@@ -196,7 +185,17 @@ public class CollisionGrid {
 			//Point3D modulo = arg0.subtract(p0);
 			
 			//double letD = normal.getX()*p0.getX()+normal.getY()*p0.getY()+normal.getZ()*p0.getZ();
-			double returnVal = ((normal.getX() * (arg0.getX()-p0.getX()) + normal.getZ() * (arg0.getZ()-p0.getZ())/* - letD*/)/-normal.getY()) + p0.getY();
+			System.out.println("normal z: "+normal.getZ());
+			
+			double arg0p0x = arg0.getX()-p0.getX();
+			System.out.println("arg0p0x: "+arg0p0x);
+			
+			double arg0p0z = arg0.getZ()-p0.getZ();
+			System.out.println("arg0p0z: "+arg0p0z);
+			
+			
+			
+			double returnVal = ((normal.getX() * (arg0p0x) + normal.getZ() * (arg0p0z)/* - letD*/)/-normal.getY()) + p0.getY();
 			//System.out.println("returnVal "+returnVal);
 			GameScene.getInstance().createConnection(p0, arg0,new PhongMaterial(Color.BLACK));
 			
