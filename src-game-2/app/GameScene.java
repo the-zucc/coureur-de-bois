@@ -53,7 +53,7 @@ public class GameScene extends SubScene implements Updateable {
 	
 	
 	
-	private static double setting_floorSectionWidth = 50;
+	private static double setting_floorSectionWidth = 100;
 	private static double floorSectionHeight = setting_floorSectionWidth;
 	
 	public static double getFloorSectionWidth() {
