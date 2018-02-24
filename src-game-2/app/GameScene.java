@@ -181,7 +181,7 @@ public class GameScene extends SubScene implements Updateable {
 	private static PerspectiveCamera buildGameCamera() {
 		double distance = Controller.gameCameraDistance;
 		PerspectiveCamera returnVal = new PerspectiveCamera(true);
-		returnVal.setNearClip(0.1);
+		returnVal.setNearClip(1);
 		returnVal.setFarClip(40000);
 		returnVal.setTranslateY(-distance/3/*-distance*/);
 		returnVal.setTranslateZ(-distance);
