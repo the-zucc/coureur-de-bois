@@ -1,5 +1,7 @@
 package collision;
 
+import java.util.ArrayList;
+
 import app.Model;
 import javafx.geometry.Point3D;
 
@@ -10,6 +12,7 @@ public abstract class CollisionBox {
 	private int mapDivisionRow;
 	private int mapDivisionColumn;
 	private String id;
+	private ArrayList<CollisionBox> alreadyChecked;
 	
 	public int getMapDivisionRow() {
 		return mapDivisionRow;
@@ -22,9 +25,11 @@ public abstract class CollisionBox {
 	public CollisionBox(String id, Point3D position) {
 		this.id = id;
 		this.position = position;
+		alreadyChecked = new ArrayList<CollisionBox>();
 	}
 	
 	public void setPosition(Point3D position) {
+		
 		this.position = position;
 		if(!tooBigForCollisionDetectionSystem) {
 			int newMapDivisionRow = ((int)(position.getZ()-(-Model.getInstance().getMapHeight()/2)))/CollisionGrid.getMapDivisionHeight();
@@ -42,6 +47,13 @@ public abstract class CollisionBox {
 		}
 	}
 	
+	public void addCheckedCollisionBox(CollisionBox box) {
+		alreadyChecked.add(box);
+	}
+	public void clearAlreadyChecked() {
+		alreadyChecked.clear();
+	}
+	
 	public Point3D getPosition() {
 		return position;
 	}
@@ -52,8 +64,6 @@ public abstract class CollisionBox {
 		}
 		return null;
 	}
-	
-	
 
 	public boolean collides(CollisionBox arg0) {
 		if(arg0 instanceof SphericalCollisionBox) {
@@ -63,7 +73,7 @@ public abstract class CollisionBox {
 	}
 	
 	protected abstract boolean collidesSphericalBox(SphericalCollisionBox box);
-	
+	protected abstract boolean collidesCapsuleBox(CapsuleCollisionBox box);
 	protected abstract Point3D getCorrectionSphericalBox(SphericalCollisionBox box);
 
 	public String getId() {

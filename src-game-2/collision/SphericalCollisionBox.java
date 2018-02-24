@@ -9,7 +9,7 @@ public class SphericalCollisionBox extends CollisionBox {
 	public SphericalCollisionBox(String id, Point3D position, double radius) {
 		super(id, position);
 		this.radius=radius;
-		if(radius > CollisionGrid.getMapDivisionHeight()/2 || radius > CollisionGrid.getMapDivisionWidth()/2) {
+		if(radius*2 > CollisionGrid.getMapDivisionHeight() || radius*2 > CollisionGrid.getMapDivisionWidth()) {
 			tooBigForCollisionDetectionSystem = true;
 		}
 		else
@@ -34,5 +34,11 @@ public class SphericalCollisionBox extends CollisionBox {
 		double magnitude = distance - (box.getRadius()+radius);
 		double frac = magnitude/distance;
 		return new Point3D(frac*(box.getPosition().getX()-position.getX()), frac*(box.getPosition().getY()-position.getY()), frac*(box.getPosition().getZ()-position.getZ()));
+	}
+
+	@Override
+	protected boolean collidesCapsuleBox(CapsuleCollisionBox box) {
+		
+		return false;
 	}
 }

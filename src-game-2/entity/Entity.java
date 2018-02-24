@@ -58,7 +58,8 @@ public abstract class Entity{
 						while(true)
 							try {
 								tryCount++;
-								for(CollisionBox cb:boxesFromDivision)
+								for(CollisionBox cb:boxesFromDivision) {
+									cb.addCheckedCollisionBox(collisionBox);
 									if(cb != collisionBox) {
 										if(collisionBox.collides(cb)) {
 											returnVal = true;
@@ -66,7 +67,7 @@ public abstract class Entity{
 											collisionBox.setPosition(position);
 										}
 									}
-
+								}
 								break;
 							}catch(ConcurrentModificationException cme) {
 								if(tryCount > 10)

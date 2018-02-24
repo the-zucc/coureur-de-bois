@@ -5,12 +5,17 @@ import java.awt.Toolkit;
 
 import collision.CollisionGrid;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.scene.Group;
+import javafx.scene.SceneAntialiasing;
 import javafx.scene.effect.BlendMode;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import menu.LoadingScreen;
 
 public class Controller extends Application{
 	
@@ -29,32 +34,36 @@ public class Controller extends Application{
 	@Override
 	public void start(Stage arg0) throws Exception {
 		
-		//instanciate the model
-		Model model = Model.getInstance();
-		//instanciate the game scene
-		GameScene gameScene = GameScene.getInstance();
-		CollisionGrid.getInstance().initFloorVertices();
-		//instanciate the UI
-		UI ui = UI.getInstance();
-		
-		//refresh the gameElements list from theMmodel instance
-		long nanoTime = System.nanoTime(); 
-		model.update(nanoTime);
-		//refresh the gameComponents list from the GameScene instance
-		gameScene.setupInitialComponents();
-		//start the game loop
-		GameLoop.getInstance().start();
-		//start 
-		arg0.setScene(ui);
-		//arg0.initStyle(StageStyle.TRANSPARENT);
-		//define that the application window is the current stage
-		applicationWindow = arg0;
-		GameScene.getInstance().setCameraOnPlayer(GameScene.getInstance().getGameCamera(), Model.getInstance().getCurrentPlayer().getId());
-		
-		setupScreenResizing();
-		
-		//show the window.
+		arg0.setScene(new LoadingScreen(new AnchorPane(), 1280, 720, false, SceneAntialiasing.BALANCED));
 		arg0.show();
+		Platform.runLater(() ->{
+			//instanciate the model
+			Model model = Model.getInstance();
+			//instanciate the game scene
+			GameScene gameScene = GameScene.getInstance();
+			CollisionGrid.getInstance().initFloorVertices();
+			//instanciate the UI
+			UI ui = UI.getInstance();
+			
+			//refresh the gameElements list from theMmodel instance
+			long nanoTime = System.nanoTime(); 
+			model.update(nanoTime);
+			//refresh the gameComponents list from the GameScene instance
+			gameScene.setupInitialComponents();
+			//start the game loop
+			GameLoop.getInstance().start();
+			//start 
+			arg0.setScene(ui);
+			//arg0.initStyle(StageStyle.TRANSPARENT);
+			//define that the application window is the current stage
+			applicationWindow = arg0;
+			GameScene.getInstance().setCameraOnPlayer(GameScene.getInstance().getGameCamera(), Model.getInstance().getCurrentPlayer().getId());
+			
+			setupScreenResizing();
+			
+			//show the window.
+			arg0.show();
+		});
 	}
 	
 	/**

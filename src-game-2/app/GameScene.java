@@ -53,7 +53,7 @@ public class GameScene extends SubScene implements Updateable {
 	
 	
 	
-	private static double setting_floorSectionWidth = 100;
+	private static double setting_floorSectionWidth = 40;
 	private static double floorSectionHeight = setting_floorSectionWidth;
 	
 	public static double getFloorSectionWidth() {
@@ -199,9 +199,14 @@ public class GameScene extends SubScene implements Updateable {
 	}
 	
 	private static Group buildFloor(int cols, int rows, int colwidth, int rowheight) {
+		int offsetX = ThreadLocalRandom.current().nextInt(450);
+		int offsetY = 100;
+		int offsetZ = 10;
+		PerlinNoise perlin1 = new PerlinNoise();
+		perlin1.offset(offsetX,offsetY,offsetZ);
 		
-		PerlinNoise p = new PerlinNoise();
-		p.offset(500,100,10);
+		PerlinNoise perlin2 = new PerlinNoise();
+		perlin2.offset(offsetX+1,offsetY+1,offsetZ);
 		
 		Group returnVal = new Group();
 		
@@ -214,25 +219,27 @@ public class GameScene extends SubScene implements Updateable {
 		//height matrix
 		float[][] tempHeightMatrix = new float[rows+1][cols+1];
 		float[][] waterHeightMatrix = new float[rows+1][cols+1];
+		float[][] snowHeightMatrix = new float[rows+1][cols+1];
 		
 		
 		float multiplicator = 0.01f;
 		//generate random heights
 		for(int z = 0; z < rows+1; z++) {
 			for(int x = 0; x < cols+1; x++) {
-				float y = p.smoothNoise(x*multiplicator, z*multiplicator, 32, 24)*1000;
+				float y = perlin1.smoothNoise(x*multiplicator, z*multiplicator, 32, 24)*450;
 				tempHeightMatrix[z][x]=y;
 				waterHeightMatrix[z][x]=(float)ThreadLocalRandom.current().nextDouble()*25;
+				snowHeightMatrix[z][x]=perlin2.smoothNoise(x*multiplicator, z*multiplicator, 32, 24)*450;
 			}
 		}
 		
 		//2D array with two triangle per "cell"
 		heightMatrix = new Point3D[rows][cols][2][3];
 		
-		for(int z = 0; z < rows-1; z++) {
+		for(int z = 0; z < rows; z++) {
 			int zIndex = z;
 			int zCoordRef = -z;
-			TriangleMesh mesh = new TriangleMesh();
+			TriangleMesh floorMesh = new TriangleMesh();
 			TriangleMesh waterMesh = new TriangleMesh();
 			
 			for(int x = 0; x < cols; x++) {
@@ -280,14 +287,17 @@ public class GameScene extends SubScene implements Updateable {
 				//Point3D p3 = heightMatrix[zIndex][x][0][2];
 				
 				
-				mesh.getPoints().addAll((float)p2.getX(), (float)p2.getY(), (float)p2.getZ());
-				mesh.getPoints().addAll((float)p1.getX(), (float)p1.getY(), (float)p1.getZ());
+				floorMesh.getPoints().addAll((float)p2.getX(), (float)p2.getY(), (float)p2.getZ());
+				floorMesh.getPoints().addAll((float)p1.getX(), (float)p1.getY(), (float)p1.getZ());
+				
 				waterMesh.getPoints().addAll((float)p2.getX(), waterHeight, (float)p2.getZ());
 				waterMesh.getPoints().addAll((float)p1.getX(), waterHeight, (float)p1.getZ());
+				
+				
 				//mesh.getPoints().addAll((float)p3.getX(), (float)p3.getY(), (float)p3.getZ());
 				//GameScene.getInstance().createConnection(Point3D.ZERO, new Point3D((float)((-x*width)-(-Model.getInstance().getMapWidth()/2)), tempHeightMatrix[z][x], (float)(((-z)*height)-(-Model.getInstance().getMapHeight()/2))), null);
 			}
-			mesh.getTexCoords().addAll(0,0);
+			floorMesh.getTexCoords().addAll(0,0);
 			waterMesh.getTexCoords().addAll(0,0);
 			for(int i=2;i<cols*2;i+=2) {  //add each segment
 		        //Vertices wound counter-clockwise which is the default front face of any Triange
@@ -298,22 +308,23 @@ public class GameScene extends SubScene implements Updateable {
 		        //waterMesh.getFaces().addAll(i+1,0,i-2,0,i-1,0); //add secondary Width face
 		        //Add the same faces but wind them clockwise so that the color looks correct when camera is rotated
 		        //These triangles live on the backside of the line facing away from initial the camera
-		        mesh.getFaces().addAll(i+1,0,i-2,0,i,0); //add primary face
-		        mesh.getFaces().addAll(i-1,0,i-2,0,i+1,0); //add secondary Width face
+		        floorMesh.getFaces().addAll(i+1,0,i-2,0,i,0); //add primary face
+		        floorMesh.getFaces().addAll(i-1,0,i-2,0,i+1,0); //add secondary Width face
 		        waterMesh.getFaces().addAll(i+1,0,i-2,0,i,0); //add primary face
 		        waterMesh.getFaces().addAll(i-1,0,i-2,0,i+1,0); //add secondary Width face
 		    }
-			MeshView meshView = new MeshView(mesh);
-			meshView.setDrawMode(DrawMode.FILL);
-			PhongMaterial material = new PhongMaterial(Color.WHITE);
+			
+			MeshView floorMeshView = new MeshView(floorMesh);
+			floorMeshView.setDrawMode(DrawMode.FILL);
+			floorMeshView.setMaterial(new PhongMaterial(Color.GREEN));
+			floorMeshView.setTranslateX(0);
+			floorMeshView.setTranslateY(-7.5);
+			floorMeshView.setTranslateZ(0);
 			
 			MeshView waterMeshView = new MeshView(waterMesh);
 			waterMeshView.setMaterial(new PhongMaterial(new Color(0,0.05,0.7,0.5)));
-			meshView.setMaterial(material);
-			meshView.setTranslateX(0);
-			meshView.setTranslateY(-7.5);
-			meshView.setTranslateZ(0);
-			returnVal.getChildren().addAll(meshView, waterMeshView);
+			
+			returnVal.getChildren().addAll(floorMeshView, waterMeshView);
 		}
 		return returnVal;
 	}
@@ -345,6 +356,7 @@ public class GameScene extends SubScene implements Updateable {
 
 	    ((Group)this.getRoot()).getChildren().addAll(line);
 	}
+	
 	public void addMeshView(Point3D[][] triangles){
 		for(Point3D[] triangle:triangles){
 			TriangleMesh mesh = new TriangleMesh();
