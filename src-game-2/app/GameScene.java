@@ -106,7 +106,7 @@ public class GameScene extends SubScene implements Updateable {
 		gameEnvRoot.getChildren().add(floor);
 		
 		//debug
-		gameEnvRoot.getChildren().add(new Label("2fdshajflhdsjaklhjkl"));
+		//gameEnvRoot.getChildren().add(new Label("2fdshajflhdsjaklhjkl"));
 	}
 	public void setupInitialComponents() {
 		for(Entity e:Model.getInstance().getGameElements()) {
@@ -174,10 +174,10 @@ public class GameScene extends SubScene implements Updateable {
 		PerspectiveCamera returnVal = new PerspectiveCamera(true);
 		returnVal.setNearClip(0.1);
 		returnVal.setFarClip(40000);
-		returnVal.setTranslateY(-distance/3/*-distance*/);
-	returnVal.setTranslateZ(-distance);
+		returnVal.setTranslateY(/*-distance/3*/-distance);
+		returnVal.setTranslateZ(-distance);
 		returnVal.setRotationAxis(Rotate.X_AXIS);
-		returnVal.setRotate(-17/*-90*/);
+		returnVal.setRotate(/*-17-90*/-45);
 		return returnVal;
 	}
 	
@@ -228,13 +228,13 @@ public class GameScene extends SubScene implements Updateable {
 				
 				//top left triangle
 				heightMatrix[zIndex][x][0][0] = new Point3D(x*width-mapWidth/2, tempHeightMatrix[zIndex][x], mapHeight/2+zCoordRef*height);
-				heightMatrix[zIndex][x][0][1] = new Point3D((x+1)*width-mapWidth/2, tempHeightMatrix[zIndex][x], mapHeight/2+zCoordRef*height);
+				heightMatrix[zIndex][x][0][1] = new Point3D((x+1)*width-mapWidth/2, tempHeightMatrix[zIndex][x+1], mapHeight/2+zCoordRef*height);
 				heightMatrix[zIndex][x][0][2] = new Point3D(x*width-mapWidth/2, tempHeightMatrix[zIndex+1][x], mapWidth/2+(zCoordRef-1)*height);
 				
 				//bottom right triangle
-				heightMatrix[zIndex][x][1][0] = new Point3D((x+1)*width-mapWidth/2, tempHeightMatrix[zIndex+1][x], mapWidth/2+(zCoordRef-1)*height);
+				heightMatrix[zIndex][x][1][0] = new Point3D((x+1)*width-mapWidth/2, tempHeightMatrix[zIndex+1][x+1], mapWidth/2+(zCoordRef-1)*height);
 				heightMatrix[zIndex][x][1][1] = new Point3D(x*width-mapWidth/2, tempHeightMatrix[zIndex+1][x], mapWidth/2+(zCoordRef-1)*height);
-				heightMatrix[zIndex][x][1][2] = new Point3D((x+1)*width-mapWidth/2, tempHeightMatrix[zIndex][x], mapWidth/2+zCoordRef*height);
+				heightMatrix[zIndex][x][1][2] = new Point3D((x+1)*width-mapWidth/2, tempHeightMatrix[zIndex][x+1], mapWidth/2+zCoordRef*height);
 				
 				/*
 				if(x < cols-1) {

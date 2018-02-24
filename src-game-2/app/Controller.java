@@ -46,7 +46,7 @@ public class Controller extends Application{
 		GameLoop.getInstance().start();
 		//start 
 		arg0.setScene(ui);
-		arg0.initStyle(StageStyle.TRANSPARENT);
+		//arg0.initStyle(StageStyle.TRANSPARENT);
 		//define that the application window is the current stage
 		applicationWindow = arg0;
 		GameScene.getInstance().setCameraOnPlayer(GameScene.getInstance().getGameCamera(), Model.getInstance().getCurrentPlayer().getId());
