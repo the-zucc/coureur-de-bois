@@ -204,7 +204,8 @@ public class CollisionGrid {
 			
 			return returnVal;
 		}catch(Exception e) {
-			System.out.println("exception caught, fix needed");
+			
+			//System.out.println("exception caught, fix needed");
 			return 0;
 		}
 	}

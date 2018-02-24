@@ -35,6 +35,7 @@ public class Player extends LivingEntity implements UserControllable{
 		move();
 		updateCollisionGrid();
 		correctCollisions();
+		System.out.println(position);
 	}
 
 	@Override
