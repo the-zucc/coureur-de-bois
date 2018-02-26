@@ -84,7 +84,7 @@ public abstract class Entity{
 	protected void updateCollisionGrid(){
 		collisionBox.setPosition(position);
 	}
-	protected void fall(){
+	public void fall(){
 		if(position.getY() < CollisionGrid.getInstance().getHeightAt(position)){
 			if(gravity == null)
 				gravity = new Point3D(GameLogic.getGravity().getX(), GameLogic.getGravity().getY(), GameLogic.getGravity().getZ());

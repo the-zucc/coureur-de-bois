@@ -5,6 +5,8 @@ import java.util.Hashtable;
 import java.util.concurrent.ThreadLocalRandom;
 
 import entity.Entity;
+import entity.statics.StaticEntity;
+import entity.statics.Tree;
 import javafx.geometry.Point3D;
 import javafx.scene.Camera;
 import javafx.scene.Group;
@@ -121,6 +123,10 @@ public class GameScene extends SubScene implements Updateable {
 		for(Entity e:Model.getInstance().getGameElements()) {
 			updateComponentOfElement(e);
 		}
+		for(Tree t:Model.getInstance().getTrees()) {
+			t.fall();
+			setupComponentOfStaticElement(t);
+		}
 	}
 	
 	/**
@@ -158,6 +164,11 @@ public class GameScene extends SubScene implements Updateable {
 		if(component instanceof UpdateableComponent) {
 			((UpdateableComponent) component).update(e);
 		}
+	}
+	
+	private void setupComponentOfStaticElement(StaticEntity se) {
+		Component component = se.buildComponent();
+		gameEnvRoot.getChildren().add(component);
 	}
 	
 	/**
@@ -222,11 +233,11 @@ public class GameScene extends SubScene implements Updateable {
 		float[][] snowHeightMatrix = new float[rows+1][cols+1];
 		
 		
-		float multiplicator = 0.01f;
+		float multiplicator = 0.001f;
 		//generate random heights
 		for(int z = 0; z < rows+1; z++) {
 			for(int x = 0; x < cols+1; x++) {
-				float y = perlin1.smoothNoise(x*multiplicator, z*multiplicator, 32, 24)*450;
+				float y = perlin1.smoothNoise(x*multiplicator, z*multiplicator, 32, 24)*10000;
 				tempHeightMatrix[z][x]=y;
 				waterHeightMatrix[z][x]=(float)ThreadLocalRandom.current().nextDouble()*25;
 				snowHeightMatrix[z][x]=perlin2.smoothNoise(x*multiplicator, z*multiplicator, 32, 24)*450;

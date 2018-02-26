@@ -8,6 +8,7 @@ import collision.CollisionGrid;
 import entity.Entity;
 import entity.living.Mob;
 import entity.living.human.Player;
+import entity.statics.Tree;
 import javafx.geometry.Point3D;
 import javafx.scene.paint.Color;
 import util.Updateable;
@@ -18,7 +19,7 @@ public class Model implements Updateable{
 	
 	public static Model getInstance() {
 		if(instance == null) {
-			instance = new Model(40000, 40000, 5, 1500, 10);
+			instance = new Model(40000, 40000, 5, 1000, 1000);
 		}
 		return instance;
 	}
@@ -26,6 +27,7 @@ public class Model implements Updateable{
 	//instance variables
 	private ArrayList<Entity> entities;
 	private Hashtable<String,Entity> gameElementsHashtable;
+	private ArrayList<Tree> trees;
 	private CollisionGrid collisionGrid;
 	private Player currentPlayer;
 	private double mapWidth;
@@ -38,6 +40,7 @@ public class Model implements Updateable{
 		//initialize the lists of elements
 		entities = new ArrayList<Entity>();
 		gameElementsHashtable = new Hashtable<String, Entity>();
+		trees = new ArrayList<Tree>();
 		
 		double gridColumnWidth=100;
 		double gridColumnHeight=100;
@@ -52,6 +55,14 @@ public class Model implements Updateable{
 			Mob newMob = new Mob(position, 100, 100, 1, Color.AQUA);
 			
 			addElement(newMob);
+		}
+		for(int i = 0; i < treeCount; i++) {
+			double x = (double)ThreadLocalRandom.current().nextInt((int)-(mapWidth/2), (int)mapWidth/2);
+			double z = (double)ThreadLocalRandom.current().nextInt((int)-(mapHeight/2), (int)mapHeight/2);
+			double y = 0/*CollisionGrid.getInstance().getHeightAt(new Point3D(x, 0, z))*/;
+			Point3D position = new Point3D(x, y, z);
+			Tree tree = new Tree(position);
+			addElement(tree);
 		}
 		double x = (double)ThreadLocalRandom.current().nextInt((int)-(mapWidth/2), (int)mapWidth/2);
 		double z = (double)ThreadLocalRandom.current().nextInt((int)-(mapHeight/2), (int)mapHeight/2);
@@ -78,8 +89,13 @@ public class Model implements Updateable{
 	 * @param ge the Element to add to the model
 	 */
 	public void addElement(Entity ge) {
-		entities.add(ge);
-		gameElementsHashtable.put(ge.getId(), ge);
+		if(ge instanceof Tree) {
+			trees.add((Tree)ge);
+		}else {
+			entities.add(ge);
+			gameElementsHashtable.put(ge.getId(), ge);
+		}
+		
 	}
 	/**
 	 * removes the 
@@ -106,5 +122,9 @@ public class Model implements Updateable{
 	}
 	public Player getCurrentPlayer() {
 		return currentPlayer;
+	}
+
+	public ArrayList<Tree> getTrees() {
+		return trees;
 	}
 }
