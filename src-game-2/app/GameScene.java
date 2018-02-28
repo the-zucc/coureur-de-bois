@@ -55,7 +55,7 @@ public class GameScene extends SubScene implements Updateable {
 	
 	
 	
-	private static double setting_floorSectionWidth = 40;
+	private static double setting_floorSectionWidth = 100;
 	private static double floorSectionHeight = setting_floorSectionWidth;
 	
 	public static double getFloorSectionWidth() {
@@ -193,7 +193,8 @@ public class GameScene extends SubScene implements Updateable {
 		double distance = Controller.gameCameraDistance;
 		PerspectiveCamera returnVal = new PerspectiveCamera(true);
 		returnVal.setNearClip(1);
-		returnVal.setFarClip(40000);
+		returnVal.setFarClip(30000);
+		returnVal.setFieldOfView(74);
 		returnVal.setTranslateY(-distance/3/*-distance*/);
 		returnVal.setTranslateZ(-distance);
 		returnVal.setRotationAxis(Rotate.X_AXIS);

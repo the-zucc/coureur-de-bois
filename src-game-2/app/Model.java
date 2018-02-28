@@ -19,7 +19,7 @@ public class Model implements Updateable{
 	
 	public static Model getInstance() {
 		if(instance == null) {
-			instance = new Model(40000, 40000, 5, 1000, 1000);
+			instance = new Model(80000, 80000, 5, 100, 2000);
 		}
 		return instance;
 	}

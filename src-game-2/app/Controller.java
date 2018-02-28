@@ -37,11 +37,15 @@ public class Controller extends Application{
 		arg0.setScene(new LoadingScreen(new AnchorPane(), 1280, 720, false, SceneAntialiasing.BALANCED));
 		arg0.show();
 		Platform.runLater(() ->{
-			//instanciate the model
-			Model model = Model.getInstance();
+			
 			//instanciate the game scene
 			GameScene gameScene = GameScene.getInstance();
 			CollisionGrid.getInstance().initFloorVertices();
+			
+			//instanciate the model. has to be called after
+			//the instance of the game scene has been created
+			Model model = Model.getInstance();
+			
 			//instanciate the UI
 			UI ui = UI.getInstance();
 			
