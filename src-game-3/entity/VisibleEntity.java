@@ -6,12 +6,12 @@ import game.Map;
 import javafx.geometry.Point3D;
 import visual.Component;
 
-public abstract class PhysicalEntity extends Entity implements ComponentOwner{
+public abstract class VisibleEntity extends Entity implements ComponentOwner{
 	
 	private Component component;
-	private Point3D position;
+	protected Point3D position;
 	
-	public PhysicalEntity(Point3D position){
+	public VisibleEntity(Point3D position){
 		super();
 		setPosition(position);
 		component = buildComponent();
