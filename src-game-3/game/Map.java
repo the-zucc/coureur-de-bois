@@ -1,15 +1,18 @@
 package game;
 
 import java.util.ArrayList;
+import java.util.Hashtable;
 
 import characteristic.ComponentOwner;
+import characteristic.Messageable;
 import characteristic.Updateable;
 import characteristic.positionnable.Collideable;
 import entity.Entity;
 import javafx.geometry.Point3D;
 import visual.Component;
 
-public class Map implements ComponentOwner, Updateable{
+public class Map implements ComponentOwner, Updateable, Messageable{
+	private static long updateCount = 0;
 	
 	private static Map instance;
 	
@@ -65,7 +68,6 @@ public class Map implements ComponentOwner, Updateable{
 
 	@Override
 	public boolean isComponentInScene() {
-		
 		return getComponent().getParent() != null;
 	}
 
@@ -86,12 +88,37 @@ public class Map implements ComponentOwner, Updateable{
 	@Override
 	public void update(double secondsPassed) {
 		for(Updateable u:updateables){
-			u.update(secondsPassed);
+			u.update(secondsPassed);	
+		}
+		if(updateCount % 10 == 0){//to be executed once every 10 ticks
+			for(Updateable u:updateables){
+				if(u instanceof ComponentOwner){
+					if(!((ComponentOwner) u).isComponentInScene())
+						((ComponentOwner) u).placeComponentInScene();
+				}
+			}
 		}
 	}
 
 	@Override
 	public boolean shouldUpdate() {
 		return true;
+	}
+	
+	/**
+	 * COLLISIONS SECTION
+	 */
+	//static variables
+	private static int collisionMapDivisionWidth=100;
+	private static int collisionMapDivisionHeight=collisionMapDivisionWidth;
+	public double getHeightAt(Point3D position){
+		return 0;
+	}
+
+	@Override
+	public void onMessageReceived(Hashtable<String, ? extends Object> message) {
+		if(message.containsKey("start")){
+			Hashtable<String, Double> params = (Hashtable<String, Double>)message.get("start");
+		}
 	}
 }

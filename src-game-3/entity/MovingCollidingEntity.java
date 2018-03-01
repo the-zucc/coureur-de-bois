@@ -29,10 +29,7 @@ public abstract class MovingCollidingEntity extends VisibleCollidingEntity{
 	}
 
 	@Override
-	public CollisionBox buildCollisionBox() {
-		
-		return null;
-	}
+	public abstract CollisionBox buildCollisionBox();
 
 	@Override
 	public boolean canMoveOnCollision() {

@@ -2,8 +2,7 @@ package entity.living;
 
 import java.util.Hashtable;
 
-import characteristic.ComponentUpdateable;
-import characteristic.positionnable.Collideable;
+import characteristic.*;
 import characteristic.positionnable.GravityAffected;
 import collision.CollisionBox;
 import entity.GravityAffectedCollidingEntity;
@@ -12,46 +11,102 @@ import game.GameLogic;
 import javafx.geometry.Point3D;
 import visual.Component;
 
-public  class LivingEntity extends GravityAffectedCollidingEntity implements GravityAffected, ComponentUpdateable{
+public abstract  class LivingEntity extends GravityAffectedCollidingEntity{
+	
 	private Point3D gravity;
 	private Point3D movement;
 	private double hp;
+	private boolean up, down, left, right, newOrientation, isRunning;
 
 	public LivingEntity(Point3D position) {
 		super(position);
+		up = down = left = right = newOrientation = isRunning = false;
 	}
-	
+
 	protected abstract double computeXpReward();
 	
 	public double getHp(){
 		return hp;
 	}
-	private void dealDamage(double damage, LivingEntity attacker){
-		hp+=damage;
-		if(hp<=0){
-			if(attacker != null){
-				Hashtable<String, Double> message = GameLogic.createSimpleXpMessage(computeXpReward());
-				GameLogic.sendMessage(attacker, message);
-			}
-		}
-	}
-
-	@Override
-	public Component buildComponent() {
-		
-		return null;
-	}
 
 	@Override
 	public void onMessageReceived(Hashtable<String, ? extends Object> message) {
+		/**
+		 * cmputes the operations when the entity receives damage
+		 */
 		if(message.containsKey("damage")){
 			hp -= ((Hashtable<String, Double>)message).get("damage");
 			if(hp<=0){
 				if(message.containsKey("sender")){
-					Hashtable<String, Double> message = GameLogic.createSimpleXpMessage(computeXpReward(), this);
-					GameLogic.sendMessage(((Hashtable<String, Messageable>)message).get("sender"), message);
+					Hashtable<String, ? extends Object> sentMessage = GameLogic.createSimpleXpMessage(computeXpReward(), this);
+					
+					Messageable destination = ((Hashtable<String, Messageable>)sentMessage).get("sender");
+					
+					GameLogic.sendMessage(destination, sentMessage);
 				}
 			}
 		}
+	}
+	protected void updateMovementVector() {
+		double movementSpeed = computeMovementSpeed();
+		double angle = Math.toRadians(45);
+		if(up) {
+			if(up && right) {
+				movement = new Point3D(Math.cos(angle) * movementSpeed, 0, Math.sin(angle) * movementSpeed);
+				return;
+			}
+			else if(up && left) {
+				movement = new Point3D(-Math.cos(angle) * movementSpeed, 0, Math.sin(angle) * movementSpeed);
+				return;
+			}
+			movement = new Point3D(0, 0, movementSpeed);
+			return;
+		}
+		else if(down) {
+			if(down && right) {
+				movement = new Point3D(Math.cos(angle) * movementSpeed, 0, -Math.sin(angle) * movementSpeed);
+				return;
+			}
+			else if(down && left) {
+				movement = new Point3D(-Math.cos(angle) * movementSpeed, 0, -Math.sin(angle) * movementSpeed);
+				return;
+			}
+			movement = new Point3D(0, 0, -movementSpeed);
+			return;
+		}
+		else if(right)
+			movement = new Point3D(movementSpeed, 0, 0);
+		else if(left)
+			movement = new Point3D(-movementSpeed, 0, 0);
+		else
+			movement = null;
+	}
+	/**
+	 * this method should be defined in all subclasses. it returns the movement speed to use. The value can be dynamic, as the method is called every tick.
+	 * @return the movement speed to use when computing the movmement vector for this entity.
+	 */
+	protected abstract double computeMovementSpeed();
+	
+	public void setUp(boolean value) {
+		up = value;
+		newOrientation = true;
+	}
+	public void setDown(boolean value) {
+		down = value;
+		newOrientation = true;
+	}
+	public void setLeft(boolean value) {
+		left = value;
+		newOrientation = true;
+	}
+	public void setRight(boolean value) {
+		right = value;
+		newOrientation = true;
+	}
+	public void setIsRunning(boolean value) {
+		isRunning = value;
+	}
+	protected boolean isRunning(){
+		return isRunning;
 	}
 }
