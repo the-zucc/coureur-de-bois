@@ -11,11 +11,13 @@ public class Menu extends SubScene {
 	private Group menuRoot;
 	private Button startGameButton;
 
-	public Menu(Parent arg0, double w, double h) {
-		super(arg0, w, h, false, SceneAntialiasing.BALANCED);
-		menuRoot = (Group)arg0;
+	public Menu(double w, double h) {
+		super(new Group(), w, h, false, SceneAntialiasing.BALANCED);
+		menuRoot = (Group)getRoot();
 		startGameButton = new Button("start game");
-		
+		startGameButton.setOnMouseClicked(e -> {
+			action_startGameButton();
+		});
 		menuRoot.getChildren().add(startGameButton);
 	}
 	
