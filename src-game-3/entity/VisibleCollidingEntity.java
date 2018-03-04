@@ -24,6 +24,7 @@ public abstract class VisibleCollidingEntity extends VisibleEntity implements Co
  
 	@Override
 	public void moveTo(Point3D nextPosition) {
+		//System.out.println(nextPosition);
 		setPosition(nextPosition);
 	}
 

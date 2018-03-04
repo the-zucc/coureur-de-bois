@@ -48,10 +48,11 @@ public class GameLogic {
 	}
 
 	public static void startGame() {
+		Map map = Map.getInstance();
 		GameScene scene = new GameScene(App.windowWidth, App.windowHeight);
 		App.getUserInterface().putSubScene("game", scene);
 		App.getUserInterface().setSubScene("game");
-		((Group)scene.getRoot()).getChildren().add(Map.getInstance().getComponent());
+		((Group)scene.getRoot()).getChildren().add(map.getComponent());
 		loop = new GameLoop();
 		loop.start();
 	}

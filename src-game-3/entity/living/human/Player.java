@@ -25,7 +25,7 @@ public class Player extends Human implements UserControllable{
 
 	@Override
 	public void updateActions(double secondsPassed){
-		System.out.println(movement);
+		//System.out.println(getPosition());
 	}
 
 	@Override
@@ -124,6 +124,16 @@ public class Player extends Human implements UserControllable{
 			this.setIsRunning(keyDown);
 		//else if(code.equals(KeyCode.SPACE))
 		ke.consume();
+	}
+
+	@Override
+	public boolean shouldUpdateComponent() {
+		return true;
+	}
+
+	@Override
+	public void updateComponent() {
+		getComponent().setPosition(getPosition());
 	}
 	
 }

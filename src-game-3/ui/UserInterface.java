@@ -63,10 +63,9 @@ public class UserInterface extends Scene implements Updateable {
 	public void bindGameControls(){
 		this.setOnKeyPressed(new EventHandler<KeyEvent>(){
 			
-			
-
 			@Override
 			public void handle(KeyEvent event) {
+				System.out.println("yo");
 				try{
 					Map.getInstance().getCurrentPlayer().onKeyPressed(event);
 				}catch(Exception ex){
@@ -74,13 +73,14 @@ public class UserInterface extends Scene implements Updateable {
 				}
 			}
 		});
-		this.setOnKeyPressed(e -> {
-			try{
-				Map.getInstance().getCurrentPlayer().onKeyReleased(e);
-			}catch(Exception ex){
-				
+		this.setOnKeyReleased(new EventHandler<KeyEvent>(){
+			public void handle(KeyEvent event){
+				try{
+					Map.getInstance().getCurrentPlayer().onKeyReleased(event);
+				}catch(Exception ex){
+					
+				}
 			}
-			
 		});
 	}
 }

@@ -71,7 +71,7 @@ public class Map implements ComponentOwner, Updateable, Messageable{
 		setPosition(new Point3D(0,0,0));
 		component = buildComponent();
 		
-		currentPlayer = new Player(Point3D.ZERO);
+		currentPlayer = new Player(new Point3D(0,0,0));
 		addEntity(currentPlayer);
 	}
 	
@@ -108,7 +108,7 @@ public class Map implements ComponentOwner, Updateable, Messageable{
 			for(double x = -mapWidth/2; x < mapWidth/2; x += vertexSeparationWidth, xi++){
 				p1 = new Point3D(x,floorVertices[zi][xi],z);
 				p2 = new Point3D(x,floorVertices[zi+1][xi],z-vertexSeparationHeight);
-				System.out.println("zi:"+zi+" z:"+z+" xi:"+xi+" x:"+x);
+				//System.out.println("zi:"+zi+" z:"+z+" xi:"+xi+" x:"+x);
 				mesh.getPoints().addAll((float)p1.getX(), (float)p1.getY(), (float)p1.getZ());
 				mesh.getPoints().addAll((float)p2.getX(), (float)p2.getY(), (float)p2.getZ());
 			}
@@ -151,7 +151,7 @@ public class Map implements ComponentOwner, Updateable, Messageable{
 			for(int x = 0; x < cols+1; x++) {
 				float y = perlin.smoothNoise(x*multiplicator, z*multiplicator, 32, 24)*10000;
 				returnVal[z][x]=y;
-				System.out.println("z:"+z+"x:"+x);
+				//System.out.println("z:"+z+"x:"+x);
 			}
 		}
 		return returnVal;

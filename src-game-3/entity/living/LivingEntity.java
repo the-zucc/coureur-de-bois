@@ -11,7 +11,7 @@ import game.GameLogic;
 import javafx.geometry.Point3D;
 import visual.Component;
 
-public abstract  class LivingEntity extends GravityAffectedCollidingEntity{
+public abstract  class LivingEntity extends GravityAffectedCollidingEntity implements ComponentUpdateable{
 	
 	private Point3D gravity;
 	protected Point3D movement;
@@ -28,8 +28,14 @@ public abstract  class LivingEntity extends GravityAffectedCollidingEntity{
 	@Override
 	public void update(double secondsPassed){
 		updateMovementVector();
-		moveTo(computeNextPosition());
+		Point3D nextPos = computeNextPosition();
+		if(nextPos != null){
+			System.out.println(nextPos);
+			moveTo(nextPos);
+		}
 		updateActions(secondsPassed);
+		if(shouldUpdateComponent())
+			updateComponent();
 	}
 	
 	public abstract void updateActions(double secondsPassed);
