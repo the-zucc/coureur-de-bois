@@ -3,12 +3,16 @@ package ui;
 import java.util.Hashtable;
 
 import characteristic.Updateable;
+import game.Map;
+import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.SceneAntialiasing;
 import javafx.scene.SubScene;
+import javafx.scene.input.KeyEvent;
 import ui.gamescene.GameScene;
+import ui.menu.Menu;
 
 public class UserInterface extends Scene implements Updateable {
 	
@@ -21,6 +25,10 @@ public class UserInterface extends Scene implements Updateable {
 		super(new Group(), width, height, false, SceneAntialiasing.DISABLED);
 		uiRoot = (Group)getRoot();
 		subScenes = new Hashtable<String, SubScene>();
+		Menu menu = new Menu(width, height);
+		putSubScene("main_menu", menu);
+		setSubScene("main_menu");
+		bindGameControls();
 	}
 
 	@Override
@@ -51,5 +59,28 @@ public class UserInterface extends Scene implements Updateable {
 
 	public GameScene getGameScene() {
 		return gameScene;
+	}
+	public void bindGameControls(){
+		this.setOnKeyPressed(new EventHandler<KeyEvent>(){
+			
+			
+
+			@Override
+			public void handle(KeyEvent event) {
+				try{
+					Map.getInstance().getCurrentPlayer().onKeyPressed(event);
+				}catch(Exception ex){
+					
+				}
+			}
+		});
+		this.setOnKeyPressed(e -> {
+			try{
+				Map.getInstance().getCurrentPlayer().onKeyReleased(e);
+			}catch(Exception ex){
+				
+			}
+			
+		});
 	}
 }

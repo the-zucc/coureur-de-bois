@@ -42,7 +42,7 @@ public abstract class VisibleEntity extends Entity implements ComponentOwner{
 
 	@Override
 	public void placeComponentInScene() {
-		Map.getInstance().getComponent().getChildren().add(getComponent());
+		Map.getInstance().getComponent().addChildComponent(getComponent());
 		getComponent().setTranslateX(getPosition().getX());
 		getComponent().setTranslateY(getPosition().getY());
 		getComponent().setTranslateZ(getPosition().getZ());

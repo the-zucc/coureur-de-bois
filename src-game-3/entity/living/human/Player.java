@@ -1,15 +1,18 @@
 package entity.living.human;
 
+import characteristic.interactive.UserControllable;
 import characteristic.positionnable.Collideable;
 import collision.CollisionBox;
 import javafx.geometry.Point3D;
 import javafx.scene.Group;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.Box;
 import visual.Component;
 
-public class Player extends Human {
+public class Player extends Human implements UserControllable{
 
 	public Player(Point3D position) {
 		super(position);
@@ -21,8 +24,8 @@ public class Player extends Human {
 	}
 
 	@Override
-	public void update(double secondsPassed) {
-		
+	public void updateActions(double secondsPassed){
+		System.out.println(movement);
 	}
 
 	@Override
@@ -92,4 +95,35 @@ public class Player extends Human {
 			return speed*2;
 		return speed;
 	}
+
+	@Override
+	public void onKeyPressed(KeyEvent ke) {
+		// TODO Auto-generated method stub
+		System.out.println("gotit");
+		keyAction(ke, true);
+	}
+
+	@Override
+	public void onKeyReleased(KeyEvent ke) {
+		keyAction(ke, false);
+	}
+
+	@Override
+	public void keyAction(KeyEvent ke, boolean keyDown) {
+		// TODO Auto-generated method stub
+		KeyCode code = ke.getCode();
+		if(code.equals(KeyCode.W))
+			this.setUp(keyDown);
+		else if(code.equals(KeyCode.A))
+			this.setLeft(keyDown);
+		else if(code.equals(KeyCode.S))
+			this.setDown(keyDown);
+		else if(code.equals(KeyCode.D))
+			this.setRight(keyDown);
+		else if(code.equals(KeyCode.SHIFT))
+			this.setIsRunning(keyDown);
+		//else if(code.equals(KeyCode.SPACE))
+		ke.consume();
+	}
+	
 }

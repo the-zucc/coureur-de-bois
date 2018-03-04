@@ -43,7 +43,11 @@ public abstract class GravityAffectedCollidingEntity extends MovingCollidingEnti
 	 */
 	public Point3D computeNextPosition(){
 		updateGravityVector();
-		return super.computeNextPosition().add(getGravityVector());
+		Point3D next = super.computeNextPosition();
+		if(next != null){
+			return next.add(getGravityVector());
+		}
+		return null;
 	}
 
 }

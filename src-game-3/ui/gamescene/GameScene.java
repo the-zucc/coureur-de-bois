@@ -22,7 +22,7 @@ public class GameScene extends SubScene {
 		return gameRoot;
 	}
 	public PerspectiveCamera buildGameCamera(){
-		double dist = 800;
+		double dist = 1500;
 		PerspectiveCamera returnVal = new PerspectiveCamera(true);
 		returnVal.setNearClip(10);
 		returnVal.setFarClip(20000);

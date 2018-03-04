@@ -25,7 +25,10 @@ public abstract class MovingCollidingEntity extends VisibleCollidingEntity{
 
 	@Override
 	public Point3D computeNextPosition() {
-		return getPosition().add(movement);
+		if(movement != null){
+			return getPosition().add(movement);
+		}
+		else return null;
 	}
 
 	@Override

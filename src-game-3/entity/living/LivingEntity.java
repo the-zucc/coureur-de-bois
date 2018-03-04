@@ -14,7 +14,7 @@ import visual.Component;
 public abstract  class LivingEntity extends GravityAffectedCollidingEntity{
 	
 	private Point3D gravity;
-	private Point3D movement;
+	protected Point3D movement;
 	private double hp;
 	private boolean up, down, left, right, newOrientation, isRunning;
 
@@ -24,6 +24,15 @@ public abstract  class LivingEntity extends GravityAffectedCollidingEntity{
 	}
 
 	protected abstract double computeXpReward();
+	
+	@Override
+	public void update(double secondsPassed){
+		updateMovementVector();
+		moveTo(computeNextPosition());
+		updateActions(secondsPassed);
+	}
+	
+	public abstract void updateActions(double secondsPassed);
 	
 	public double getHp(){
 		return hp;
@@ -87,23 +96,23 @@ public abstract  class LivingEntity extends GravityAffectedCollidingEntity{
 	 */
 	protected abstract double computeMovementSpeed();
 	
-	public void setUp(boolean value) {
+	protected void setUp(boolean value) {
 		up = value;
 		newOrientation = true;
 	}
-	public void setDown(boolean value) {
+	protected void setDown(boolean value) {
 		down = value;
 		newOrientation = true;
 	}
-	public void setLeft(boolean value) {
+	protected void setLeft(boolean value) {
 		left = value;
 		newOrientation = true;
 	}
-	public void setRight(boolean value) {
+	protected void setRight(boolean value) {
 		right = value;
 		newOrientation = true;
 	}
-	public void setIsRunning(boolean value) {
+	protected void setIsRunning(boolean value) {
 		isRunning = value;
 	}
 	protected boolean isRunning(){

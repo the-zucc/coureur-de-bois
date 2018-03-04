@@ -10,6 +10,7 @@ import characteristic.Messageable;
 import characteristic.Updateable;
 import characteristic.positionnable.Collideable;
 import entity.Entity;
+import entity.living.human.Player;
 import javafx.geometry.Point3D;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
@@ -33,6 +34,10 @@ public class Map implements ComponentOwner, Updateable, Messageable{
 	private ArrayList<Updateable> updateables;
 	private ArrayList<Entity> entities;
 	private ArrayList<ComponentOwner> componentOwners;
+	private Player currentPlayer;
+	public Player getCurrentPlayer(){
+		return currentPlayer;
+	}
 	
 	private Point3D position;
 	private Component component;
@@ -45,7 +50,7 @@ public class Map implements ComponentOwner, Updateable, Messageable{
 	private float[][] floorVertices;
 	private Point3D[][][][] heightMatrix;
 	
-	public Map(double mapWidth, double mapHeight, double vertexSeparationWidth, double vertexSeparationHeight, int treeCount) {
+	public Map(double mapWidth, double mapHeight, int treeCount, double vertexSeparationWidth, double vertexSeparationHeight) {
 		collideables = new ArrayList<Collideable>();
 		updateables = new ArrayList<Updateable>();
 		componentOwners = new ArrayList<ComponentOwner>();
@@ -66,6 +71,8 @@ public class Map implements ComponentOwner, Updateable, Messageable{
 		setPosition(new Point3D(0,0,0));
 		component = buildComponent();
 		
+		currentPlayer = new Player(Point3D.ZERO);
+		addEntity(currentPlayer);
 	}
 	
 	public double getHeightAt(double x, double z) {
@@ -83,7 +90,7 @@ public class Map implements ComponentOwner, Updateable, Messageable{
 	}
 	@Override
 	public Component buildComponent() {
-		Component returnVal = new Component("map");
+		Component returnVal = new Component("id_map");
 		returnVal.setPosition(position);
 		returnVal.addChildComponent(buildFloorMesh());
 		return returnVal;
@@ -93,11 +100,15 @@ public class Map implements ComponentOwner, Updateable, Messageable{
 		Point3D p1 = null;
 		Point3D p2 = null;
 		int cols = (int)(mapWidth/vertexSeparationWidth);
-		for(double z  = mapHeight/2; z >= -mapHeight/2; z-= vertexSeparationHeight){
+		int zi=0;
+		int xi=0;
+		for(double z  = mapHeight/2; z > -mapHeight/2; z-= vertexSeparationHeight, zi++){
 			TriangleMesh mesh = new TriangleMesh();
-			for(double x = -mapWidth/2; x <= mapWidth/2; x += vertexSeparationWidth){
-				p1 = new Point3D(x,0,z);
-				p2 = new Point3D(x,0,z-vertexSeparationHeight);
+			xi=0;
+			for(double x = -mapWidth/2; x < mapWidth/2; x += vertexSeparationWidth, xi++){
+				p1 = new Point3D(x,floorVertices[zi][xi],z);
+				p2 = new Point3D(x,floorVertices[zi+1][xi],z-vertexSeparationHeight);
+				System.out.println("zi:"+zi+" z:"+z+" xi:"+xi+" x:"+x);
 				mesh.getPoints().addAll((float)p1.getX(), (float)p1.getY(), (float)p1.getZ());
 				mesh.getPoints().addAll((float)p2.getX(), (float)p2.getY(), (float)p2.getZ());
 			}
@@ -140,6 +151,7 @@ public class Map implements ComponentOwner, Updateable, Messageable{
 			for(int x = 0; x < cols+1; x++) {
 				float y = perlin.smoothNoise(x*multiplicator, z*multiplicator, 32, 24)*10000;
 				returnVal[z][x]=y;
+				System.out.println("z:"+z+"x:"+x);
 			}
 		}
 		return returnVal;
@@ -152,7 +164,8 @@ public class Map implements ComponentOwner, Updateable, Messageable{
 
 	@Override
 	public boolean isComponentInScene() {
-		return getComponent().getParent() != null;
+		//return getComponent().getParent() != null;
+		return true;
 	}
 
 	@Override
@@ -168,6 +181,10 @@ public class Map implements ComponentOwner, Updateable, Messageable{
 	public void update(double secondsPassed) {
 		for(Updateable u:updateables){
 			u.update(secondsPassed);	
+		}
+		for(ComponentOwner c:componentOwners){
+			if(!c.isComponentInScene())
+				getComponent().addChildComponent(c.getComponent());
 		}
 	}
 
@@ -194,7 +211,6 @@ public class Map implements ComponentOwner, Updateable, Messageable{
 			componentOwners.add((ComponentOwner)e);
 		}
 		entities.add(e);
-		
 	}
 	
 	/**
@@ -203,9 +219,61 @@ public class Map implements ComponentOwner, Updateable, Messageable{
 	//static variables
 	private static int collisionMapDivisionWidth=100;
 	private static int collisionMapDivisionHeight=collisionMapDivisionWidth;
-	
-	public double getHeightAt(Point3D position){
+	/*
+	public double getHeightAt(Point3D arg0){
+		try {
+			
+			double rowHeight = vertexSeparationHeight;
+			double rowWidth = vertexSeparationWidth;
+			
+			
+			int row = (int)((-arg0.getZ()+mapHeight/2)/rowHeight);
+			int column = (int)((arg0.getX()+mapWidth/2)/rowWidth);
+			
+			Point3D[][] currentTwoTriangles = floorVertices[row][column];
+			
+			int xmod = (int) (arg0.getX()%vertexSeparationWidth);
+			if(xmod < 0){
+				xmod+=vertexSeparationWidth;
+			}
+			
+			int ymod = (int) (arg0.getZ()%vertexSeparationHeight);
+			if(ymod < 0){
+				ymod+=vertexSeparationHeight;
+			}
+			
+			Point3D[] currentTriangle = null;
+			if(xmod < ymod) {
+				currentTriangle = currentTwoTriangles[0];
+			}
+			else{
+				currentTriangle = currentTwoTriangles[1];
+			}
+			Point3D p0 = currentTriangle[0];
+			
+			Point3D vect1 = p0.subtract(currentTriangle[1]);
+			Point3D vect2 = p0.subtract(currentTriangle[2]);
+
+			Point3D normal = vect1.crossProduct(vect2).normalize();
+			
+			double arg0p0x = arg0.getX()-p0.getX();
+
+			double arg0p0z = arg0.getZ()-p0.getZ();
+			
+			double returnVal = ((normal.getX() * (arg0p0x) + normal.getZ() * (arg0p0z))/-normal.getY()) + p0.getY();
+			
+			if(returnVal > GameScene.getWaterHeight())
+				returnVal = GameScene.getWaterHeight();
+			
+			return returnVal;
+		}catch(Exception e) {
+			
+			//System.out.println("exception caught, fix needed");
+			return 0;
+		}
+	}
+	*/
+	public double getHeightAt(){
 		return 0;
 	}
-	
 }

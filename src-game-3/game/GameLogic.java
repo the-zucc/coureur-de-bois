@@ -43,13 +43,6 @@ public class GameLogic {
 	}
 	
 	public static void mainLoop(double secondsPassed) {
-		if(updateCount % 10 == 0){
-			for(ComponentOwner c:Map.getInstance().getComponentOwners()){
-				if(!c.isComponentInScene()){
-					c.placeComponentInScene();
-				}
-			}
-		}
 		Map.getInstance().update(secondsPassed);
 		updateCount++;
 	}
@@ -58,6 +51,7 @@ public class GameLogic {
 		GameScene scene = new GameScene(App.windowWidth, App.windowHeight);
 		App.getUserInterface().putSubScene("game", scene);
 		App.getUserInterface().setSubScene("game");
+		((Group)scene.getRoot()).getChildren().add(Map.getInstance().getComponent());
 		loop = new GameLoop();
 		loop.start();
 	}
