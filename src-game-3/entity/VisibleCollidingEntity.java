@@ -29,7 +29,7 @@ public abstract class VisibleCollidingEntity extends VisibleEntity implements Co
 	}
 
 	@Override
-	public abstract Point3D computeNextPosition();
+	public abstract Point3D computeNextPosition(double secondsPassed);
 
 	@Override
 	public abstract CollisionBox buildCollisionBox();

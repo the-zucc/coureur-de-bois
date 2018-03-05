@@ -9,18 +9,20 @@ import entity.GravityAffectedCollidingEntity;
 import entity.VisibleCollidingEntity;
 import game.GameLogic;
 import javafx.geometry.Point3D;
+import javafx.scene.transform.Rotate;
 import visual.Component;
 
 public abstract  class LivingEntity extends GravityAffectedCollidingEntity implements ComponentUpdateable{
 	
-	private Point3D gravity;
-	protected Point3D movement;
+	//private Point3D gravity;
 	private double hp;
 	private boolean up, down, left, right, newOrientation, isRunning;
+	private Point3D oldMovement;
 
 	public LivingEntity(Point3D position) {
 		super(position);
 		up = down = left = right = newOrientation = isRunning = false;
+		oldMovement = movement;
 	}
 
 	protected abstract double computeXpReward();
@@ -28,7 +30,7 @@ public abstract  class LivingEntity extends GravityAffectedCollidingEntity imple
 	@Override
 	public void update(double secondsPassed){
 		updateMovementVector();
-		Point3D nextPos = computeNextPosition();
+		Point3D nextPos = computeNextPosition(secondsPassed);
 		if(nextPos != null){
 			System.out.println(nextPos);
 			moveTo(nextPos);
@@ -94,7 +96,12 @@ public abstract  class LivingEntity extends GravityAffectedCollidingEntity imple
 		else if(left)
 			movement = new Point3D(-movementSpeed, 0, 0);
 		else
-			movement = null;
+			movement = new Point3D(0,0,0);
+		if(oldMovement.angle(Rotate.X_AXIS) == movement.angle(Rotate.X_AXIS))
+			newOrientation = false;
+		else
+			newOrientation = true;
+		oldMovement = movement;
 	}
 	/**
 	 * this method should be defined in all subclasses. it returns the movement speed to use. The value can be dynamic, as the method is called every tick.
@@ -124,4 +131,8 @@ public abstract  class LivingEntity extends GravityAffectedCollidingEntity imple
 	protected boolean isRunning(){
 		return isRunning;
 	}
+	protected void jump(){
+		this.addForceToGravity(getJumpVector());
+	}
+	protected abstract Point3D getJumpVector();
 }

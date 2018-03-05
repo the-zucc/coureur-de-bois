@@ -5,6 +5,7 @@ import java.util.Hashtable;
 import characteristic.positionnable.Collideable;
 import characteristic.positionnable.GravityAffected;
 import game.GameLogic;
+import game.Map;
 import javafx.geometry.Point3D;
 import visual.Component;
 
@@ -25,10 +26,16 @@ public abstract class GravityAffectedCollidingEntity extends MovingCollidingEnti
 	/**
 	 * updates the gravity vector to the new value with the applied gravity acceleration.
 	 */
-	public void updateGravityVector() {
-		gravity = gravity.add(GameLogic.getGravity());
+	public void updateGravityVector(double secondsPassed) {
+		if(position.getY() < Map.getInstance().getHeightAt(position)){
+			gravity = gravity.add(GameLogic.getGravity().multiply(secondsPassed));
+		}
 	}
-
+	@Override
+	public void addForceToGravity(Point3D force){
+		if(force != null)
+			this.gravity = this.gravity.add(force);
+	}
 	@Override
 	/**
 	 * resets the gravity vector to 0.
@@ -41,13 +48,21 @@ public abstract class GravityAffectedCollidingEntity extends MovingCollidingEnti
 	/**
 	 * computes the next position. uses the superclass' method, but adds gravity to the returned value.
 	 */
-	public Point3D computeNextPosition(){
-		updateGravityVector();
-		Point3D next = super.computeNextPosition();
+	public Point3D computeNextPosition(double secondsPassed){
+		updateGravityVector(secondsPassed);
+		Point3D next = super.computeNextPosition(secondsPassed);
 		if(next != null){
-			return next.add(getGravityVector());
+			next =  next.add(getGravityVector().multiply(secondsPassed));
 		}
-		return null;
+		if(next.getY() > Map.getInstance().getHeightAt(next)){
+			next = new Point3D(next.getX(), Map.getInstance().getHeightAt(next), next.getZ());
+			resetGravityVector();
+		}
+		//System.out.println("nextpos:"+next);
+		//System.out.println("grav:"+getGravityVector());
+		if(next != null){
+			return next;
+		}
+		return position;
 	}
-
 }

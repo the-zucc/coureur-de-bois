@@ -21,7 +21,7 @@ public class GameLogic {
 		return loop;
 	}
 	
-	private static Point3D gravity = new Point3D(0,10,0);
+	private static Point3D gravity = new Point3D(0,9.81,0);
 	
 	public static Point3D getGravity() {
 		return gravity;

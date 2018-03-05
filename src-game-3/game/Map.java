@@ -273,7 +273,7 @@ public class Map implements ComponentOwner, Updateable, Messageable{
 		}
 	}
 	*/
-	public double getHeightAt(){
+	public double getHeightAt(Point3D position){
 		return 0;
 	}
 }

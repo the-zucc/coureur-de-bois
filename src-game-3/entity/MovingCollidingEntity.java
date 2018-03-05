@@ -9,7 +9,7 @@ import visual.Component;
 
 public abstract class MovingCollidingEntity extends VisibleCollidingEntity{
 
-	private Point3D movement;
+	protected Point3D movement;
 	
 	public MovingCollidingEntity(Point3D position) {
 		super(position);
@@ -24,11 +24,11 @@ public abstract class MovingCollidingEntity extends VisibleCollidingEntity{
 	}
 
 	@Override
-	public Point3D computeNextPosition() {
+	public Point3D computeNextPosition(double secondsPassed) {
 		if(movement != null){
-			return getPosition().add(movement);
+			return getPosition().add(movement.multiply(secondsPassed));
 		}
-		else return null;
+		else return position;
 	}
 
 	@Override

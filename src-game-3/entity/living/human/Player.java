@@ -13,6 +13,8 @@ import javafx.scene.shape.Box;
 import visual.Component;
 
 public class Player extends Human implements UserControllable{
+	
+	private static Point3D jumpVector = new Point3D(0, -35, 0);
 
 	public Player(Point3D position) {
 		super(position);
@@ -25,7 +27,7 @@ public class Player extends Human implements UserControllable{
 
 	@Override
 	public void updateActions(double secondsPassed){
-		//System.out.println(getPosition());
+		//System.out.println(getPosition().add(movement));
 	}
 
 	@Override
@@ -90,7 +92,7 @@ public class Player extends Human implements UserControllable{
 
 	@Override
 	protected double computeMovementSpeed() {
-		double speed = 6; 
+		double speed = 60; 
 		if(isRunning())
 			return speed*2;
 		return speed;
@@ -99,7 +101,6 @@ public class Player extends Human implements UserControllable{
 	@Override
 	public void onKeyPressed(KeyEvent ke) {
 		// TODO Auto-generated method stub
-		System.out.println("gotit");
 		keyAction(ke, true);
 	}
 
@@ -122,7 +123,8 @@ public class Player extends Human implements UserControllable{
 			this.setRight(keyDown);
 		else if(code.equals(KeyCode.SHIFT))
 			this.setIsRunning(keyDown);
-		//else if(code.equals(KeyCode.SPACE))
+		else if(code.equals(KeyCode.SPACE))
+			this.jump();
 		ke.consume();
 	}
 
@@ -134,6 +136,11 @@ public class Player extends Human implements UserControllable{
 	@Override
 	public void updateComponent() {
 		getComponent().setPosition(getPosition());
+	}
+
+	@Override
+	protected Point3D getJumpVector() {
+		return jumpVector;
 	}
 	
 }
