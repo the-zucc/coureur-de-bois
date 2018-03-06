@@ -12,6 +12,7 @@ import javafx.scene.Group;
 import ui.gamescene.GameScene;
 
 public class GameLogic {
+	private static double meterLength = 50;
 	
 	private static long updateCount = 0;
 	
@@ -21,7 +22,7 @@ public class GameLogic {
 		return loop;
 	}
 	
-	private static Point3D gravity = new Point3D(0,9.81,0);
+	private static Point3D gravity = new Point3D(0,9.81*2*meterLength,0);
 	
 	public static Point3D getGravity() {
 		return gravity;
@@ -55,5 +56,9 @@ public class GameLogic {
 		((Group)scene.getRoot()).getChildren().add(map.getComponent());
 		loop = new GameLoop();
 		loop.start();
+	}
+
+	public static double getMeterLength() {
+		return meterLength;
 	}
 }

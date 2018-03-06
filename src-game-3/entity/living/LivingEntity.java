@@ -22,7 +22,7 @@ public abstract  class LivingEntity extends GravityAffectedCollidingEntity imple
 	public LivingEntity(Point3D position) {
 		super(position);
 		up = down = left = right = newOrientation = isRunning = false;
-		oldMovement = movement;
+		oldMovement = Point3D.ZERO;
 	}
 
 	protected abstract double computeXpReward();

@@ -20,6 +20,8 @@ public class GameScene extends SubScene {
 		gameRoot.getChildren().add(new Label("yo"));
 		gameCamera = buildGameCamera();
 		setCamera(gameCamera);
+		Map.getInstance().getCurrentPlayer().att
+		//Map.getInstance().setGameCamera((GameCamera)gameCamera);
 	}
 	public Group getGameRoot(){
 		return gameRoot;

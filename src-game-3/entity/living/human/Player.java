@@ -1,8 +1,13 @@
 package entity.living.human;
 
+import java.util.ArrayList;
+
+import characteristic.attachable.Attachable;
+import characteristic.attachable.AttachableReceiver;
 import characteristic.interactive.UserControllable;
 import characteristic.positionnable.Collideable;
 import collision.CollisionBox;
+import game.GameLogic;
 import javafx.geometry.Point3D;
 import javafx.scene.Group;
 import javafx.scene.input.KeyCode;
@@ -12,9 +17,9 @@ import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.Box;
 import visual.Component;
 
-public class Player extends Human implements UserControllable{
+public class Player extends Human implements UserControllable, AttachableReceiver{
 	
-	private static Point3D jumpVector = new Point3D(0, -35, 0);
+	private static Point3D jumpVector = new Point3D(0, -10*GameLogic.getMeterLength(), 0);
 
 	public Player(Point3D position) {
 		super(position);
@@ -141,6 +146,29 @@ public class Player extends Human implements UserControllable{
 	@Override
 	protected Point3D getJumpVector() {
 		return jumpVector;
+	}
+
+	@Override
+	public void attach(Attachable a) {
+		getComponent().addChildComponent(a.getComponent());
+		onAttachActions();
+		a.onAttach(this);
+	}
+
+	@Override
+	public void onAttachActions() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public ArrayList<Attachable> getAttachables() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void updateAttachables() {
 	}
 	
 }
