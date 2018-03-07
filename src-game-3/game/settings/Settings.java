@@ -1,5 +1,7 @@
 package game.settings;
 
+import javafx.scene.SceneAntialiasing;
+
 public class Settings {
 
 
@@ -14,7 +16,13 @@ public class Settings {
     public static void setAntialiasing(boolean antialiasing) {
         Settings.antialiasing = antialiasing;
     }
-
+    
+    public static SceneAntialiasing getAntialiasingValue(){
+    	if(isAntialiasing())
+    		return SceneAntialiasing.BALANCED;
+    	return SceneAntialiasing.DISABLED;
+    }
+    
     public static double getCameraDistance() {
         return cameraDistance;
     }

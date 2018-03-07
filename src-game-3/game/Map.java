@@ -11,6 +11,7 @@ import characteristic.Updateable;
 import characteristic.positionnable.Collideable;
 import entity.Entity;
 import entity.living.human.Player;
+import game.settings.Preferences;
 import javafx.geometry.Point3D;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
@@ -27,7 +28,7 @@ public class Map implements ComponentOwner, Updateable, Messageable{
 	
 	public static Map getInstance(){
 		if(instance == null)
-			instance = new Map(20000, 20000, 5000, 100, 100);
+			instance = new Map(Preferences.getMapWidth(), Preferences.getMapHeight(), 5000, 100, 100);
 		return instance;
 	}
 	

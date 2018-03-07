@@ -1,6 +1,7 @@
 package ui.gamescene;
 
 import game.Map;
+import game.settings.Settings;
 import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.Parent;
@@ -15,9 +16,8 @@ public class GameScene extends SubScene {
 	private Group gameRoot;
 	private PerspectiveCamera gameCamera;
 	public GameScene(double arg1, double arg2) {
-		super(new Group(), arg1, arg2, true, SceneAntialiasing.BALANCED);
+		super(new Group(), arg1, arg2, true, Settings.getAntialiasingValue());
 		gameRoot = (Group)getRoot();
-		gameRoot.getChildren().add(new Label("yo"));
 		gameCamera = new GameCamera(1500, Map.getInstance().getCurrentPlayer());
 		setCamera(gameCamera);
 	}

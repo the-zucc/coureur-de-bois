@@ -32,7 +32,6 @@ public abstract  class LivingEntity extends GravityAffectedCollidingEntity imple
 		updateMovementVector();
 		Point3D nextPos = computeNextPosition(secondsPassed);
 		if(nextPos != null){
-			System.out.println(nextPos);
 			moveTo(nextPos);
 		}
 		updateActions(secondsPassed);
