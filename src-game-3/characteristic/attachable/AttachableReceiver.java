@@ -13,7 +13,8 @@ import characteristic.Updateable;
 public interface AttachableReceiver extends Updateable, ComponentOwner, Messageable{
 	public void attach(Attachable a);
 	public void detach(Attachable a);
-	public void onAttachActions();
+	public void onAttachActions(Attachable a);
+	public void onDetachActions(Attachable a);
 	public ArrayList<Attachable> getAttachables();
 	public void updateAttachables();
 }

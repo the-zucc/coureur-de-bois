@@ -97,7 +97,7 @@ public class Player extends Human implements UserControllable, AttachableReceive
 
 	@Override
 	protected double computeMovementSpeed() {
-		double speed = 60; 
+		double speed = 180;
 		if(isRunning())
 			return speed*2;
 		return speed;
@@ -151,17 +151,30 @@ public class Player extends Human implements UserControllable, AttachableReceive
 	@Override
 	public void attach(Attachable a) {
 		getComponent().addChildComponent(a.getComponent());
-		onAttachActions();
 		a.onAttach(this);
+        onAttachActions(a);
 	}
 
 	@Override
-	public void onAttachActions() {
-		// TODO Auto-generated method stub
-		
+	public void detach(Attachable a) {
+	    if(getAttachables().contains(a)){
+            getAttachables().remove(a);
+            getComponent().removeChildComponent(a.getComponent());
+            a.onDetach(this);
+        }
 	}
 
 	@Override
+	public void onAttachActions(Attachable a) {
+
+	}
+
+    @Override
+    public void onDetachActions(Attachable a) {
+
+    }
+
+    @Override
 	public ArrayList<Attachable> getAttachables() {
 		// TODO Auto-generated method stub
 		return null;
@@ -169,6 +182,7 @@ public class Player extends Human implements UserControllable, AttachableReceive
 
 	@Override
 	public void updateAttachables() {
+
 	}
 	
 }

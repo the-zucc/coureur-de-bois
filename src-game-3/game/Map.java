@@ -76,6 +76,7 @@ public class Map implements ComponentOwner, Updateable, Messageable{
 		
 		currentPlayer = new Player(new Point3D(0,0,0));
 		addEntity(currentPlayer);
+
 	}
 	
 	public double getHeightAt(Point3D arg0){
@@ -235,9 +236,6 @@ public class Map implements ComponentOwner, Updateable, Messageable{
 
 	@Override
 	public void update(double secondsPassed) {
-		if(gameCamera == null)
-			System.out.println("camera null.");
-		
 		for(Updateable u:updateables){
 			u.update(secondsPassed);	
 		}

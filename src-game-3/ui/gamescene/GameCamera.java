@@ -4,13 +4,14 @@ import java.util.Hashtable;
 
 import characteristic.attachable.Attachable;
 import characteristic.attachable.AttachableReceiver;
+import game.Map;
 import javafx.geometry.Point3D;
 import javafx.scene.PerspectiveCamera;
 import javafx.scene.transform.Rotate;
 import visual.Component;
 
 public class GameCamera extends PerspectiveCamera implements Attachable{
-	
+
 	private Component component;
 	private double dist;
 	private AttachableReceiver receiver;
@@ -21,12 +22,17 @@ public class GameCamera extends PerspectiveCamera implements Attachable{
 		
 		position=null;
 		this.dist = dist;
+
+		component = buildComponent();
+
 		setNearClip(10);
 		setFarClip(20000);
-		setTranslateY(-dist);
-		setTranslateZ(-dist);
-		setRotationAxis(Rotate.X_AXIS);
-		setRotate(-45);
+
+		component.setTranslateY(-dist/3);
+		component.setTranslateZ(-dist);
+		component.setRotationAxis(Rotate.X_AXIS);
+		component.setRotate(-17);
+
 		ar.attach(this);
 	}
 
@@ -37,35 +43,34 @@ public class GameCamera extends PerspectiveCamera implements Attachable{
 
 	@Override
 	public boolean shouldUpdate() {
-		return ;
+		return true;
 	}
 
 	@Override
 	public void onMessageReceived(Hashtable<String, ? extends Object> message) {
-		
+
 	}
 
 	@Override
 	public void onAttach(AttachableReceiver ar) {
-		ar.getComponent().addChildComponent(getComponent());
-		this.relativePosition = new Point3D(0,-dist, -dist);
+		this.relativePosition = new Point3D(0,-dist/3, -dist);
 		getComponent().setTranslateX(relativePosition.getX());
 		getComponent().setTranslateY(relativePosition.getY());
 		getComponent().setTranslateZ(relativePosition.getZ());
 	}
 	@Override
-	public void onDetach() {
-		position = getReceiver().getPosition().add(relativePosition);
+	public void onDetach(AttachableReceiver ar) {
+		position = computeAbsolutePosition();
+		if(ar == getReceiver()){
+            receiver.getComponent().removeChildComponent(getComponent());
+            receiver = null;
+            Map.getInstance().getComponent().addChildComponent(getComponent());
+        }
 	}
 
-	@Override
-	public void detachFromReceiver(AttachableReceiver ar) {
-		ar.detach(this);
-	}
-
-	@Override
+    @Override
 	public void setPosition(Point3D position) {
-		
+
 	}
 
 	@Override

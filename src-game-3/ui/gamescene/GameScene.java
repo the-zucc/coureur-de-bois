@@ -18,24 +18,11 @@ public class GameScene extends SubScene {
 		super(new Group(), arg1, arg2, true, SceneAntialiasing.BALANCED);
 		gameRoot = (Group)getRoot();
 		gameRoot.getChildren().add(new Label("yo"));
-		gameCamera = buildGameCamera();
+		gameCamera = new GameCamera(1500, Map.getInstance().getCurrentPlayer());
 		setCamera(gameCamera);
-		Map.getInstance().getCurrentPlayer().att
-		//Map.getInstance().setGameCamera((GameCamera)gameCamera);
 	}
 	public Group getGameRoot(){
 		return gameRoot;
-	}
-	public PerspectiveCamera buildGameCamera(){
-		double dist = 1500;
-		PerspectiveCamera returnVal = new PerspectiveCamera(true);
-		returnVal.setNearClip(10);
-		returnVal.setFarClip(20000);
-		returnVal.setTranslateY(-dist);
-		returnVal.setTranslateZ(-dist);
-		returnVal.setRotationAxis(Rotate.X_AXIS);
-		returnVal.setRotate(-45);
-		return returnVal;
 	}
 	
 }
