@@ -70,7 +70,7 @@ public class GameCamera extends PerspectiveCamera implements Attachable{
 
     @Override
 	public void setPosition(Point3D position) {
-
+    	
 	}
 
 	@Override

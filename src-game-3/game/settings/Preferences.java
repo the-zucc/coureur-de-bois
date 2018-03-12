@@ -17,15 +17,15 @@ public class Preferences {
 	public static double getMapHeight() {
 		return mapHeight;
 	}
-	public static void setMapHeight(double mapHeight) {
-		Preferences.mapHeight = mapHeight;
+	public static void setMapHeight(double value) {
+		Preferences.mapHeight = value;
 	}
-
 	
 	public static double getMapWidth() {
 		return mapWidth;
 	}
-	public static void setMapWidth(double mapWidth) {
-		Preferences.mapWidth = mapWidth;
+	public static void setMapWidth(double value) {
+		Preferences.mapWidth = value;
+		
 	}
 }

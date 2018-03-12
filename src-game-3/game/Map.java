@@ -27,8 +27,11 @@ public class Map implements ComponentOwner, Updateable, Messageable{
 	private static Map instance;
 	
 	public static Map getInstance(){
-		if(instance == null)
+		if(instance == null){
 			instance = new Map(Preferences.getMapWidth(), Preferences.getMapHeight(), 5000, 100, 100);
+			System.out.println("height: "+Preferences.getMapHeight());
+			System.out.println("width: "+Preferences.getMapWidth());
+		}
 		return instance;
 	}
 	

@@ -4,6 +4,8 @@ import game.GameLogic;
 import game.Map;
 import game.settings.Preferences;
 import game.settings.Settings;
+import javafx.application.Platform;
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
@@ -15,6 +17,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
@@ -113,8 +116,11 @@ public class Menu extends SubScene {
 		//start game button
 		startGameButton = new Button("start game");
 		startGameButton.setPrefSize(200,100);
-		startGameButton.setOnMouseClicked(e -> {
-			action_startGameButton();
+		startGameButton.setOnMouseClicked(new EventHandler<MouseEvent>(){
+			@Override
+			public void handle(MouseEvent arg0) {
+				action_startGameButton();
+			}
 		});
 		
 		wholeMenuVBox.getChildren().add(topPanelHBox);
@@ -162,23 +168,25 @@ public class Menu extends SubScene {
 		Settings.setAntialiasing(antialiasingButtonOn.isSelected());
 	}
 	private void action_setGamePreferences(){
-		if(mapWidthTextField.getText().length() >0){
+		if(mapWidthTextField.getText().length() > 0){
 			try{
 				double mapWidth = Double.parseDouble(mapWidthTextField.getText());
+				System.out.println("mapwidth read: "+mapWidth);
 				Preferences.setMapWidth(mapWidth);
 			}catch(Exception e){
 				System.out.println("invalid map width.");
 			}
 		}
-		if(mapHeightTextField.getText().length() >0){
+		if(mapHeightTextField.getText().length() > 0){
 			try{
 				double mapHeight = Double.parseDouble(mapHeightTextField.getText());
+				System.out.println("mapHeight read: "+mapHeight);
 				Preferences.setMapHeight(mapHeight);
 			}catch(Exception e){
 				System.out.println("invalid map width.");
 			}
 		}
-		if(waterLevelTextField.getText().length() >0){
+		if(waterLevelTextField.getText().length() > 0){
 			try{
 				double waterLevel = Double.parseDouble(waterLevelTextField.getText());
 				Preferences.setWaterLevel(waterLevel);

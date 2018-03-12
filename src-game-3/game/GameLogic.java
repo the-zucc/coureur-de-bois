@@ -53,6 +53,7 @@ public class GameLogic {
 		GameScene scene = new GameScene(App.windowWidth, App.windowHeight);
 		App.getUserInterface().putSubScene("game", scene);
 		App.getUserInterface().setSubScene("game");
+		App.getUserInterface().bindGameControls();
 		((Group)scene.getRoot()).getChildren().add(map.getComponent());
 		loop = new GameLoop();
 		loop.start();

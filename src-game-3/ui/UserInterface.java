@@ -28,7 +28,6 @@ public class UserInterface extends Scene implements Updateable {
 		Menu menu = new Menu(width, height);
 		putSubScene("main_menu", menu);
 		setSubScene("main_menu");
-		bindGameControls();
 	}
 
 	@Override
