@@ -15,6 +15,9 @@ public abstract class VisibleEntity extends Entity implements ComponentOwner{
 		super();
 		setPosition(position);
 		component = buildComponent();
+		component.setTranslateX(position.getX());
+		component.setTranslateY(position.getY());
+		component.setTranslateZ(position.getZ());
 	}
 	
 	@Override

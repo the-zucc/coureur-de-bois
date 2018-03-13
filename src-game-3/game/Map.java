@@ -11,6 +11,7 @@ import characteristic.Updateable;
 import characteristic.positionnable.Collideable;
 import entity.Entity;
 import entity.living.human.Player;
+import entity.statics.village.Tipi;
 import entity.statics.tree.TreeNormal;
 import game.settings.Preferences;
 import javafx.geometry.Point3D;
@@ -29,9 +30,7 @@ public class Map implements ComponentOwner, Updateable, Messageable{
 	
 	public static Map getInstance(){
 		if(instance == null){
-			instance = new Map(Preferences.getMapWidth(), Preferences.getMapHeight(), Preferences.getTreeCount(), 100, 100);
-			System.out.println("height: "+Preferences.getMapHeight());
-			System.out.println("width: "+Preferences.getMapWidth());
+			instance = new Map(Preferences.getMapWidth(),Preferences.getMapHeight(), Preferences.getTreeCount(), Preferences.getMapDetail(), Preferences.getMapDetail());
 		}
 		return instance;
 	}
@@ -85,7 +84,7 @@ public class Map implements ComponentOwner, Updateable, Messageable{
 			double x = Math.random()*mapWidth-mapWidth/2;
 			double z = Math.random()*mapHeight-mapHeight/2;
 			double y = getHeightAt(new Point3D(x,0,z));
-			addEntity(new TreeNormal(new Point3D(x,y,z)));
+			addEntity(new Tipi(new Point3D(x,y,z)));
 		}
 
 	}
@@ -178,24 +177,20 @@ public class Map implements ComponentOwner, Updateable, Messageable{
 				floorVertices[zi][xi] = p1;
 				p2 = new Point3D(x,heightMatrix[zi+1][xi],z-vertexSeparationHeight);
 				//System.out.println("zi:"+zi+" z:"+z+" xi:"+xi+" x:"+x);
-				
 				mesh.getPoints().addAll((float)p2.getX(), (float)p2.getY(), (float)p2.getZ());
 				mesh.getPoints().addAll((float)p1.getX(), (float)p1.getY(), (float)p1.getZ());
+
 			}
 			mesh.getTexCoords().addAll(0,0);
-			for(int i=2;i<cols*2;i+=2) {  //add each segment
-		        //Vertices wound counter-clockwise which is the default front face of any Triange
-		        //These triangles live on the frontside of the line facing the camera
-		        //mesh.getFaces().addAll(i,0,i-2,0,i+1,0); //add primary face
-		        //mesh.getFaces().addAll(i+1,0,i-2,0,i-1,0); //add secondary Width face
-		        //waterMesh.getFaces().addAll(i,0,i-2,0,i+1,0); //add primary face
-		        //waterMesh.getFaces().addAll(i+1,0,i-2,0,i-1,0); //add secondary Width face
-		        //Add the same faces but wind them clockwise so that the color looks correct when camera is rotated
-		        //These triangles live on the backside of the line facing away from initial the camera
-		        mesh.getFaces().addAll(i+1,0,i-2,0,i,0); //add primary face
-		        mesh.getFaces().addAll(i-1,0,i-2,0,i+1,0); //add secondary Width face
+
+			for(int i=0;i<cols-1;i++) {
+				//full explanation here: http://www.dummies.com/programming/java/javafx-add-a-mesh-object-to-a-3d-world/
+		        int idx = i*2;
+		        mesh.getFaces().addAll(idx+1,0,idx,0,idx+2,0);
+		        mesh.getFaces().addAll(idx+2,0,idx+3,0,idx+1,0);
 		    }
-			MeshView floorMeshView = new MeshView(mesh);
+
+		    MeshView floorMeshView = new MeshView(mesh);
 			floorMeshView.setDrawMode(DrawMode.FILL);
 			floorMeshView.setMaterial(new PhongMaterial(Color.GREEN));
 			floorMeshView.setTranslateX(0);
@@ -312,65 +307,12 @@ public class Map implements ComponentOwner, Updateable, Messageable{
 	}
 	
 	/**
-	 * COLLISIONS SECTION
+	 * COLLISIONS
 	 */
 	//static variables
 	private static int collisionMapDivisionWidth=100;
 	private static int collisionMapDivisionHeight=collisionMapDivisionWidth;
-	/*
-	public double getHeightAt(Point3D arg0){
-		try {
-			
-			double rowHeight = vertexSeparationHeight;
-			double rowWidth = vertexSeparationWidth;
-			
-			
-			int row = (int)((-arg0.getZ()+mapHeight/2)/rowHeight);
-			int column = (int)((arg0.getX()+mapWidth/2)/rowWidth);
-			
-			Point3D[][] currentTwoTriangles = floorVertices[row][column];
-			
-			int xmod = (int) (arg0.getX()%vertexSeparationWidth);
-			if(xmod < 0){
-				xmod+=vertexSeparationWidth;
-			}
-			
-			int ymod = (int) (arg0.getZ()%vertexSeparationHeight);
-			if(ymod < 0){
-				ymod+=vertexSeparationHeight;
-			}
-			
-			Point3D[] currentTriangle = null;
-			if(xmod < ymod) {
-				currentTriangle = currentTwoTriangles[0];
-			}
-			else{
-				currentTriangle = currentTwoTriangles[1];
-			}
-			Point3D p0 = currentTriangle[0];
-			
-			Point3D vect1 = p0.subtract(currentTriangle[1]);
-			Point3D vect2 = p0.subtract(currentTriangle[2]);
 
-			Point3D normal = vect1.crossProduct(vect2).normalize();
-			
-			double arg0p0x = arg0.getX()-p0.getX();
-
-			double arg0p0z = arg0.getZ()-p0.getZ();
-			
-			double returnVal = ((normal.getX() * (arg0p0x) + normal.getZ() * (arg0p0z))/-normal.getY()) + p0.getY();
-			
-			if(returnVal > GameScene.getWaterHeight())
-				returnVal = GameScene.getWaterHeight();
-			
-			return returnVal;
-		}catch(Exception e) {
-			
-			//System.out.println("exception caught, fix needed");
-			return 0;
-		}
-	}
-	*/
 	public void setGameCamera(GameCamera gc){
 		gameCamera = gc;
 		updateables.add(gc);

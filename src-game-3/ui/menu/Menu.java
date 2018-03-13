@@ -1,15 +1,12 @@
 package ui.menu;
 
 import game.GameLogic;
-import game.Map;
 import game.settings.Preferences;
 import game.settings.Settings;
-import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
-import javafx.scene.Parent;
 import javafx.scene.SceneAntialiasing;
 import javafx.scene.SubScene;
 import javafx.scene.control.Button;
@@ -50,7 +47,13 @@ public class Menu extends SubScene {
 	private TextField waterLevelTextField;
 	private HBox treeCountHBox;
 	private TextField treeCountTextField;
-	
+	private HBox villageCountHBox;
+	private TextField villageCountTextField;
+	private HBox villageRadiusHBox;
+	private TextField villageRadiusTextField;
+	private HBox villageVillagerCountHBox;
+	private TextField villageVillagerCountTextField;
+
 	
 	//the HBox located at the top of the layout. contains gamePreferencesVBox and settingsVBox
 	private HBox topPanelHBox;
@@ -103,10 +106,17 @@ public class Menu extends SubScene {
 
 		treeCountTextField = new TextField();
 		treeCountHBox = buildHBox(spaceSize);
-		treeCountHBox.getChildren().addAll(new Label("tree count: "), treeCountTextField);
+		treeCountHBox.getChildren().addAll(new Label("Tree count: "), treeCountTextField);
 
+		villageRadiusTextField = new TextField();
+		villageRadiusHBox = buildHBox(spaceSize);
+		villageRadiusHBox.getChildren().addAll(new Label("Village size: "), villageRadiusTextField);
 
-		gamePreferencesVBox.getChildren().addAll(mapWidthHBox, mapHeightHBox, treeCountHBox, waterLevelHBox);
+		villageCountTextField = new TextField();
+		villageCountHBox = buildHBox(spaceSize);
+		villageCountHBox.getChildren().addAll(new Label("Village count: "), villageCountTextField);
+
+		gamePreferencesVBox.getChildren().addAll(mapWidthHBox, mapHeightHBox, treeCountHBox, waterLevelHBox, villageCountHBox, villageRadiusHBox);
 		
 		//VBox for containing both top panels
 		spaceSize = 15;
@@ -135,8 +145,9 @@ public class Menu extends SubScene {
 		
 		menuRoot = (Group)getRoot();
 		menuRoot.getChildren().add(wholeMenuVBox);
-		wholeMenuVBox.setTranslateX(w/2-wholeMenuVBox.getWidth()/2);
-		wholeMenuVBox.setTranslateY(h/2-wholeMenuVBox.getHeight()/2);
+		//wholeMenuVBox.setTranslateX(w/2-wholeMenuVBox.getWidth()/2);
+		//wholeMenuVBox.setTranslateY(h/2-wholeMenuVBox.getHeight()/2);
+
 	}
 	private VBox buildVBox(double spaceSize){
 		VBox returnedVBox = new VBox();
@@ -205,6 +216,22 @@ public class Menu extends SubScene {
 			try{
 				int treeCount = Integer.parseInt(treeCountTextField.getText());
 				Preferences.setTreeCount(treeCount);
+			}catch(Exception e){
+				System.out.println("invalid tree count.");
+			}
+		}
+		if(villageRadiusTextField.getText().length() > 0){
+			try{
+				double villageRadius = Double.parseDouble(villageRadiusTextField.getText());
+				Preferences.setVillageRadius(villageRadius);
+			}catch(Exception e){
+				System.out.println("invalid village radius.");
+			}
+		}
+		if(villageCountTextField.getText().length() > 0){
+			try{
+				int villageCount = Integer.parseInt(villageCountTextField.getText());
+				Preferences.setVillageCount(villageCount);
 			}catch(Exception e){
 
 			}

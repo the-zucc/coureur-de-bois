@@ -2,10 +2,24 @@ package game.settings;
 
 public class Preferences {
 	private static float waterLevel = 0;
-	private static double mapHeight = 20000;
-	private static double mapWidth = 20000;
+	private static double mapHeight = 300000;
+	private static double mapWidth = 300000;
+
+	public static double getMapDetail() {
+		return mapDetail;
+	}
+
+	public static void setMapDetail(double mapDetail) {
+		Preferences.mapDetail = mapDetail;
+	}
+
+	private static double mapDetail = 200;
 	private static int treeCount = 1000;
 
+	private static double villageRadius = 500;
+	private static int villageCount = 4;
+	private static int villageTipiCount = 6;
+    private static int villageVillagerCount = 10;
 
 	public static float getWaterLevel() {
 		return waterLevel;
@@ -37,4 +51,29 @@ public class Preferences {
 	public static int getTreeCount() {
 		return treeCount;
 	}
+
+    public static void setVillageRadius(double villageRadius) {
+        Preferences.villageRadius = villageRadius;
+    }
+
+    public static double getVillageRadius(){
+		return villageRadius;
+	}
+    public static void setVillageCount(int villageCount) {
+        Preferences.villageCount = villageCount;
+    }
+
+    public static void setVillageVillagerCount(int villageVillagerCount){
+	    Preferences.villageVillagerCount = villageVillagerCount;
+    }
+    public static int getVillageVillagerCount(){
+	    return villageVillagerCount;
+    }
+
+    public static void setVillageTipiCount(int villageTipiCount) {
+        Preferences.villageTipiCount = villageTipiCount;
+    }
+    public static int getVillageTipiCount() {
+        return villageTipiCount;
+    }
 }

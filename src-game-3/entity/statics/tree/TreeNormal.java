@@ -39,10 +39,6 @@ public class TreeNormal extends StaticVisibleCollidingEntity {
 
         Point3D position = getPosition();
 
-        returnVal.setTranslateY(position.getY());
-        returnVal.setTranslateX(position.getX());
-        returnVal.setTranslateZ(position.getZ());
-
         returnVal.getChildren().addAll(leaves, trunk);
         return returnVal;
     }
