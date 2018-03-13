@@ -159,6 +159,7 @@ public class Map implements ComponentOwner, Updateable, Messageable{
 		Component returnVal = new Component("id_map");
 		returnVal.setPosition(position);
 		returnVal.addChildComponent(buildFloorMesh());
+		returnVal.addChildComponent(buildWaterMesh(Preferences.getWaterLevel()));
 
 		return returnVal;
 	}
@@ -204,19 +205,27 @@ public class Map implements ComponentOwner, Updateable, Messageable{
 		}
 		return returnVal;
 	}
-	private Component buildWaterMesh(float waterHeight){
+	private Component buildWaterMesh(float waterLevel){
 	    Component returnVal = new Component("id_water_mesh");
 
 	    TriangleMesh mesh = new TriangleMesh();
 
-        mesh.getPoints().addAll((float)-mapWidth/2, waterHeight, (float)mapHeight/2);
-        mesh.getPoints().addAll((float)-mapWidth/2, waterHeight, (float)-mapHeight/2);
-        mesh.getPoints().addAll((float)mapWidth/2, waterHeight, (float)mapHeight/2);
-        mesh.getPoints().addAll((float)mapWidth/2, waterHeight, (float)-mapHeight/2);
-        
+        mesh.getPoints().addAll((float)-mapWidth/2, waterLevel, (float)mapHeight/2);
+        mesh.getPoints().addAll((float)-mapWidth/2, waterLevel, (float)-mapHeight/2);
+        mesh.getPoints().addAll((float)mapWidth/2, waterLevel, (float)mapHeight/2);
+        mesh.getPoints().addAll((float)mapWidth/2, waterLevel, (float)-mapHeight/2);
+
+		//mesh.getFaces().addAll(0,0,2,0,1,0); //add primary face
+		mesh.getFaces().addAll(0,0,1,0,2,0); //add secondary Width face
+		mesh.getFaces().addAll(3,0,2,0,1,0);
+		//mesh.getFaces().addAll(2,0,0,0,1,0); //add primary face
+		//mesh.getFaces().addAll(1,0,0,0,3,0); //add secondary Width face
+
+		mesh.getTexCoords().addAll(0,0);
 
         MeshView meshView = new MeshView(mesh);
-
+        meshView.setMaterial(new PhongMaterial(new Color(0,0,0.5,0.6)));
+		returnVal.getChildren().add(meshView);
 	    return returnVal;
     }
 	private float[][] generateHeightMatrix(int rows, int cols){

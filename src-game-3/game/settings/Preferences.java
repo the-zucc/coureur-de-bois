@@ -1,17 +1,17 @@
 package game.settings;
 
 public class Preferences {
-	private static double waterLevel = 0;
+	private static float waterLevel = 0;
 	private static double mapHeight = 20000;
 	private static double mapWidth = 20000;
 	private static int treeCount = 1000;
 
 
-	public static double getWaterLevel() {
+	public static float getWaterLevel() {
 		return waterLevel;
 	}
-	public static void setWaterLevel(double waterHeight) {
-		Preferences.waterLevel = waterHeight;
+	public static void setWaterLevel(float waterLevel) {
+		Preferences.waterLevel = waterLevel;
 	}
 	
 	

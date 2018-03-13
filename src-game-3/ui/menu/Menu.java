@@ -195,7 +195,7 @@ public class Menu extends SubScene {
 		}
 		if(waterLevelTextField.getText().length() > 0){
 			try{
-				double waterLevel = Double.parseDouble(waterLevelTextField.getText());
+				float waterLevel = -(Float.parseFloat(waterLevelTextField.getText()));
 				Preferences.setWaterLevel(waterLevel);
 			}catch(Exception e){
 				System.out.println("invalid map width.");
