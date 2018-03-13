@@ -213,7 +213,7 @@ public class Map implements ComponentOwner, Updateable, Messageable{
         mesh.getPoints().addAll((float)-mapWidth/2, waterHeight, (float)-mapHeight/2);
         mesh.getPoints().addAll((float)mapWidth/2, waterHeight, (float)mapHeight/2);
         mesh.getPoints().addAll((float)mapWidth/2, waterHeight, (float)-mapHeight/2);
-        mesh.getFaces().add()
+        
 
         MeshView meshView = new MeshView(mesh);
 
