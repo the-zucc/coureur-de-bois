@@ -26,7 +26,7 @@ public class GameCamera extends PerspectiveCamera implements Attachable{
 		component = buildComponent();
 
 		setNearClip(10);
-		setFarClip(20000);
+		setFarClip(50000);
 
 		component.setTranslateY(-dist/3);
 		component.setTranslateZ(-dist);

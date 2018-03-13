@@ -4,8 +4,9 @@ public class Preferences {
 	private static double waterLevel = 0;
 	private static double mapHeight = 20000;
 	private static double mapWidth = 20000;
+	private static int treeCount = 1000;
 
-	
+
 	public static double getWaterLevel() {
 		return waterLevel;
 	}
@@ -27,5 +28,13 @@ public class Preferences {
 	public static void setMapWidth(double value) {
 		Preferences.mapWidth = value;
 		
+	}
+
+    public static void setTreeCount(int treeCount) {
+        Preferences.treeCount = treeCount;
+    }
+
+	public static int getTreeCount() {
+		return treeCount;
 	}
 }

@@ -32,7 +32,7 @@ public class Player extends Human implements UserControllable, AttachableReceive
 
 	@Override
 	public void updateActions(double secondsPassed){
-		//System.out.println(getPosition().add(movement));
+		//System.out.println(getPosition());
 	}
 
 	@Override
@@ -97,9 +97,9 @@ public class Player extends Human implements UserControllable, AttachableReceive
 
 	@Override
 	protected double computeMovementSpeed() {
-		double speed = 180;
+		double speed = 3*GameLogic.getMeterLength();
 		if(isRunning())
-			return speed*2;
+			return speed*5;
 		return speed;
 	}
 

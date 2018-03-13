@@ -48,6 +48,8 @@ public class Menu extends SubScene {
 	private TextField mapWidthTextField;
 	private HBox waterLevelHBox;
 	private TextField waterLevelTextField;
+	private HBox treeCountHBox;
+	private TextField treeCountTextField;
 	
 	
 	//the HBox located at the top of the layout. contains gamePreferencesVBox and settingsVBox
@@ -98,8 +100,13 @@ public class Menu extends SubScene {
 		mapHeightTextField = new TextField();
 		mapHeightHBox = buildHBox(spaceSize);
 		mapHeightHBox.getChildren().addAll(new Label("Map height: "), mapHeightTextField);
-		
-		gamePreferencesVBox.getChildren().addAll(mapWidthHBox, mapHeightHBox, waterLevelHBox);
+
+		treeCountTextField = new TextField();
+		treeCountHBox = buildHBox(spaceSize);
+		treeCountHBox.getChildren().addAll(new Label("tree count: "), treeCountTextField);
+
+
+		gamePreferencesVBox.getChildren().addAll(mapWidthHBox, mapHeightHBox, treeCountHBox, waterLevelHBox);
 		
 		//VBox for containing both top panels
 		spaceSize = 15;
@@ -192,6 +199,14 @@ public class Menu extends SubScene {
 				Preferences.setWaterLevel(waterLevel);
 			}catch(Exception e){
 				System.out.println("invalid map width.");
+			}
+		}
+		if(treeCountTextField.getText().length() > 0){
+			try{
+				int treeCount = Integer.parseInt(treeCountTextField.getText());
+				Preferences.setTreeCount(treeCount);
+			}catch(Exception e){
+
 			}
 		}
 	}

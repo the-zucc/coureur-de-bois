@@ -64,7 +64,6 @@ public class UserInterface extends Scene implements Updateable {
 			
 			@Override
 			public void handle(KeyEvent event) {
-				System.out.println("yo");
 				try{
 					Map.getInstance().getCurrentPlayer().onKeyPressed(event);
 				}catch(Exception ex){

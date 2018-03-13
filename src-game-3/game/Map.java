@@ -11,6 +11,7 @@ import characteristic.Updateable;
 import characteristic.positionnable.Collideable;
 import entity.Entity;
 import entity.living.human.Player;
+import entity.statics.tree.TreeNormal;
 import game.settings.Preferences;
 import javafx.geometry.Point3D;
 import javafx.scene.paint.Color;
@@ -28,7 +29,7 @@ public class Map implements ComponentOwner, Updateable, Messageable{
 	
 	public static Map getInstance(){
 		if(instance == null){
-			instance = new Map(Preferences.getMapWidth(), Preferences.getMapHeight(), 5000, 100, 100);
+			instance = new Map(Preferences.getMapWidth(), Preferences.getMapHeight(), Preferences.getTreeCount(), 100, 100);
 			System.out.println("height: "+Preferences.getMapHeight());
 			System.out.println("width: "+Preferences.getMapWidth());
 		}
@@ -80,6 +81,12 @@ public class Map implements ComponentOwner, Updateable, Messageable{
 		
 		currentPlayer = new Player(new Point3D(0,0,0));
 		addEntity(currentPlayer);
+		for (int i = 0; i < treeCount; i++) {
+			double x = Math.random()*mapWidth-mapWidth/2;
+			double z = Math.random()*mapHeight-mapHeight/2;
+			double y = getHeightAt(new Point3D(x,0,z));
+			addEntity(new TreeNormal(new Point3D(x,y,z)));
+		}
 
 	}
 	
@@ -152,6 +159,7 @@ public class Map implements ComponentOwner, Updateable, Messageable{
 		Component returnVal = new Component("id_map");
 		returnVal.setPosition(position);
 		returnVal.addChildComponent(buildFloorMesh());
+
 		return returnVal;
 	}
 	private Component buildFloorMesh(){
@@ -177,8 +185,8 @@ public class Map implements ComponentOwner, Updateable, Messageable{
 			for(int i=2;i<cols*2;i+=2) {  //add each segment
 		        //Vertices wound counter-clockwise which is the default front face of any Triange
 		        //These triangles live on the frontside of the line facing the camera
-		        mesh.getFaces().addAll(i,0,i-2,0,i+1,0); //add primary face
-		        mesh.getFaces().addAll(i+1,0,i-2,0,i-1,0); //add secondary Width face
+		        //mesh.getFaces().addAll(i,0,i-2,0,i+1,0); //add primary face
+		        //mesh.getFaces().addAll(i+1,0,i-2,0,i-1,0); //add secondary Width face
 		        //waterMesh.getFaces().addAll(i,0,i-2,0,i+1,0); //add primary face
 		        //waterMesh.getFaces().addAll(i+1,0,i-2,0,i-1,0); //add secondary Width face
 		        //Add the same faces but wind them clockwise so that the color looks correct when camera is rotated
@@ -196,6 +204,21 @@ public class Map implements ComponentOwner, Updateable, Messageable{
 		}
 		return returnVal;
 	}
+	private Component buildWaterMesh(float waterHeight){
+	    Component returnVal = new Component("id_water_mesh");
+
+	    TriangleMesh mesh = new TriangleMesh();
+
+        mesh.getPoints().addAll((float)-mapWidth/2, waterHeight, (float)mapHeight/2);
+        mesh.getPoints().addAll((float)-mapWidth/2, waterHeight, (float)-mapHeight/2);
+        mesh.getPoints().addAll((float)mapWidth/2, waterHeight, (float)mapHeight/2);
+        mesh.getPoints().addAll((float)mapWidth/2, waterHeight, (float)-mapHeight/2);
+        mesh.getFaces().add()
+
+        MeshView meshView = new MeshView(mesh);
+
+	    return returnVal;
+    }
 	private float[][] generateHeightMatrix(int rows, int cols){
 		
 		PerlinNoise perlin = new PerlinNoise();
@@ -244,8 +267,13 @@ public class Map implements ComponentOwner, Updateable, Messageable{
 			u.update(secondsPassed);	
 		}
 		for(ComponentOwner c:componentOwners){
-			if(!c.isComponentInScene())
+			if(!c.isComponentInScene()) {
+				if (c instanceof TreeNormal) {
+					System.out.println("tree");
+					System.out.println(c.getPosition());
+				}
 				getComponent().addChildComponent(c.getComponent());
+			}
 		}
 	}
 
