@@ -8,4 +8,8 @@ public abstract class Human extends LivingEntity {
 	public Human(Point3D position) {
 		super(position);
 	}
+	@Override
+	public boolean shouldUpdateComponent() {
+		return false;
+	}
 }

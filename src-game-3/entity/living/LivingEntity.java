@@ -18,6 +18,7 @@ public abstract  class LivingEntity extends GravityAffectedCollidingEntity imple
 	private double hp;
 	private boolean up, down, left, right, newOrientation, isRunning;
 	private Point3D oldMovement;
+	private Point3D jumpVector;
 
 	public LivingEntity(Point3D position) {
 		super(position);
@@ -133,5 +134,7 @@ public abstract  class LivingEntity extends GravityAffectedCollidingEntity imple
 	protected void jump(){
 		this.addForceToGravity(getJumpVector());
 	}
-	protected abstract Point3D getJumpVector();
+	protected Point3D getJumpVector() {
+		return jumpVector;
+	}
 }
