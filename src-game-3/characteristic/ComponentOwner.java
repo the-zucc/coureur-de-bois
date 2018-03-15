@@ -1,9 +1,9 @@
 package characteristic;
 
-import characteristic.positionnable.Positionnable;
+import characteristic.positionnable.Positionnable2D;
 import visual.Component;
 
-public interface ComponentOwner extends Positionnable{
+public interface ComponentOwner extends Positionnable2D{
 	/**
 	 * should be used in the constructor of the implementing class to define the class' component attribute.
 	 * once defined, the attribute should be accessed using getComponent().

@@ -3,11 +3,14 @@ package entity.living.human;
 import characteristic.positionnable.Collideable;
 import collision.CollisionBox;
 import javafx.geometry.Point3D;
+import village.Village;
 import visual.Component;
 
-public class Npc extends Human {
+public class Villager extends Human {
+	
+	private Village village;
 
-	public Npc(Point3D position) {
+	public Villager(Point3D position) {
 		super(position);
 		// TODO Auto-generated constructor stub
 	}
@@ -55,5 +58,9 @@ public class Npc extends Human {
 		// TODO Auto-generated method stub
 
 	}
-
+	
+	public double getDistanceFromVillage(){
+		
+		return get2DPosition().distance(village.get2DPosition());
+	}
 }

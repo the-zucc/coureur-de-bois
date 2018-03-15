@@ -4,7 +4,9 @@ import java.util.Hashtable;
 
 import characteristic.attachable.Attachable;
 import characteristic.attachable.AttachableReceiver;
+import characteristic.positionnable.Positionnable2D;
 import game.Map;
+import javafx.geometry.Point2D;
 import javafx.geometry.Point3D;
 import javafx.scene.PerspectiveCamera;
 import javafx.scene.transform.Rotate;
@@ -118,6 +120,30 @@ public class GameCamera extends PerspectiveCamera implements Attachable{
 			return ((Attachable)getReceiver()).computeAbsolutePosition().add(relativePosition);
 		}
 		return getReceiver().getPosition().add(relativePosition);
+	}
+
+	@Override
+	public Point2D compute2DPosition(Point3D position3d) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void set2DPosition(Point2D position2d) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public Point2D get2DPosition() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public double distanceFrom(Positionnable2D arg0) {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 
 }
