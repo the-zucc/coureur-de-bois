@@ -7,6 +7,7 @@ import characteristic.positionnable.GravityAffected;
 import game.GameLogic;
 import game.Map;
 import javafx.geometry.Point3D;
+import util.PositionGenerator;
 import visual.Component;
 
 public abstract class GravityAffectedCollidingEntity extends MovingCollidingEntity implements GravityAffected{
@@ -27,7 +28,7 @@ public abstract class GravityAffectedCollidingEntity extends MovingCollidingEnti
 	 * updates the gravity vector to the new value with the applied gravity acceleration.
 	 */
 	public void updateGravityVector(double secondsPassed) {
-		if(position.getY() < Map.getInstance().getHeightAt(position)){
+		if(position.getY() < Map.getInstance().getHeightAt(position2D)){
 			gravity = gravity.add(GameLogic.getGravity().multiply(secondsPassed));
 		}
 	}
@@ -54,8 +55,9 @@ public abstract class GravityAffectedCollidingEntity extends MovingCollidingEnti
 		if(next != null){
 			next =  next.add(getGravityVector().multiply(secondsPassed));
 		}
-		if(next.getY() > Map.getInstance().getHeightAt(next)){
-			next = new Point3D(next.getX(), Map.getInstance().getHeightAt(next), next.getZ());
+		double floorHeight=Map.getInstance().getHeightAt(PositionGenerator.convert2D(next));
+		if(next.getY() > floorHeight){
+			next = new Point3D(next.getX(), floorHeight, next.getZ());
 			resetGravityVector();
 		}
 		//System.out.println("nextpos:"+next);

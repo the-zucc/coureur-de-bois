@@ -34,6 +34,8 @@ public abstract  class LivingEntity extends GravityAffectedCollidingEntity imple
 		Point3D nextPos = computeNextPosition(secondsPassed);
 		if(nextPos != null){
 			moveTo(nextPos);
+			if(getId().equals("id_2500"))
+			System.out.println(nextPos);
 		}
 		updateActions(secondsPassed);
 		if(shouldUpdateComponent())
@@ -41,7 +43,15 @@ public abstract  class LivingEntity extends GravityAffectedCollidingEntity imple
 	}
 	
 	public abstract void updateActions(double secondsPassed);
-	
+
+	@Override
+	public void updateComponent(){
+		getComponent().setPosition(getPosition());
+		additionalComponentUpdates();
+	}
+
+	public abstract void additionalComponentUpdates();
+
 	public double getHp(){
 		return hp;
 	}

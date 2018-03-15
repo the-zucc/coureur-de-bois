@@ -2,8 +2,8 @@ package game.settings;
 
 public class Preferences {
 	private static float waterLevel = 0;
-	private static double mapHeight = 300000;
-	private static double mapWidth = 300000;
+	private static double mapHeight = 150000;
+	private static double mapWidth = 150000;
 
 	public static double getMapDetail() {
 		return mapDetail;

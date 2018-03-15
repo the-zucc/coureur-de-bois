@@ -134,13 +134,8 @@ public class Player extends Human implements UserControllable, AttachableReceive
 	}
 
 	@Override
-	public boolean shouldUpdateComponent() {
-		return true;
-	}
+	public void additionalComponentUpdates() {
 
-	@Override
-	public void updateComponent() {
-		getComponent().setPosition(getPosition());
 	}
 
 	@Override

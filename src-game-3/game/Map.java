@@ -9,11 +9,14 @@ import characteristic.ComponentOwner;
 import characteristic.Messageable;
 import characteristic.Updateable;
 import characteristic.positionnable.Collideable;
+import characteristic.positionnable.Positionnable2D;
 import entity.Entity;
 import entity.living.human.Player;
+import entity.living.human.Villager;
 import entity.statics.village.Tipi;
 import entity.statics.tree.TreeNormal;
 import game.settings.Preferences;
+import javafx.geometry.Point2D;
 import javafx.geometry.Point3D;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
@@ -22,6 +25,7 @@ import javafx.scene.shape.MeshView;
 import javafx.scene.shape.TriangleMesh;
 import perlin.PerlinNoise;
 import ui.gamescene.GameCamera;
+import util.PositionGenerator;
 import visual.Component;
 
 public class Map implements ComponentOwner, Updateable, Messageable{
@@ -30,7 +34,7 @@ public class Map implements ComponentOwner, Updateable, Messageable{
 	
 	public static Map getInstance(){
 		if(instance == null){
-			instance = new Map(Preferences.getMapWidth(),Preferences.getMapHeight(), Preferences.getTreeCount(), Preferences.getMapDetail(), Preferences.getMapDetail());
+			instance = new Map(Preferences.getMapWidth(),Preferences.getMapHeight(), Preferences.getMapDetail(), Preferences.getMapDetail(), Preferences.getTreeCount(), 1000, 1000);
 		}
 		return instance;
 	}
@@ -50,13 +54,19 @@ public class Map implements ComponentOwner, Updateable, Messageable{
 	
 	private double mapWidth;
 	private double mapHeight;
+	public double getMapWidth(){
+		return mapWidth;
+	}
+	public double getMapHeight(){
+		return mapHeight;
+	}
 	private double vertexSeparationWidth;
 	private double vertexSeparationHeight;
 	
 	private float[][] heightMatrix;
 	private Point3D[][] floorVertices;
 	
-	public Map(double mapWidth, double mapHeight, int treeCount, double vertexSeparationWidth, double vertexSeparationHeight) {
+	public Map(double mapWidth, double mapHeight, double vertexSeparationWidth, double vertexSeparationHeight, int treeCount, int tipiCount, int villagerCount) {
 		collideables = new ArrayList<Collideable>();
 		updateables = new ArrayList<Updateable>();
 		componentOwners = new ArrayList<ComponentOwner>();
@@ -81,21 +91,27 @@ public class Map implements ComponentOwner, Updateable, Messageable{
 		currentPlayer = new Player(new Point3D(0,0,0));
 		addEntity(currentPlayer);
 		for (int i = 0; i < treeCount; i++) {
-			double x = Math.random()*mapWidth-mapWidth/2;
-			double z = Math.random()*mapHeight-mapHeight/2;
-			double y = getHeightAt(new Point3D(x,0,z));
-			addEntity(new Tipi(new Point3D(x,y,z)));
+			Point3D pos = PositionGenerator.generateRandom3DPositionOnFloor(this);
+			addEntity(new TreeNormal(pos));
+		}
+		for (int i = 0; i < tipiCount; i++) {
+			Point3D pos = PositionGenerator.generateRandom3DPositionOnFloor(this);
+			addEntity(new Tipi(pos));
+		}
+		for (int i = 0; i < villagerCount; i++) {
+			Point3D pos = PositionGenerator.generateRandom3DPositionOnFloor(this);
+			addEntity(new Villager(pos));
 		}
 
 	}
 	
-	public double getHeightAt(Point3D arg0){
+	public double getHeightAt(Point2D arg0){
 		try {
 			double rowHeight = vertexSeparationHeight;
 			double rowWidth = vertexSeparationWidth;
 			
 			
-			int row = (int)((-arg0.getZ()+mapHeight/2)/rowHeight);
+			int row = (int)((-arg0.getY()+mapHeight/2)/rowHeight);
 			int column = (int)((arg0.getX()+mapWidth/2)/rowWidth);
 			
 			
@@ -105,7 +121,7 @@ public class Map implements ComponentOwner, Updateable, Messageable{
 				xmod+=vertexSeparationWidth;
 			}
 			
-			int ymod = (int) (arg0.getZ()%vertexSeparationHeight);
+			int ymod = (int) (arg0.getY()%vertexSeparationHeight);
 			if(ymod < 0){
 				ymod+=vertexSeparationHeight;
 			}
@@ -130,7 +146,7 @@ public class Map implements ComponentOwner, Updateable, Messageable{
 			
 			double arg0p0x = arg0.getX()-p0.getX();
 
-			double arg0p0z = arg0.getZ()-p0.getZ();
+			double arg0p0z = arg0.getY()-p0.getZ();
 			
 			double returnVal = ((normal.getX() * (arg0p0x) + normal.getZ() * (arg0p0z)/* - letD*/)/-normal.getY()) + p0.getY();
 			/*
@@ -177,8 +193,8 @@ public class Map implements ComponentOwner, Updateable, Messageable{
 				floorVertices[zi][xi] = p1;
 				p2 = new Point3D(x,heightMatrix[zi+1][xi],z-vertexSeparationHeight);
 				//System.out.println("zi:"+zi+" z:"+z+" xi:"+xi+" x:"+x);
-				mesh.getPoints().addAll((float)p2.getX(), (float)p2.getY(), (float)p2.getZ());
 				mesh.getPoints().addAll((float)p1.getX(), (float)p1.getY(), (float)p1.getZ());
+				mesh.getPoints().addAll((float)p2.getX(), (float)p2.getY(), (float)p2.getZ());
 
 			}
 			mesh.getTexCoords().addAll(0,0);
@@ -186,8 +202,8 @@ public class Map implements ComponentOwner, Updateable, Messageable{
 			for(int i=0;i<cols-1;i++) {
 				//full explanation here: http://www.dummies.com/programming/java/javafx-add-a-mesh-object-to-a-3d-world/
 		        int idx = i*2;
-		        mesh.getFaces().addAll(idx+1,0,idx,0,idx+2,0);
-		        mesh.getFaces().addAll(idx+2,0,idx+3,0,idx+1,0);
+		        mesh.getFaces().addAll(idx+2,0,idx,0,idx+1,0);
+		        mesh.getFaces().addAll(idx+1,0,idx+3,0,idx+2,0);
 		    }
 
 		    MeshView floorMeshView = new MeshView(mesh);
@@ -288,9 +304,7 @@ public class Map implements ComponentOwner, Updateable, Messageable{
 	
 	@Override
 	public void onMessageReceived(Hashtable<String, ? extends Object> message) {
-		if(message.containsKey("start")){
-			Hashtable<String, Double> params = (Hashtable<String, Double>)message.get("start");
-		}
+		
 	}
 	
 	public void addEntity(Entity e){
@@ -316,5 +330,28 @@ public class Map implements ComponentOwner, Updateable, Messageable{
 	public void setGameCamera(GameCamera gc){
 		gameCamera = gc;
 		updateables.add(gc);
+	}
+
+	@Override
+	public Point2D compute2DPosition(Point3D position3d) {
+		// TODO Auto-generated method stub
+		return Point2D.ZERO;
+	}
+
+	@Override
+	public void set2DPosition(Point2D position2d) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public Point2D get2DPosition() {
+		// TODO Auto-generated method stub
+		return Point2D.ZERO;
+	}
+
+	@Override
+	public double distanceFrom(Positionnable2D arg0) {
+		return Point2D.ZERO.distance(arg0.get2DPosition());
 	}
 }
