@@ -2,7 +2,9 @@ package ui;
 
 import java.util.Hashtable;
 
+import characteristic.Messageable;
 import characteristic.Updateable;
+import game.GameLogic;
 import game.Map;
 import javafx.event.EventHandler;
 import javafx.scene.Group;
@@ -12,13 +14,15 @@ import javafx.scene.SceneAntialiasing;
 import javafx.scene.SubScene;
 import javafx.scene.input.KeyEvent;
 import ui.gamescene.GameScene;
+import ui.gamescene.GameScreen;
 import ui.menu.Menu;
 
-public class UserInterface extends Scene implements Updateable {
+public class UserInterface extends Scene implements Updateable, Messageable {
 	
 	private Hashtable<String, SubScene> subScenes;
 	private SubScene currentSubScene;
 	private GameScene gameScene;
+	private GameScreen gameScreen;
 	private Group uiRoot;
 
 	public UserInterface(double width, double height) {
@@ -53,12 +57,17 @@ public class UserInterface extends Scene implements Updateable {
 	public void putSubScene(String key, SubScene subScene){
 		subScenes.put(key, subScene);
 		if(key.equals("game"))
-			gameScene = (GameScene)subScene;
+			gameScene = ((GameScreen)subScene).getGameScene();
 	}
 
 	public GameScene getGameScene() {
 		return gameScene;
 	}
+
+	public GameScreen getGameScreen() {
+		return gameScreen;
+	}
+
 	public void bindGameControls(){
 		this.setOnKeyPressed(new EventHandler<KeyEvent>(){
 			
@@ -80,5 +89,12 @@ public class UserInterface extends Scene implements Updateable {
 				}
 			}
 		});
+	}
+
+	@Override
+	public void onMessageReceived(Hashtable<String, ?> message) {
+		if(message.containsKey("show_info_pane")){//transfers the message to the "gameScreen" object
+			GameLogic.sendMessage(gameScreen, message);
+		}
 	}
 }

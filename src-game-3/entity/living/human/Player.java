@@ -22,7 +22,7 @@ public class Player extends Human implements UserControllable, AttachableReceive
 	private static Point3D jumpVector = new Point3D(0, -10*GameLogic.getMeterLength(), 0);
 
 	public Player(Point3D position) {
-		super(position);
+		super(position, 1);
 	}
 
 	@Override

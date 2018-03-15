@@ -10,6 +10,7 @@ import entity.living.LivingEntity;
 import javafx.geometry.Point3D;
 import javafx.scene.Group;
 import ui.gamescene.GameScene;
+import ui.gamescene.GameScreen;
 
 public class GameLogic {
 	private static double meterLength = 50;
@@ -51,7 +52,8 @@ public class GameLogic {
 	public static void startGame() {
 		Map map = Map.getInstance();
 		GameScene scene = new GameScene(App.windowWidth, App.windowHeight);
-		App.getUserInterface().putSubScene("game", scene);
+		GameScreen screen = new GameScreen(App.windowWidth, App.windowHeight, scene);
+		App.getUserInterface().putSubScene("game", screen);
 		App.getUserInterface().setSubScene("game");
 		App.getUserInterface().bindGameControls();
 		((Group)scene.getRoot()).getChildren().add(map.getComponent());

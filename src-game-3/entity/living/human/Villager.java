@@ -1,28 +1,30 @@
 package entity.living.human;
 
+import characteristic.interactive.Hoverable;
 import characteristic.positionnable.Collideable;
 import collision.CollisionBox;
 import javafx.geometry.Point3D;
+import javafx.scene.input.MouseEvent;
 import visual.Component;
 
-public class Npc extends Human {
+public class Villager extends Human implements Hoverable{
 
-	public Npc(Point3D position) {
-		super(position);
-		// TODO Auto-generated constructor stub
+	public Villager(Point3D position) {
+		super(position, (int)(Math.random()*10)+1);
 	}
 
 	
 
 	@Override
 	public void updateComponent() {
-		// TODO Auto-generated method stub
-
+		getComponent().setTranslateX(position.getX());
+		getComponent().setTranslateY(position.getY());
+		getComponent().setTranslateZ(position.getZ());
 	}
 
 	@Override
 	protected double computeXpReward() {
-		// TODO Auto-generated method stub
+
 		return 0;
 	}
 
@@ -40,13 +42,20 @@ public class Npc extends Human {
 	
 	@Override
 	public Component buildComponent() {
-		// TODO Auto-generated method stub
+		Component returnVal = new Component(getId());
+
+		returnVal.setOnMouseEntered(e -> {
+			this.onHover(e);
+		});
+		returnVal.setOnMouseExited(e -> {
+			this.onUnHover(e);
+		});
 		return null;
 	}
 
 	@Override
 	public CollisionBox buildCollisionBox() {
-		// TODO Auto-generated method stub
+
 		return null;
 	}
 
@@ -56,4 +65,13 @@ public class Npc extends Human {
 
 	}
 
+	@Override
+	public void onHover(MouseEvent me) {
+
+	}
+
+	@Override
+	public void onUnHover(MouseEvent me) {
+
+	}
 }
