@@ -26,32 +26,62 @@ import javafx.scene.shape.TriangleMesh;
 import perlin.PerlinNoise;
 import ui.gamescene.GameCamera;
 import util.PositionGenerator;
+import village.Village;
 import visual.Component;
 
 public class Map implements ComponentOwner, Updateable, Messageable{
 	
 	private static Map instance;
 	
-	public static Map getInstance(){
-		if(instance == null){
-			instance = new Map(Preferences.getMapWidth(),Preferences.getMapHeight(), Preferences.getMapDetail(), Preferences.getMapDetail(), Preferences.getTreeCount(), 1000, 1000);
+	public static Map getInstance() {
+		if (instance == null) {
+			instance = new Map(Preferences.getMapWidth(), Preferences.getMapHeight(), Preferences.getMapDetail(), Preferences.getMapDetail(), Preferences.getWaterLevel(), Preferences.getTreeCount(),10, 10, 10);
 		}
 		return instance;
 	}
-	
-	private ArrayList<Collideable> collideables;
-	private ArrayList<Updateable> updateables;
-	private ArrayList<Entity> entities;
-	private ArrayList<ComponentOwner> componentOwners;
+
 	private Player currentPlayer;
 	public Player getCurrentPlayer(){
 		return currentPlayer;
 	}
 	
 	private Point3D position;
+	@Override
+	public void setPosition(Point3D position) {
+		this.position = position;
+	}
+
+	@Override
+	public Point3D getPosition() {
+		return position;
+	}
 	private Component component;
+	@Override
+	public Component getComponent() {
+		return component;
+	}
+	@Override
+	public Component buildComponent() {
+		Component returnVal = new Component("id_map");
+		returnVal.setPosition(position);
+		returnVal.addChildComponent(buildFloorMesh());
+		returnVal.addChildComponent(buildWaterMesh((float)waterLevel));
+
+		return returnVal;
+	}
+	@Override
+	public boolean isComponentInScene() {
+		//return getComponent().getParent() != null;
+		return true;
+	}
+
+	@Override
+	public void placeComponentInScene() {
+		App.getUserInterface().getGameScene().getGameRoot().getChildren().add(getComponent());
+	}
+
+
 	private GameCamera gameCamera;
-	
 	private double mapWidth;
 	private double mapHeight;
 	public double getMapWidth(){
@@ -65,15 +95,22 @@ public class Map implements ComponentOwner, Updateable, Messageable{
 	
 	private float[][] heightMatrix;
 	private Point3D[][] floorVertices;
-	
-	public Map(double mapWidth, double mapHeight, double vertexSeparationWidth, double vertexSeparationHeight, int treeCount, int tipiCount, int villagerCount) {
+	private double waterLevel;
+
+	private ArrayList<Collideable> collideables;
+	private ArrayList<Updateable> updateables;
+	private ArrayList<Entity> entities;
+	private ArrayList<ComponentOwner> componentOwners;
+	private ArrayList<Village> villages;
+
+	public Map(double mapWidth, double mapHeight, double vertexSeparationWidth, double vertexSeparationHeight, double waterLevel, int treeCount, int villageCount, int tipiCount, int villagerCount) {
 		collideables = new ArrayList<Collideable>();
 		updateables = new ArrayList<Updateable>();
 		componentOwners = new ArrayList<ComponentOwner>();
 		entities = new ArrayList<Entity>();
+		villages = new ArrayList<Village>();
 		
 		componentOwners.add(this);
-		
 		//generating the terrain vertices
 		int cols = (int)(mapWidth/vertexSeparationWidth);
 		int rows = (int)(mapWidth/vertexSeparationHeight);
@@ -86,10 +123,11 @@ public class Map implements ComponentOwner, Updateable, Messageable{
 		this.vertexSeparationHeight = vertexSeparationHeight;
 		
 		setPosition(new Point3D(0,0,0));
+
+		this.waterLevel = waterLevel;
 		component = buildComponent();
 		
-		currentPlayer = new Player(new Point3D(0,0,0));
-		addEntity(currentPlayer);
+
 		for (int i = 0; i < treeCount; i++) {
 			Point3D pos = PositionGenerator.generateRandom3DPositionOnFloor(this);
 			addEntity(new TreeNormal(pos));
@@ -98,11 +136,15 @@ public class Map implements ComponentOwner, Updateable, Messageable{
 			Point3D pos = PositionGenerator.generateRandom3DPositionOnFloor(this);
 			addEntity(new Tipi(pos));
 		}
-		for (int i = 0; i < villagerCount; i++) {
-			Point3D pos = PositionGenerator.generateRandom3DPositionOnFloor(this);
-			addEntity(new Villager(pos));
+		for(int j= 0; j < villageCount; j++){
+			Point2D villagePos = PositionGenerator.generate2DPositionNotInVillages(this, villages);
+			Village v = new Village(villagePos, tipiCount, 2000,villagerCount, this);
+			villages.add(v);
+			v.addEntitiesToMap(this);
 		}
-
+		//currentPlayer = new Player(new Point3D(0,0,0));
+		currentPlayer = new Player(PositionGenerator.getFloorPosition(villages.get(0).get2DPosition(), this));
+		addEntity(currentPlayer);
 	}
 	
 	public double getHeightAt(Point2D arg0){
@@ -127,7 +169,7 @@ public class Map implements ComponentOwner, Updateable, Messageable{
 			}
 			
 			Point3D[] triangle = new Point3D[3];
-			if(xmod < ymod) {
+			if(xmod > ymod) {
 				triangle[0] = floorVertices[row][column];
 				triangle[1] = floorVertices[row+1][column];
 				triangle[2] = floorVertices[row][column+1];
@@ -160,60 +202,43 @@ public class Map implements ComponentOwner, Updateable, Messageable{
 			return 0;
 		}
 	}
-	@Override
-	public void setPosition(Point3D position) {
-		this.position = position;
-	}
 
-	@Override
-	public Point3D getPosition() {
-		return position;
-	}
-	@Override
-	public Component buildComponent() {
-		Component returnVal = new Component("id_map");
-		returnVal.setPosition(position);
-		returnVal.addChildComponent(buildFloorMesh());
-		returnVal.addChildComponent(buildWaterMesh(Preferences.getWaterLevel()));
 
-		return returnVal;
-	}
 	private Component buildFloorMesh(){
 		Component returnVal = new Component("id_floor_mesh");
-		Point3D p1 = null;
-		Point3D p2 = null;
+		Point3D p1;
 		int cols = (int)(mapWidth/vertexSeparationWidth);
+		int rows = (int)(mapHeight/vertexSeparationHeight);
 		int zi=0;
 		int xi=0;
+		TriangleMesh mesh = new TriangleMesh();
 		for(double z  = mapHeight/2; z > -mapHeight/2; z-= vertexSeparationHeight, zi++){
-			TriangleMesh mesh = new TriangleMesh();
 			xi=0;
 			for(double x = -mapWidth/2; x < mapWidth/2; x += vertexSeparationWidth, xi++){
 				p1 = new Point3D(x,heightMatrix[zi][xi],z);
 				floorVertices[zi][xi] = p1;
-				p2 = new Point3D(x,heightMatrix[zi+1][xi],z-vertexSeparationHeight);
-				//System.out.println("zi:"+zi+" z:"+z+" xi:"+xi+" x:"+x);
+				System.out.println("zi:"+zi+" z:"+z+" xi:"+xi+" x:"+x);
 				mesh.getPoints().addAll((float)p1.getX(), (float)p1.getY(), (float)p1.getZ());
-				mesh.getPoints().addAll((float)p2.getX(), (float)p2.getY(), (float)p2.getZ());
+				if(zi<rows-1 && xi < cols-1){
+					int idx = xi+(zi*cols);
+					System.out.println("idx:"+idx);
+					System.out.println("idx+cols:"+(idx+cols));
+					mesh.getFaces().addAll(idx+1,0,idx,0,idx+cols,0);
+					mesh.getFaces().addAll(idx+cols,0,idx+cols+1,0,idx+1,0);
+				}
 
 			}
-			mesh.getTexCoords().addAll(0,0);
 
-			for(int i=0;i<cols-1;i++) {
-				//full explanation here: http://www.dummies.com/programming/java/javafx-add-a-mesh-object-to-a-3d-world/
-		        int idx = i*2;
-		        mesh.getFaces().addAll(idx+2,0,idx,0,idx+1,0);
-		        mesh.getFaces().addAll(idx+1,0,idx+3,0,idx+2,0);
-		    }
-
-		    MeshView floorMeshView = new MeshView(mesh);
-			floorMeshView.setDrawMode(DrawMode.FILL);
-			floorMeshView.setMaterial(new PhongMaterial(Color.GREEN));
-			floorMeshView.setTranslateX(0);
-			floorMeshView.setTranslateY(-7.5);
-			floorMeshView.setTranslateZ(0);
-			returnVal.getChildren().add(floorMeshView);
 		}
+		System.out.println(((mesh.getPoints().size()/3)-1)+" points");
+		mesh.getTexCoords().addAll(0,0);
+
+		MeshView floorMeshView = new MeshView(mesh);
+		floorMeshView.setDrawMode(DrawMode.FILL);
+		floorMeshView.setMaterial(new PhongMaterial(Color.GREEN));
+		floorMeshView.setTranslateX(0);
+		floorMeshView.setTranslateZ(0);
+		returnVal.getChildren().add(floorMeshView);
 		return returnVal;
 	}
 	private Component buildWaterMesh(float waterLevel){
@@ -242,7 +267,7 @@ public class Map implements ComponentOwner, Updateable, Messageable{
 	private float[][] generateHeightMatrix(int rows, int cols){
 		
 		PerlinNoise perlin = new PerlinNoise();
-		int offsetX = ThreadLocalRandom.current().nextInt(450);
+		int offsetX = ThreadLocalRandom.current().nextInt(900);
 		int offsetY = 100;
 		int offsetZ = 10;
 		perlin.offset(offsetX,offsetY,offsetZ);
@@ -253,29 +278,16 @@ public class Map implements ComponentOwner, Updateable, Messageable{
 		//generate random heights
 		for(int z = 0; z < rows+1; z++) {
 			for(int x = 0; x < cols+1; x++) {
-				float y = perlin.smoothNoise(x*multiplicator, z*multiplicator, 32, 24)*10000;
+				float y = perlin.smoothNoise(x*multiplicator, z*multiplicator, 32, 24)*50000;
 				returnVal[z][x]=y;
-				//System.out.println("z:"+z+"x:"+x);
 			}
 		}
 		return returnVal;
 	}
 	
-	@Override
-	public Component getComponent() {
-		return component;
-	}
 
-	@Override
-	public boolean isComponentInScene() {
-		//return getComponent().getParent() != null;
-		return true;
-	}
 
-	@Override
-	public void placeComponentInScene() {
-		App.getUserInterface().getGameScene().getGameRoot().getChildren().add(getComponent());
-	}
+
 	
 	public ArrayList<ComponentOwner> getComponentOwners(){
 		return componentOwners;
@@ -286,15 +298,6 @@ public class Map implements ComponentOwner, Updateable, Messageable{
 		for(Updateable u:updateables){
 			u.update(secondsPassed);	
 		}
-		for(ComponentOwner c:componentOwners){
-			if(!c.isComponentInScene()) {
-				if (c instanceof TreeNormal) {
-					System.out.println("tree");
-					System.out.println(c.getPosition());
-				}
-				getComponent().addChildComponent(c.getComponent());
-			}
-		}
 	}
 
 	@Override
@@ -304,7 +307,7 @@ public class Map implements ComponentOwner, Updateable, Messageable{
 	
 	@Override
 	public void onMessageReceived(Hashtable<String, ? extends Object> message) {
-		
+
 	}
 	
 	public void addEntity(Entity e){
@@ -316,10 +319,33 @@ public class Map implements ComponentOwner, Updateable, Messageable{
 		}
 		if(e instanceof ComponentOwner) {
 			componentOwners.add((ComponentOwner)e);
+			getComponent().addChildComponent(((ComponentOwner)e).getComponent());
 		}
 		entities.add(e);
 	}
-	
+	@Override
+	public Point2D compute2DPosition(Point3D position3d) {
+		return Point2D.ZERO;
+	}
+
+	@Override
+	public void set2DPosition(Point2D position2d) {
+	}
+
+	@Override
+	public Point2D get2DPosition() {
+		return Point2D.ZERO;
+	}
+
+	@Override
+	public double distanceFrom(Positionnable2D arg0) {
+		return Point2D.ZERO.distance(arg0.get2DPosition());
+	}
+
+	public double getWaterLevel() {
+		return waterLevel;
+	}
+
 	/**
 	 * COLLISIONS
 	 */
@@ -332,26 +358,5 @@ public class Map implements ComponentOwner, Updateable, Messageable{
 		updateables.add(gc);
 	}
 
-	@Override
-	public Point2D compute2DPosition(Point3D position3d) {
-		// TODO Auto-generated method stub
-		return Point2D.ZERO;
-	}
 
-	@Override
-	public void set2DPosition(Point2D position2d) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public Point2D get2DPosition() {
-		// TODO Auto-generated method stub
-		return Point2D.ZERO;
-	}
-
-	@Override
-	public double distanceFrom(Positionnable2D arg0) {
-		return Point2D.ZERO.distance(arg0.get2DPosition());
-	}
 }

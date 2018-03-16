@@ -13,7 +13,7 @@ public class Preferences {
 		Preferences.mapDetail = mapDetail;
 	}
 
-	private static double mapDetail = 200;
+	private static double mapDetail = 400;
 	private static int treeCount = 1000;
 
 	private static double villageRadius = 500;

@@ -34,8 +34,6 @@ public abstract  class LivingEntity extends GravityAffectedCollidingEntity imple
 		Point3D nextPos = computeNextPosition(secondsPassed);
 		if(nextPos != null){
 			moveTo(nextPos);
-			if(getId().equals("id_2500"))
-			System.out.println(nextPos);
 		}
 		updateActions(secondsPassed);
 		if(shouldUpdateComponent())
@@ -62,7 +60,7 @@ public abstract  class LivingEntity extends GravityAffectedCollidingEntity imple
 		 * cmputes the operations when the entity receives damage
 		 */
 		if(message.containsKey("damage")){
-			hp -= ((Hashtable<String, Double>)message).get("damage");
+			hp -= (Double)(message.get("damage"));
 			if(hp<=0){
 				if(message.containsKey("sender")){
 					Hashtable<String, ? extends Object> sentMessage = GameLogic.createSimpleXpMessage(computeXpReward(), this);

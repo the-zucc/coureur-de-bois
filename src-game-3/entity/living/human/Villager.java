@@ -16,11 +16,20 @@ import visual.Component;
 public class Villager extends Human implements Hoverable{
 	
 	private Village village;
+	public void setVillage(Village v){
+	    this.village = v;
+    }
+    public Village getVillage(){
+	    return this.village;
+	}
 
 	public Villager(Point3D position) {
 		super(position, (int)(Math.random()*10)+1);
-
 	}
+    public Villager(Point3D position, Village v) {
+        super(position, (int)(Math.random()*10)+1);
+        village = v;
+    }
 
 	@Override
 	public void additionalComponentUpdates(){

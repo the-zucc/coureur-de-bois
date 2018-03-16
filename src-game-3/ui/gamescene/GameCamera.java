@@ -28,13 +28,17 @@ public class GameCamera extends PerspectiveCamera implements Attachable{
 		component = buildComponent();
 
 		setNearClip(10);
-		setFarClip(50000);
+		setFarClip(100000);
 
-		component.setTranslateY(-dist/3);
-		component.setTranslateZ(-dist);
+		double ty= -dist;
+		component.setTranslateY(ty);
+		double tz = -dist;
+		component.setTranslateZ(tz);
+
 		component.setRotationAxis(Rotate.X_AXIS);
-		component.setRotate(-17);
+		component.setRotate(-45);
 
+		this.relativePosition = new Point3D(0,ty, tz);
 		ar.attach(this);
 	}
 
@@ -50,12 +54,11 @@ public class GameCamera extends PerspectiveCamera implements Attachable{
 
 	@Override
 	public void onMessageReceived(Hashtable<String, ? extends Object> message) {
-
+		
 	}
 
 	@Override
 	public void onAttach(AttachableReceiver ar) {
-		this.relativePosition = new Point3D(0,-dist/3, -dist);
 		getComponent().setTranslateX(relativePosition.getX());
 		getComponent().setTranslateY(relativePosition.getY());
 		getComponent().setTranslateZ(relativePosition.getZ());

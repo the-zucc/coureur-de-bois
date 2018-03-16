@@ -2,6 +2,7 @@ package util;
 
 import java.util.ArrayList;
 
+import characteristic.positionnable.Positionnable2D;
 import game.Map;
 import javafx.geometry.Point2D;
 import javafx.geometry.Point3D;
@@ -21,28 +22,40 @@ public class PositionGenerator {
 		return new Point3D(x,y,z);
 	}
 	public static Point3D generateRandom3DPositionOnFloor(Map map){
-		double mapWidth = map.getMapWidth();
-		double mapHeight = map.getMapHeight();
-		double x = Math.random()*mapWidth-mapWidth/2;
-		double z = Math.random()*mapHeight-mapHeight/2;
-		Point2D pos = new Point2D(x,z);
-		Point3D returnVal = new Point3D(x,map.getHeightAt(pos),z);
+		Point2D pos;
+		do {
+			double mapWidth = map.getMapWidth();
+			double mapHeight = map.getMapHeight();
+			double x = Math.random() * mapWidth - mapWidth / 2;
+			double z = Math.random() * mapHeight - mapHeight / 2;
+			pos = new Point2D(x, z);
+		}while(map.getWaterLevel() < map.getHeightAt(pos));
+
+		Point3D returnVal = new Point3D(pos.getX(),map.getHeightAt(pos),pos.getY());
 		return returnVal;
 	}
 	public static Point2D generate2DPositionInRadius(Point2D center, double radius){
-		return null;
+		double norme = Math.random()*radius;
+		double angle = Math.toRadians(Math.random()*360);
+		double x = Math.cos(angle)*norme;
+		double y = Math.sin(angle)*norme;
+		return new Point2D(x,y).add(center);
 	}
-	public static Point3D generate3DPositionNotInVillages(Map map, ArrayList<Village> villages){
-		Point3D pos;
+	public static Point3D getFloorPosition(Point2D xz, Map map){
+		return new Point3D(xz.getX(), map.getHeightAt(xz), xz.getY());
+	}
+	public static Point2D generate2DPositionNotInVillages(Map map, ArrayList<Village> villages){
+		Point2D pos;
+		boolean inVillage = false;
 		do{
-			pos = generateRandom3DPositionOnFloor(map);
-			break;
-		}while(true);
-		Point2D converted = convert2D(pos);
-		for(Village v:villages){
-			
-		}
-		return null;
+			pos = convert2D(generateRandom3DPositionOnFloor(map));
+			for (Village v :
+					villages) {
+				if(v.get2DPosition().distance(pos) < v.getRadius())
+					inVillage = true;
+			}
+		}while(inVillage);
+		return pos;
 	}
 	
 }

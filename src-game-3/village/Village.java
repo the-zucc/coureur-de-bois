@@ -5,35 +5,36 @@ import java.util.concurrent.ThreadLocalRandom;
 
 import characteristic.positionnable.*;
 import entity.living.human.Villager;
+import entity.statics.village.Tipi;
 import game.Map;
 import javafx.geometry.Point2D;
 import javafx.geometry.Point3D;
+import util.EntityFactory;
 import util.PositionGenerator;
 
 public class Village implements Positionnable2D{
 	private Point3D position;
 	private ArrayList<Villager> villagers;
+	private ArrayList<Tipi> tipis;
 	private Point2D position2D;
+	private double radius;
 	
-	public Village(Point3D position, int tipiCount, double radius, int tipiRowCount, int villagerCount) {
-
-		int tipiCountPerRow = tipiCount;
-		if(tipiCount > 6)
-			tipiCountPerRow=6;
-		double angleBetweenTipis = Math.toRadians(360/tipiCountPerRow);
-
-		setPosition(position);
+	public Village(Point2D position2D, int tipiCount, double radius, int villagerCount, Map m) {
+		this.radius = radius;
+		this.position2D = position2D;
 		villagers = new ArrayList<Villager>();
-		/*
+		tipis = new ArrayList<Tipi>();
+
 		for (int i = 0; i < villagerCount; i++) {
 			double x, y, z;
-			Villager v;
-			do{
-				v = new Villager(PositionGenerator.generateRandom3DPositionOnFloor(Map.getInstance()));
-			}while(v.distanceFrom(this) > this.radius);
-			villagers.add(v)
+			Villager v = EntityFactory.spawnVillagerFromVillage(this, m);
+			villagers.add(v);
 		}
-		*/
+		for (int i = 0; i < tipiCount; i++) {
+			Tipi t = EntityFactory.buildTipiAroundVillage(this, m);
+			tipis.add(t);
+		}
+
 	}
 	
 	@Override
@@ -47,7 +48,12 @@ public class Village implements Positionnable2D{
 		return position;
 	}
 	public void addEntitiesToMap(Map m) {
-		
+		for (Villager v :villagers) {
+			m.addEntity(v);
+		}
+		for (Tipi t:tipis) {
+			m.addEntity(t);
+		}
 	}
 
 	@Override
@@ -70,5 +76,9 @@ public class Village implements Positionnable2D{
 	@Override
 	public double distanceFrom(Positionnable2D arg0) {
 		return get2DPosition().distance(arg0.get2DPosition());
+	}
+
+	public double getRadius() {
+		return radius;
 	}
 }
