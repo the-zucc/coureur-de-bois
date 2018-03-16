@@ -18,7 +18,7 @@ public class GameScene extends SubScene {
 	public GameScene(double arg1, double arg2) {
 		super(new Group(), arg1, arg2, true, Settings.getAntialiasingValue());
 		gameRoot = (Group)getRoot();
-		gameCamera = new GameCamera(1500, Map.getInstance().getCurrentPlayer());
+		gameCamera = new GameCamera(2000, Map.getInstance().getCurrentPlayer());
 		setCamera(gameCamera);
 	}
 	public Group getGameRoot(){

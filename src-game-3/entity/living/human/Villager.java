@@ -62,10 +62,12 @@ public class Villager extends Human implements Hoverable{
             setRight(true);
         } else if (a < 8 * actionChoiceTreshold) {
             setRight(false);
-        } else{
+        } else if (a < 9 * actionChoiceTreshold) {
+			startMovingTo(village.get2DPosition());
+		} else {
             double mapWidth = Map.getInstance().getMapWidth();
             if(getPosition().getX() > mapWidth/2 || getPosition().getX() < -mapWidth/2)
-                moveTo(Point3D.ZERO);
+                startMovingTo(village.get2DPosition());
         }
 
 	}

@@ -19,11 +19,6 @@ public abstract class MovingCollidingEntity extends VisibleCollidingEntity{
 	public abstract Component buildComponent();
 
 	@Override
-	public boolean shouldUpdate() {
-		return true;
-	}
-
-	@Override
 	public Point3D computeNextPosition(double secondsPassed) {
 		if(movement != null){
 			return getPosition().add(movement.multiply(secondsPassed));

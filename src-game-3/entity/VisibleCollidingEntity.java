@@ -15,12 +15,6 @@ public abstract class VisibleCollidingEntity extends VisibleEntity implements Co
 
 	@Override
 	public abstract Component buildComponent();
-
-	@Override
-	public abstract void update(double secondsPassed);
-	
-	@Override
-	public abstract boolean shouldUpdate();
  
 	@Override
 	public void moveTo(Point3D nextPosition) {

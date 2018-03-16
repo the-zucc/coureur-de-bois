@@ -18,9 +18,6 @@ public abstract class StaticVisibleCollidingEntity extends VisibleCollidingEntit
 	public abstract Component buildComponent();
 
 	@Override
-	public abstract void update(double secondsPassed);
-
-	@Override
 	public Point3D computeNextPosition(double secondsPassed) {
 		return position;
 	}
@@ -41,10 +38,4 @@ public abstract class StaticVisibleCollidingEntity extends VisibleCollidingEntit
 
 	@Override
 	public abstract void onMessageReceived(Hashtable<String, ? extends Object> message);
-
-	@Override
-	public boolean shouldUpdate() {
-		return false;
-	}
-
 }

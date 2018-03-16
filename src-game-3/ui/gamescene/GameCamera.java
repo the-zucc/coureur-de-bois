@@ -28,7 +28,7 @@ public class GameCamera extends PerspectiveCamera implements Attachable{
 		component = buildComponent();
 
 		setNearClip(10);
-		setFarClip(100000);
+		setFarClip(200000);
 
 		double ty= -dist;
 		component.setTranslateY(ty);
@@ -54,7 +54,7 @@ public class GameCamera extends PerspectiveCamera implements Attachable{
 
 	@Override
 	public void onMessageReceived(Hashtable<String, ? extends Object> message) {
-		
+
 	}
 
 	@Override

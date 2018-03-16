@@ -44,11 +44,6 @@ public class TreeNormal extends StaticVisibleCollidingEntity {
     }
 
     @Override
-    public void update(double secondsPassed) {
-
-    }
-
-    @Override
     public CollisionBox buildCollisionBox() {
         return null;
     }

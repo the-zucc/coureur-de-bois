@@ -35,7 +35,7 @@ public class Map implements ComponentOwner, Updateable, Messageable{
 	
 	public static Map getInstance() {
 		if (instance == null) {
-			instance = new Map(Preferences.getMapWidth(), Preferences.getMapHeight(), Preferences.getMapDetail(), Preferences.getMapDetail(), Preferences.getWaterLevel(), Preferences.getTreeCount(),10, 10, 10);
+			instance = new Map(Preferences.getMapWidth(), Preferences.getMapHeight(), Preferences.getMapDetail(), Preferences.getMapDetail(), Preferences.getWaterLevel(), Preferences.getTreeCount(),100, 10, 10);
 		}
 		return instance;
 	}
@@ -126,7 +126,9 @@ public class Map implements ComponentOwner, Updateable, Messageable{
 
 		this.waterLevel = waterLevel;
 		component = buildComponent();
-		
+
+		currentPlayer = new Player(PositionGenerator.generateRandom3DPositionOnFloor(this));
+		addEntity(currentPlayer);
 
 		for (int i = 0; i < treeCount; i++) {
 			Point3D pos = PositionGenerator.generateRandom3DPositionOnFloor(this);
@@ -142,9 +144,7 @@ public class Map implements ComponentOwner, Updateable, Messageable{
 			villages.add(v);
 			v.addEntitiesToMap(this);
 		}
-		//currentPlayer = new Player(new Point3D(0,0,0));
-		currentPlayer = new Player(PositionGenerator.getFloorPosition(villages.get(0).get2DPosition(), this));
-		addEntity(currentPlayer);
+
 	}
 	
 	public double getHeightAt(Point2D arg0){

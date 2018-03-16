@@ -8,8 +8,10 @@ import collision.CollisionBox;
 import entity.GravityAffectedCollidingEntity;
 import entity.VisibleCollidingEntity;
 import game.GameLogic;
+import javafx.geometry.Point2D;
 import javafx.geometry.Point3D;
 import javafx.scene.transform.Rotate;
+import util.PositionGenerator;
 import visual.Component;
 
 public abstract  class LivingEntity extends GravityAffectedCollidingEntity implements ComponentUpdateable{
@@ -19,11 +21,14 @@ public abstract  class LivingEntity extends GravityAffectedCollidingEntity imple
 	private boolean up, down, left, right, newOrientation, isRunning;
 	private Point3D oldMovement;
 	private Point3D jumpVector;
+	private Point2D target;
 
 	public LivingEntity(Point3D position) {
 		super(position);
 		up = down = left = right = newOrientation = isRunning = false;
 		oldMovement = Point3D.ZERO;
+		movement = oldMovement;
+		target = null;
 	}
 
 	protected abstract double computeXpReward();
@@ -73,43 +78,58 @@ public abstract  class LivingEntity extends GravityAffectedCollidingEntity imple
 		}
 	}
 	protected void updateMovementVector() {
+		oldMovement = movement;
 		double movementSpeed = computeMovementSpeed();
 		double angle = Math.toRadians(45);
-		if(up) {
-			if(up && right) {
-				movement = new Point3D(Math.cos(angle) * movementSpeed, 0, Math.sin(angle) * movementSpeed);
+		if(target == null){
+			if(up) {
+				if(up && right) {
+					movement = new Point3D(Math.cos(angle) * movementSpeed, 0, Math.sin(angle) * movementSpeed);
+					return;
+				}
+				else if(up && left) {
+					movement = new Point3D(-Math.cos(angle) * movementSpeed, 0, Math.sin(angle) * movementSpeed);
+					return;
+				}
+				movement = new Point3D(0, 0, movementSpeed);
 				return;
 			}
-			else if(up && left) {
-				movement = new Point3D(-Math.cos(angle) * movementSpeed, 0, Math.sin(angle) * movementSpeed);
+			else if(down) {
+				if(down && right) {
+					movement = new Point3D(Math.cos(angle) * movementSpeed, 0, -Math.sin(angle) * movementSpeed);
+					return;
+				}
+				else if(down && left) {
+					movement = new Point3D(-Math.cos(angle) * movementSpeed, 0, -Math.sin(angle) * movementSpeed);
+					return;
+				}
+				movement = new Point3D(0, 0, -movementSpeed);
 				return;
 			}
-			movement = new Point3D(0, 0, movementSpeed);
-			return;
+			else if(right)
+				movement = new Point3D(movementSpeed, 0, 0);
+			else if(left)
+				movement = new Point3D(-movementSpeed, 0, 0);
+			else
+				movement = new Point3D(0,0,0);
+			if(oldMovement.angle(Rotate.X_AXIS) == movement.angle(Rotate.X_AXIS))
+				newOrientation = false;
+			else
+				newOrientation = true;
 		}
-		else if(down) {
-			if(down && right) {
-				movement = new Point3D(Math.cos(angle) * movementSpeed, 0, -Math.sin(angle) * movementSpeed);
-				return;
+		else{
+			if(position2D.distance(target) < movement.magnitude()){
+				movement = Point3D.ZERO;
 			}
-			else if(down && left) {
-				movement = new Point3D(-Math.cos(angle) * movementSpeed, 0, -Math.sin(angle) * movementSpeed);
-				return;
+			else{
+				double mvtang = target.subtract(position2D).angle(new Point2D(1,0));
+				double x = Math.cos(mvtang);
+				double y = Math.sin(mvtang);
+				movement = new Point3D(x,0,y);
 			}
-			movement = new Point3D(0, 0, -movementSpeed);
-			return;
+
 		}
-		else if(right)
-			movement = new Point3D(movementSpeed, 0, 0);
-		else if(left)
-			movement = new Point3D(-movementSpeed, 0, 0);
-		else
-			movement = new Point3D(0,0,0);
-		if(oldMovement.angle(Rotate.X_AXIS) == movement.angle(Rotate.X_AXIS))
-			newOrientation = false;
-		else
-			newOrientation = true;
-		oldMovement = movement;
+
 	}
 	/**
 	 * this method should be defined in all subclasses. it returns the movement speed to use. The value can be dynamic, as the method is called every tick.
@@ -144,5 +164,8 @@ public abstract  class LivingEntity extends GravityAffectedCollidingEntity imple
 	}
 	protected Point3D getJumpVector() {
 		return jumpVector;
+	}
+	protected void startMovingTo(Point2D target){
+		this.target = target;
 	}
 }

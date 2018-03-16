@@ -99,7 +99,7 @@ public class Player extends Human implements UserControllable, AttachableReceive
 	protected double computeMovementSpeed() {
 		double speed = 3*GameLogic.getMeterLength();
 		if(isRunning())
-			return speed*5;
+			return speed*15;
 		return speed;
 	}
 

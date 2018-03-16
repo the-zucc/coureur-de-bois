@@ -15,20 +15,26 @@ import java.util.Hashtable;
 
 public class Tipi extends StaticVisibleCollidingEntity {
 
+    private double radius;
+    public double getRadius(){
+        return radius;
+    }
+    private double height;
+    public double getHeight(){
+        return height;
+    }
+
     public Tipi(Point3D position) {
         super(position);
+        this.radius = 100;
+        this.height = 175;
     }
 
     @Override
     public Component buildComponent() {
         Component returnVal = new Component(getId());
-        returnVal.getChildren().add(MeshFactory.buildRegularPyramid(6, 175,100));
+        returnVal.getChildren().add(MeshFactory.buildRegularPyramid(6, 175, 100));
         return returnVal;
-    }
-
-    @Override
-    public void update(double secondsPassed) {
-
     }
 
     @Override

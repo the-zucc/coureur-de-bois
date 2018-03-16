@@ -14,4 +14,8 @@ public abstract class Human extends LivingEntity {
 	public boolean shouldUpdateComponent() {
 		return true;
 	}
+	@Override
+	public boolean shouldUpdate(){
+		return true;
+	}
 }

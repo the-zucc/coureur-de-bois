@@ -16,6 +16,10 @@ public class Village implements Positionnable2D{
 	private Point3D position;
 	private ArrayList<Villager> villagers;
 	private ArrayList<Tipi> tipis;
+	public ArrayList<Tipi> getTipis() {
+		return tipis;
+	}
+
 	private Point2D position2D;
 	private double radius;
 	

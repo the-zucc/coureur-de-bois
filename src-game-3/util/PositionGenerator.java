@@ -3,6 +3,7 @@ package util;
 import java.util.ArrayList;
 
 import characteristic.positionnable.Positionnable2D;
+import entity.statics.village.Tipi;
 import game.Map;
 import javafx.geometry.Point2D;
 import javafx.geometry.Point3D;
@@ -48,6 +49,7 @@ public class PositionGenerator {
 		Point2D pos;
 		boolean inVillage = false;
 		do{
+			inVillage = false;
 			pos = convert2D(generateRandom3DPositionOnFloor(map));
 			for (Village v :
 					villages) {
@@ -57,5 +59,20 @@ public class PositionGenerator {
 		}while(inVillage);
 		return pos;
 	}
-	
+	public static Point2D generateTipiPositionInVillage(Village v){
+		Point2D pos;
+		boolean positionInvalid = false;
+		do {
+			positionInvalid = false;
+			pos = generate2DPositionInRadius(v.get2DPosition(), v.getRadius());
+			for (Tipi t :
+					v.getTipis()) {
+				if(t.get2DPosition().distance(pos) < t.getRadius()){
+					positionInvalid = true;
+				}
+			}
+		} while(positionInvalid);
+		return pos;
+	}
+
 }
