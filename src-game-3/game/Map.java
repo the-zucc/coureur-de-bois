@@ -346,17 +346,41 @@ public class Map implements ComponentOwner, Updateable, Messageable{
 		return waterLevel;
 	}
 
+	public void setGameCamera(GameCamera gc){
+		gameCamera = gc;
+		updateables.add(gc);
+	}
+
 	/**
 	 * COLLISIONS
 	 */
 	//static variables
 	private static int collisionMapDivisionWidth=100;
 	private static int collisionMapDivisionHeight=collisionMapDivisionWidth;
-
-	public void setGameCamera(GameCamera gc){
-		gameCamera = gc;
-		updateables.add(gc);
+	public static int getCollisionMapDivisionWidth(){
+		return collisionMapDivisionWidth;
 	}
-
-
+	public static int getCollisionMapDivisionHeight(){
+		return collisionMapDivisionHeight;
+	}
+	private ArrayList<Collideable>[][] collisionMap;
+	private ArrayList<Collideable> bigCollideables;
+	private void updateCollisionMap(){
+		for (ArrayList<Collideable>[] a:
+		collisionMap){
+			for (ArrayList<Collideable> b :
+					a) {
+				for (Collideable c :
+						b) {
+					b.remove(c);
+					int col = (int)c.getPosition().getX()/collisionMapDivisionWidth;
+					int row = (int)c.getPosition().getZ()/collisionMapDivisionHeight;
+					collisionMap[row][col].add(c);
+				}
+			}
+		}
+	}
+	public ArrayList<Collideable>[][] getCollisionMap(){
+		return collisionMap;
+	}
 }
