@@ -12,10 +12,15 @@ public class SphericalCollisionBox extends CollisionBox {
 	}
 	private Point3D relativePosition;
 	private Point3D absolutePosition;
+	public Point3D getPosition(){
+		return absolutePosition;
+	}
 	public Point3D computePosition(){
 		return getCollideable().getPosition().add(relativePosition);
 	}
-	public void updatePosition();
+	public void updatePosition(){
+		this.absolutePosition = computePosition();
+	};
 
 	public SphericalCollisionBox(double radius, Collideable collideable, Point3D relativePosition, Map map){
 		super(collideable, map);
@@ -36,10 +41,12 @@ public class SphericalCollisionBox extends CollisionBox {
 	@Override
 	public Point3D getCorrectionSphericalBox(SphericalCollisionBox b1) {
 		Point3D pos = b1.getPosition();
-		double distance = Math.hypot(b1.getPosition().getX()-position.getX(), b1.getPosition().getZ()-position.getZ());
+		Point3D thisPos = getPosition();
+
+		double distance = pos.distance(thisPos);
 		double magnitude = distance - (b1.getRadius()+radius);
 		double frac = magnitude/distance;
-		return new Point3D(frac*(b1.getPosition().getX()-position.getX()), frac*(b1.getPosition().getY()-position.getY()), frac*(b1.getPosition().getZ()-position.getZ()));
+		return new Point3D(frac*(pos.getX()-thisPos.getX()), frac*(pos.getY()-thisPos.getY()), frac*(pos.getZ()-thisPos.getZ()));
 	}
 
 	@Override

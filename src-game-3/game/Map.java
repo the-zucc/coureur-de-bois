@@ -35,7 +35,7 @@ public class Map implements ComponentOwner, Updateable, Messageable{
 	
 	public static Map getInstance() {
 		if (instance == null) {
-			instance = new Map(Preferences.getMapWidth(), Preferences.getMapHeight(), Preferences.getMapDetail(), Preferences.getMapDetail(), Preferences.getWaterLevel(), Preferences.getTreeCount(),100, 10, 10);
+			instance = new Map(Preferences.getMapWidth(), Preferences.getMapHeight(), Preferences.getMapDetail(), Preferences.getMapDetail(), Preferences.getWaterLevel(), Preferences.getTreeCount(),Preferences.getVillageCount(), Preferences.getVillageRadius(), Preferences.getVillageTipiCount(), Preferences.getVillageVillagerCount());
 		}
 		return instance;
 	}
@@ -103,7 +103,7 @@ public class Map implements ComponentOwner, Updateable, Messageable{
 	private ArrayList<ComponentOwner> componentOwners;
 	private ArrayList<Village> villages;
 
-	public Map(double mapWidth, double mapHeight, double vertexSeparationWidth, double vertexSeparationHeight, double waterLevel, int treeCount, int villageCount, int tipiCount, int villagerCount) {
+	public Map(double mapWidth, double mapHeight, double vertexSeparationWidth, double vertexSeparationHeight, double waterLevel, int treeCount, int villageCount, double villageRadius, int tipiCount, int villagerCount) {
 		collideables = new ArrayList<Collideable>();
 		updateables = new ArrayList<Updateable>();
 		componentOwners = new ArrayList<ComponentOwner>();
@@ -156,8 +156,6 @@ public class Map implements ComponentOwner, Updateable, Messageable{
 			int row = (int)((-arg0.getY()+mapHeight/2)/rowHeight);
 			int column = (int)((arg0.getX()+mapWidth/2)/rowWidth);
 			
-			
-			
 			int xmod = (int) (arg0.getX()%vertexSeparationWidth);
 			if(xmod < 0){
 				xmod+=vertexSeparationWidth;
@@ -169,16 +167,16 @@ public class Map implements ComponentOwner, Updateable, Messageable{
 			}
 			
 			Point3D[] triangle = new Point3D[3];
-			if(xmod > ymod) {
+			/*if(xmod < ymod) {*/
 				triangle[0] = floorVertices[row][column];
 				triangle[1] = floorVertices[row+1][column];
 				triangle[2] = floorVertices[row][column+1];
-			}
+			/*}
 			else{
 				triangle[0] = floorVertices[row+1][column+1];
 				triangle[1] = floorVertices[row+1][column];
 				triangle[2] = floorVertices[row][column+1];
-			}
+			}*/
 			Point3D p0 = triangle[0];
 			
 			Point3D vect1 = p0.subtract(triangle[1]);
@@ -195,6 +193,7 @@ public class Map implements ComponentOwner, Updateable, Messageable{
 			if(returnVal > GameScene.getWaterHeight())
 				returnVal = GameScene.getWaterHeight();
 			*/
+			App.getUserInterface().getGameScene().createConnection(triangle[0], triangle[0].add(new Point3D(0,-500,0)), new PhongMaterial(Color.BLACK));
 			return returnVal;
 		}catch(Exception e) {
 			
@@ -210,7 +209,7 @@ public class Map implements ComponentOwner, Updateable, Messageable{
 		int cols = (int)(mapWidth/vertexSeparationWidth);
 		int rows = (int)(mapHeight/vertexSeparationHeight);
 		int zi=0;
-		int xi=0;
+		int xi;
 		TriangleMesh mesh = new TriangleMesh();
 		for(double z  = mapHeight/2; z > -mapHeight/2; z-= vertexSeparationHeight, zi++){
 			xi=0;
@@ -226,15 +225,13 @@ public class Map implements ComponentOwner, Updateable, Messageable{
 					mesh.getFaces().addAll(idx+1,0,idx,0,idx+cols,0);
 					mesh.getFaces().addAll(idx+cols,0,idx+cols+1,0,idx+1,0);
 				}
-
 			}
-
 		}
 		System.out.println(((mesh.getPoints().size()/3)-1)+" points");
 		mesh.getTexCoords().addAll(0,0);
 
 		MeshView floorMeshView = new MeshView(mesh);
-		floorMeshView.setDrawMode(DrawMode.FILL);
+		floorMeshView.setDrawMode(DrawMode.LINE);
 		floorMeshView.setMaterial(new PhongMaterial(Color.GREEN));
 		floorMeshView.setTranslateX(0);
 		floorMeshView.setTranslateZ(0);

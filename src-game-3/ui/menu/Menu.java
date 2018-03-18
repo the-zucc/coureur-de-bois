@@ -53,6 +53,8 @@ public class Menu extends SubScene {
 	private TextField villageRadiusTextField;
 	private HBox villageVillagerCountHBox;
 	private TextField villageVillagerCountTextField;
+	private HBox villageTipiCountHBox;
+	private TextField villageTipiCountTextField;
 
 	
 	//the HBox located at the top of the layout. contains gamePreferencesVBox and settingsVBox
@@ -116,7 +118,15 @@ public class Menu extends SubScene {
 		villageCountHBox = buildHBox(spaceSize);
 		villageCountHBox.getChildren().addAll(new Label("Village count: "), villageCountTextField);
 
-		gamePreferencesVBox.getChildren().addAll(mapWidthHBox, mapHeightHBox, treeCountHBox, waterLevelHBox, villageCountHBox, villageRadiusHBox);
+		villageVillagerCountTextField = new TextField();
+		villageVillagerCountHBox = buildHBox(spaceSize);
+		villageVillagerCountHBox.getChildren().addAll(new Label("Villagers/village:"), villageVillagerCountTextField);
+
+		villageTipiCountHBox = buildHBox(spaceSize);
+		villageTipiCountTextField = new TextField();
+		villageTipiCountHBox.getChildren().addAll(new Label("Tipis/Village:"), villageTipiCountTextField);
+
+		gamePreferencesVBox.getChildren().addAll(mapWidthHBox, mapHeightHBox, treeCountHBox, waterLevelHBox, villageCountHBox, villageRadiusHBox, villageTipiCountHBox, villageVillagerCountHBox);
 		
 		//VBox for containing both top panels
 		spaceSize = 15;
@@ -233,7 +243,24 @@ public class Menu extends SubScene {
 				int villageCount = Integer.parseInt(villageCountTextField.getText());
 				Preferences.setVillageCount(villageCount);
 			}catch(Exception e){
+				System.out.println("invalid village count.");
+			}
+		}
+		if(villageTipiCountTextField.getText().length() > 0){
+			try{
+				int tipiCount = Integer.parseInt(villageTipiCountTextField.getText());
+				Preferences.setVillageTipiCount(tipiCount);
+			}catch(Exception e){
+				System.out.println("invalid tipi count.");
+			}
 
+		}
+		if(villageVillagerCountTextField.getText().length() > 0){
+			try{
+				int villagerCount = Integer.parseInt(villageTipiCountTextField.getText());
+				Preferences.setVillageVillagerCount(villagerCount);
+			}catch(Exception e){
+				System.out.println("invalid tipi count.");
 			}
 		}
 	}

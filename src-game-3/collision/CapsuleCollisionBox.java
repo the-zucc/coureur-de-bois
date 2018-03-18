@@ -1,9 +1,16 @@
 package collision;
 
+import characteristic.positionnable.Collideable;
+import game.Map;
 import javafx.geometry.Point3D;
 
 public class CapsuleCollisionBox extends CollisionBox {
 	private Point3D p1;
+
+	public CapsuleCollisionBox(Collideable collideable, Map map) {
+		super(collideable, map);
+	}
+
 	public Point3D getP1() {
 		return p1;
 	}
