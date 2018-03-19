@@ -22,7 +22,7 @@ public class GameScene extends SubScene {
 	public GameScene(double arg1, double arg2) {
 		super(new Group(), arg1, arg2, true, Settings.getAntialiasingValue());
 		gameRoot = (Group)getRoot();
-		gameCamera = new GameCamera(2000, Map.getInstance().getCurrentPlayer());
+		gameCamera = new GameCamera(1250, Map.getInstance().getCurrentPlayer());
 		setCamera(gameCamera);
 	}
 	public Group getGameRoot(){
@@ -40,7 +40,7 @@ public class GameScene extends SubScene {
 		double angle = Math.acos(diff.normalize().dotProduct(yAxis));
 		Rotate rotateAroundCenter = new Rotate(-Math.toDegrees(angle), axisOfRotation);
 
-		Cylinder line = new Cylinder(1, height);
+		Cylinder line = new Cylinder(5, height);
 
 		line.getTransforms().addAll(moveToMidpoint, rotateAroundCenter);
 		line.setMaterial(material);

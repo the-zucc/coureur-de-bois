@@ -19,7 +19,7 @@ import visual.Component;
 
 public class Player extends Human implements UserControllable, AttachableReceiver{
 	
-	private static Point3D jumpVector = new Point3D(0, -10*GameLogic.getMeterLength(), 0);
+	private static Point3D jumpVector = new Point3D(0, -20*GameLogic.getMeterLength(), 0);
 
 	public Player(Point3D position) {
 		super(position, 1);

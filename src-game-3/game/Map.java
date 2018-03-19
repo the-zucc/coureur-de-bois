@@ -156,27 +156,21 @@ public class Map implements ComponentOwner, Updateable, Messageable{
 			int row = (int)((-arg0.getY()+mapHeight/2)/rowHeight);
 			int column = (int)((arg0.getX()+mapWidth/2)/rowWidth);
 			
-			int xmod = (int) (arg0.getX()%vertexSeparationWidth);
-			if(xmod < 0){
-				xmod+=vertexSeparationWidth;
-			}
+			int xmod = (int) ((arg0.getX()+mapWidth/2)%rowWidth);
 			
-			int ymod = (int) (arg0.getY()%vertexSeparationHeight);
-			if(ymod < 0){
-				ymod+=vertexSeparationHeight;
-			}
+			int ymod = (int) (rowHeight-((-arg0.getY()+mapHeight/2)%rowHeight));
 			
 			Point3D[] triangle = new Point3D[3];
-			/*if(xmod < ymod) {*/
+			if(xmod < ymod) {
 				triangle[0] = floorVertices[row][column];
 				triangle[1] = floorVertices[row+1][column];
 				triangle[2] = floorVertices[row][column+1];
-			/*}
+			}
 			else{
 				triangle[0] = floorVertices[row+1][column+1];
 				triangle[1] = floorVertices[row+1][column];
 				triangle[2] = floorVertices[row][column+1];
-			}*/
+			}
 			Point3D p0 = triangle[0];
 			
 			Point3D vect1 = p0.subtract(triangle[1]);
@@ -193,7 +187,9 @@ public class Map implements ComponentOwner, Updateable, Messageable{
 			if(returnVal > GameScene.getWaterHeight())
 				returnVal = GameScene.getWaterHeight();
 			*/
-			App.getUserInterface().getGameScene().createConnection(triangle[0], triangle[0].add(new Point3D(0,-500,0)), new PhongMaterial(Color.BLACK));
+			//App.getUserInterface().getGameScene().createConnection(triangle[0], triangle[1], new PhongMaterial(Color.BLACK));
+			//App.getUserInterface().getGameScene().createConnection(triangle[1], triangle[2], new PhongMaterial(Color.BLACK));
+			//App.getUserInterface().getGameScene().createConnection(triangle[2], triangle[0], new PhongMaterial(Color.BLACK));
 			return returnVal;
 		}catch(Exception e) {
 			
@@ -231,7 +227,7 @@ public class Map implements ComponentOwner, Updateable, Messageable{
 		mesh.getTexCoords().addAll(0,0);
 
 		MeshView floorMeshView = new MeshView(mesh);
-		floorMeshView.setDrawMode(DrawMode.LINE);
+		floorMeshView.setDrawMode(DrawMode.FILL);
 		floorMeshView.setMaterial(new PhongMaterial(Color.GREEN));
 		floorMeshView.setTranslateX(0);
 		floorMeshView.setTranslateZ(0);
