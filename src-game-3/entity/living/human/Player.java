@@ -7,7 +7,9 @@ import characteristic.attachable.AttachableReceiver;
 import characteristic.interactive.UserControllable;
 import characteristic.positionnable.Collideable;
 import collision.CollisionBox;
+import collision.SphericalCollisionBox;
 import game.GameLogic;
+import game.Map;
 import javafx.geometry.Point3D;
 import javafx.scene.Group;
 import javafx.scene.input.KeyCode;
@@ -21,18 +23,17 @@ public class Player extends Human implements UserControllable, AttachableReceive
 	
 	private static Point3D jumpVector = new Point3D(0, -20*GameLogic.getMeterLength(), 0);
 
-	public Player(Point3D position) {
-		super(position, 1);
+	public Player(Point3D position, Map map) {
+		super(position, map, 1);
 	}
 
 	@Override
 	protected double computeXpReward() {
-		return 0;
+		return 42069;
 	}
 
 	@Override
 	public void updateActions(double secondsPassed){
-		//System.out.println(getPosition());
 	}
 
 	@Override
@@ -92,7 +93,7 @@ public class Player extends Human implements UserControllable, AttachableReceive
 
 	@Override
 	public CollisionBox buildCollisionBox() {
-		return null;
+		return new SphericalCollisionBox(20,this, new Point3D(0,-10,0), map);
 	}
 
 	@Override
@@ -141,6 +142,11 @@ public class Player extends Human implements UserControllable, AttachableReceive
 	@Override
 	protected Point3D getJumpVector() {
 		return jumpVector;
+	}
+
+	@Override
+	public double computeCollidingWeight() {
+		return 1;
 	}
 
 	

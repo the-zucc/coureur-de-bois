@@ -3,6 +3,7 @@ package entity.statics.village;
 import characteristic.positionnable.Collideable;
 import collision.CollisionBox;
 import entity.statics.StaticVisibleCollidingEntity;
+import game.Map;
 import javafx.geometry.Point3D;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
@@ -24,8 +25,8 @@ public class Tipi extends StaticVisibleCollidingEntity {
         return height;
     }
 
-    public Tipi(Point3D position) {
-        super(position);
+    public Tipi(Point3D position, Map map) {
+        super(position, map);
         this.radius = 100;
         this.height = 175;
     }
@@ -56,4 +57,10 @@ public class Tipi extends StaticVisibleCollidingEntity {
     public void onMessageReceived(Hashtable<String, ?> message) {
 
     }
+
+	@Override
+	public double computeCollidingWeight() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
 }

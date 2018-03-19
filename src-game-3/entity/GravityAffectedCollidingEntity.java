@@ -13,8 +13,8 @@ import visual.Component;
 public abstract class GravityAffectedCollidingEntity extends MovingCollidingEntity implements GravityAffected{
 	private Point3D gravity;
 
-	public GravityAffectedCollidingEntity(Point3D position) {
-		super(position);
+	public GravityAffectedCollidingEntity(Point3D position, Map map) {
+		super(position, map);
 		gravity = new Point3D(0,0,0);
 	}
 
@@ -66,5 +66,8 @@ public abstract class GravityAffectedCollidingEntity extends MovingCollidingEnti
 			return next;
 		}
 		return position;
+	}
+	public void update(double secondsPassed){
+		super.update(secondsPassed);
 	}
 }

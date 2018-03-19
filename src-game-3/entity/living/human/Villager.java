@@ -3,6 +3,7 @@ package entity.living.human;
 import characteristic.interactive.Hoverable;
 import characteristic.positionnable.Collideable;
 import collision.CollisionBox;
+import collision.SphericalCollisionBox;
 import game.GameLogic;
 import game.Map;
 import javafx.geometry.Point3D;
@@ -23,11 +24,11 @@ public class Villager extends Human implements Hoverable{
 	    return this.village;
 	}
 
-	public Villager(Point3D position) {
-		super(position, (int)(Math.random()*10)+1);
+	public Villager(Point3D position, Map map) {
+		super(position, map, (int)(Math.random()*10)+1);
 	}
-    public Villager(Point3D position, Village v) {
-        super(position, (int)(Math.random()*10)+1);
+    public Villager(Point3D position, Map map, Village v) {
+        super(position, map, (int)(Math.random()*10)+1);
         village = v;
     }
 
@@ -117,7 +118,7 @@ public class Villager extends Human implements Hoverable{
 
 	@Override
 	public CollisionBox buildCollisionBox() {
-		return null;
+		return new SphericalCollisionBox(20,this, new Point3D(0,-10,0), map);
 	}
 
 	@Override
@@ -137,5 +138,10 @@ public class Villager extends Human implements Hoverable{
 	
 	public double getDistanceFromVillage(){
 		return get2DPosition().distance(village.get2DPosition());
+	}
+	@Override
+	public double computeCollidingWeight() {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 }

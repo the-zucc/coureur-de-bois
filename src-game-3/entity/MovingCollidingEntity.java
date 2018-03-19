@@ -4,6 +4,7 @@ import java.util.Hashtable;
 
 import characteristic.positionnable.Collideable;
 import collision.CollisionBox;
+import game.Map;
 import javafx.geometry.Point3D;
 import visual.Component;
 
@@ -11,8 +12,8 @@ public abstract class MovingCollidingEntity extends VisibleCollidingEntity{
 
 	protected Point3D movement;
 	
-	public MovingCollidingEntity(Point3D position) {
-		super(position);
+	public MovingCollidingEntity(Point3D position, Map map) {
+		super(position, map);
 	}
 
 	@Override
@@ -38,5 +39,9 @@ public abstract class MovingCollidingEntity extends VisibleCollidingEntity{
 	public Point3D getAllCorrections() {
 		return null;//TODO REDEFINE THIS ASAP
 	}
-	
+	public void update(double secondsPassed){
+		Point3D nextPos = computeNextPosition(secondsPassed);
+		moveTo(nextPos);
+		correctCollisions();
+	}
 }

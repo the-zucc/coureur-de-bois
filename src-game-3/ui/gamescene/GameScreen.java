@@ -7,18 +7,20 @@ import javafx.scene.Group;
 import javafx.scene.Parent;
 import javafx.scene.SceneAntialiasing;
 import javafx.scene.SubScene;
+import ui.floatingpane.FloatingPane;
 
 import java.util.Hashtable;
 
 public class GameScreen extends SubScene implements Updateable, Messageable{
     private GameScene gameScene;
     private Group root;
-    private Hashtable<String, Parent> groups;
+    private Hashtable<String, FloatingPane> floatingPanes;
     public GameScreen(double w, double h, GameScene gs){
         super(new Group(),w,h,false, SceneAntialiasing.DISABLED);
         gameScene = gs;
         root = (Group)getRoot();
         root.getChildren().add(gs);
+        floatingPanes = new Hashtable<String, FloatingPane>();
     }
     public GameScene getGameScene(){
         return gameScene;
@@ -49,6 +51,9 @@ public class GameScreen extends SubScene implements Updateable, Messageable{
     public boolean shouldUpdate() {
         return false;
     }
-
+    
+    public FloatingPane getFloatingPane(String key){
+    	return floatingPanes.get(key);
+    }
 
 }

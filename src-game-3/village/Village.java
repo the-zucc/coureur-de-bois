@@ -41,16 +41,6 @@ public class Village implements Positionnable2D{
 
 	}
 	
-	@Override
-	public void setPosition(Point3D position) {
-		this.position = position;
-		set2DPosition(compute2DPosition(position));
-	}
-
-	@Override
-	public Point3D getPosition() {
-		return position;
-	}
 	public void addEntitiesToMap(Map m) {
 		for (Villager v :villagers) {
 			m.addEntity(v);
@@ -62,7 +52,6 @@ public class Village implements Positionnable2D{
 
 	@Override
 	public Point2D compute2DPosition(Point3D position3d) {
-		
 		return new Point2D(position3d.getX(), position3d.getZ());
 	}
 

@@ -59,4 +59,9 @@ public class CapsuleCollisionBox extends CollisionBox {
 		return false;
 	}
 
+	@Override
+	public void update() {
+		
+	}
+
 }

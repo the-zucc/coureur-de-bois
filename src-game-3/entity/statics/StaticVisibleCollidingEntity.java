@@ -5,13 +5,14 @@ import java.util.Hashtable;
 import characteristic.positionnable.Collideable;
 import collision.CollisionBox;
 import entity.VisibleCollidingEntity;
+import game.Map;
 import javafx.geometry.Point3D;
 import visual.Component;
 
 public abstract class StaticVisibleCollidingEntity extends VisibleCollidingEntity {
 
-	public StaticVisibleCollidingEntity(Point3D position) {
-		super(position);
+	public StaticVisibleCollidingEntity(Point3D position, Map map) {
+		super(position, map);
 	}
 
 	@Override

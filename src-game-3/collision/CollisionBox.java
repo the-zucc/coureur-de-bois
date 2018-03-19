@@ -11,6 +11,9 @@ public abstract class CollisionBox {
 	}
 
 	private boolean tooBigForCollisionOptimization;
+	public boolean isBigCollisionBox(){
+		return tooBigForCollisionOptimization;
+	}
 	protected Map map;
 	public CollisionBox(Collideable collideable, Map map){
 		this.tooBigForCollisionOptimization = isTooBigForCollisionOptimization();
@@ -35,5 +38,5 @@ public abstract class CollisionBox {
 	public abstract double computeCollidingWeight();
 
 	protected abstract boolean isTooBigForCollisionOptimization();
-
+	public abstract void update();
 }

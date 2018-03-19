@@ -4,7 +4,7 @@ import characteristic.positionnable.Collideable;
 import game.Map;
 import javafx.geometry.Point3D;
 
-public class SphericalCollisionBox extends CollisionBox {
+public class SphericalCollisionBox extends CollisionBox{
 
 	private double radius;
 	public double getRadius(){
@@ -58,19 +58,20 @@ public class SphericalCollisionBox extends CollisionBox {
 
 	@Override
 	public boolean movesOnCollision() {
-		return true;
+		return getCollideable().canMoveOnCollision();
 	}
 
 	@Override
 	public double computeCollidingWeight() {
-		return 1;
+		return getCollideable().computeCollidingWeight();
 	}
 
 	@Override
 	protected boolean isTooBigForCollisionOptimization() {
 		return this.radius*2 > Map.getCollisionMapDivisionWidth() || this.radius*2 > Map.getCollisionMapDivisionHeight();
 	}
-	public void correct(){
-
+	@Override
+	public void update() {
+		updatePosition();
 	}
 }

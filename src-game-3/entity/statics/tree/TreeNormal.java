@@ -3,6 +3,7 @@ package entity.statics.tree;
 import characteristic.positionnable.Collideable;
 import collision.CollisionBox;
 import entity.statics.StaticVisibleCollidingEntity;
+import game.Map;
 import javafx.geometry.Point3D;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
@@ -14,8 +15,8 @@ import java.util.Hashtable;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class TreeNormal extends StaticVisibleCollidingEntity {
-    public TreeNormal(Point3D position) {
-        super(position);
+    public TreeNormal(Point3D position, Map map) {
+        super(position, map);
     }
 
     @Override
@@ -58,8 +59,14 @@ public class TreeNormal extends StaticVisibleCollidingEntity {
         return null;
     }
 
-    @Override
-    public void onMessageReceived(Hashtable<String, ?> message) {
+	@Override
+	public double computeCollidingWeight() {
+		// TODO Auto-generated method stub
+		return 1;
+	}
 
-    }
+	@Override
+	public void onMessageReceived(Hashtable<String, ? extends Object> message) {
+		
+	}
 }

@@ -10,7 +10,9 @@ import characteristic.Messageable;
 import characteristic.Updateable;
 import characteristic.positionnable.Collideable;
 import characteristic.positionnable.Positionnable2D;
+import collision.CollisionBox;
 import entity.Entity;
+import entity.living.animal.Fox;
 import entity.living.human.Player;
 import entity.living.human.Villager;
 import entity.statics.village.Tipi;
@@ -35,7 +37,17 @@ public class Map implements ComponentOwner, Updateable, Messageable{
 	
 	public static Map getInstance() {
 		if (instance == null) {
-			instance = new Map(Preferences.getMapWidth(), Preferences.getMapHeight(), Preferences.getMapDetail(), Preferences.getMapDetail(), Preferences.getWaterLevel(), Preferences.getTreeCount(),Preferences.getVillageCount(), Preferences.getVillageRadius(), Preferences.getVillageTipiCount(), Preferences.getVillageVillagerCount());
+			instance = new Map(Preferences.getMapWidth(),
+					Preferences.getMapHeight(),
+					Preferences.getMapDetail(),
+					Preferences.getMapDetail(),
+					Preferences.getWaterLevel(),
+					Preferences.getTreeCount(),
+					Preferences.getVillageCount(),
+					Preferences.getVillageRadius(),
+					Preferences.getVillageTipiCount(),
+					Preferences.getVillageVillagerCount(),
+					500);
 		}
 		return instance;
 	}
@@ -103,8 +115,26 @@ public class Map implements ComponentOwner, Updateable, Messageable{
 	private ArrayList<ComponentOwner> componentOwners;
 	private ArrayList<Village> villages;
 
-	public Map(double mapWidth, double mapHeight, double vertexSeparationWidth, double vertexSeparationHeight, double waterLevel, int treeCount, int villageCount, double villageRadius, int tipiCount, int villagerCount) {
+	public Map(double mapWidth,
+			double mapHeight,
+			double vertexSeparationWidth,
+			double vertexSeparationHeight,
+			double waterLevel,
+			int treeCount,
+			int villageCount,
+			double villageRadius,
+			int tipiCount,
+			int villagerCount,
+			int foxCount) {
 		collideables = new ArrayList<Collideable>();
+		collisionCols = (int)mapWidth/collisionMapDivisionWidth;
+		collisionRows = (int)mapHeight/collisionMapDivisionHeight;
+		collisionMap = new ArrayList[collisionRows][collisionRows];
+		for(int i = 0; i < collisionRows; i++){
+			for(int j = 0; j < collisionCols; j++){
+				collisionMap[i][j] = new ArrayList<Collideable>();
+			}
+		}
 		updateables = new ArrayList<Updateable>();
 		componentOwners = new ArrayList<ComponentOwner>();
 		entities = new ArrayList<Entity>();
@@ -127,24 +157,26 @@ public class Map implements ComponentOwner, Updateable, Messageable{
 		this.waterLevel = waterLevel;
 		component = buildComponent();
 
-		currentPlayer = new Player(PositionGenerator.generateRandom3DPositionOnFloor(this));
+		currentPlayer = new Player(PositionGenerator.generateRandom3DPositionOnFloor(this), this);
 		addEntity(currentPlayer);
 
 		for (int i = 0; i < treeCount; i++) {
 			Point3D pos = PositionGenerator.generateRandom3DPositionOnFloor(this);
-			addEntity(new TreeNormal(pos));
+			addEntity(new TreeNormal(pos, this));
 		}
 		for (int i = 0; i < tipiCount; i++) {
 			Point3D pos = PositionGenerator.generateRandom3DPositionOnFloor(this);
-			addEntity(new Tipi(pos));
+			addEntity(new Tipi(pos, this));
 		}
-		for(int j= 0; j < villageCount; j++){
+		for(int i= 0; i < villageCount; i++){
 			Point2D villagePos = PositionGenerator.generate2DPositionNotInVillages(this, villages);
 			Village v = new Village(villagePos, tipiCount, 2000,villagerCount, this);
 			villages.add(v);
 			v.addEntitiesToMap(this);
 		}
-
+		for(int i = 0; i < foxCount; i++){
+			addEntity(new Fox(PositionGenerator.generateRandom3DPositionOnFloor(this), this));
+		}
 	}
 	
 	public double getHeightAt(Point2D arg0){
@@ -309,6 +341,13 @@ public class Map implements ComponentOwner, Updateable, Messageable{
 		}
 		if(e instanceof Collideable){
 			collideables.add((Collideable)e);
+			Point2D pos = ((Collideable) e).get2DPosition();
+			int row = getCollisionRowFor(pos);
+			int col = getCollisionColumnFor(pos);
+			if(row < collisionRows && row >= 0 && col < collisionCols && col >= 0){
+				collisionMap[row][col].add((Collideable)e);
+			}
+			
 		}
 		if(e instanceof ComponentOwner) {
 			componentOwners.add((ComponentOwner)e);
@@ -350,6 +389,8 @@ public class Map implements ComponentOwner, Updateable, Messageable{
 	//static variables
 	private static int collisionMapDivisionWidth=100;
 	private static int collisionMapDivisionHeight=collisionMapDivisionWidth;
+	private int collisionCols;
+	private int collisionRows;
 	public static int getCollisionMapDivisionWidth(){
 		return collisionMapDivisionWidth;
 	}
@@ -358,6 +399,9 @@ public class Map implements ComponentOwner, Updateable, Messageable{
 	}
 	private ArrayList<Collideable>[][] collisionMap;
 	private ArrayList<Collideable> bigCollideables;
+	public ArrayList<Collideable> getBigCollideables(){
+		return bigCollideables;
+	}
 	private void updateCollisionMap(){
 		for (ArrayList<Collideable>[] a:
 		collisionMap){
@@ -375,5 +419,24 @@ public class Map implements ComponentOwner, Updateable, Messageable{
 	}
 	public ArrayList<Collideable>[][] getCollisionMap(){
 		return collisionMap;
+	}
+	public ArrayList<Collideable>[][] getNearbyCollideables(int row, int col){
+		ArrayList<Collideable>[][] returnVal = new ArrayList[3][3];
+		//returnVal = (ArrayList<Collideable>[][])returnVal;
+		int ri = 0;
+		for(int i = row-1; i <= row+1; i++, ri++){
+			int rj = 0;
+			for(int j = col-1; j <= col+1; j++, rj++){
+				returnVal[ri][rj]= collisionMap[i][j];
+			}
+		}
+		return returnVal;
+	}
+
+	public int getCollisionRowFor(Point2D position2D) {
+		return (int)(position2D.getY()+mapHeight/2)/collisionMapDivisionHeight;
+	}
+	public int getCollisionColumnFor(Point2D position2D){
+		return (int)(position2D.getX()+mapWidth/2)/collisionMapDivisionWidth;
 	}
 }

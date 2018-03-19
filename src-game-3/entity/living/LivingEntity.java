@@ -8,6 +8,7 @@ import collision.CollisionBox;
 import entity.GravityAffectedCollidingEntity;
 import entity.VisibleCollidingEntity;
 import game.GameLogic;
+import game.Map;
 import javafx.geometry.Point2D;
 import javafx.geometry.Point3D;
 import javafx.scene.transform.Rotate;
@@ -23,8 +24,8 @@ public abstract  class LivingEntity extends GravityAffectedCollidingEntity imple
 	private Point3D jumpVector;
 	private Point2D target;
 
-	public LivingEntity(Point3D position) {
-		super(position);
+	public LivingEntity(Point3D position, Map map) {
+		super(position, map);
 		up = down = left = right = newOrientation = isRunning = false;
 		oldMovement = Point3D.ZERO;
 		movement = oldMovement;
@@ -32,14 +33,14 @@ public abstract  class LivingEntity extends GravityAffectedCollidingEntity imple
 	}
 
 	protected abstract double computeXpReward();
-	
+	@Override
+	public boolean shouldUpdate(){
+		return true;
+	}
 	@Override
 	public void update(double secondsPassed){
 		updateMovementVector();
-		Point3D nextPos = computeNextPosition(secondsPassed);
-		if(nextPos != null){
-			moveTo(nextPos);
-		}
+		super.update(secondsPassed);
 		updateActions(secondsPassed);
 		if(shouldUpdateComponent())
 			updateComponent();
@@ -47,6 +48,10 @@ public abstract  class LivingEntity extends GravityAffectedCollidingEntity imple
 	
 	public abstract void updateActions(double secondsPassed);
 
+	@Override
+	public boolean shouldUpdateComponent(){
+		return true;
+	}
 	@Override
 	public void updateComponent(){
 		getComponent().setPosition(getPosition());

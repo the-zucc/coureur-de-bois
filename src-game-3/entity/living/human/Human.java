@@ -3,6 +3,7 @@ package entity.living.human;
 import characteristic.attachable.Attachable;
 import characteristic.attachable.AttachableReceiver;
 import entity.living.LivingEntity;
+import game.Map;
 import javafx.geometry.Point3D;
 
 import java.util.ArrayList;
@@ -10,18 +11,15 @@ import java.util.ArrayList;
 public abstract class Human extends LivingEntity implements AttachableReceiver {
 	int level;
 
-	public Human(Point3D position, int level) {
-		super(position);
+	public Human(Point3D position, Map map, int level) {
+		super(position, map);
 		this.level = level;
 	}
 	@Override
 	public boolean shouldUpdateComponent() {
 		return true;
 	}
-	@Override
-	public boolean shouldUpdate(){
-		return true;
-	}
+	
 	@Override
 	public void attach(Attachable a) {
 		getComponent().addChildComponent(a.getComponent());
