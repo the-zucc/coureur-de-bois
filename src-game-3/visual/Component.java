@@ -26,6 +26,9 @@ public class Component extends Group implements Positionnable{
 		getChildren().remove(child);
 		subComponents.remove(child.getId());
 	}
+	public Component getSubComponent(String key){
+		return subComponents.get(key);
+	}
 
 	@Override
 	public void setPosition(Point3D position) {

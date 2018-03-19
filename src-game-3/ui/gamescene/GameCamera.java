@@ -30,13 +30,13 @@ public class GameCamera extends PerspectiveCamera implements Attachable{
 		setNearClip(10);
 		setFarClip(200000);
 
-		double ty= -dist;
+		double ty= -dist/3;
 		component.setTranslateY(ty);
 		double tz = -dist;
 		component.setTranslateZ(tz);
 
 		component.setRotationAxis(Rotate.X_AXIS);
-		component.setRotate(-45);
+		component.setRotate(-17);
 
 		this.relativePosition = new Point3D(0,ty, tz);
 		ar.attach(this);

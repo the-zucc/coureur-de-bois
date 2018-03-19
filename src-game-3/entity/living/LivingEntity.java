@@ -12,6 +12,7 @@ import game.Map;
 import javafx.geometry.Point2D;
 import javafx.geometry.Point3D;
 import javafx.scene.transform.Rotate;
+import javafx.scene.transform.Transform;
 import util.PositionGenerator;
 import visual.Component;
 
@@ -23,6 +24,11 @@ public abstract  class LivingEntity extends GravityAffectedCollidingEntity imple
 	private Point3D oldMovement;
 	private Point3D jumpVector;
 	private Point2D target;
+	protected double rotationAngle;
+	protected double computeComponentRotationAngle(double rotationAngle){
+		
+		return rotationAngle+90;
+	}
 
 	public LivingEntity(Point3D position, Map map) {
 		super(position, map);
@@ -30,6 +36,7 @@ public abstract  class LivingEntity extends GravityAffectedCollidingEntity imple
 		oldMovement = Point3D.ZERO;
 		movement = oldMovement;
 		target = null;
+		rotationAngle = 0;
 	}
 
 	protected abstract double computeXpReward();
@@ -55,6 +62,8 @@ public abstract  class LivingEntity extends GravityAffectedCollidingEntity imple
 	@Override
 	public void updateComponent(){
 		getComponent().setPosition(getPosition());
+		getComponent().setRotationAxis(Rotate.Y_AXIS);
+		getComponent().setRotate(computeComponentRotationAngle(rotationAngle));
 		additionalComponentUpdates();
 	}
 
@@ -84,32 +93,32 @@ public abstract  class LivingEntity extends GravityAffectedCollidingEntity imple
 	}
 	protected void updateMovementVector() {
 		oldMovement = movement;
+		
 		double movementSpeed = computeMovementSpeed();
 		double angle = Math.toRadians(45);
 		if(target == null){
 			if(up) {
 				if(up && right) {
 					movement = new Point3D(Math.cos(angle) * movementSpeed, 0, Math.sin(angle) * movementSpeed);
-					return;
 				}
 				else if(up && left) {
 					movement = new Point3D(-Math.cos(angle) * movementSpeed, 0, Math.sin(angle) * movementSpeed);
-					return;
 				}
-				movement = new Point3D(0, 0, movementSpeed);
-				return;
+				else{
+					movement = new Point3D(0, 0, movementSpeed);
+				}
 			}
 			else if(down) {
 				if(down && right) {
 					movement = new Point3D(Math.cos(angle) * movementSpeed, 0, -Math.sin(angle) * movementSpeed);
-					return;
 				}
 				else if(down && left) {
 					movement = new Point3D(-Math.cos(angle) * movementSpeed, 0, -Math.sin(angle) * movementSpeed);
-					return;
 				}
-				movement = new Point3D(0, 0, -movementSpeed);
-				return;
+				else{
+					movement = new Point3D(0, 0, -movementSpeed);					
+				}
+				
 			}
 			else if(right)
 				movement = new Point3D(movementSpeed, 0, 0);
@@ -134,14 +143,25 @@ public abstract  class LivingEntity extends GravityAffectedCollidingEntity imple
 			}
 
 		}
-
+		rotationAngle = computeAngleFromMovement(movement);
 	}
 	/**
 	 * this method should be defined in all subclasses. it returns the movement speed to use. The value can be dynamic, as the method is called every tick.
 	 * @return the movement speed to use when computing the movmement vector for this entity.
 	 */
 	protected abstract double computeMovementSpeed();
-	
+	protected double computeAngleFromMovement(Point3D movement){
+		if(movement.equals(Point3D.ZERO))
+			return 90;
+		double yo = new Point3D(movement.getX(), 0, movement.getZ()).angle(Rotate.X_AXIS);
+		if(movement.getZ()>0)
+			yo*=-1;
+		if(this == Map.getInstance().getCurrentPlayer()){
+			System.out.println(yo);
+			System.out.println(movement);
+		}
+		return yo;
+	}
 	protected void setUp(boolean value) {
 		up = value;
 		newOrientation = true;

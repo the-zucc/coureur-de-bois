@@ -17,6 +17,7 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.Box;
+import javafx.scene.transform.Rotate;
 import visual.Component;
 
 public class Player extends Human implements UserControllable, AttachableReceiver{
@@ -86,7 +87,7 @@ public class Player extends Human implements UserControllable, AttachableReceive
 		
 		//adding children to the returnValue
 		playerNode.getChildren().addAll(box1, box3, playerHead);
-		returnVal.getChildren().add(playerNode);
+		returnVal.addChildComponent(playerNode);
 		
 		return returnVal;
 	}
@@ -149,5 +150,12 @@ public class Player extends Human implements UserControllable, AttachableReceive
 		return 1;
 	}
 
-	
+	@Override
+	public void updateComponent(){
+		Component playerBody = getComponent().getSubComponent(getId()+"_body");
+		getComponent().setPosition(getPosition());
+		playerBody.setRotationAxis(Rotate.Y_AXIS);
+		playerBody.setRotate(computeComponentRotationAngle(rotationAngle));
+		additionalComponentUpdates();
+	}
 }

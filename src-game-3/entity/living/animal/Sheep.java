@@ -7,14 +7,16 @@ import game.GameLogic;
 import game.Map;
 import javafx.geometry.Point2D;
 import javafx.geometry.Point3D;
+import javafx.scene.paint.Color;
+import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.Box;
 import util.PositionGenerator;
 import visual.Component;
 
-public class Fox extends LivingEntity {
+public class Sheep extends LivingEntity {
 
 
-	public Fox(Point3D position, Map map) {
+	public Sheep(Point3D position, Map map) {
 		super(position, map);
 	}
 
@@ -73,7 +75,13 @@ public class Fox extends LivingEntity {
 		Component returnVal = new Component(getId());
 		Box box = new Box(50,50,50);
 		box.setTranslateY(-25);
-		returnVal.getChildren().addAll(box);
+		
+		Box head = new Box(20, 20, 20);
+		head.setMaterial(new PhongMaterial(Color.BLACK));
+		head.setTranslateY(-30);
+		head.setTranslateZ(35);
+		
+		returnVal.getChildren().addAll(box, head);
 		return returnVal;
 	}
 
