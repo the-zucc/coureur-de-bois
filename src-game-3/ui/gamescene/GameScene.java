@@ -2,6 +2,8 @@ package ui.gamescene;
 
 import game.Map;
 import game.settings.Settings;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.EventHandler;
 import javafx.geometry.Point3D;
 import javafx.scene.Group;
@@ -15,15 +17,29 @@ import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.Cylinder;
 import javafx.scene.transform.Rotate;
 import javafx.scene.transform.Translate;
+import javafx.stage.Stage;
 
 public class GameScene extends SubScene {
 	private Group gameRoot;
 	private PerspectiveCamera gameCamera;
-	public GameScene(double arg1, double arg2) {
+	public GameScene(double arg1, double arg2, Stage window) {
 		super(new Group(), arg1, arg2, true, Settings.getAntialiasingValue());
 		gameRoot = (Group)getRoot();
 		gameCamera = new GameCamera(1250, Map.getInstance().getCurrentPlayer());
 		setCamera(gameCamera);
+		window.widthProperty().addListener(new ChangeListener<Number>() {
+			@Override
+			public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+				GameScene.this.setWidth(newValue.doubleValue());
+			}
+		});
+		window.heightProperty().addListener(new ChangeListener<Number>(){
+
+			@Override
+			public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+				GameScene.this.setHeight(newValue.doubleValue());
+			}
+		});
 	}
 	public Group getGameRoot(){
 		return gameRoot;

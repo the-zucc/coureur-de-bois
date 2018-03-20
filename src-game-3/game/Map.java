@@ -15,6 +15,7 @@ import entity.Entity;
 import entity.living.animal.Sheep;
 import entity.living.human.Player;
 import entity.living.human.Villager;
+import entity.statics.tree.PineTree;
 import entity.statics.village.Tipi;
 import entity.statics.tree.TreeNormal;
 import game.settings.Preferences;
@@ -162,7 +163,15 @@ public class Map implements ComponentOwner, Updateable, Messageable{
 
 		for (int i = 0; i < treeCount; i++) {
 			Point3D pos = PositionGenerator.generateRandom3DPositionOnFloor(this);
-			addEntity(new TreeNormal(pos, this));
+			TreeNormal tree;
+			double val = Math.random();
+			if(val > 0.5){
+				tree = new PineTree(pos, this);
+			}
+			else{
+				tree = new TreeNormal(pos,this);
+			}
+			addEntity(tree);
 		}
 		for (int i = 0; i < tipiCount; i++) {
 			Point3D pos = PositionGenerator.generateRandom3DPositionOnFloor(this);
@@ -244,18 +253,18 @@ public class Map implements ComponentOwner, Updateable, Messageable{
 			for(double x = -mapWidth/2; x < mapWidth/2; x += vertexSeparationWidth, xi++){
 				p1 = new Point3D(x,heightMatrix[zi][xi],z);
 				floorVertices[zi][xi] = p1;
-				System.out.println("zi:"+zi+" z:"+z+" xi:"+xi+" x:"+x);
+				//System.out.println("zi:"+zi+" z:"+z+" xi:"+xi+" x:"+x);
 				mesh.getPoints().addAll((float)p1.getX(), (float)p1.getY(), (float)p1.getZ());
 				if(zi<rows-1 && xi < cols-1){
 					int idx = xi+(zi*cols);
-					System.out.println("idx:"+idx);
-					System.out.println("idx+cols:"+(idx+cols));
+					//System.out.println("idx:"+idx);
+					//System.out.println("idx+cols:"+(idx+cols));
 					mesh.getFaces().addAll(idx+1,0,idx,0,idx+cols,0);
 					mesh.getFaces().addAll(idx+cols,0,idx+cols+1,0,idx+1,0);
 				}
 			}
 		}
-		System.out.println(((mesh.getPoints().size()/3)-1)+" points");
+		//System.out.println(((mesh.getPoints().size()/3)-1)+" points");
 		mesh.getTexCoords().addAll(0,0);
 
 		MeshView floorMeshView = new MeshView(mesh);

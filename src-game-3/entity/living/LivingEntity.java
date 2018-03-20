@@ -153,14 +153,10 @@ public abstract  class LivingEntity extends GravityAffectedCollidingEntity imple
 	protected double computeAngleFromMovement(Point3D movement){
 		if(movement.equals(Point3D.ZERO))
 			return 90;
-		double yo = new Point3D(movement.getX(), 0, movement.getZ()).angle(Rotate.X_AXIS);
+		double angle = new Point3D(movement.getX(), 0, movement.getZ()).angle(Rotate.X_AXIS);
 		if(movement.getZ()>0)
-			yo*=-1;
-		if(this == Map.getInstance().getCurrentPlayer()){
-			System.out.println(yo);
-			System.out.println(movement);
-		}
-		return yo;
+			angle*=-1;
+		return angle;
 	}
 	protected void setUp(boolean value) {
 		up = value;

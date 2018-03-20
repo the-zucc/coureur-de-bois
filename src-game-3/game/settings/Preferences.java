@@ -38,7 +38,7 @@ public class Preferences {
 	}
 
 
-	private static int treeCount = 1000;
+	private static int treeCount = 2000;
 	public static int getTreeCount() {
 		return treeCount;
 	}
