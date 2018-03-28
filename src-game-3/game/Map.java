@@ -331,9 +331,11 @@ public class Map implements ComponentOwner, Updateable, Messageable{
 	@Override
 	public void update(double secondsPassed) {
 		for(Updateable u:updateables){
-			u.update(secondsPassed);	
+			u.update(secondsPassed);
 		}
 	}
+
+	
 
 	@Override
 	public boolean shouldUpdate() {
@@ -402,10 +404,11 @@ public class Map implements ComponentOwner, Updateable, Messageable{
 	 * COLLISIONS
 	 */
 	//static variables
-	private static int collisionMapDivisionWidth=100;
+	private static int collisionMapDivisionWidth=500;
 	private static int collisionMapDivisionHeight=collisionMapDivisionWidth;
 	private int collisionCols;
 	private int collisionRows;
+	
 	public static int getCollisionMapDivisionWidth(){
 		return collisionMapDivisionWidth;
 	}

@@ -44,9 +44,7 @@ public abstract class VisibleCollidingEntity extends VisibleEntity implements Co
 	@Override
 	public void moveTo(Point3D nextPosition) {
 		//System.out.println(nextPosition);
-		if(this instanceof Player){
-			System.out.println("player");
-		}
+		
 		setPosition(nextPosition);
 		if(collisionBox != null){
 			collisionBox.update();
@@ -55,8 +53,15 @@ public abstract class VisibleCollidingEntity extends VisibleEntity implements Co
 		int newCollisionMapColumn = map.getCollisionColumnFor(get2DPosition());
 		if(newCollisionMapRow != collisionMapRow || newCollisionMapColumn != collisionMapColumn){
 			try{
+				if(this instanceof Player){
+					System.out.println("row:"+newCollisionMapRow);
+					System.out.println("column:"+newCollisionMapColumn);
+				}
 				map.getCollisionMap()[collisionMapRow][collisionMapColumn].remove(this);
-				map.getCollisionMap()[newCollisionMapRow][newCollisionMapColumn].add(this);
+				collisionMapRow = newCollisionMapRow;
+				collisionMapColumn = newCollisionMapColumn;
+				map.getCollisionMap()[collisionMapRow][collisionMapColumn].add(this);
+				
 			}catch(Exception e){
 				//System.out.println("out of map");
 			}
@@ -105,7 +110,6 @@ public abstract class VisibleCollidingEntity extends VisibleEntity implements Co
 					for (Collideable collideable : b) {
 						if(collideable != this){
 							Point3D correction = getCorrection(collideable);
-							System.out.println(correction);
 							corrections = corrections.add(correction);
 						}
 					}

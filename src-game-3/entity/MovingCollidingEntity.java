@@ -41,19 +41,22 @@ public abstract class MovingCollidingEntity extends VisibleCollidingEntity{
 	public Point3D getAllCorrections() {
 		if(this instanceof Player){
 			int collideableCount = 0;
-			System.out.println("boi correction");
 			Point3D corrections = Point3D.ZERO;
 			for(int i = collisionMapRow-1; i <= collisionMapRow+1; i++){
 				for(int j = collisionMapColumn-1; j <= collisionMapColumn+1;j++){
 					try{
 						ArrayList<Collideable> collideables = map.getCollisionMap()[i][j];
 						for(int k = 0; k < collideables.size(); k++){
-						Collideable c = collideables.get(k);
-						collideableCount++;
-						if(c.getCollisionBox() != null && getCollisionBox() != null && c != this)
-							if(getCollisionBox().collides(c.getCollisionBox())){
-								System.out.println("collision");
-								corrections = corrections.add(this.getCorrection(c));
+							Collideable c = collideables.get(k);
+							System.out.println("otherBox:"+c.getCollisionBox());
+							System.out.println("thisBox:"+getCollisionBox());
+							collideableCount++;
+							if(c.getCollisionBox() != null && getCollisionBox() != null && c != this) {
+								if(getCollisionBox().collides(c.getCollisionBox())){
+									System.out.println("collision");
+									corrections = corrections.add(this.getCorrection(c));
+								}
+								System.out.println("correction |B|"+this.getCorrection(c));
 							}
 						}
 						
