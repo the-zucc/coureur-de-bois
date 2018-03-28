@@ -81,7 +81,7 @@ public class Player extends Human implements UserControllable, AttachableReceive
 		
 		//body boxes
 		Box box1 = new Box(20,20,20);
-		Box box3 = new Box(30, 10, 10);
+		Box box3 = new Box(35, 10, 10);
 		box1.setTranslateY(-12.5);
 		box3.setTranslateY(-10.75);
 		

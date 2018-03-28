@@ -12,6 +12,7 @@ import characteristic.positionnable.Collideable;
 import characteristic.positionnable.Positionnable2D;
 import collision.CollisionBox;
 import entity.Entity;
+import entity.MovingCollidingEntity;
 import entity.living.animal.Sheep;
 import entity.living.human.Player;
 import entity.living.human.Villager;
@@ -48,7 +49,7 @@ public class Map implements ComponentOwner, Updateable, Messageable{
 					Preferences.getVillageRadius(),
 					Preferences.getVillageTipiCount(),
 					Preferences.getVillageVillagerCount(),
-					500);
+					0);
 		}
 		return instance;
 	}
@@ -126,7 +127,7 @@ public class Map implements ComponentOwner, Updateable, Messageable{
 			double villageRadius,
 			int tipiCount,
 			int villagerCount,
-			int foxCount) {
+			int sheepCount) {
 		collideables = new ArrayList<Collideable>();
 		collisionCols = (int)mapWidth/collisionMapDivisionWidth;
 		collisionRows = (int)mapHeight/collisionMapDivisionHeight;
@@ -183,7 +184,7 @@ public class Map implements ComponentOwner, Updateable, Messageable{
 			villages.add(v);
 			v.addEntitiesToMap(this);
 		}
-		for(int i = 0; i < foxCount; i++){
+		for(int i = 0; i < sheepCount; i++){
 			addEntity(new Sheep(PositionGenerator.generateRandom3DPositionOnFloor(this), this));
 		}
 	}
@@ -353,10 +354,15 @@ public class Map implements ComponentOwner, Updateable, Messageable{
 			Point2D pos = ((Collideable) e).get2DPosition();
 			int row = getCollisionRowFor(pos);
 			int col = getCollisionColumnFor(pos);
-			if(row < collisionRows && row >= 0 && col < collisionCols && col >= 0){
+			try{
 				collisionMap[row][col].add((Collideable)e);
+				if(e instanceof MovingCollidingEntity){
+					((MovingCollidingEntity) e).setCollisionMapRow(row);
+					((MovingCollidingEntity) e).setCollisionMapColum(col);
+				}
+			}catch(ArrayIndexOutOfBoundsException aioobe){
+				System.out.println("out of map");
 			}
-			
 		}
 		if(e instanceof ComponentOwner) {
 			componentOwners.add((ComponentOwner)e);
@@ -411,21 +417,7 @@ public class Map implements ComponentOwner, Updateable, Messageable{
 	public ArrayList<Collideable> getBigCollideables(){
 		return bigCollideables;
 	}
-	private void updateCollisionMap(){
-		for (ArrayList<Collideable>[] a:
-		collisionMap){
-			for (ArrayList<Collideable> b :
-					a) {
-				for (Collideable c :
-						b) {
-					b.remove(c);
-					int col = (int)c.getPosition().getX()/collisionMapDivisionWidth;
-					int row = (int)c.getPosition().getZ()/collisionMapDivisionHeight;
-					collisionMap[row][col].add(c);
-				}
-			}
-		}
-	}
+	
 	public ArrayList<Collideable>[][] getCollisionMap(){
 		return collisionMap;
 	}

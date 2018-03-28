@@ -134,11 +134,12 @@ public abstract  class LivingEntity extends GravityAffectedCollidingEntity imple
 		else{
 			if(position2D.distance(target) < movement.magnitude()){
 				movement = Point3D.ZERO;
+				target = null;
 			}
 			else{
 				double mvtang = target.subtract(position2D).angle(new Point2D(1,0));
-				double x = Math.cos(mvtang);
-				double y = Math.sin(mvtang);
+				double x = Math.cos(mvtang)*this.computeMovementSpeed();
+				double y = Math.sin(mvtang)*this.computeMovementSpeed();
 				movement = new Point3D(x,0,y);
 			}
 

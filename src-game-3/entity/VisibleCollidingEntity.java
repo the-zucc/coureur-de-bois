@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import characteristic.positionnable.Collideable;
 import collision.CollisionBox;
+import entity.living.human.Player;
 import game.Map;
 import javafx.geometry.Point3D;
 import visual.Component;
@@ -11,8 +12,14 @@ import visual.Component;
 public abstract class VisibleCollidingEntity extends VisibleEntity implements Collideable{
 	protected CollisionBox collisionBox;
 	protected Map map;
-	private int collisionMapRow;
-	private int collisionMapColumn;
+	protected int collisionMapRow;
+	public void setCollisionMapRow(int collisionMapRow){
+		this.collisionMapRow = collisionMapRow;
+	}
+	protected int collisionMapColumn;
+	public void setCollisionMapColum(int collisionMapColumn){
+		this.collisionMapColumn = collisionMapColumn;
+	}
 	
 	public VisibleCollidingEntity(Point3D position, Map map) {
 		super(position);
@@ -27,6 +34,8 @@ public abstract class VisibleCollidingEntity extends VisibleEntity implements Co
 	
 	protected void correctCollisions(){
 		Point3D corrections = getAllCorrections();
+		if(this instanceof Player)
+			System.out.println(corrections);
 		if(corrections != null){
 			moveTo(getPosition().add(corrections));
 		}
@@ -35,9 +44,22 @@ public abstract class VisibleCollidingEntity extends VisibleEntity implements Co
 	@Override
 	public void moveTo(Point3D nextPosition) {
 		//System.out.println(nextPosition);
+		if(this instanceof Player){
+			System.out.println("player");
+		}
 		setPosition(nextPosition);
 		if(collisionBox != null){
 			collisionBox.update();
+		}
+		int newCollisionMapRow = map.getCollisionRowFor(get2DPosition());
+		int newCollisionMapColumn = map.getCollisionColumnFor(get2DPosition());
+		if(newCollisionMapRow != collisionMapRow || newCollisionMapColumn != collisionMapColumn){
+			try{
+				map.getCollisionMap()[collisionMapRow][collisionMapColumn].remove(this);
+				map.getCollisionMap()[newCollisionMapRow][newCollisionMapColumn].add(this);
+			}catch(Exception e){
+				//System.out.println("out of map");
+			}
 		}
 	}
 
