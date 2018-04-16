@@ -70,7 +70,6 @@ public class Villager extends Human implements Hoverable{
             if(getPosition().getX() > mapWidth/2 || getPosition().getX() < -mapWidth/2)
                 startMovingTo(village.get2DPosition());
         }
-
 	}
 
 	@Override

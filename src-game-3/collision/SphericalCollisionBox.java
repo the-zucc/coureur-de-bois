@@ -39,21 +39,20 @@ public class SphericalCollisionBox extends CollisionBox{
 	}
 
 	@Override
-	public Point3D getCorrectionSphericalBox(SphericalCollisionBox b1) {
-		Point3D pos = b1.getPosition();
-		Point3D thisPos = getPosition();
+	public Point3D getCorrectionSphericalBox(SphericalCollisionBox box) {
+		Point3D position = getPosition();
 
-		double distance = pos.distance(thisPos);
-		double magnitude = distance - (b1.getRadius()+radius);
+		double distance = Math.hypot(box.getPosition().getX()-position.getX(), box.getPosition().getZ()-position.getZ());
+		double magnitude = distance - (box.getRadius()+radius);
 		double frac = magnitude/distance;
-		return new Point3D(frac*(pos.getX()-thisPos.getX()), frac*(pos.getY()-thisPos.getY()), frac*(pos.getZ()-thisPos.getZ()));
+		return new Point3D(frac*(box.getPosition().getX()-position.getX()), frac*(box.getPosition().getY()-position.getY()), frac*(box.getPosition().getZ()-position.getZ()));
 	}
 
 	@Override
 	public boolean collidesSphericalBox(SphericalCollisionBox b1) {
 		Point3D pos = b1.getPosition();
 		Point3D thisPos = getPosition();
-		return Math.hypot(Math.hypot(pos.getX()-thisPos.getX(), b1.getPosition().getZ()-thisPos.getZ()),b1.getPosition().getY()-thisPos.getY()) < (b1.getRadius()+radius);
+		return pos.distance(thisPos) < (b1.getRadius()+radius);
 	}
 
 	@Override

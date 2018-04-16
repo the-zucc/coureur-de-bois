@@ -21,7 +21,16 @@ public abstract class CollisionBox {
 		this.map = map;
 	}
 	public Point3D getCorrection(CollisionBox b1){
-		return new Point3D(0,0,0);
+		if(b1 instanceof SphericalCollisionBox){
+			return getCorrectionSphericalBox((SphericalCollisionBox)b1);
+		}
+		else if(b1 instanceof CapsuleCollisionBox){
+			return getCorrectionCapsuleBox((CapsuleCollisionBox) b1);
+		}
+		else{
+			return new Point3D(0,0,0);
+		}
+
 	};
 	public boolean collides(CollisionBox b1){
 		if(b1 instanceof SphericalCollisionBox)

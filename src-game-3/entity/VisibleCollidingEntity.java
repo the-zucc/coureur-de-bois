@@ -34,8 +34,6 @@ public abstract class VisibleCollidingEntity extends VisibleEntity implements Co
 	
 	protected void correctCollisions(){
 		Point3D corrections = getAllCorrections();
-		if(this instanceof Player)
-			System.out.println(corrections);
 		if(corrections != null){
 			moveTo(getPosition().add(corrections));
 		}
@@ -89,10 +87,10 @@ public abstract class VisibleCollidingEntity extends VisibleEntity implements Co
 
 	@Override
 	public Point3D getCorrection(Collideable c) {
-		Point3D correction = null;
+		Point3D correction = Point3D.ZERO;
 		CollisionBox cbox = c.getCollisionBox();
 		if(collisionBox != null && cbox != null){
-			correction = getCollisionBox().getCorrection(c.getCollisionBox());
+			correction = getCollisionBox().getCorrection(cbox);
 		}
 		return correction;
 	}

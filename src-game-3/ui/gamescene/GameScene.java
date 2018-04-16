@@ -1,5 +1,6 @@
 package ui.gamescene;
 
+import game.GameLogic;
 import game.Map;
 import game.settings.Settings;
 import javafx.beans.value.ChangeListener;
@@ -25,7 +26,7 @@ public class GameScene extends SubScene {
 	public GameScene(double arg1, double arg2, Stage window) {
 		super(new Group(), arg1, arg2, true, Settings.getAntialiasingValue());
 		gameRoot = (Group)getRoot();
-		gameCamera = new GameCamera(1250, Map.getInstance().getCurrentPlayer());
+		gameCamera = new GameCamera(25*GameLogic.getMeterLength(), Map.getInstance().getCurrentPlayer());
 		setCamera(gameCamera);
 		window.widthProperty().addListener(new ChangeListener<Number>() {
 			@Override

@@ -13,10 +13,10 @@ import javafx.scene.shape.Box;
 import util.PositionGenerator;
 import visual.Component;
 
-public class Sheep extends LivingEntity {
+public class Fox extends LivingEntity {
 
 
-	public Sheep(Point3D position, Map map) {
+	public Fox(Point3D position, Map map) {
 		super(position, map);
 	}
 
@@ -62,7 +62,7 @@ public class Sheep extends LivingEntity {
 
 	@Override
 	public void additionalComponentUpdates() {
-		
+
 	}
 
 	@Override
@@ -73,14 +73,13 @@ public class Sheep extends LivingEntity {
 	@Override
 	public Component buildComponent() {
 		Component returnVal = new Component(getId());
-		double meter = GameLogic.getMeterLength();
-		Box box = new Box(meter,meter,meter*1.2);
-		box.setTranslateY(-meter/2);
+		Box box = new Box(50,50,50);
+		box.setTranslateY(-25);
 		
-		Box head = new Box(0.4*meter, 0.4*meter, 0.4*meter);
+		Box head = new Box(20, 20, 20);
 		head.setMaterial(new PhongMaterial(Color.BLACK));
-		head.setTranslateY(-0.6*meter);
-		head.setTranslateZ(0.7*meter);
+		head.setTranslateY(-30);
+		head.setTranslateZ(35);
 		
 		returnVal.getChildren().addAll(box, head);
 		return returnVal;

@@ -3,6 +3,7 @@ package entity.statics.tree;
 import characteristic.positionnable.Collideable;
 import collision.CollisionBox;
 import entity.statics.StaticVisibleCollidingEntity;
+import game.GameLogic;
 import game.Map;
 import javafx.geometry.Point3D;
 import javafx.scene.paint.Color;
@@ -23,8 +24,9 @@ public class TreeNormal extends StaticVisibleCollidingEntity {
     public Component buildComponent() {
         Component returnVal = new Component(getId());
 
-        Box trunk = new Box(30, 100, 30);
-        Box leaves = new Box(100, 80, 100);
+        double meter = GameLogic.getMeterLength();
+        Box trunk = new Box(0.6*meter, 2*meter, 0.6*meter);
+        Box leaves = new Box(2*meter, 1.8*meter, 2*meter);
 
         leaves.setTranslateY(-(trunk.getHeight()+leaves.getHeight()/2));
         leaves.setMaterial(new PhongMaterial(Color.LAWNGREEN));

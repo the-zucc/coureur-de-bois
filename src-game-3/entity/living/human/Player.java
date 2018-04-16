@@ -46,45 +46,46 @@ public class Player extends Human implements UserControllable, AttachableReceive
 	public Component buildComponent() {
 		Component returnVal = new Component(getId());
 		Component playerNode = new Component(getId()+"_body");
-		
-		//boxes for the hat
-		Box boxHat = new Box(40, 2.5, 40);
-		Box boxHat2 = new Box(25, 10, 30);
-		boxHat.setTranslateY(-51.25);
-		boxHat2.setTranslateY(-57.5);
-		
+
+		double meter = GameLogic.getMeterLength();
+
+		//body boxes
+		Box box1 = new Box(0.4*meter,0.4*meter,0.4*meter);
+		Box box3 = new Box(0.7*meter, 0.2*meter, 0.2*meter);
+		box1.setTranslateY(-box1.getHeight()/2);
+		box3.setTranslateY(-box1.getHeight()+box3.getHeight()/2);
+
 		//color for the skin of the player
 		PhongMaterial materialHead = new PhongMaterial();
 		materialHead.setDiffuseColor(Color.PINK);
-		
-		//box for the player's nose
-		Box boxNose = new Box(5,5,5);
-		boxNose.setTranslateY(-27.5);
-		boxNose.setTranslateZ(17.5);
-		boxNose.setMaterial(materialHead);
-		
+
 		//box for the player head
-		Box boxHead = new Box(30,30,30);
-		boxHead.setTranslateY(-35);
+		Box boxHead = new Box(0.6*meter,0.6*meter,0.6*meter);
+		boxHead.setTranslateY(-(boxHead.getHeight()/2+0.1*meter));
 		boxHead.setMaterial(materialHead);
-		
+
+		//box for the player's nose
+		Box boxNose = new Box(0.1*meter,0.1*meter,0.1*meter);
+		boxNose.setTranslateY(-(0.5*meter+boxNose.getHeight()/2));
+		boxNose.setTranslateZ(-(boxHead.getDepth()/2+boxNose.getDepth()/2));
+		boxNose.setMaterial(materialHead);
+
+		//boxes for the hat
+		Box boxHat = new Box(0.8*meter, 0.05*meter, 0.8*meter);
+		Box boxHat2 = new Box(0.5*meter, 0.2*meter, 0.6*meter);
+		boxHat.setTranslateY(-(boxHead.getHeight()+box3.getHeight()+box1.getHeight()+boxHat.getHeight()/2));
+		boxHat2.setTranslateY(-(boxHead.getHeight()+box3.getHeight()+box1.getHeight()+boxHat.getHeight()+boxHat2.getHeight()/2));
+
 		//constructing the player's head
 		Component playerHead = new Component(getId()+"_head");
 		playerHead.getChildren().addAll(boxHead, boxNose, boxHat, boxHat2);
-		
 		
 		//material for the hat
 		PhongMaterial hatMaterial = new PhongMaterial();
 		hatMaterial.setDiffuseColor(Color.BLACK);
 		boxHat.setMaterial(hatMaterial);
 		boxHat2.setMaterial(hatMaterial);
-		
-		//body boxes
-		Box box1 = new Box(20,20,20);
-		Box box3 = new Box(35, 10, 10);
-		box1.setTranslateY(-12.5);
-		box3.setTranslateY(-10.75);
-		
+
 		//adding children to the returnValue
 		playerNode.getChildren().addAll(box1, box3, playerHead);
 		returnVal.addChildComponent(playerNode);

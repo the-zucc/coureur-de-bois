@@ -1,5 +1,6 @@
 package entity.statics.tree;
 
+import game.GameLogic;
 import game.Map;
 import javafx.geometry.Point3D;
 import javafx.scene.Group;
@@ -19,13 +20,13 @@ public class PineTree extends TreeNormal {
     @Override
     public Component buildComponent() {
 
-        return recurseBuildPyramids(getId(), 200f, 120f, 2);
+        return recurseBuildPyramids(getId(), (float)(4*GameLogic.getMeterLength()), (float)(2.4*GameLogic.getMeterLength()), 2);
     }
 
     private Component recurseBuildPyramids(String id, float baseSectionHeight, float baseSectionRadius, int sectionCount){
         Component returnVal = new Component(getId());
 
-        returnVal.getChildren().add(pyramidCreate(-baseSectionHeight/2,baseSectionHeight+15 ,baseSectionRadius,null, sectionCount));
+        returnVal.getChildren().add(pyramidCreate(-baseSectionHeight/2,baseSectionHeight+(float)(0.3*GameLogic.getMeterLength()) ,baseSectionRadius,null, sectionCount));
 
         return returnVal;
     }

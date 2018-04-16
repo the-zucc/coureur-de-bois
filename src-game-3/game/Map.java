@@ -313,7 +313,7 @@ public class Map implements ComponentOwner, Updateable, Messageable{
 		//generate random heights
 		for(int z = 0; z < rows+1; z++) {
 			for(int x = 0; x < cols+1; x++) {
-				float y = perlin.smoothNoise(x*multiplicator, z*multiplicator, 32, 24)*50000;
+				float y = perlin.smoothNoise(x*multiplicator, z*multiplicator, 32, 24)*(float)(1000*GameLogic.getMeterLength());
 				returnVal[z][x]=y;
 			}
 		}
@@ -404,7 +404,7 @@ public class Map implements ComponentOwner, Updateable, Messageable{
 	 * COLLISIONS
 	 */
 	//static variables
-	private static int collisionMapDivisionWidth=500;
+	private static int collisionMapDivisionWidth=(int)(10*GameLogic.getMeterLength());
 	private static int collisionMapDivisionHeight=collisionMapDivisionWidth;
 	private int collisionCols;
 	private int collisionRows;

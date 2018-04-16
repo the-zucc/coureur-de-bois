@@ -60,8 +60,6 @@ public abstract class GravityAffectedCollidingEntity extends MovingCollidingEnti
 			next = new Point3D(next.getX(), floorHeight, next.getZ());
 			resetGravityVector();
 		}
-		//System.out.println("nextpos:"+next);
-		//System.out.println("grav:"+getGravityVector());
 		if(next != null){
 			return next;
 		}

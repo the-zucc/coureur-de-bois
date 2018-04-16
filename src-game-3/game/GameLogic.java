@@ -13,7 +13,7 @@ import ui.gamescene.GameScene;
 import ui.gamescene.GameScreen;
 
 public class GameLogic {
-	private static double meterLength = 50;
+	private static double meterLength = 5;
 	
 	private static long updateCount = 0;
 	

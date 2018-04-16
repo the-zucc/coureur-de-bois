@@ -39,39 +39,32 @@ public abstract class MovingCollidingEntity extends VisibleCollidingEntity{
 
 	@Override
 	public Point3D getAllCorrections() {
-		if(this instanceof Player){
-			int collideableCount = 0;
-			Point3D corrections = Point3D.ZERO;
-			for(int i = collisionMapRow-1; i <= collisionMapRow+1; i++){
-				for(int j = collisionMapColumn-1; j <= collisionMapColumn+1;j++){
-					try{
-						ArrayList<Collideable> collideables = map.getCollisionMap()[i][j];
-						for(int k = 0; k < collideables.size(); k++){
-							Collideable c = collideables.get(k);
-							System.out.println("otherBox:"+c.getCollisionBox());
-							System.out.println("thisBox:"+getCollisionBox());
-							collideableCount++;
-							if(c.getCollisionBox() != null && getCollisionBox() != null && c != this) {
-								if(getCollisionBox().collides(c.getCollisionBox())){
-									System.out.println("collision");
-									corrections = corrections.add(this.getCorrection(c));
-								}
-								System.out.println("correction |B|"+this.getCorrection(c));
+		Point3D corrections = Point3D.ZERO;
+		for(int i = collisionMapRow-1; i <= collisionMapRow+1; i++){
+			for(int j = collisionMapColumn-1; j <= collisionMapColumn+1;j++){
+				try{
+					ArrayList<Collideable> collideables = map.getCollisionMap()[i][j];
+					for(int k = 0; k < collideables.size(); k++){
+						Collideable c = collideables.get(k);
+						if(c.getCollisionBox() != null && getCollisionBox() != null && c != this) {
+							if(getCollisionBox().collides(c.getCollisionBox())){
+								corrections = corrections.add(this.getCorrection(c));
 							}
 						}
-						
-					}catch(Exception e){
-						return Point3D.ZERO;
 					}
+
+				}catch(ArrayIndexOutOfBoundsException e){
+
+				}catch(Exception e){
+					e.printStackTrace();
+					return Point3D.ZERO;
 				}
 			}
-			System.out.println(collideableCount);
-			if(corrections != null)
-				return corrections;
-			else
-				return Point3D.ZERO;
 		}
-		return Point3D.ZERO;
+		if(corrections != null)
+			return corrections;
+		else
+			return Point3D.ZERO;
 	}
 	public void update(double secondsPassed){
 		Point3D nextPos = computeNextPosition(secondsPassed);

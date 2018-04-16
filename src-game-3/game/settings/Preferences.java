@@ -1,5 +1,7 @@
 package game.settings;
 
+import game.GameLogic;
+
 public class Preferences {
 
 	private static float waterLevel = 0;
@@ -11,7 +13,7 @@ public class Preferences {
 	}
 
 
-	private static double mapHeight = 150000;
+	private static double mapHeight = 15000;
 	public static double getMapHeight() {
 		return mapHeight;
 	}
@@ -20,7 +22,7 @@ public class Preferences {
 	}
 
 
-	private static double mapWidth = 150000;
+	private static double mapWidth = 15000;
 	public static double getMapWidth() {
 		return mapWidth;
 	}
@@ -29,12 +31,12 @@ public class Preferences {
 	}
 
 
-	private static double mapDetail = 400;
+	private static double mapDetail = 8*GameLogic.getMeterLength();
 	public static double getMapDetail() {
 		return mapDetail;
 	}
 	public static void setMapDetail(double mapDetail) {
-		Preferences.mapDetail = mapDetail;
+		Preferences.mapDetail = mapDetail*GameLogic.getMeterLength();
 	}
 
 
