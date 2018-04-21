@@ -83,9 +83,7 @@ public abstract  class LivingEntity extends GravityAffectedCollidingEntity imple
 			if(hp<=0){
 				if(message.containsKey("sender")){
 					Hashtable<String, ? extends Object> sentMessage = GameLogic.createSimpleXpMessage(computeXpReward(), this);
-					
 					Messageable destination = ((Hashtable<String, Messageable>)sentMessage).get("sender");
-					
 					GameLogic.sendMessage(destination, sentMessage);
 				}
 			}
@@ -137,10 +135,13 @@ public abstract  class LivingEntity extends GravityAffectedCollidingEntity imple
 				target = null;
 			}
 			else{
-				double mvtang = target.subtract(position2D).angle(new Point2D(1,0));
+				Point3D temp = new Point3D(target.getX(), 0, target.getY()).subtract(new Point3D(position2D.getX(), 0, position2D.getY())).normalize();
+				movement = temp.multiply(1/temp.magnitude());
+				
+				/*double mvtang = target.subtract(position2D).angle(new Point2D(1,0));
 				double x = Math.cos(mvtang)*this.computeMovementSpeed();
 				double y = Math.sin(mvtang)*this.computeMovementSpeed();
-				movement = new Point3D(x,0,y);
+				movement = new Point3D(x,0,y);*/
 			}
 
 		}

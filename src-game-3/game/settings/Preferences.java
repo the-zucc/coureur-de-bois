@@ -13,7 +13,7 @@ public class Preferences {
 	}
 
 
-	private static double mapHeight = 15000;
+	private static double mapHeight = 8000;
 	public static double getMapHeight() {
 		return mapHeight;
 	}
@@ -22,7 +22,7 @@ public class Preferences {
 	}
 
 
-	private static double mapWidth = 15000;
+	private static double mapWidth = 8000;
 	public static double getMapWidth() {
 		return mapWidth;
 	}

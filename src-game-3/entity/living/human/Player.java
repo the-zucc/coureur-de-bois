@@ -61,20 +61,20 @@ public class Player extends Human implements UserControllable, AttachableReceive
 
 		//box for the player head
 		Box boxHead = new Box(0.6*meter,0.6*meter,0.6*meter);
-		boxHead.setTranslateY(-(boxHead.getHeight()/2+0.1*meter));
+		boxHead.setTranslateY(-(boxHead.getHeight()/2+0.4*meter));
 		boxHead.setMaterial(materialHead);
 
 		//box for the player's nose
 		Box boxNose = new Box(0.1*meter,0.1*meter,0.1*meter);
 		boxNose.setTranslateY(-(0.5*meter+boxNose.getHeight()/2));
-		boxNose.setTranslateZ(-(boxHead.getDepth()/2+boxNose.getDepth()/2));
+		boxNose.setTranslateZ(boxHead.getDepth()/2+boxNose.getDepth()/2);
 		boxNose.setMaterial(materialHead);
 
 		//boxes for the hat
 		Box boxHat = new Box(0.8*meter, 0.05*meter, 0.8*meter);
 		Box boxHat2 = new Box(0.5*meter, 0.2*meter, 0.6*meter);
-		boxHat.setTranslateY(-(boxHead.getHeight()+box3.getHeight()+box1.getHeight()+boxHat.getHeight()/2));
-		boxHat2.setTranslateY(-(boxHead.getHeight()+box3.getHeight()+box1.getHeight()+boxHat.getHeight()+boxHat2.getHeight()/2));
+		boxHat.setTranslateY(-(boxHead.getHeight()+box1.getHeight()+boxHat.getHeight()/2));
+		boxHat2.setTranslateY(-(boxHead.getHeight()+box1.getHeight()+boxHat.getHeight()+boxHat2.getHeight()/2));
 
 		//constructing the player's head
 		Component playerHead = new Component(getId()+"_head");
@@ -95,7 +95,7 @@ public class Player extends Human implements UserControllable, AttachableReceive
 
 	@Override
 	public CollisionBox buildCollisionBox() {
-		return new SphericalCollisionBox(20,this, new Point3D(0,-10,0), map);
+		return new SphericalCollisionBox(GameLogic.getMeterLength(),this, new Point3D(0,0,0), map);
 	}
 
 	@Override

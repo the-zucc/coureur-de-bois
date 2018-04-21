@@ -22,11 +22,14 @@ import javafx.stage.Stage;
 
 public class GameScene extends SubScene {
 	private Group gameRoot;
-	private PerspectiveCamera gameCamera;
-	public GameScene(double arg1, double arg2, Stage window) {
+	private GameCamera gameCamera;
+	public GameCamera getGameCamera() {
+		return gameCamera;
+	}
+	public GameScene(double arg1, double arg2, Stage window, Map map) {
 		super(new Group(), arg1, arg2, true, Settings.getAntialiasingValue());
 		gameRoot = (Group)getRoot();
-		gameCamera = new GameCamera(25*GameLogic.getMeterLength(), Map.getInstance().getCurrentPlayer());
+		gameCamera = new GameCamera(20*GameLogic.getMeterLength(), Map.getInstance().getCurrentPlayer(), map);
 		setCamera(gameCamera);
 		window.widthProperty().addListener(new ChangeListener<Number>() {
 			@Override

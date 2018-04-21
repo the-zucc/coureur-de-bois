@@ -33,10 +33,15 @@ public abstract class CollisionBox {
 
 	};
 	public boolean collides(CollisionBox b1){
-		if(b1 instanceof SphericalCollisionBox)
-			return collidesSphericalBox((SphericalCollisionBox)b1);
-		if(b1 instanceof CapsuleCollisionBox)
-			return collidesCapsuleBox((CapsuleCollisionBox)b1);
+		try {
+			if(b1 instanceof SphericalCollisionBox)
+				return collidesSphericalBox((SphericalCollisionBox)b1);
+			if(b1 instanceof CapsuleCollisionBox)
+				return collidesCapsuleBox((CapsuleCollisionBox)b1);			
+		}catch(Exception e) {
+			
+		}
+		
 		return false;
 	}
 	public abstract Point3D getCorrectionCapsuleBox(CapsuleCollisionBox b1);

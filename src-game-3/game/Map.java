@@ -13,6 +13,7 @@ import characteristic.positionnable.Positionnable2D;
 import collision.CollisionBox;
 import entity.Entity;
 import entity.MovingCollidingEntity;
+import entity.living.animal.Fox;
 import entity.living.animal.Sheep;
 import entity.living.human.Player;
 import entity.living.human.Villager;
@@ -49,7 +50,7 @@ public class Map implements ComponentOwner, Updateable, Messageable{
 					Preferences.getVillageRadius(),
 					Preferences.getVillageTipiCount(),
 					Preferences.getVillageVillagerCount(),
-					0);
+					1000);
 		}
 		return instance;
 	}
@@ -185,7 +186,7 @@ public class Map implements ComponentOwner, Updateable, Messageable{
 			v.addEntitiesToMap(this);
 		}
 		for(int i = 0; i < sheepCount; i++){
-			addEntity(new Sheep(PositionGenerator.generateRandom3DPositionOnFloor(this), this));
+			addEntity(new Fox(PositionGenerator.generateRandom3DPositionOnFloor(this), this));
 		}
 	}
 	
@@ -363,7 +364,7 @@ public class Map implements ComponentOwner, Updateable, Messageable{
 					((MovingCollidingEntity) e).setCollisionMapColum(col);
 				}
 			}catch(ArrayIndexOutOfBoundsException aioobe){
-				System.out.println("out of map");
+				
 			}
 		}
 		if(e instanceof ComponentOwner) {
@@ -426,7 +427,6 @@ public class Map implements ComponentOwner, Updateable, Messageable{
 	}
 	public ArrayList<Collideable>[][] getNearbyCollideables(int row, int col){
 		ArrayList<Collideable>[][] returnVal = new ArrayList[3][3];
-		//returnVal = (ArrayList<Collideable>[][])returnVal;
 		int ri = 0;
 		for(int i = row-1; i <= row+1; i++, ri++){
 			int rj = 0;

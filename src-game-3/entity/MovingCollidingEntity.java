@@ -54,7 +54,7 @@ public abstract class MovingCollidingEntity extends VisibleCollidingEntity{
 					}
 
 				}catch(ArrayIndexOutOfBoundsException e){
-
+					
 				}catch(Exception e){
 					e.printStackTrace();
 					return Point3D.ZERO;

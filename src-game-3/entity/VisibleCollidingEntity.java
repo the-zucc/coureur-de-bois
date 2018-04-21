@@ -34,6 +34,7 @@ public abstract class VisibleCollidingEntity extends VisibleEntity implements Co
 	
 	protected void correctCollisions(){
 		Point3D corrections = getAllCorrections();
+		//System.out.println("corrections "+getClass().getName()+" "+corrections);
 		if(corrections != null){
 			moveTo(getPosition().add(corrections));
 		}
@@ -41,25 +42,19 @@ public abstract class VisibleCollidingEntity extends VisibleEntity implements Co
 	
 	@Override
 	public void moveTo(Point3D nextPosition) {
-		//System.out.println(nextPosition);
-		
 		setPosition(nextPosition);
 		if(collisionBox != null){
 			collisionBox.update();
 		}
+		
 		int newCollisionMapRow = map.getCollisionRowFor(get2DPosition());
 		int newCollisionMapColumn = map.getCollisionColumnFor(get2DPosition());
 		if(newCollisionMapRow != collisionMapRow || newCollisionMapColumn != collisionMapColumn){
 			try{
-				if(this instanceof Player){
-					System.out.println("row:"+newCollisionMapRow);
-					System.out.println("column:"+newCollisionMapColumn);
-				}
 				map.getCollisionMap()[collisionMapRow][collisionMapColumn].remove(this);
 				collisionMapRow = newCollisionMapRow;
 				collisionMapColumn = newCollisionMapColumn;
 				map.getCollisionMap()[collisionMapRow][collisionMapColumn].add(this);
-				
 			}catch(Exception e){
 				//System.out.println("out of map");
 			}
@@ -97,28 +92,4 @@ public abstract class VisibleCollidingEntity extends VisibleEntity implements Co
 
 	@Override
 	public abstract boolean canMoveOnCollision();
-	
-	@Override
-	public Point3D getAllCorrections(){
-		Point3D corrections = Point3D.ZERO;
-		if(!collisionBox.isBigCollisionBox()){
-			ArrayList<Collideable>[][] nearbyCollideables = map.getNearbyCollideables(collisionMapRow, collisionMapRow);
-			for(ArrayList<Collideable>[] a:nearbyCollideables){
-				for(ArrayList<Collideable> b:a){
-					for (Collideable collideable : b) {
-						if(collideable != this){
-							Point3D correction = getCorrection(collideable);
-							corrections = corrections.add(correction);
-						}
-					}
-				}
-			}
-		}
-		for(Collideable c:map.getBigCollideables()){
-			if(c != this){
-				corrections = corrections.add(getCorrection(c));
-			}
-		}
-		return position;
-	}
 }

@@ -80,29 +80,29 @@ public class Villager extends Human implements Hoverable{
 	@Override
 	public Component buildComponent() {
 		Component returnVal = new Component(getId());
-
-        Box box1 = new Box(20,20,20);
-        Box box2 = new Box(30,30,30);
-        Box box3 = new Box(30, 10, 10);
-        Box boxNose = new Box(5,7,5);
+		double meter = GameLogic.getMeterLength();
+        Box box1 = new Box(0.4*meter,0.4*meter,0.4*meter);
+        Box box2 = new Box(0.6*meter, 0.6*meter,0.6*meter);
+        Box box3 = new Box(0.6*meter,0.2*meter,0.2*meter);
+        Box boxNose = new Box(0.1*meter,0.12*meter,0.1*meter);
         PhongMaterial materialHead = new PhongMaterial();
         materialHead.setDiffuseColor(Color.PINK);
         box2.setMaterial(materialHead);
         boxNose.setMaterial(materialHead);
 
-        box1.setTranslateY(-12.5);
-        box2.setTranslateY(-35);
-        box3.setTranslateY(-10.75);
+        box1.setTranslateY(-0.25*meter);
+        box2.setTranslateY(-0.7*meter);
+        box3.setTranslateY(-0.2*meter +.015*meter);
 
-        boxNose.setTranslateY(-35);
-        boxNose.setTranslateZ(17.5);
+        boxNose.setTranslateY(-0.7*meter);
+        boxNose.setTranslateZ(0.25*meter+0.1*meter);
 
         //hair
         PhongMaterial materialHair = new PhongMaterial(Color.ORANGERED);
-        Box boxHair = new Box(34, 5, 34);
+        Box boxHair = new Box(0.695*meter, 0.1*meter, 0.695*meter);
         //Box boxHair2 = new Box(5, )
         boxHair.setMaterial(materialHair);
-        boxHair.setTranslateY(-50);
+        boxHair.setTranslateY(-meter);
 
         returnVal.getChildren().addAll(box1, box2, box3, boxNose, boxHair);
 
@@ -117,12 +117,12 @@ public class Villager extends Human implements Hoverable{
 
 	@Override
 	public CollisionBox buildCollisionBox() {
-		return new SphericalCollisionBox(20,this, new Point3D(0,-10,0), map);
+		return new SphericalCollisionBox(0.5*GameLogic.getMeterLength(),this, new Point3D(0,0,0), map);
 	}
 
 	@Override
 	public void onCollides(Collideable c) {
-
+		
 	}
 
 	@Override
