@@ -48,6 +48,7 @@ public class GameCamera extends PerspectiveCamera implements Attachable{
 
 		component.setRotationAxis(Rotate.X_AXIS);
 		component.setRotate(-45);
+		
 		double accel = 0.1;
 		speeds = Point3D.ZERO;
 		accelY = new Point3D(0,-accel,0);
@@ -82,7 +83,7 @@ public class GameCamera extends PerspectiveCamera implements Attachable{
 		component.setTranslateX(relativePosition.getX());
 		component.setTranslateY(relativePosition.getY());
 		component.setTranslateZ(relativePosition.getZ());
-
+		
 		Utils3D.lookat(getComponent(), map.getCurrentPlayer().getPosition());
 		*/
 	}

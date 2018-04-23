@@ -21,18 +21,11 @@ public class Utils3D {
 		double distZ = nodePosition.getZ()-lookat.getZ();
 		
 		//hypothenuse du triange au sol, utilisé pour la rotation autour de l'axe des X
-		double angleY = Math.toDegrees(Math.atan(distZ/distX));
+		double angleY = Math.toDegrees(Math.atan(distZ/distX))+90;
 		double hypot = Math.hypot(distX, distZ);
-		double angleX = Math.toDegrees(Math.atan(hypot/Math.abs(distY)));
-		Rotate ry = new Rotate(angleY, Rotate.Y_AXIS);
-		Rotate rx = new Rotate(-angleX, Rotate.X_AXIS);
-		for (int i = 0; i < node.getTransforms().size(); i++) {
-			Transform t = node.getTransforms().get(i);
-			if(t instanceof Rotate){
-				//node.getTransforms().remove(t);
-				//i--;
-			}
-		}
+		double angleX = Math.toDegrees(Math.atan(hypot/distY));
+		Rotate ry = new Rotate(-angleY, Rotate.Y_AXIS);
+		Rotate rx = new Rotate(angleX, Rotate.X_AXIS);
         node.getTransforms().add(ry);
         node.getTransforms().add(rx);
 

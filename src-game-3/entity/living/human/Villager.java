@@ -7,6 +7,7 @@ import collision.SphericalCollisionBox;
 import game.GameLogic;
 import game.Map;
 import javafx.geometry.Point3D;
+import javafx.scene.Cursor;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
@@ -112,6 +113,7 @@ public class Villager extends Human implements Hoverable{
 		returnVal.setOnMouseExited(e -> {
 			this.onUnHover(e);
 		});
+		returnVal.setCursor(Cursor.HAND);
 		return returnVal;
 	}
 

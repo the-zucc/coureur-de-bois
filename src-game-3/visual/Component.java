@@ -6,6 +6,7 @@ import characteristic.positionnable.Positionnable;
 import characteristic.positionnable.Positionnable2D;
 import javafx.geometry.Point2D;
 import javafx.geometry.Point3D;
+import javafx.scene.Cursor;
 import javafx.scene.Group;
 
 public class Component extends Group implements Positionnable{
@@ -67,5 +68,4 @@ public class Component extends Group implements Positionnable{
 	public double distanceFrom(Positionnable2D arg0) {
 		return arg0.get2DPosition().distance(position2D);
 	}
-	
 }

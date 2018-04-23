@@ -1,16 +1,27 @@
 package entity.living.animal;
 
+import java.io.IOException;
+import java.io.InputStream;
+
+import app.App;
 import characteristic.positionnable.Collideable;
 import collision.CollisionBox;
 import collision.SphericalCollisionBox;
 import entity.living.LivingEntity;
 import game.GameLogic;
 import game.Map;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Point2D;
 import javafx.geometry.Point3D;
+import javafx.scene.Cursor;
+import javafx.scene.Group;
+import javafx.scene.control.Label;
+import javafx.scene.control.TitledPane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.Box;
+import ui.UserInterface;
+import ui.gamescene.GameScreen;
 import util.PositionGenerator;
 import visual.Component;
 import visual.LegComponent;
@@ -59,7 +70,6 @@ public class Pig extends LivingEntity {
             if(getPosition().getX() > mapWidth/2 || getPosition().getX() < -mapWidth/2)
                 startMovingTo(Point2D.ZERO);
         }
-        //startMovingTo(Point2D.ZERO);
 	}
 
 	@Override
@@ -116,6 +126,26 @@ public class Pig extends LivingEntity {
 		
 		returnVal.getChildren().addAll(legs);
 		returnVal.getChildren().addAll(body, head);
+		returnVal.setCursor(Cursor.HAND);
+		returnVal.setOnMouseClicked((e) -> {
+			TitledPane root;
+			try {
+				root = FXMLLoader.load(getClass().getResource("/fxml/entity_pane.fxml"));
+				root.setTranslateX(e.getX());
+				root.setTranslateY(e.getY());
+				root.setTranslateZ(e.getZ());
+				((Group)returnVal.getScene().getRoot()).getChildren().add(root);
+				//((Label)root.lookup("#hpLabel")).setText(String.valueOf(getHp()));
+				
+				root.setOnMouseClicked((e2)->{
+					((Group)returnVal.getScene().getRoot()).getChildren().remove(root);
+				});
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			
+		});
 		return returnVal;
 	}
 
@@ -128,5 +158,5 @@ public class Pig extends LivingEntity {
 	public void onCollides(Collideable c) {
 		
 	}
-
+	
 }

@@ -52,11 +52,16 @@ public abstract class VisibleCollidingEntity extends VisibleEntity implements Co
 		if(newCollisionMapRow != collisionMapRow || newCollisionMapColumn != collisionMapColumn){
 			try{
 				map.getCollisionMap()[collisionMapRow][collisionMapColumn].remove(this);
-				collisionMapRow = newCollisionMapRow;
-				collisionMapColumn = newCollisionMapColumn;
-				map.getCollisionMap()[collisionMapRow][collisionMapColumn].add(this);
+				
 			}catch(Exception e){
 				//System.out.println("out of map");
+			}
+			collisionMapRow = newCollisionMapRow;
+			collisionMapColumn = newCollisionMapColumn;
+			try{
+				map.getCollisionMap()[collisionMapRow][collisionMapColumn].add(this);
+			}catch(Exception e){
+				
 			}
 		}
 	}
