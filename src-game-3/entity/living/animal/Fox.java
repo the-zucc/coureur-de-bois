@@ -13,6 +13,7 @@ import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.Box;
 import util.PositionGenerator;
 import visual.Component;
+import visual.LegComponent;
 
 public class Fox extends LivingEntity {
 	
@@ -80,26 +81,28 @@ public class Fox extends LivingEntity {
 		body.setMaterial(new PhongMaterial(Color.CHOCOLATE));
 		double width = 0.3*meter;
 		double depth = meter;
-		Box[] legs = new Box[4];
-		legs[0] = new Box(0.125*meter, 0.125*meter, 0.125*meter);
+		double[] boxSize = {0.125*meter, 0.125*meter, 0.125*meter};
+		LegComponent[] legs = new LegComponent[4];
+		PhongMaterial material = null;
+		legs[0] = new LegComponent("leg0",0,0, 0.1*meter, boxSize, material);
 		legs[0].setTranslateX(-width/2);
-		legs[0].setTranslateY(-legs[0].getHeight()/2);
+		legs[0].setTranslateY(-legs[0].getLeg().getHeight()/2);
 		legs[0].setTranslateZ(depth/2);
-		
-		legs[1] = new Box(0.125*meter, 0.125*meter, 0.125*meter);
+
+		legs[1] = new LegComponent("leg1",0,0, 0.1*meter, boxSize, material);
 		legs[1].setTranslateX(width/2);
-		legs[1].setTranslateY(-legs[1].getHeight()/2);
+		legs[1].setTranslateY(-legs[1].getLeg().getHeight()/2);
 		legs[1].setTranslateZ(depth/2);
-		
-		legs[2] = new Box(0.125*meter, 0.125*meter, 0.125*meter);
+
+		legs[2] = new LegComponent("leg2",0,0, 0.1*meter, boxSize, material);
 		legs[2].setTranslateX(-width/2);
 		legs[2].setTranslateZ(-depth/2);
-		legs[2].setTranslateY(-legs[2].getHeight()/2);
-		
-		legs[3] = new Box(0.125*meter, 0.125*meter, 0.125*meter);
+		legs[2].setTranslateY(-legs[2].getLeg().getHeight()/2);
+
+		legs[3] = new LegComponent("leg3",0,0, 0.1*meter, boxSize, material);
 		legs[3].setTranslateX(width/2);
 		legs[3].setTranslateZ(-depth/2);
-		legs[3].setTranslateY(-legs[3].getHeight()/2);
+		legs[3].setTranslateY(-legs[3].getLeg().getHeight()/2);
 		
 		Box head = new Box(0.4*meter, 0.4*meter, 0.4*meter);
 		head.setMaterial(new PhongMaterial(Color.BLANCHEDALMOND));

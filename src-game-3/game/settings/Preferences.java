@@ -58,7 +58,7 @@ public class Preferences {
 	}
 
 
-	private static int villageCount = 10;
+	private static int villageCount = 5;
 	public static void setVillageCount(int villageCount) {
 		Preferences.villageCount = villageCount;
 	}

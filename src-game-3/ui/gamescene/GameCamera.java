@@ -12,6 +12,7 @@ import javafx.geometry.Point3D;
 import javafx.scene.PerspectiveCamera;
 import javafx.scene.transform.Rotate;
 import visual.Component;
+import visual.Utils3D;
 
 public class GameCamera extends PerspectiveCamera implements Attachable{
 
@@ -41,9 +42,9 @@ public class GameCamera extends PerspectiveCamera implements Attachable{
 		setFarClip(20000);
 
 		double ty= -dist;
-		component.setTranslateY(ty);
+		//component.setTranslateY(ty);
 		double tz = -dist;
-		component.setTranslateZ(tz);
+		//component.setTranslateZ(tz);
 
 		component.setRotationAxis(Rotate.X_AXIS);
 		component.setRotate(-45);
@@ -66,7 +67,6 @@ public class GameCamera extends PerspectiveCamera implements Attachable{
 			speeds = speeds.add(accelY);
 			//aller vers le bas
 			if(speeds.getY() > 0 && Math.abs(position.getY()-desiredCameraHeight)<Math.abs(speeds.getY())) {
-				relativePosition = new Point3D(relativePosition.getX(), height, relativePosition.getZ());
 				speeds = new Point3D(speeds.getX(),0,speeds.getZ());
 			}
 		}
@@ -74,14 +74,16 @@ public class GameCamera extends PerspectiveCamera implements Attachable{
 			speeds = speeds.subtract(accelY);
 			//aller vers le haut
 			if(speeds.getY() < 0 && Math.abs(position.getY()-desiredCameraHeight)<Math.abs(speeds.getY())) {
-				relativePosition = new Point3D(relativePosition.getX(), height, relativePosition.getZ());
 				speeds = new Point3D(speeds.getX(),0,speeds.getZ());
 			}
 		}
 		relativePosition = relativePosition.add(speeds);
+
 		component.setTranslateX(relativePosition.getX());
 		component.setTranslateY(relativePosition.getY());
 		component.setTranslateZ(relativePosition.getZ());
+
+		Utils3D.lookat(getComponent(), map.getCurrentPlayer().getPosition());
 		*/
 	}
 

@@ -19,6 +19,7 @@ import javafx.scene.shape.Cylinder;
 import javafx.scene.transform.Rotate;
 import javafx.scene.transform.Translate;
 import javafx.stage.Stage;
+import visual.Utils3D;
 
 public class GameScene extends SubScene {
 	private Group gameRoot;
@@ -31,6 +32,7 @@ public class GameScene extends SubScene {
 		gameRoot = (Group)getRoot();
 		gameCamera = new GameCamera(20*GameLogic.getMeterLength(), Map.getInstance().getCurrentPlayer(), map);
 		setCamera(gameCamera);
+		//Utils3D.lookat(gameCamera, map.getCurrentPlayer().getPosition());
 		window.widthProperty().addListener(new ChangeListener<Number>() {
 			@Override
 			public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {

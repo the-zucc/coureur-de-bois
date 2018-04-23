@@ -22,6 +22,14 @@ public class Component extends Group implements Positionnable{
 			subComponents.put(child.getId(),child);
 		}
 	}
+	public void addChildComponents(Component... children) {
+		for(Component child: children){
+			if(child.getId() != null){
+				getChildren().add(child);
+				subComponents.put(child.getId(),child);
+			}
+		}
+	}
 	public void removeChildComponent(Component child){
 		getChildren().remove(child);
 		subComponents.remove(child.getId());
