@@ -22,7 +22,7 @@ import visual.Component;
 
 public class Player extends Human implements UserControllable, AttachableReceiver{
 	
-	private static Point3D jumpVector = new Point3D(0, -20*GameLogic.getMeterLength(), 0);
+	private static Point3D jumpVector = new Point3D(0, -40*GameLogic.getMeterLength(), 0);
 
 	public Player(Point3D position, Map map) {
 		super(position, map, 1);
@@ -100,9 +100,9 @@ public class Player extends Human implements UserControllable, AttachableReceive
 
 	@Override
 	protected double computeMovementSpeed() {
-		double speed = 3*GameLogic.getMeterLength();
+		double speed = 15*GameLogic.getMeterLength();
 		if(isRunning())
-			return speed*15;
+			return speed*3;
 		return speed;
 	}
 
@@ -158,5 +158,10 @@ public class Player extends Human implements UserControllable, AttachableReceive
 		playerBody.setRotationAxis(Rotate.Y_AXIS);
 		playerBody.setRotate(computeComponentRotationAngle(rotationAngle));
 		additionalComponentUpdates();
+	}
+	@Override
+	protected void jump(){
+		//overriden from LivingEntity
+		addForceToGravity(getJumpVector());
 	}
 }

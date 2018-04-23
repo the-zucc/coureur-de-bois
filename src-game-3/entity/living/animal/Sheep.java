@@ -94,8 +94,7 @@ public class Sheep extends LivingEntity {
 
 	@Override
 	public void onCollides(Collideable c) {
-		// TODO Auto-generated method stub
-
+		
 	}
 
 }

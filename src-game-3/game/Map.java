@@ -13,7 +13,7 @@ import characteristic.positionnable.Positionnable2D;
 import collision.CollisionBox;
 import entity.Entity;
 import entity.MovingCollidingEntity;
-import entity.living.animal.Fox;
+import entity.living.animal.Pig;
 import entity.living.animal.Sheep;
 import entity.living.human.Player;
 import entity.living.human.Villager;
@@ -186,7 +186,7 @@ public class Map implements ComponentOwner, Updateable, Messageable{
 			v.addEntitiesToMap(this);
 		}
 		for(int i = 0; i < sheepCount; i++){
-			addEntity(new Fox(PositionGenerator.generateRandom3DPositionOnFloor(this), this));
+			addEntity(new Pig(PositionGenerator.generateRandom3DPositionOnFloor(this), this));
 		}
 	}
 	

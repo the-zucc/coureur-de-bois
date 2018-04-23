@@ -136,12 +136,7 @@ public abstract  class LivingEntity extends GravityAffectedCollidingEntity imple
 			}
 			else{
 				Point3D temp = new Point3D(target.getX(), 0, target.getY()).subtract(new Point3D(position2D.getX(), 0, position2D.getY())).normalize();
-				movement = temp.multiply(1/temp.magnitude());
-				
-				/*double mvtang = target.subtract(position2D).angle(new Point2D(1,0));
-				double x = Math.cos(mvtang)*this.computeMovementSpeed();
-				double y = Math.sin(mvtang)*this.computeMovementSpeed();
-				movement = new Point3D(x,0,y);*/
+				movement = temp.multiply(1/temp.magnitude()).multiply(movementSpeed);
 			}
 
 		}
@@ -183,7 +178,9 @@ public abstract  class LivingEntity extends GravityAffectedCollidingEntity imple
 		return isRunning;
 	}
 	protected void jump(){
-		this.addForceToGravity(getJumpVector());
+		if(getPosition().getY() >= map.getHeightAt(get2DPosition())-0.1*GameLogic.getMeterLength()){
+			this.addForceToGravity(getJumpVector());
+		}
 	}
 	protected Point3D getJumpVector() {
 		return jumpVector;

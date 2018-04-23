@@ -15,10 +15,10 @@ import util.PositionGenerator;
 import visual.Component;
 import visual.LegComponent;
 
-public class Fox extends LivingEntity {
+public class Pig extends LivingEntity {
 	
 
-	public Fox(Point3D position, Map map) {
+	public Pig(Point3D position, Map map) {
 		super(position, map);
 	}
 
@@ -36,7 +36,7 @@ public class Fox extends LivingEntity {
 	public void updateActions(double secondsPassed) {
 	    double actionChoiceTreshold = 0.015;
         double a = Math.random()*100;
-        /*if (a < actionChoiceTreshold) {
+        if (a < actionChoiceTreshold) {
             setUp(true);
         } else if (a < 2 * actionChoiceTreshold) {
             setUp(false);
@@ -58,13 +58,18 @@ public class Fox extends LivingEntity {
             double mapWidth = Map.getInstance().getMapWidth();
             if(getPosition().getX() > mapWidth/2 || getPosition().getX() < -mapWidth/2)
                 startMovingTo(Point2D.ZERO);
-        }*/
-        startMovingTo(Point2D.ZERO);
+        }
+        //startMovingTo(Point2D.ZERO);
 	}
 
 	@Override
 	public void additionalComponentUpdates() {
-		
+		if(!this.movement.equals(Point3D.ZERO)){
+			for (int i = 0; i < 4; i++) {
+				LegComponent lc = (LegComponent)getComponent().lookup("#leg"+i);
+				lc.update();
+			}
+		}
 	}
 
 	@Override
@@ -75,26 +80,26 @@ public class Fox extends LivingEntity {
 	@Override
 	public Component buildComponent() {
 		Component returnVal = new Component(getId());
-		double meter = GameLogic.getMeterLength()*10;
+		double meter = GameLogic.getMeterLength();
 		Box body = new Box(0.5*meter,0.5*meter,meter);
 		body.setTranslateY(-(0.4*meter));
-		body.setMaterial(new PhongMaterial(Color.CHOCOLATE));
+		body.setMaterial(new PhongMaterial(Color.PINK));
 		double width = 0.3*meter;
 		double depth = meter;
 		double[] boxSize = {0.125*meter, 0.125*meter, 0.125*meter};
 		LegComponent[] legs = new LegComponent[4];
-		PhongMaterial material = null;
+		PhongMaterial material = new PhongMaterial(Color.PINK);
 		legs[0] = new LegComponent("leg0",0,0, 0.1*meter, boxSize, material);
 		legs[0].setTranslateX(-width/2);
 		legs[0].setTranslateY(-legs[0].getLeg().getHeight()/2);
 		legs[0].setTranslateZ(depth/2);
 
-		legs[1] = new LegComponent("leg1",0,0, 0.1*meter, boxSize, material);
+		legs[1] = new LegComponent("leg1",1,0, 0.1*meter, boxSize, material);
 		legs[1].setTranslateX(width/2);
 		legs[1].setTranslateY(-legs[1].getLeg().getHeight()/2);
 		legs[1].setTranslateZ(depth/2);
 
-		legs[2] = new LegComponent("leg2",0,0, 0.1*meter, boxSize, material);
+		legs[2] = new LegComponent("leg2",1,0, 0.1*meter, boxSize, material);
 		legs[2].setTranslateX(-width/2);
 		legs[2].setTranslateZ(-depth/2);
 		legs[2].setTranslateY(-legs[2].getLeg().getHeight()/2);
@@ -105,9 +110,9 @@ public class Fox extends LivingEntity {
 		legs[3].setTranslateY(-legs[3].getLeg().getHeight()/2);
 		
 		Box head = new Box(0.4*meter, 0.4*meter, 0.4*meter);
-		head.setMaterial(new PhongMaterial(Color.BLANCHEDALMOND));
+		head.setMaterial(new PhongMaterial(Color.PINK));
 		head.setTranslateY(-0.6*meter);
-		head.setTranslateZ(35);
+		head.setTranslateZ(0.7*meter);
 		
 		returnVal.getChildren().addAll(legs);
 		returnVal.getChildren().addAll(body, head);
@@ -116,7 +121,7 @@ public class Fox extends LivingEntity {
 
 	@Override
 	public CollisionBox buildCollisionBox() {
-		return new SphericalCollisionBox(0.5*GameLogic.getMeterLength(),this, new Point3D(0,-GameLogic.getMeterLength()*10,0), map);
+		return new SphericalCollisionBox(0.5*GameLogic.getMeterLength(),this, new Point3D(0,0,0), map);
 	}
 
 	@Override

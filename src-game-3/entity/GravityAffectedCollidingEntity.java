@@ -19,7 +19,7 @@ public abstract class GravityAffectedCollidingEntity extends MovingCollidingEnti
 	}
 
 	@Override
-	public Point3D getGravityVector() {
+	public Point3D getGravity() {
 		return gravity;
 	}
 
@@ -53,7 +53,7 @@ public abstract class GravityAffectedCollidingEntity extends MovingCollidingEnti
 		updateGravityVector(secondsPassed);
 		Point3D next = super.computeNextPosition(secondsPassed);
 		if(next != null){
-			next =  next.add(getGravityVector().multiply(secondsPassed));
+			next =  next.add(getGravity().multiply(secondsPassed));
 		}
 		double floorHeight=Map.getInstance().getHeightAt(PositionGenerator.convert2D(next));
 		if(next.getY() > floorHeight){
