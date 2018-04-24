@@ -108,7 +108,6 @@ public class Player extends Human implements UserControllable, AttachableReceive
 
 	@Override
 	public void onKeyPressed(KeyEvent ke) {
-		// TODO Auto-generated method stub
 		keyAction(ke, true);
 	}
 

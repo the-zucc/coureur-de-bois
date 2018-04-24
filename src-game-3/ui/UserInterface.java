@@ -5,6 +5,7 @@ import java.util.Hashtable;
 import characteristic.Messageable;
 import characteristic.Updateable;
 import game.GameLogic;
+import game.InputHandler;
 import game.Map;
 import javafx.event.EventHandler;
 import javafx.scene.Group;
@@ -24,6 +25,8 @@ public class UserInterface extends Scene implements Updateable, Messageable {
 	private GameScene gameScene;
 	private GameScreen gameScreen;
 	private Group uiRoot;
+	private Map map;
+	private InputHandler inputHandler;
 
 	public UserInterface(double width, double height) {
 		super(new Group(), width, height, false, SceneAntialiasing.DISABLED);
@@ -37,6 +40,11 @@ public class UserInterface extends Scene implements Updateable, Messageable {
 	@Override
 	public void update(double secondsPassed) {
 		
+	}
+	public void setMapAndBindControls(Map map){
+		this.map = map;
+		inputHandler = new InputHandler(map);
+		bindGameControls();
 	}
 
 	@Override
@@ -74,7 +82,7 @@ public class UserInterface extends Scene implements Updateable, Messageable {
 			@Override
 			public void handle(KeyEvent event) {
 				try{
-					Map.getInstance().getCurrentPlayer().onKeyPressed(event);
+					inputHandler.handleKeyDown(event);
 				}catch(Exception ex){
 					
 				}
@@ -83,7 +91,7 @@ public class UserInterface extends Scene implements Updateable, Messageable {
 		this.setOnKeyReleased(new EventHandler<KeyEvent>(){
 			public void handle(KeyEvent event){
 				try{
-					Map.getInstance().getCurrentPlayer().onKeyReleased(event);
+					inputHandler.handleKeyUp(event);
 				}catch(Exception ex){
 					
 				}

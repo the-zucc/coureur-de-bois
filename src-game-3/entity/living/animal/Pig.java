@@ -22,6 +22,7 @@ import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.Box;
 import ui.UserInterface;
 import ui.gamescene.GameScreen;
+import util.NodeUtils;
 import util.PositionGenerator;
 import visual.Component;
 import visual.LegComponent;
@@ -131,11 +132,13 @@ public class Pig extends LivingEntity {
 			TitledPane root;
 			try {
 				root = FXMLLoader.load(getClass().getResource("/fxml/entity_pane.fxml"));
-				root.setTranslateX(e.getX());
-				root.setTranslateY(e.getY());
-				root.setTranslateZ(e.getZ());
+				//root.setTranslateZ(e.getZ());
 				((Group)returnVal.getScene().getRoot()).getChildren().add(root);
-				//((Label)root.lookup("#hpLabel")).setText(String.valueOf(getHp()));
+				
+				root.setTranslateX(e.getSceneX());
+				root.setTranslateY(e.getSceneY());
+				Label l = (Label)NodeUtils.getChildByID(root, "hpLabel");
+				l.setText(String.valueOf(10));
 				
 				root.setOnMouseClicked((e2)->{
 					((Group)returnVal.getScene().getRoot()).getChildren().remove(root);
