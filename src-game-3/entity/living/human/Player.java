@@ -1,5 +1,6 @@
 package entity.living.human;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 import characteristic.attachable.Attachable;
@@ -10,15 +11,21 @@ import collision.CollisionBox;
 import collision.SphericalCollisionBox;
 import game.GameLogic;
 import game.Map;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Point3D;
+import javafx.scene.Cursor;
 import javafx.scene.Group;
+import javafx.scene.control.Label;
+import javafx.scene.control.TitledPane;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.Box;
 import javafx.scene.transform.Rotate;
+import util.NodeUtils;
 import visual.Component;
+import visual.LegComponent;
 
 public class Player extends Human implements UserControllable, AttachableReceiver{
 	
@@ -44,6 +51,7 @@ public class Player extends Human implements UserControllable, AttachableReceive
 
 	@Override
 	public Component buildComponent() {
+		/*
 		Component returnVal = new Component(getId());
 		Component playerNode = new Component(getId()+"_body");
 
@@ -91,6 +99,69 @@ public class Player extends Human implements UserControllable, AttachableReceive
 		returnVal.addChildComponent(playerNode);
 		
 		return returnVal;
+		*/
+		Component realReturnVal = new Component(getId()); 
+		Component returnVal = new Component(getId()+"_body");
+		realReturnVal.addChildComponent(returnVal);
+		double meter = GameLogic.getMeterLength();
+		Box body = new Box(0.5*meter,0.5*meter,meter);
+		body.setTranslateY(-(0.4*meter));
+		body.setMaterial(new PhongMaterial(Color.PINK));
+		double width = 0.3*meter;
+		double depth = meter;
+		double[] boxSize = {0.125*meter, 0.125*meter, 0.125*meter};
+		LegComponent[] legs = new LegComponent[4];
+		PhongMaterial material = new PhongMaterial(Color.PINK);
+		legs[0] = new LegComponent("leg0",0,0, 0.1*meter, boxSize, material);
+		legs[0].setTranslateX(-width/2);
+		legs[0].setTranslateY(-legs[0].getLeg().getHeight()/2);
+		legs[0].setTranslateZ(depth/2);
+
+		legs[1] = new LegComponent("leg1",1,0, 0.1*meter, boxSize, material);
+		legs[1].setTranslateX(width/2);
+		legs[1].setTranslateY(-legs[1].getLeg().getHeight()/2);
+		legs[1].setTranslateZ(depth/2);
+
+		legs[2] = new LegComponent("leg2",1,0, 0.1*meter, boxSize, material);
+		legs[2].setTranslateX(-width/2);
+		legs[2].setTranslateZ(-depth/2);
+		legs[2].setTranslateY(-legs[2].getLeg().getHeight()/2);
+
+		legs[3] = new LegComponent("leg3",0,0, 0.1*meter, boxSize, material);
+		legs[3].setTranslateX(width/2);
+		legs[3].setTranslateZ(-depth/2);
+		legs[3].setTranslateY(-legs[3].getLeg().getHeight()/2);
+		
+		Box head = new Box(0.4*meter, 0.4*meter, 0.4*meter);
+		head.setMaterial(new PhongMaterial(Color.PINK));
+		head.setTranslateY(-0.6*meter);
+		head.setTranslateZ(0.7*meter);
+		
+		returnVal.getChildren().addAll(legs);
+		returnVal.getChildren().addAll(body, head);
+		returnVal.setCursor(Cursor.HAND);
+		returnVal.setOnMouseClicked((e) -> {
+			TitledPane root;
+			try {
+				root = FXMLLoader.load(getClass().getResource("/fxml/entity_pane.fxml"));
+				//root.setTranslateZ(e.getZ());
+				((Group)returnVal.getScene().getRoot()).getChildren().add(root);
+				
+				root.setTranslateX(e.getSceneX());
+				root.setTranslateY(e.getSceneY());
+				Label l = (Label)NodeUtils.getChildByID(root, "hpLabel");
+				l.setText(String.valueOf(10));
+				
+				root.setOnMouseClicked((e2)->{
+					((Group)returnVal.getScene().getRoot()).getChildren().remove(root);
+				});
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			
+		});
+		return realReturnVal;
 	}
 
 	@Override
@@ -137,7 +208,12 @@ public class Player extends Human implements UserControllable, AttachableReceive
 
 	@Override
 	public void additionalComponentUpdates() {
-
+		if(!this.movement.equals(Point3D.ZERO)){
+			for (int i = 0; i < 4; i++) {
+				LegComponent lc = (LegComponent)getComponent().lookup("#leg"+i);
+				lc.update();
+			}
+		}
 	}
 
 	@Override
