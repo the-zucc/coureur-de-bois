@@ -1,5 +1,6 @@
 package entity.statics.tree;
 
+import characteristic.Messenger;
 import characteristic.positionnable.Collideable;
 import collision.CollisionBox;
 import entity.statics.StaticVisibleCollidingEntity;
@@ -14,8 +15,8 @@ import javafx.scene.shape.Box;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class TreeNormal extends StaticVisibleCollidingEntity {
-    public TreeNormal(Point3D position, Map map) {
-        super(position, map);
+    public TreeNormal(Point3D position, Map map, Messenger messenger) {
+        super(position, map, messenger);
     }
 
     @Override

@@ -14,7 +14,7 @@ public abstract  class LivingEntity extends GravityAffectedCollidingEntity imple
 	private double hp;
 	private boolean up, down, left, right, newOrientation, isRunning;
 	private Point3D oldMovement;
-	private Point3D jumpVector;
+	private Point3D jumpVector = new Point3D(0,-40,0);
 	private Point2D target;
 	protected double rotationAngle;
 	protected double computeComponentRotationAngle(double rotationAngle){
@@ -22,8 +22,8 @@ public abstract  class LivingEntity extends GravityAffectedCollidingEntity imple
 		return rotationAngle+90;
 	}
 
-	public LivingEntity(Point3D position, Map map) {
-		super(position, map);
+	public LivingEntity(Point3D position, Map map, Messenger messenger) {
+		super(position, map, messenger);
 		up = down = left = right = newOrientation = isRunning = false;
 		oldMovement = Point3D.ZERO;
 		movement = oldMovement;

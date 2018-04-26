@@ -1,5 +1,6 @@
 package entity.living.animal;
 
+import characteristic.Messenger;
 import characteristic.positionnable.Collideable;
 import collision.CollisionBox;
 import entity.living.LivingEntity;
@@ -16,8 +17,8 @@ import visual.Component;
 public class Sheep extends LivingEntity {
 
 
-	public Sheep(Point3D position, Map map) {
-		super(position, map);
+	public Sheep(Point3D position, Map map, Messenger messenger) {
+		super(position, map, messenger);
 	}
 
 	@Override

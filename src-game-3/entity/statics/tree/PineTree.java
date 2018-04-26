@@ -1,5 +1,6 @@
 package entity.statics.tree;
 
+import characteristic.Messenger;
 import game.GameLogic;
 import game.Map;
 import javafx.geometry.Point3D;
@@ -13,8 +14,8 @@ import visual.Component;
 
 public class PineTree extends TreeNormal {
 
-    public PineTree(Point3D position, Map map) {
-        super(position, map);
+    public PineTree(Point3D position, Map map, Messenger messenger) {
+        super(position, map, messenger);
     }
 
     @Override

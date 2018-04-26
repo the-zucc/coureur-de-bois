@@ -1,5 +1,6 @@
 package entity.statics;
 
+import characteristic.Messenger;
 import characteristic.positionnable.Collideable;
 import collision.CollisionBox;
 import entity.VisibleCollidingEntity;
@@ -9,8 +10,8 @@ import visual.Component;
 
 public abstract class StaticVisibleCollidingEntity extends VisibleCollidingEntity {
 
-	public StaticVisibleCollidingEntity(Point3D position, Map map) {
-		super(position, map);
+	public StaticVisibleCollidingEntity(Point3D position, Map map, Messenger messenger) {
+		super(position, map, messenger);
 	}
 
 	@Override

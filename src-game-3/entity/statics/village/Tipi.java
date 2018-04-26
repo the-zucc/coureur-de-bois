@@ -1,5 +1,6 @@
 package entity.statics.village;
 
+import characteristic.Messenger;
 import characteristic.positionnable.Collideable;
 import collision.CollisionBox;
 import entity.statics.StaticVisibleCollidingEntity;
@@ -19,8 +20,8 @@ public class Tipi extends StaticVisibleCollidingEntity {
         return height;
     }
 
-    public Tipi(Point3D position, Map map) {
-        super(position, map);
+    public Tipi(Point3D position, Map map, Messenger messenger) {
+        super(position, map, messenger);
         this.radius = 100;
         this.height = 175;
     }

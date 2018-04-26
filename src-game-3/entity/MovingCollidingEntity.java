@@ -3,6 +3,7 @@ package entity;
 import java.util.ArrayList;
 import java.util.Hashtable;
 
+import characteristic.Messenger;
 import characteristic.positionnable.Collideable;
 import collision.CollisionBox;
 import entity.living.human.Player;
@@ -14,8 +15,8 @@ public abstract class MovingCollidingEntity extends VisibleCollidingEntity{
 
 	protected Point3D movement;
 	
-	public MovingCollidingEntity(Point3D position, Map map) {
-		super(position, map);
+	public MovingCollidingEntity(Point3D position, Map map, Messenger messenger) {
+		super(position, map, messenger);
 	}
 
 	@Override
@@ -67,7 +68,7 @@ public abstract class MovingCollidingEntity extends VisibleCollidingEntity{
 			return Point3D.ZERO;
 	}
 	public void update(double secondsPassed){
-		super.update();
+		processCallbackQueue();
 		Point3D nextPos = computeNextPosition(secondsPassed);
 		moveTo(nextPos);
 		collisionBox.update();

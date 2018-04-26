@@ -5,6 +5,7 @@ import java.util.Hashtable;
 import java.util.Iterator;
 
 import characteristic.MessageReceiver;
+import characteristic.Messenger;
 import characteristic.positionnable.Collideable;
 import collision.CollisionBox;
 import game.Map;
@@ -23,9 +24,13 @@ public abstract class VisibleCollidingEntity extends VisibleEntity implements Co
 	public void setCollisionMapColum(int collisionMapColumn){
 		this.collisionMapColumn = collisionMapColumn;
 	}
-	
-	public VisibleCollidingEntity(Point3D position, Map map) {
+	protected Messenger messenger;
+	public VisibleCollidingEntity(Point3D position, Map map, Messenger messenger) {
 		super(position);
+		this.messenger = messenger;
+		getMessengers().add(messenger);
+		messenger.addReceiver(this);
+		
 		collisionBox = buildCollisionBox();
 		this.map = map;
 		this.collisionMapRow = map.getCollisionRowFor(get2DPosition());
@@ -104,6 +109,12 @@ public abstract class VisibleCollidingEntity extends VisibleEntity implements Co
 	/**
 	 * Section pour Messageable
 	**/
+	private ArrayList<Messenger> messengers = new ArrayList<Messenger>();
+	@Override
+	public ArrayList<Messenger> getMessengers(){
+		return messengers;
+	}
+	
 	Hashtable<String, ArrayList<Object[]>> callbackQueue = new Hashtable<String, ArrayList<Object[]>>();
 	@Override
 	public Hashtable<String, ArrayList<Object[]>> getCallbackQueue(){
@@ -157,9 +168,5 @@ public abstract class VisibleCollidingEntity extends VisibleEntity implements Co
 	@Override
 	public Hashtable<String, MessageCallback> getAccepts(){
 		return accepts;
-	}
-
-	protected void update() {
-		processCallbackQueue();
 	}
 }

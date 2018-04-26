@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import app.App;
+import characteristic.Messenger;
 import characteristic.positionnable.Collideable;
 import collision.CollisionBox;
 import collision.SphericalCollisionBox;
@@ -30,8 +31,12 @@ import visual.LegComponent;
 public class Pig extends LivingEntity {
 	
 
-	public Pig(Point3D position, Map map) {
-		super(position, map);
+	public Pig(Point3D position, Map map, Messenger messenger) {
+		super(position, map, messenger);
+		accept("yall_jump", (params)->{
+			System.out.println("yo");
+			jump();
+		});
 	}
 
 	@Override
@@ -161,5 +166,4 @@ public class Pig extends LivingEntity {
 	public void onCollides(Collideable c) {
 		
 	}
-	
 }

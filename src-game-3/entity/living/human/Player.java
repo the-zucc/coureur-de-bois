@@ -3,6 +3,7 @@ package entity.living.human;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import characteristic.Messenger;
 import characteristic.attachable.Attachable;
 import characteristic.attachable.AttachableReceiver;
 import characteristic.interactive.UserControllable;
@@ -31,8 +32,8 @@ public class Player extends Human implements UserControllable, AttachableReceive
 	
 	private static Point3D jumpVector = new Point3D(0, -40*GameLogic.getMeterLength(), 0);
 
-	public Player(Point3D position, Map map) {
-		super(position, map, 1);
+	public Player(Point3D position, Map map, Messenger messenger) {
+		super(position, map, messenger,  1);
 	}
 
 	@Override
@@ -51,7 +52,7 @@ public class Player extends Human implements UserControllable, AttachableReceive
 
 	@Override
 	public Component buildComponent() {
-		/*
+		
 		Component returnVal = new Component(getId());
 		Component playerNode = new Component(getId()+"_body");
 
@@ -99,7 +100,7 @@ public class Player extends Human implements UserControllable, AttachableReceive
 		returnVal.addChildComponent(playerNode);
 		
 		return returnVal;
-		*/
+		/*
 		Component realReturnVal = new Component(getId()); 
 		Component returnVal = new Component(getId()+"_body");
 		realReturnVal.addChildComponent(returnVal);
@@ -161,7 +162,7 @@ public class Player extends Human implements UserControllable, AttachableReceive
 			}
 			
 		});
-		return realReturnVal;
+		return realReturnVal;*/
 	}
 
 	@Override
@@ -208,12 +209,12 @@ public class Player extends Human implements UserControllable, AttachableReceive
 
 	@Override
 	public void additionalComponentUpdates() {
-		if(!this.movement.equals(Point3D.ZERO)){
+		/*if(!this.movement.equals(Point3D.ZERO)){
 			for (int i = 0; i < 4; i++) {
 				LegComponent lc = (LegComponent)getComponent().lookup("#leg"+i);
 				lc.update();
 			}
-		}
+		}*/
 	}
 
 	@Override
@@ -237,6 +238,7 @@ public class Player extends Human implements UserControllable, AttachableReceive
 	@Override
 	protected void jump(){
 		//overriden from LivingEntity
-		addForceToGravity(getJumpVector());
+		messenger.send("yall_jump", null);
+		//addForceToGravity(getJumpVector());
 	}
 }

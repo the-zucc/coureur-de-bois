@@ -116,7 +116,10 @@ public class Map implements ComponentOwner, Updateable {
 	private ArrayList<Village> villages;
 	
 	private Messenger messenger;
-
+	public Messenger getMessenger() {
+		return messenger;
+	}
+	
 	public Map(double mapWidth,
 			double mapHeight,
 			double vertexSeparationWidth,
@@ -161,7 +164,7 @@ public class Map implements ComponentOwner, Updateable {
 		this.waterLevel = waterLevel;
 		component = buildComponent();
 
-		currentPlayer = new Player(PositionGenerator.generateRandom3DPositionOnFloor(this), this);
+		currentPlayer = new Player(PositionGenerator.generateRandom3DPositionOnFloor(this), this, messenger);
 		addEntity(currentPlayer);
 
 		for (int i = 0; i < treeCount; i++) {
@@ -169,16 +172,16 @@ public class Map implements ComponentOwner, Updateable {
 			TreeNormal tree;
 			double val = Math.random();
 			if(val > 0.5){
-				tree = new PineTree(pos, this);
+				tree = new PineTree(pos, this, messenger);
 			}
 			else{
-				tree = new TreeNormal(pos,this);
+				tree = new TreeNormal(pos,this, messenger);
 			}
 			addEntity(tree);
 		}
 		for (int i = 0; i < tipiCount; i++) {
 			Point3D pos = PositionGenerator.generateRandom3DPositionOnFloor(this);
-			addEntity(new Tipi(pos, this));
+			addEntity(new Tipi(pos, this, messenger));
 		}
 		for(int i= 0; i < villageCount; i++){
 			Point2D villagePos = PositionGenerator.generate2DPositionNotInVillages(this, villages);
@@ -187,7 +190,7 @@ public class Map implements ComponentOwner, Updateable {
 			v.addEntitiesToMap(this);
 		}
 		for(int i = 0; i < sheepCount; i++){
-			addEntity(new Pig(PositionGenerator.generateRandom3DPositionOnFloor(this), this));
+			addEntity(new Pig(PositionGenerator.generateRandom3DPositionOnFloor(this), this, messenger));
 		}
 	}
 
@@ -366,10 +369,6 @@ public class Map implements ComponentOwner, Updateable {
 		return returnVal;
 	}
 	
-
-
-
-	
 	public ArrayList<ComponentOwner> getComponentOwners(){
 		return componentOwners;
 	}
@@ -380,8 +379,6 @@ public class Map implements ComponentOwner, Updateable {
 			u.update(secondsPassed);
 		}
 	}
-
-	
 
 	@Override
 	public boolean shouldUpdate() {

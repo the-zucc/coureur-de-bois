@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.Hashtable;
 
 public interface MessageReceiver {
+	ArrayList<Messenger> getMessengers();
+	
     Hashtable<String, ArrayList<Object[]>> getCallbackQueue();
     void processCallbackQueue();
 

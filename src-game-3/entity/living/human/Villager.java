@@ -1,5 +1,6 @@
 package entity.living.human;
 
+import characteristic.Messenger;
 import characteristic.interactive.Hoverable;
 import characteristic.positionnable.Collideable;
 import collision.CollisionBox;
@@ -25,17 +26,21 @@ public class Villager extends Human implements Hoverable{
 	    return this.village;
 	}
 
-	public Villager(Point3D position, Map map) {
-		super(position, map, (int)(Math.random()*10)+1);
+	public Villager(Point3D position, Map map, Messenger messenger) {
+		super(position, map, messenger, (int)(Math.random()*10)+1);
+		accept("yall_jump", (params)->{
+			jump();
+		});
+		
 	}
-    public Villager(Point3D position, Map map, Village v) {
-        super(position, map, (int)(Math.random()*10)+1);
+    public Villager(Point3D position, Map map, Messenger messenger, Village v) {
+        super(position, map, messenger, (int)(Math.random()*10)+1);
         village = v;
     }
 
 	@Override
 	public void additionalComponentUpdates(){
-
+		
     }
 
 	@Override

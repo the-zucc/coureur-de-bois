@@ -2,6 +2,7 @@ package entity;
 
 import java.util.Hashtable;
 
+import characteristic.Messenger;
 import characteristic.positionnable.Collideable;
 import characteristic.positionnable.GravityAffected;
 import game.GameLogic;
@@ -13,8 +14,8 @@ import visual.Component;
 public abstract class GravityAffectedCollidingEntity extends MovingCollidingEntity implements GravityAffected{
 	private Point3D gravity;
 
-	public GravityAffectedCollidingEntity(Point3D position, Map map) {
-		super(position, map);
+	public GravityAffectedCollidingEntity(Point3D position, Map map, Messenger messenger) {
+		super(position, map, messenger);
 		gravity = new Point3D(0,0,0);
 	}
 

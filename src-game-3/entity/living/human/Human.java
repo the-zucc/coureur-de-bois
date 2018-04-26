@@ -1,5 +1,6 @@
 package entity.living.human;
 
+import characteristic.Messenger;
 import characteristic.attachable.Attachable;
 import characteristic.attachable.AttachableReceiver;
 import entity.living.LivingEntity;
@@ -11,8 +12,8 @@ import java.util.ArrayList;
 public abstract class Human extends LivingEntity implements AttachableReceiver {
 	int level;
 
-	public Human(Point3D position, Map map, int level) {
-		super(position, map);
+	public Human(Point3D position, Map map, Messenger messenger, int level) {
+		super(position, map, messenger);
 		this.level = level;
 	}
 	@Override
