@@ -1,15 +1,18 @@
 package entity;
 
 import java.util.ArrayList;
+import java.util.Hashtable;
+import java.util.Iterator;
 
+import characteristic.MessageReceiver;
 import characteristic.positionnable.Collideable;
 import collision.CollisionBox;
-import entity.living.human.Player;
 import game.Map;
 import javafx.geometry.Point3D;
+import util.MessageCallback;
 import visual.Component;
 
-public abstract class VisibleCollidingEntity extends VisibleEntity implements Collideable{
+public abstract class VisibleCollidingEntity extends VisibleEntity implements Collideable, MessageReceiver {
 	protected CollisionBox collisionBox;
 	protected Map map;
 	protected int collisionMapRow;
@@ -97,4 +100,66 @@ public abstract class VisibleCollidingEntity extends VisibleEntity implements Co
 
 	@Override
 	public abstract boolean canMoveOnCollision();
+
+	/**
+	 * Section pour Messageable
+	**/
+	Hashtable<String, ArrayList<Object[]>> callbackQueue = new Hashtable<String, ArrayList<Object[]>>();
+	@Override
+	public Hashtable<String, ArrayList<Object[]>> getCallbackQueue(){
+		return callbackQueue;
+	}
+
+	@Override
+	public void processCallbackQueue(){
+		Iterator<String> iterator = callbackQueue.keySet().iterator();
+		while(iterator.hasNext()){
+			String key = iterator.next();
+			ArrayList<Object[]> paramsList = getCallbackQueue().get(key);
+			for(Object[] params:paramsList){
+				if(params != null){
+					getAccepts().get(key).run(params);
+				}
+				else{
+					getAccepts().get(key).run();
+				}
+			}
+		}
+		callbackQueue.clear();
+	}
+	@Override
+	public void receiveMessage(String message, Object... params){
+		if(getAccepts().containsKey(message)){
+			if(!getCallbackQueue().containsKey(message)){
+				ArrayList<Object[]> paramsArray = new ArrayList<Object[]>();
+				paramsArray.add(params);
+				getCallbackQueue().put(message, paramsArray);
+			}
+			else{
+				getCallbackQueue().get(message).add(params);
+			}
+		}
+	}
+
+	@Override
+	public void receiveMessage(String message){
+		if(getAccepts().containsKey(message)){
+			callbackQueue.put(message, null);
+		}
+	}
+
+	@Override
+	public void accept(String message, MessageCallback callback){
+		getAccepts().put(message, callback);
+	}
+
+	Hashtable<String, MessageCallback> accepts = new Hashtable<String, MessageCallback>();
+	@Override
+	public Hashtable<String, MessageCallback> getAccepts(){
+		return accepts;
+	}
+
+	protected void update() {
+		processCallbackQueue();
+	}
 }

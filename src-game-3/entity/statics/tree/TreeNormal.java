@@ -8,11 +8,9 @@ import game.Map;
 import javafx.geometry.Point3D;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
-import util.IdMaker;
 import visual.Component;
 import javafx.scene.shape.Box;
 
-import java.util.Hashtable;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class TreeNormal extends StaticVisibleCollidingEntity {
@@ -67,8 +65,4 @@ public class TreeNormal extends StaticVisibleCollidingEntity {
 		return 1;
 	}
 
-	@Override
-	public void onMessageReceived(Hashtable<String, ? extends Object> message) {
-		
-	}
 }

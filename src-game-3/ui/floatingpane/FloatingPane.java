@@ -2,14 +2,13 @@ package ui.floatingpane;
 
 import java.util.Hashtable;
 
-import characteristic.Messageable;
 import characteristic.positionnable.Positionnable2D;
 import javafx.geometry.Point2D;
 import javafx.geometry.Point3D;
 import javafx.scene.Group;
 import ui.gamescene.GameScreen;
 
-public abstract class FloatingPane extends Group implements Messageable, Positionnable2D {
+public abstract class FloatingPane extends Group implements Positionnable2D {
 	
 	private Point2D position2D;
 	private double height;
@@ -25,19 +24,8 @@ public abstract class FloatingPane extends Group implements Messageable, Positio
 	public void hide(){
 		
 	}
-	
-	@Override
-	public void onMessageReceived(Hashtable<String, ? extends Object> message) {
-		if(message.containsKey("hide"))
-			hide();
-		else if(message.containsKey("update")){
-			Hashtable<String, ? extends Object> data = (Hashtable<String, ? extends Object>)message.get("update");
-			update(data);
-		}
-		else
-			onMessageReceived_sub(message);
-	}
-	protected abstract void onMessageReceived_sub(Hashtable<String, ? extends Object> message);
+
+    protected abstract void onMessageReceived_sub(Hashtable<String, ? extends Object> message);
 	protected abstract void update(Hashtable<String, ? extends Object> data);
 	protected abstract double computeWidth();
 	protected abstract double computeHeight();

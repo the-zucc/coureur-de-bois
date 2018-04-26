@@ -5,14 +5,8 @@ import collision.CollisionBox;
 import entity.statics.StaticVisibleCollidingEntity;
 import game.Map;
 import javafx.geometry.Point3D;
-import javafx.scene.paint.Color;
-import javafx.scene.paint.PhongMaterial;
-import javafx.scene.shape.MeshView;
-import javafx.scene.shape.TriangleMesh;
 import util.MeshFactory;
 import visual.Component;
-
-import java.util.Hashtable;
 
 public class Tipi extends StaticVisibleCollidingEntity {
 
@@ -54,11 +48,6 @@ public class Tipi extends StaticVisibleCollidingEntity {
     }
 
     @Override
-    public void onMessageReceived(Hashtable<String, ?> message) {
-
-    }
-
-	@Override
 	public double computeCollidingWeight() {
 		// TODO Auto-generated method stub
 		return 0;

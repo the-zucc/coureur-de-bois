@@ -1,22 +1,19 @@
 package game;
 
 import java.util.ArrayList;
-import java.util.Hashtable;
 import java.util.concurrent.ThreadLocalRandom;
 
 import app.App;
 import characteristic.ComponentOwner;
-import characteristic.Messageable;
+import characteristic.MessageReceiver;
+import characteristic.Messenger;
 import characteristic.Updateable;
 import characteristic.positionnable.Collideable;
 import characteristic.positionnable.Positionnable2D;
-import collision.CollisionBox;
 import entity.Entity;
 import entity.MovingCollidingEntity;
 import entity.living.animal.Pig;
-import entity.living.animal.Sheep;
 import entity.living.human.Player;
-import entity.living.human.Villager;
 import entity.statics.tree.PineTree;
 import entity.statics.village.Tipi;
 import entity.statics.tree.TreeNormal;
@@ -34,7 +31,7 @@ import util.PositionGenerator;
 import village.Village;
 import visual.Component;
 
-public class Map implements ComponentOwner, Updateable, Messageable{
+public class Map implements ComponentOwner, Updateable {
 	
 	private static Map instance;
 	
@@ -117,6 +114,8 @@ public class Map implements ComponentOwner, Updateable, Messageable{
 	private ArrayList<Entity> entities;
 	private ArrayList<ComponentOwner> componentOwners;
 	private ArrayList<Village> villages;
+	
+	private Messenger messenger;
 
 	public Map(double mapWidth,
 			double mapHeight,
@@ -128,7 +127,9 @@ public class Map implements ComponentOwner, Updateable, Messageable{
 			double villageRadius,
 			int tipiCount,
 			int villagerCount,
-			int sheepCount) {
+			int sheepCount)
+	{
+		messenger = createMessenger();
 		collideables = new ArrayList<Collideable>();
 		collisionCols = (int)mapWidth/collisionMapDivisionWidth;
 		collisionRows = (int)mapHeight/collisionMapDivisionHeight;
@@ -189,7 +190,51 @@ public class Map implements ComponentOwner, Updateable, Messageable{
 			addEntity(new Pig(PositionGenerator.generateRandom3DPositionOnFloor(this), this));
 		}
 	}
-	
+
+	private Messenger createMessenger() {
+		return new Messenger() {
+			private ArrayList<MessageReceiver> receivers = new ArrayList<MessageReceiver>();
+			@Override
+			public void notifyReceivers(String message) {
+			    for(MessageReceiver r:getReceivers()){
+			        r.receiveMessage(message);
+                }
+			}
+
+			@Override
+			public void notifyReceivers(String message, Object... params) {
+                for(MessageReceiver r:getReceivers()){
+                    r.receiveMessage(message, params);
+                }
+			}
+
+			@Override
+			public void send(String message) {
+				notifyReceivers(message);
+			}
+
+            @Override
+            public void send(String message, Object... params) {
+                notifyReceivers(message, params);
+            }
+
+			@Override
+			public ArrayList<MessageReceiver> getReceivers() {
+				return receivers;
+			}
+
+			@Override
+			public void addReceiver(MessageReceiver o) {
+				receivers.add(o);
+			}
+
+			@Override
+			public void removeReceiver(MessageReceiver o) {
+				receivers.remove(o);
+			}
+		};
+	}
+
 	public double getHeightAt(Point2D arg0){
 		try {
 			double rowHeight = vertexSeparationHeight;
@@ -342,13 +387,8 @@ public class Map implements ComponentOwner, Updateable, Messageable{
 	public boolean shouldUpdate() {
 		return true;
 	}
-	
-	@Override
-	public void onMessageReceived(Hashtable<String, ? extends Object> message) {
 
-	}
-	
-	public void addEntity(Entity e){
+    public void addEntity(Entity e){
 		if(e instanceof Updateable){
 			updateables.add(((Updateable)e));
 		}

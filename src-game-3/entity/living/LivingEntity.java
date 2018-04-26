@@ -1,20 +1,12 @@
 package entity.living;
 
-import java.util.Hashtable;
-
 import characteristic.*;
-import characteristic.positionnable.GravityAffected;
-import collision.CollisionBox;
 import entity.GravityAffectedCollidingEntity;
-import entity.VisibleCollidingEntity;
 import game.GameLogic;
 import game.Map;
 import javafx.geometry.Point2D;
 import javafx.geometry.Point3D;
 import javafx.scene.transform.Rotate;
-import javafx.scene.transform.Transform;
-import util.PositionGenerator;
-import visual.Component;
 
 public abstract  class LivingEntity extends GravityAffectedCollidingEntity implements ComponentUpdateable{
 	
@@ -73,23 +65,7 @@ public abstract  class LivingEntity extends GravityAffectedCollidingEntity imple
 		return hp;
 	}
 
-	@Override
-	public void onMessageReceived(Hashtable<String, ? extends Object> message) {
-		/**
-		 * cmputes the operations when the entity receives damage
-		 */
-		if(message.containsKey("damage")){
-			hp -= (Double)(message.get("damage"));
-			if(hp<=0){
-				if(message.containsKey("sender")){
-					Hashtable<String, ? extends Object> sentMessage = GameLogic.createSimpleXpMessage(computeXpReward(), this);
-					Messageable destination = ((Hashtable<String, Messageable>)sentMessage).get("sender");
-					GameLogic.sendMessage(destination, sentMessage);
-				}
-			}
-		}
-	}
-	protected void updateMovementVector() {
+    protected void updateMovementVector() {
 		oldMovement = movement;
 		
 		double movementSpeed = computeMovementSpeed();

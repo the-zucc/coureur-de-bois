@@ -1,18 +1,14 @@
 package ui.gamescene;
 
-import java.util.Hashtable;
-
 import characteristic.attachable.Attachable;
 import characteristic.attachable.AttachableReceiver;
 import characteristic.positionnable.Positionnable2D;
-import game.GameLogic;
 import game.Map;
 import javafx.geometry.Point2D;
 import javafx.geometry.Point3D;
 import javafx.scene.PerspectiveCamera;
 import javafx.scene.transform.Rotate;
 import visual.Component;
-import visual.Utils3D;
 
 public class GameCamera extends PerspectiveCamera implements Attachable{
 
@@ -93,12 +89,7 @@ public class GameCamera extends PerspectiveCamera implements Attachable{
 		return true;
 	}
 
-	@Override
-	public void onMessageReceived(Hashtable<String, ? extends Object> message) {
-		
-	}
-
-	@Override
+    @Override
 	public void onAttach(AttachableReceiver ar) {
 		getComponent().setTranslateX(relativePosition.getX());
 		getComponent().setTranslateY(relativePosition.getY());

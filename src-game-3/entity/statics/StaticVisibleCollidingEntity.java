@@ -1,7 +1,5 @@
 package entity.statics;
 
-import java.util.Hashtable;
-
 import characteristic.positionnable.Collideable;
 import collision.CollisionBox;
 import entity.VisibleCollidingEntity;
@@ -37,6 +35,4 @@ public abstract class StaticVisibleCollidingEntity extends VisibleCollidingEntit
 		return false;
 	}
 
-	@Override
-	public abstract void onMessageReceived(Hashtable<String, ? extends Object> message);
 }

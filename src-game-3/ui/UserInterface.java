@@ -2,14 +2,11 @@ package ui;
 
 import java.util.Hashtable;
 
-import characteristic.Messageable;
 import characteristic.Updateable;
-import game.GameLogic;
 import game.InputHandler;
 import game.Map;
 import javafx.event.EventHandler;
 import javafx.scene.Group;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.SceneAntialiasing;
 import javafx.scene.SubScene;
@@ -18,7 +15,7 @@ import ui.gamescene.GameScene;
 import ui.gamescene.GameScreen;
 import ui.menu.Menu;
 
-public class UserInterface extends Scene implements Updateable, Messageable {
+public class UserInterface extends Scene implements Updateable {
 	
 	private Hashtable<String, SubScene> subScenes;
 	private SubScene currentSubScene;
@@ -99,10 +96,4 @@ public class UserInterface extends Scene implements Updateable, Messageable {
 		});
 	}
 
-	@Override
-	public void onMessageReceived(Hashtable<String, ?> message) {
-		if(message.containsKey("show_info_pane")){//transfers the message to the "gameScreen" object
-			GameLogic.sendMessage(gameScreen, message);
-		}
-	}
 }
