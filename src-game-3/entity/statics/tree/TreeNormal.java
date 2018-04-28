@@ -7,6 +7,8 @@ import entity.statics.StaticVisibleCollidingEntity;
 import game.GameLogic;
 import game.Map;
 import javafx.geometry.Point3D;
+import javafx.scene.Cursor;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
 import visual.Component;
@@ -62,8 +64,27 @@ public class TreeNormal extends StaticVisibleCollidingEntity {
 
 	@Override
 	public double computeCollidingWeight() {
-		// TODO Auto-generated method stub
 		return 1;
+	}
+
+	@Override
+	public void onHover(MouseEvent me) {
+		
+	}
+
+	@Override
+	public void onUnHover(MouseEvent me) {
+		
+	}
+
+	@Override
+	protected Cursor getHoveredCursor() {
+		return Cursor.DEFAULT;
+	}
+
+	@Override
+	protected String getMouseToolTipText() {
+		return "Tree";
 	}
 
 }

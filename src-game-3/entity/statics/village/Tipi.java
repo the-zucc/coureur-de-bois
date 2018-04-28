@@ -6,6 +6,8 @@ import collision.CollisionBox;
 import entity.statics.StaticVisibleCollidingEntity;
 import game.Map;
 import javafx.geometry.Point3D;
+import javafx.scene.Cursor;
+import javafx.scene.input.MouseEvent;
 import util.MeshFactory;
 import visual.Component;
 
@@ -50,7 +52,26 @@ public class Tipi extends StaticVisibleCollidingEntity {
 
     @Override
 	public double computeCollidingWeight() {
-		// TODO Auto-generated method stub
 		return 0;
+	}
+
+	@Override
+	protected Cursor getHoveredCursor() {
+		return Cursor.DEFAULT;
+	}
+
+	@Override
+	public void onHover(MouseEvent me) {
+		
+	}
+
+	@Override
+	public void onUnHover(MouseEvent me) {
+		
+	}
+
+	@Override
+	protected String getMouseToolTipText() {
+		return "tipi";
 	}
 }

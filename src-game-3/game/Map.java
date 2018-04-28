@@ -20,6 +20,7 @@ import entity.statics.tree.TreeNormal;
 import game.settings.Preferences;
 import javafx.geometry.Point2D;
 import javafx.geometry.Point3D;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.DrawMode;
@@ -437,7 +438,15 @@ public class Map implements ComponentOwner, Updateable {
 		gameCamera = gc;
 		updateables.add(gc);
 	}
+	@Override
+	public void onHover(MouseEvent me) {
+		
+	}
 
+	@Override
+	public void onUnHover(MouseEvent me) {
+		
+	}
 	/**
 	 * COLLISIONS
 	 */
@@ -480,4 +489,6 @@ public class Map implements ComponentOwner, Updateable {
 	public int getCollisionColumnFor(Point2D position2D){
 		return (int)(position2D.getX()+mapWidth/2)/collisionMapDivisionWidth;
 	}
+
+	
 }

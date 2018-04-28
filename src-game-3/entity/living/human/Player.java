@@ -20,6 +20,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TitledPane;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.Box;
@@ -238,7 +239,29 @@ public class Player extends Human implements UserControllable, AttachableReceive
 	@Override
 	protected void jump(){
 		//overriden from LivingEntity
-		messenger.send("yall_jump", null);
+		messenger.send("yall_jump", 10,"yo big", Point3D.ZERO);
 		//addForceToGravity(getJumpVector());
+	}
+
+	@Override
+	public void onHover(MouseEvent me) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onUnHover(MouseEvent me) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	protected Cursor getHoveredCursor() {
+		return Cursor.DEFAULT;
+	}
+
+	@Override
+	protected String getMouseToolTipText() {
+		return "You";
 	}
 }

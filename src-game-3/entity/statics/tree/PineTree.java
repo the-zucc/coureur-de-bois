@@ -54,4 +54,8 @@ public class PineTree extends TreeNormal {
         else
             return returnVal;
     }
+    @Override
+    protected String getMouseToolTipText() {
+    	return "Pine tree";
+    }
 }

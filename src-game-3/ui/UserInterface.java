@@ -10,6 +10,7 @@ import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.SceneAntialiasing;
 import javafx.scene.SubScene;
+import javafx.scene.control.Label;
 import javafx.scene.input.KeyEvent;
 import ui.gamescene.GameScene;
 import ui.gamescene.GameScreen;
@@ -24,6 +25,7 @@ public class UserInterface extends Scene implements Updateable {
 	private Group uiRoot;
 	private Map map;
 	private InputHandler inputHandler;
+	
 
 	public UserInterface(double width, double height) {
 		super(new Group(), width, height, false, SceneAntialiasing.DISABLED);
@@ -61,8 +63,10 @@ public class UserInterface extends Scene implements Updateable {
 	}
 	public void putSubScene(String key, SubScene subScene){
 		subScenes.put(key, subScene);
-		if(key.equals("game"))
+		if(key.equals("game")) {
 			gameScene = ((GameScreen)subScene).getGameScene();
+			gameScreen = (GameScreen)subScene;
+		}
 	}
 
 	public GameScene getGameScene() {
@@ -95,5 +99,4 @@ public class UserInterface extends Scene implements Updateable {
 			}
 		});
 	}
-
 }

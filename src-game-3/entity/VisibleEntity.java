@@ -1,11 +1,14 @@
 package entity;
 
+import app.App;
 import characteristic.ComponentOwner;
+import characteristic.interactive.Hoverable;
 import characteristic.positionnable.Collideable;
 import characteristic.positionnable.Positionnable2D;
 import game.Map;
 import javafx.geometry.Point2D;
 import javafx.geometry.Point3D;
+import javafx.scene.Cursor;
 import visual.Component;
 
 public abstract class VisibleEntity extends Entity implements ComponentOwner{
@@ -21,8 +24,19 @@ public abstract class VisibleEntity extends Entity implements ComponentOwner{
 		component.setTranslateX(position.getX());
 		component.setTranslateY(position.getY());
 		component.setTranslateZ(position.getZ());
+		component.setCursor(getHoveredCursor());
+		component.setOnMouseEntered((e)->{
+			this.onHover(e);
+			App.getUserInterface().getGameScreen().setMouseTooltipText(getMouseToolTipText());
+		});
+		component.setOnMouseExited((e)->{
+			App.getUserInterface().getGameScreen().setMouseTooltipText("");
+			this.onUnHover(e);
+		});
 	}
 	
+	protected abstract Cursor getHoveredCursor();
+	protected abstract String getMouseToolTipText();
 	@Override
 	public void setPosition(Point3D position) {
 		this.position = position;
@@ -67,4 +81,5 @@ public abstract class VisibleEntity extends Entity implements ComponentOwner{
 	public double distanceFrom(Positionnable2D arg0){
 		return position2D.distance(arg0.get2DPosition());
 	}
+	
 }

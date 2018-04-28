@@ -134,12 +134,12 @@ public class Villager extends Human implements Hoverable{
 
 	@Override
 	public void onHover(MouseEvent me) {
-
+		
 	}
 
 	@Override
 	public void onUnHover(MouseEvent me) {
-
+		
 	}
 	
 	public double getDistanceFromVillage(){
@@ -147,7 +147,14 @@ public class Villager extends Human implements Hoverable{
 	}
 	@Override
 	public double computeCollidingWeight() {
-		// TODO Auto-generated method stub
-		return 0;
+		return 1;
+	}
+	@Override
+	protected Cursor getHoveredCursor() {
+		return Cursor.HAND;
+	}
+	@Override
+	protected String getMouseToolTipText() {
+		return "Villager";
 	}
 }

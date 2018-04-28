@@ -7,6 +7,7 @@ import game.Map;
 import javafx.geometry.Point2D;
 import javafx.geometry.Point3D;
 import javafx.scene.PerspectiveCamera;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.transform.Rotate;
 import visual.Component;
 
@@ -174,5 +175,15 @@ public class GameCamera extends PerspectiveCamera implements Attachable{
 	public double distanceFrom(Positionnable2D arg0) {
 		
 		return get2DPosition().distance(arg0.get2DPosition());
+	}
+
+	@Override
+	public void onHover(MouseEvent me) {
+		
+	}
+
+	@Override
+	public void onUnHover(MouseEvent me) {
+		
 	}
 }

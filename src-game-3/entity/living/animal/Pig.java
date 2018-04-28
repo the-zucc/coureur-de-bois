@@ -18,6 +18,7 @@ import javafx.scene.Cursor;
 import javafx.scene.Group;
 import javafx.scene.control.Label;
 import javafx.scene.control.TitledPane;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.Box;
@@ -34,7 +35,6 @@ public class Pig extends LivingEntity {
 	public Pig(Point3D position, Map map, Messenger messenger) {
 		super(position, map, messenger);
 		accept("yall_jump", (params)->{
-			System.out.println("yo");
 			jump();
 		});
 	}
@@ -132,7 +132,6 @@ public class Pig extends LivingEntity {
 		
 		returnVal.getChildren().addAll(legs);
 		returnVal.getChildren().addAll(body, head);
-		returnVal.setCursor(Cursor.HAND);
 		returnVal.setOnMouseClicked((e) -> {
 			TitledPane root;
 			try {
@@ -165,5 +164,25 @@ public class Pig extends LivingEntity {
 	@Override
 	public void onCollides(Collideable c) {
 		
+	}
+
+	@Override
+	public void onHover(MouseEvent me) {
+		
+	}
+
+	@Override
+	public void onUnHover(MouseEvent me) {
+		
+	}
+
+	@Override
+	protected Cursor getHoveredCursor() {
+		return Cursor.HAND;
+	}
+
+	@Override
+	protected String getMouseToolTipText() {
+		return "Pig";
 	}
 }

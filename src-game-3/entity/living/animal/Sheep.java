@@ -8,6 +8,8 @@ import game.GameLogic;
 import game.Map;
 import javafx.geometry.Point2D;
 import javafx.geometry.Point3D;
+import javafx.scene.Cursor;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.Box;
@@ -96,6 +98,26 @@ public class Sheep extends LivingEntity {
 	@Override
 	public void onCollides(Collideable c) {
 		
+	}
+
+	@Override
+	public void onHover(MouseEvent me) {
+		
+	}
+
+	@Override
+	public void onUnHover(MouseEvent me) {
+		
+	}
+
+	@Override
+	protected Cursor getHoveredCursor() {
+		return Cursor.HAND;
+	}
+
+	@Override
+	protected String getMouseToolTipText() {
+		return "Sheep";
 	}
 
 }
