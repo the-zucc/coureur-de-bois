@@ -1,5 +1,7 @@
 package entity.living.human;
 
+import java.io.IOException;
+
 import characteristic.Messenger;
 import characteristic.interactive.Hoverable;
 import characteristic.positionnable.Collideable;
@@ -7,12 +9,17 @@ import collision.CollisionBox;
 import collision.SphericalCollisionBox;
 import game.GameLogic;
 import game.Map;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Point3D;
 import javafx.scene.Cursor;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.Box;
+import util.NodeUtils;
 import village.Village;
 import visual.Component;
 
@@ -156,5 +163,27 @@ public class Villager extends Human implements Hoverable{
 	@Override
 	protected String getMouseToolTipText() {
 		return "Villager";
+	}
+	@Override
+	public void onClick(MouseEvent me) {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	protected Parent buildOnClickedPane() {
+		
+		try {
+			Parent returnVal = FXMLLoader.load(getClass().getResource("/fxml/entity_pane.fxml"));
+			((Label)(NodeUtils.getChildByID(returnVal, "hpLabel"))).setText(String.valueOf(getHp()));
+			return returnVal;
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+	}
+	@Override
+	protected Node getPaneDismissNode(Parent onClickedPane) {
+		return onClickedPane;
 	}
 }

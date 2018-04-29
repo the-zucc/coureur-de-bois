@@ -16,6 +16,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.geometry.Point3D;
 import javafx.scene.Cursor;
 import javafx.scene.Group;
+import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.control.Label;
 import javafx.scene.control.TitledPane;
 import javafx.scene.input.KeyCode;
@@ -44,6 +46,7 @@ public class Player extends Human implements UserControllable, AttachableReceive
 
 	@Override
 	public void updateActions(double secondsPassed){
+		messenger.send("player_position",get2DPosition());
 	}
 
 	@Override
@@ -239,8 +242,7 @@ public class Player extends Human implements UserControllable, AttachableReceive
 	@Override
 	protected void jump(){
 		//overriden from LivingEntity
-		messenger.send("yall_jump", 10,"yo big", Point3D.ZERO);
-		//addForceToGravity(getJumpVector());
+		addForceToGravity(getJumpVector());
 	}
 
 	@Override
@@ -263,5 +265,20 @@ public class Player extends Human implements UserControllable, AttachableReceive
 	@Override
 	protected String getMouseToolTipText() {
 		return "You";
+	}
+
+	@Override
+	public void onClick(MouseEvent me) {
+		
+	}
+
+	@Override
+	protected Parent buildOnClickedPane() {
+		return null;
+	}
+
+	@Override
+	protected Node getPaneDismissNode(Parent onClickedPane) {
+		return null;
 	}
 }

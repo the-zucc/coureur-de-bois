@@ -9,6 +9,8 @@ import game.Map;
 import javafx.geometry.Point2D;
 import javafx.geometry.Point3D;
 import javafx.scene.Cursor;
+import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
@@ -118,6 +120,23 @@ public class Sheep extends LivingEntity {
 	@Override
 	protected String getMouseToolTipText() {
 		return "Sheep";
+	}
+
+	@Override
+	public void onClick(MouseEvent me) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	protected Parent buildOnClickedPane() {
+		return null;
+	}
+
+	@Override
+	protected Node getPaneDismissNode(Parent onClickedPane) {
+		
+		return null;
 	}
 
 }

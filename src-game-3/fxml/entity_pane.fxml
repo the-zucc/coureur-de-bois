@@ -24,7 +24,7 @@
             <AnchorPane fx:id="dropsPane" prefHeight="115.0" prefWidth="201.0">
                <children>
                   <Label layoutX="14.0" layoutY="8.0" text="Drops:" />
-                  <Label fx:id="dropsLabel" layoutX="156.0" layoutY="8.0" text="Label" />
+                  <Label fx:id="dropsLabel" layoutX="156.0" layoutY="8.0" text="drops" />
                </children>
             </AnchorPane>
          </children>

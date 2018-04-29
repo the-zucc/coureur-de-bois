@@ -1,7 +1,13 @@
 package entity;
 
+import java.util.ArrayList;
+import java.util.Hashtable;
+import java.util.Iterator;
+
 import app.App;
 import characteristic.ComponentOwner;
+import characteristic.MessageReceiver;
+import characteristic.Messenger;
 import characteristic.interactive.Hoverable;
 import characteristic.positionnable.Collideable;
 import characteristic.positionnable.Positionnable2D;
@@ -9,16 +15,24 @@ import game.Map;
 import javafx.geometry.Point2D;
 import javafx.geometry.Point3D;
 import javafx.scene.Cursor;
+import javafx.scene.Group;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.input.MouseButton;
+import util.MessageCallback;
 import visual.Component;
 
-public abstract class VisibleEntity extends Entity implements ComponentOwner{
+public abstract class VisibleEntity extends Entity implements ComponentOwner, MessageReceiver{
 	
 	private Component component;
 	protected Point3D position;
 	protected Point2D position2D;
-	
-	public VisibleEntity(Point3D position){
+	protected Messenger messenger;
+	public VisibleEntity(Point3D position, Messenger messenger){
 		super();
+		this.messenger = messenger;
+		getMessengers().add(messenger);
+		messenger.addReceiver(this);
 		setPosition(position);
 		component = buildComponent();
 		component.setTranslateX(position.getX());
@@ -32,6 +46,26 @@ public abstract class VisibleEntity extends Entity implements ComponentOwner{
 		component.setOnMouseExited((e)->{
 			App.getUserInterface().getGameScreen().setMouseTooltipText("");
 			this.onUnHover(e);
+		});
+		component.setOnMouseClicked((e)->{
+			if(e.getButton() == MouseButton.PRIMARY) {
+				Parent pane = buildOnClickedPane();
+				if(pane != null) {
+					pane.setTranslateX(e.getSceneX());
+					pane.setTranslateY(e.getSceneY());
+					((Group)App.getUserInterface().getGameScreen().getRoot()).getChildren().add(pane);
+					Node closerNode = getPaneDismissNode(pane);
+					if(closerNode != null) {
+						closerNode.setOnMouseClicked((e2)->{
+							((Group)App.getUserInterface().getGameScreen().getRoot()).getChildren().remove(pane);
+						});
+					}
+					this.onClick(e);
+				}
+			}
+			else if(e.getButton() == MouseButton.SECONDARY){
+				
+			}
 		});
 	}
 	
@@ -81,5 +115,79 @@ public abstract class VisibleEntity extends Entity implements ComponentOwner{
 	public double distanceFrom(Positionnable2D arg0){
 		return position2D.distance(arg0.get2DPosition());
 	}
+	/**
+	 * builds the pane that will be shown when clicking on the entity's component
+	 * @return the JavaFX pane that will be show to the user
+	 */
+	protected abstract Parent buildOnClickedPane();
+	/**
+	 * should be defined in relation to {@link buildOnClickedPane()}. returns the element that has to be clicked by the
+	 * user in order to dismiss the pane after clicking on the entity.
+	 * @param the pane build by buildOnClickedPane() 
+	 * @return the Node that has to be clicked to dismiss the pane.
+	 */
+	protected abstract Node getPaneDismissNode(Parent onClickedPane);
+	/**
+	 * Section pour Messenger
+	**/
+	private ArrayList<Messenger> messengers = new ArrayList<Messenger>();
+	@Override
+	public ArrayList<Messenger> getMessengers(){
+		return messengers;
+	}
 	
+	Hashtable<String, ArrayList<Object[]>> callbackQueue = new Hashtable<String, ArrayList<Object[]>>();
+	@Override
+	public Hashtable<String, ArrayList<Object[]>> getCallbackQueue(){
+		return callbackQueue;
+	}
+
+	@Override
+	public void processCallbackQueue(){
+		Iterator<String> iterator = callbackQueue.keySet().iterator();
+		while(iterator.hasNext()){
+			String key = iterator.next();
+			ArrayList<Object[]> paramsList = getCallbackQueue().get(key);
+			for(Object[] params:paramsList){
+				if(params != null){
+					getAccepts().get(key).run(params);
+				}
+				else{
+					getAccepts().get(key).run();
+				}
+			}
+		}
+		callbackQueue.clear();
+	}
+	@Override
+	public void receiveMessage(String message, Object... params){
+		if(getAccepts().containsKey(message)){
+			if(!getCallbackQueue().containsKey(message)){
+				ArrayList<Object[]> paramsArray = new ArrayList<Object[]>();
+				paramsArray.add(params);
+				getCallbackQueue().put(message, paramsArray);
+			}
+			else{
+				getCallbackQueue().get(message).add(params);
+			}
+		}
+	}
+
+	@Override
+	public void receiveMessage(String message){
+		if(getAccepts().containsKey(message)){
+			callbackQueue.put(message, null);
+		}
+	}
+
+	@Override
+	public void accept(String message, MessageCallback callback){
+		getAccepts().put(message, callback);
+	}
+
+	Hashtable<String, MessageCallback> accepts = new Hashtable<String, MessageCallback>();
+	@Override
+	public Hashtable<String, MessageCallback> getAccepts(){
+		return accepts;
+	}
 }

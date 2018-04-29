@@ -13,4 +13,6 @@ public interface Collideable extends Positionnable, Moveable{
 	public boolean canMoveOnCollision();
 	public Point3D getAllCorrections();//should combine all of the corrections into one big vector which will be returned.
 	public double computeCollidingWeight();
+	int getCollisionMapRow();
+	int getCollisionMapColumn();
 }

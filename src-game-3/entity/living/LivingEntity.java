@@ -29,6 +29,12 @@ public abstract  class LivingEntity extends GravityAffectedCollidingEntity imple
 		movement = oldMovement;
 		target = null;
 		rotationAngle = 0;
+		accept("damage", (params)->{
+			if(params[0] == this) {
+				Double amount = (Double)params[0];
+				takeDamage(amount, (MessageReceiver)params[2]);
+			}
+		});
 	}
 
 	protected abstract double computeXpReward();
@@ -125,7 +131,7 @@ public abstract  class LivingEntity extends GravityAffectedCollidingEntity imple
 	protected abstract double computeMovementSpeed();
 	protected double computeAngleFromMovement(Point3D movement){
 		if(movement.equals(Point3D.ZERO))
-			return 90;
+			return rotationAngle;
 		double angle = new Point3D(movement.getX(), 0, movement.getZ()).angle(Rotate.X_AXIS);
 		if(movement.getZ()>0)
 			angle*=-1;
@@ -163,5 +169,11 @@ public abstract  class LivingEntity extends GravityAffectedCollidingEntity imple
 	}
 	protected void startMovingTo(Point2D target){
 		this.target = target;
+	}
+	protected void takeDamage(double amount, MessageReceiver attacker) {
+		hp-=amount;
+		if(hp < 0) {
+			//messenger.send("dead", this);
+		}
 	}
 }

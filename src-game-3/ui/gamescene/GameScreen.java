@@ -9,6 +9,7 @@ import javafx.scene.SceneAntialiasing;
 import javafx.scene.SubScene;
 import javafx.scene.control.Label;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import ui.floatingpane.FloatingPane;
 
@@ -21,12 +22,17 @@ public class GameScreen extends SubScene implements Updateable {
         super(new Group(),w,h,false, SceneAntialiasing.DISABLED);
         gameScene = gs;
         root = (Group)getRoot();
-        cursorInfoLabel = new Label("label1");
+        cursorLabelGroup = new Group();
+        cursorInfoLabel = new Label("");
         cursorInfoLabel.setTextFill(Color.WHITE);
         cursorInfoLabel.setMouseTransparent(true);
+        labelBackGround = new Rectangle(cursorInfoLabel.getBoundsInLocal().getWidth(), cursorInfoLabel.getBoundsInLocal().getHeight());
+        labelBackGround.setFill(new Color(0.8, 0.8, 0.8, 0.7));
+        cursorLabelGroup.getChildren().add(labelBackGround);
+        cursorLabelGroup.getChildren().add(cursorInfoLabel);
         setupInfoLabel();
         root.getChildren().add(gs);
-        root.getChildren().add(cursorInfoLabel);
+        root.getChildren().add(cursorLabelGroup);
         window.widthProperty().addListener(new ChangeListener<Number>() {
             @Override
             public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
@@ -59,21 +65,27 @@ public class GameScreen extends SubScene implements Updateable {
     /**
      * pour le label qui suit la souris
      */
+    private Group cursorLabelGroup;
     private Label cursorInfoLabel;
+    private Rectangle labelBackGround;
 	public Label getCursorInfoLabel() {
 		return cursorInfoLabel;
 	}
 	public void setMouseTooltipText(String text) {
 		cursorInfoLabel.setText(text);
+		if(text.length() < 1) {
+			labelBackGround.setWidth(0);
+			labelBackGround.setHeight(0);
+		}else {
+			labelBackGround.setWidth(cursorLabelGroup.getBoundsInLocal().getWidth());
+			labelBackGround.setHeight(cursorLabelGroup.getBoundsInLocal().getHeight());		
+		}
 	}
 	public void setupInfoLabel() {
 		this.setOnMouseMoved((e)->{
-			cursorInfoLabel.setTranslateX(e.getSceneX()+15+cursorInfoLabel.getWidth()/2);
-			cursorInfoLabel.setTranslateY(e.getSceneY()+15+cursorInfoLabel.getHeight()/2);
+			cursorLabelGroup.setTranslateX(e.getSceneX()+15+cursorInfoLabel.getBoundsInLocal().getWidth()/2);
+			cursorLabelGroup.setTranslateY(e.getSceneY()/*+15+cursorInfoLabel.getBoundsInLocal().getHeight()/2*/);
 		});
-		cursorInfoLabel.setScaleX(2);
-		cursorInfoLabel.setScaleY(2);
-		cursorInfoLabel.setScaleZ(2);
 	}
 	
 }

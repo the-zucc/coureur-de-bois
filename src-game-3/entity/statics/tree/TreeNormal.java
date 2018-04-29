@@ -8,11 +8,16 @@ import game.GameLogic;
 import game.Map;
 import javafx.geometry.Point3D;
 import javafx.scene.Cursor;
+import javafx.scene.Group;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
 import visual.Component;
 import javafx.scene.shape.Box;
+import util.NodeUtils;
 
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -85,6 +90,27 @@ public class TreeNormal extends StaticVisibleCollidingEntity {
 	@Override
 	protected String getMouseToolTipText() {
 		return "Tree";
+	}
+
+	@Override
+	public void onClick(MouseEvent me) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	protected Parent buildOnClickedPane() {
+		Group returnVal = new Group();
+		Label l = new Label("No action here");
+		l.setId("label");
+		returnVal.getChildren().add(l);
+		return returnVal;
+	}
+
+	@Override
+	protected Node getPaneDismissNode(Parent onClickedPane) {
+		
+		return NodeUtils.getChildByID(onClickedPane, "label");
 	}
 
 }

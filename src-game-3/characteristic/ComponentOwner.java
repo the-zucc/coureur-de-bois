@@ -1,10 +1,11 @@
 package characteristic;
 
+import characteristic.interactive.Clickable;
 import characteristic.interactive.Hoverable;
 import characteristic.positionnable.Positionnable;
 import visual.Component;
 
-public interface ComponentOwner extends Positionnable, Hoverable{
+public interface ComponentOwner extends Positionnable, Hoverable, Clickable{
 	/**
 	 * should be used in the constructor of the implementing class to define the class' component attribute.
 	 * once defined, the attribute should be accessed using getComponent().

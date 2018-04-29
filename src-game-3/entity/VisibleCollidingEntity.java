@@ -11,6 +11,7 @@ import collision.CollisionBox;
 import game.Map;
 import javafx.geometry.Point3D;
 import util.MessageCallback;
+import util.PositionGenerator;
 import visual.Component;
 
 public abstract class VisibleCollidingEntity extends VisibleEntity implements Collideable, MessageReceiver {
@@ -20,16 +21,21 @@ public abstract class VisibleCollidingEntity extends VisibleEntity implements Co
 	public void setCollisionMapRow(int collisionMapRow){
 		this.collisionMapRow = collisionMapRow;
 	}
+	@Override
+	public int getCollisionMapRow() {
+		return collisionMapRow;
+	}
 	protected int collisionMapColumn;
 	public void setCollisionMapColum(int collisionMapColumn){
 		this.collisionMapColumn = collisionMapColumn;
 	}
-	protected Messenger messenger;
+	@Override
+	public int getCollisionMapColumn() {
+		return collisionMapColumn;
+	}
+	
 	public VisibleCollidingEntity(Point3D position, Map map, Messenger messenger) {
-		super(position);
-		this.messenger = messenger;
-		getMessengers().add(messenger);
-		messenger.addReceiver(this);
+		super(position, messenger);
 		
 		collisionBox = buildCollisionBox();
 		this.map = map;
@@ -45,6 +51,10 @@ public abstract class VisibleCollidingEntity extends VisibleEntity implements Co
 		//System.out.println("corrections "+getClass().getName()+" "+corrections);
 		if(corrections != null){
 			moveTo(getPosition().add(corrections));
+			if(getPosition().getY()>map.getHeightAt(get2DPosition())) {
+				moveTo(PositionGenerator.getFloorPosition(get2DPosition(), map));
+			}
+				
 		}
 	}
 	
@@ -105,68 +115,4 @@ public abstract class VisibleCollidingEntity extends VisibleEntity implements Co
 
 	@Override
 	public abstract boolean canMoveOnCollision();
-
-	/**
-	 * Section pour Messageable
-	**/
-	private ArrayList<Messenger> messengers = new ArrayList<Messenger>();
-	@Override
-	public ArrayList<Messenger> getMessengers(){
-		return messengers;
-	}
-	
-	Hashtable<String, ArrayList<Object[]>> callbackQueue = new Hashtable<String, ArrayList<Object[]>>();
-	@Override
-	public Hashtable<String, ArrayList<Object[]>> getCallbackQueue(){
-		return callbackQueue;
-	}
-
-	@Override
-	public void processCallbackQueue(){
-		Iterator<String> iterator = callbackQueue.keySet().iterator();
-		while(iterator.hasNext()){
-			String key = iterator.next();
-			ArrayList<Object[]> paramsList = getCallbackQueue().get(key);
-			for(Object[] params:paramsList){
-				if(params != null){
-					getAccepts().get(key).run(params);
-				}
-				else{
-					getAccepts().get(key).run();
-				}
-			}
-		}
-		callbackQueue.clear();
-	}
-	@Override
-	public void receiveMessage(String message, Object... params){
-		if(getAccepts().containsKey(message)){
-			if(!getCallbackQueue().containsKey(message)){
-				ArrayList<Object[]> paramsArray = new ArrayList<Object[]>();
-				paramsArray.add(params);
-				getCallbackQueue().put(message, paramsArray);
-			}
-			else{
-				getCallbackQueue().get(message).add(params);
-			}
-		}
-	}
-
-	@Override
-	public void receiveMessage(String message){
-		if(getAccepts().containsKey(message)){
-			callbackQueue.put(message, null);
-		}
-	}
-
-	@Override
-	public void accept(String message, MessageCallback callback){
-		getAccepts().put(message, callback);
-	}
-
-	Hashtable<String, MessageCallback> accepts = new Hashtable<String, MessageCallback>();
-	@Override
-	public Hashtable<String, MessageCallback> getAccepts(){
-		return accepts;
-	}
 }

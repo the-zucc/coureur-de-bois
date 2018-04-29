@@ -186,4 +186,9 @@ public class GameCamera extends PerspectiveCamera implements Attachable{
 	public void onUnHover(MouseEvent me) {
 		
 	}
+
+	@Override
+	public void onClick(MouseEvent me) {
+		
+	}
 }

@@ -1,6 +1,8 @@
 package game;
 
 import java.util.ArrayList;
+import java.util.Hashtable;
+import java.util.Iterator;
 import java.util.concurrent.ThreadLocalRandom;
 
 import app.App;
@@ -12,7 +14,7 @@ import characteristic.positionnable.Collideable;
 import characteristic.positionnable.Positionnable2D;
 import entity.Entity;
 import entity.MovingCollidingEntity;
-import entity.living.animal.Pig;
+import entity.living.animal.Fox;
 import entity.living.human.Player;
 import entity.statics.tree.PineTree;
 import entity.statics.village.Tipi;
@@ -28,11 +30,12 @@ import javafx.scene.shape.MeshView;
 import javafx.scene.shape.TriangleMesh;
 import perlin.PerlinNoise;
 import ui.gamescene.GameCamera;
+import util.MessageCallback;
 import util.PositionGenerator;
 import village.Village;
 import visual.Component;
 
-public class Map implements ComponentOwner, Updateable {
+public class Map implements ComponentOwner, Updateable, MessageReceiver{
 	
 	private static Map instance;
 	
@@ -191,8 +194,11 @@ public class Map implements ComponentOwner, Updateable {
 			v.addEntitiesToMap(this);
 		}
 		for(int i = 0; i < sheepCount; i++){
-			addEntity(new Pig(PositionGenerator.generateRandom3DPositionOnFloor(this), this, messenger));
+			addEntity(new Fox(PositionGenerator.generateRandom3DPositionOnFloor(this), this, messenger));
 		}
+		accept("dead", (params)->{
+			removeEntity((Entity)params[0]);
+		});
 	}
 
 	private Messenger createMessenger() {
@@ -411,6 +417,28 @@ public class Map implements ComponentOwner, Updateable {
 		}
 		entities.add(e);
 	}
+    
+    public void removeEntity(Entity e) {
+    	if(e instanceof Updateable){
+			updateables.remove(((Updateable)e));
+		}
+		if(e instanceof Collideable){
+			collideables.remove((Collideable)e);
+			
+			int row = ((Collideable)e).getCollisionMapRow();
+			int col = ((Collideable)e).getCollisionMapColumn();
+			try{
+				collisionMap[row][col].remove((Collideable)e);
+			}catch(ArrayIndexOutOfBoundsException aioobe){
+				
+			}
+		}
+		if(e instanceof ComponentOwner) {
+			componentOwners.remove((ComponentOwner)e);
+			getComponent().getChildren().remove(((ComponentOwner)e).getComponent());
+		}
+    }
+    
 	@Override
 	public Point2D compute2DPosition(Point3D position3d) {
 		return Point2D.ZERO;
@@ -451,7 +479,7 @@ public class Map implements ComponentOwner, Updateable {
 	 * COLLISIONS
 	 */
 	//static variables
-	private static int collisionMapDivisionWidth=(int)(10*GameLogic.getMeterLength());
+	private static int collisionMapDivisionWidth=(int)(5*GameLogic.getMeterLength());
 	private static int collisionMapDivisionHeight=collisionMapDivisionWidth;
 	private int collisionCols;
 	private int collisionRows;
@@ -490,5 +518,73 @@ public class Map implements ComponentOwner, Updateable {
 		return (int)(position2D.getX()+mapWidth/2)/collisionMapDivisionWidth;
 	}
 
+	@Override
+	public void onClick(MouseEvent me) {
+		
+	}
+	
+	/**
+	 * For messenger design pattern
+	 */
+	private ArrayList<Messenger> messengers = new ArrayList<Messenger>();
+	@Override
+	public ArrayList<Messenger> getMessengers(){
+		return messengers;
+	}
+	
+	Hashtable<String, ArrayList<Object[]>> callbackQueue = new Hashtable<String, ArrayList<Object[]>>();
+	@Override
+	public Hashtable<String, ArrayList<Object[]>> getCallbackQueue(){
+		return callbackQueue;
+	}
+
+	@Override
+	public void processCallbackQueue(){
+		Iterator<String> iterator = callbackQueue.keySet().iterator();
+		while(iterator.hasNext()){
+			String key = iterator.next();
+			ArrayList<Object[]> paramsList = getCallbackQueue().get(key);
+			for(Object[] params:paramsList){
+				if(params != null){
+					getAccepts().get(key).run(params);
+				}
+				else{
+					getAccepts().get(key).run();
+				}
+			}
+		}
+		callbackQueue.clear();
+	}
+	@Override
+	public void receiveMessage(String message, Object... params){
+		if(getAccepts().containsKey(message)){
+			if(!getCallbackQueue().containsKey(message)){
+				ArrayList<Object[]> paramsArray = new ArrayList<Object[]>();
+				paramsArray.add(params);
+				getCallbackQueue().put(message, paramsArray);
+			}
+			else{
+				getCallbackQueue().get(message).add(params);
+			}
+		}
+	}
+
+	@Override
+	public void receiveMessage(String message){
+		if(getAccepts().containsKey(message)){
+			callbackQueue.put(message, null);
+		}
+	}
+
+	@Override
+	public void accept(String message, MessageCallback callback){
+		getAccepts().put(message, callback);
+	}
+
+	Hashtable<String, MessageCallback> accepts = new Hashtable<String, MessageCallback>();
+	@Override
+	public Hashtable<String, MessageCallback> getAccepts(){
+		return accepts;
+	}
 	
 }
