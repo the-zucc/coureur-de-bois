@@ -42,7 +42,10 @@ public class Fox extends LivingEntity {
 		accept("player_position",(params)->{
 			Point2D playerPos = (Point2D)params[0];
 			if(playerPos.distance(get2DPosition()) < 10 * GameLogic.getMeterLength()) {
-				startMovingTo(playerPos);					
+				startMovingTo(playerPos);
+				if(playerPos.distance(get2DPosition()) < GameLogic.getMeterLength()) {
+					attack(map.getCurrentPlayer(), 10);
+				}
 			}
 		});
 	}

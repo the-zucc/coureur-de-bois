@@ -18,7 +18,6 @@ public abstract  class LivingEntity extends GravityAffectedCollidingEntity imple
 	private Point2D target;
 	protected double rotationAngle;
 	protected double computeComponentRotationAngle(double rotationAngle){
-		
 		return rotationAngle+90;
 	}
 
@@ -29,9 +28,10 @@ public abstract  class LivingEntity extends GravityAffectedCollidingEntity imple
 		movement = oldMovement;
 		target = null;
 		rotationAngle = 0;
+		hp = 100;
 		accept("damage", (params)->{
 			if(params[0] == this) {
-				Double amount = (Double)params[0];
+				Double amount = (Double)params[1];
 				takeDamage(amount, (MessageReceiver)params[2]);
 			}
 		});
@@ -175,5 +175,8 @@ public abstract  class LivingEntity extends GravityAffectedCollidingEntity imple
 		if(hp < 0) {
 			//messenger.send("dead", this);
 		}
+	}
+	protected void attack(MessageReceiver target, double damage) {
+		messenger.send("attack", target, damage, this);
 	}
 }

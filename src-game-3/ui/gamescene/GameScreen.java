@@ -27,7 +27,8 @@ public class GameScreen extends SubScene implements Updateable {
         cursorInfoLabel.setTextFill(Color.WHITE);
         cursorInfoLabel.setMouseTransparent(true);
         labelBackGround = new Rectangle(cursorInfoLabel.getBoundsInLocal().getWidth(), cursorInfoLabel.getBoundsInLocal().getHeight());
-        labelBackGround.setFill(new Color(0.8, 0.8, 0.8, 0.7));
+        labelBackGround.setFill(new Color(0.2, 0.2, 0.2, 0.7));
+        labelBackGround.setMouseTransparent(true);
         cursorLabelGroup.getChildren().add(labelBackGround);
         cursorLabelGroup.getChildren().add(cursorInfoLabel);
         setupInfoLabel();
@@ -77,15 +78,29 @@ public class GameScreen extends SubScene implements Updateable {
 			labelBackGround.setWidth(0);
 			labelBackGround.setHeight(0);
 		}else {
-			labelBackGround.setWidth(cursorLabelGroup.getBoundsInLocal().getWidth());
-			labelBackGround.setHeight(cursorLabelGroup.getBoundsInLocal().getHeight());		
+			labelBackGround.setWidth(cursorInfoLabel.getBoundsInLocal().getWidth());
+			labelBackGround.setHeight(cursorInfoLabel.getBoundsInLocal().getHeight());
 		}
 	}
 	public void setupInfoLabel() {
+		double hSpacing = 4;
+		double vSpacing = 2;
+		cursorInfoLabel.setTranslateX(hSpacing);
+		cursorInfoLabel.setTranslateY(vSpacing);
 		this.setOnMouseMoved((e)->{
 			cursorLabelGroup.setTranslateX(e.getSceneX()+15+cursorInfoLabel.getBoundsInLocal().getWidth()/2);
 			cursorLabelGroup.setTranslateY(e.getSceneY()/*+15+cursorInfoLabel.getBoundsInLocal().getHeight()/2*/);
+			if(cursorInfoLabel.getText().length() > 0) {
+				labelBackGround.setWidth(cursorInfoLabel.getBoundsInLocal().getWidth()+hSpacing*2);
+				labelBackGround.setHeight(cursorInfoLabel.getBoundsInLocal().getHeight()+vSpacing*2);				
+			}else {
+				labelBackGround.setWidth(0);
+				labelBackGround.setHeight(0);
+			}
 		});
+		cursorLabelGroup.setScaleX(2);
+		cursorLabelGroup.setScaleY(2);
+		cursorLabelGroup.setScaleZ(2);
 	}
 	
 }
