@@ -28,6 +28,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.Box;
 import javafx.scene.transform.Rotate;
+import ui.gamescene.GameCamera;
 import util.NodeUtils;
 import visual.Component;
 import visual.LegComponent;
@@ -38,6 +39,7 @@ public class Player extends Human implements UserControllable, AttachableReceive
 
 	public Player(Point3D position, Map map, Messenger messenger) {
 		super(position, map, messenger,  1);
+		hp=1000;
 		accept("right_clicked", (params)->{
 			System.out.println("rightClick");
 			if(params[0] instanceof LivingEntity){
@@ -45,7 +47,23 @@ public class Player extends Human implements UserControllable, AttachableReceive
 			}
 		});		
 	}
-
+	
+	@Override
+	public void attach(Attachable a) {
+		if(a instanceof GameCamera){
+			super.attach(a);
+		}
+		else{
+			if(a.getComponent().getParent() instanceof Component){
+				((Component) a.getComponent().getParent()).removeChildComponent(a.getComponent());
+			}
+			((Component)NodeUtils.getChildByID(getComponent(), getId()+"_body")).addChildComponent(a.getComponent());
+			a.onAttach(this);
+			getAttachables().add(a);
+			onAttachActions(a);
+		}
+	}
+	
 	@Override
 	protected double computeXpReward() {
 		return 42069;

@@ -1,6 +1,7 @@
 package entity;
 
 import java.util.ArrayList;
+import java.util.ConcurrentModificationException;
 import java.util.Hashtable;
 import java.util.Iterator;
 
@@ -144,17 +145,25 @@ public abstract class VisibleEntity extends Entity implements ComponentOwner, Me
 	@Override
 	public void processCallbackQueue(){
 		Iterator<String> iterator = callbackQueue.keySet().iterator();
-		while(iterator.hasNext()){
-			String key = iterator.next();
-			ArrayList<Object[]> paramsList = getCallbackQueue().get(key);
-			for(Object[] params:paramsList){
-				if(params != null){
-					getAccepts().get(key).run(params);
+		try{
+			while(iterator.hasNext()){
+				String key = iterator.next();
+				ArrayList<Object[]> paramsList = getCallbackQueue().get(key);
+				for(Object[] params:paramsList){
+					if(params != null){
+						getAccepts().get(key).run(params);
+					}
+					else{
+						getAccepts().get(key).run();
+					}
+					getCallbackQueue().get(key).remove(params);
 				}
-				else{
-					getAccepts().get(key).run();
-				}
+				iterator.remove();
+				getCallbackQueue().remove(key);
 			}
+		}catch(ConcurrentModificationException cme){
+			processCallbackQueue();
+			return;
 		}
 		callbackQueue.clear();
 	}

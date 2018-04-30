@@ -15,6 +15,7 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.shape.Box;
+import javafx.scene.transform.Rotate;
 import visual.Component;
 
 public class WeaponEntity extends MovingCollidingEntity implements Attachable {
@@ -68,6 +69,7 @@ public class WeaponEntity extends MovingCollidingEntity implements Attachable {
 		getComponent().setTranslateX(this.getPositionRelativeToReceiver().getX());
 		getComponent().setTranslateY(this.getPositionRelativeToReceiver().getY());
 		getComponent().setTranslateZ(this.getPositionRelativeToReceiver().getZ());
+		receiver = ar;
 	}
 
 	@Override
@@ -99,7 +101,9 @@ public class WeaponEntity extends MovingCollidingEntity implements Attachable {
 	public Component buildComponent() {
 		Component returnVal = new Component(getId());
 		double meter = GameLogic.getMeterLength();
-		returnVal.getChildren().add(new Box(0.1*meter, meter,0.1*meter));
+		Box sword = new Box(0.1*meter, meter,0.1*meter);
+		sword.setTranslateY(-sword.getHeight());
+		returnVal.getChildren().add(sword);
 		return returnVal;
 	}
 
@@ -139,13 +143,29 @@ public class WeaponEntity extends MovingCollidingEntity implements Attachable {
 		super.update(secondsPassed);
 		if(getReceiver() == null){
 			ticksSinceDrop++;
+			double height = Math.sin(((double)ticksSinceDrop)/10)-GameLogic.getMeterLength();
+			Point3D add = new Point3D(0,height,0);
+			getComponent().setPosition(getPosition().add(add));
 		}
 		else{
+			if(attacking){
+				ticksSinceAttack++;
+				getComponent().setRotationAxis(Rotate.X_AXIS);
+				getComponent().setRotate(getComponent().getRotate()-10);
+				if(ticksSinceAttack == 8){
+					ticksSinceAttack = 0;
+					attacking = false;
+					getComponent().setRotate(0);
+				}
+			}
 		}
 	}
+	private boolean attacking = false;
+	private double ticksSinceAttack = 0;
 	public void attack(MessageReceiver mr){
 		MessageReceiver attacker = (MessageReceiver)getReceiver();
 		messenger.send("damage", mr, computeDamage(), attacker);
+		attacking = true;
 	}
 	protected double computeDamage(){
 		return Math.random()*10+20;

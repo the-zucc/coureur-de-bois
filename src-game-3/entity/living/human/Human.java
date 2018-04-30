@@ -75,6 +75,7 @@ public abstract class Human extends LivingEntity implements AttachableReceiver {
 		messenger.send("wielded", we);
 		attach(we);
 	}
+	
 	@Override
 	protected void attack(MessageReceiver target, double damage) {
 		if(wieldedWeapon != null){

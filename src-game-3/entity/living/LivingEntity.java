@@ -12,7 +12,7 @@ import javafx.scene.transform.Rotate;
 public abstract  class LivingEntity extends GravityAffectedCollidingEntity implements ComponentUpdateable{
 	
 	//private Point3D gravity;
-	private double hp;
+	protected double hp;
 	private boolean up, down, left, right, newOrientation, isRunning;
 	private Point3D oldMovement;
 	private Point3D jumpVector = new Point3D(0,-40,0);
@@ -188,27 +188,30 @@ public abstract  class LivingEntity extends GravityAffectedCollidingEntity imple
 	private Point3D flinchMovement = null;
 	private Point3D flinchMovementToSubtract = null;
 	protected void flinch(Point3D from) {
-		if(from != null){
-			flinching = true;
-			flinchMovement = getPosition().subtract(from).normalize();
-			flinchMovementToSubtract = flinchMovement.multiply(1/30);
-		}else{
-			jump();
+		if(!flinching){
+			if(from != null){
+				flinching = true;
+				flinchMovement = getPosition().subtract(from).normalize();
+				flinchMovementToSubtract = new Point3D(flinchMovement.getX()/30, flinchMovement.getY()/30, flinchMovement.getZ()/30);
+			}else{
+				jump();
+			}			
 		}
-		
 	}
 	private void processFlinch() {
 		if(flinching){
 			if(flinchMovement != null){
 				flinchMovement = flinchMovement.subtract(flinchMovementToSubtract);
 				System.out.println(flinchMovement);
-				if(flinchMovement.equals(Point3D.ZERO)){
+				System.out.println(flinchMovementToSubtract);
+				if(flinchMovement.getX()<flinchMovementToSubtract.getX()){
 					flinchMovement = null;
 					flinchMovementToSubtract = null;
 					flinching = false;
+				}else{
+					moveTo(getPosition().add(flinchMovement));					
 				}
 			}
-			moveTo(getPosition().add(flinchMovement));
 		}
 	}
 

@@ -6,6 +6,7 @@ import characteristic.Messenger;
 import characteristic.positionnable.Collideable;
 import collision.CollisionBox;
 import entity.statics.StaticVisibleCollidingEntity;
+import game.GameLogic;
 import game.Map;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Point3D;
@@ -38,7 +39,7 @@ public class Tipi extends StaticVisibleCollidingEntity {
     @Override
     public Component buildComponent() {
         Component returnVal = new Component(getId());
-        returnVal.getChildren().add(MeshFactory.buildRegularPyramid(6, 175, 100));
+        returnVal.getChildren().add(MeshFactory.buildRegularPyramid(6, (float)(3.5*GameLogic.getMeterLength()), (float)(2*GameLogic.getMeterLength())));
         return returnVal;
     }
 
