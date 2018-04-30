@@ -46,8 +46,6 @@ public class GameScreen extends SubScene implements Updateable {
                 GameScreen.this.setHeight(newValue.doubleValue());
             }
         });
-        
-        
     }
     public GameScene getGameScene(){
         return gameScene;
@@ -73,13 +71,15 @@ public class GameScreen extends SubScene implements Updateable {
 		return cursorInfoLabel;
 	}
 	public void setMouseTooltipText(String text) {
-		cursorInfoLabel.setText(text);
-		if(text.length() < 1) {
-			labelBackGround.setWidth(0);
-			labelBackGround.setHeight(0);
-		}else {
-			labelBackGround.setWidth(cursorInfoLabel.getBoundsInLocal().getWidth());
-			labelBackGround.setHeight(cursorInfoLabel.getBoundsInLocal().getHeight());
+		if(text != null){
+			cursorInfoLabel.setText(text);
+			if(text.length() < 1) {
+				labelBackGround.setWidth(0);
+				labelBackGround.setHeight(0);
+			}else {
+				labelBackGround.setWidth(cursorInfoLabel.getBoundsInLocal().getWidth());
+				labelBackGround.setHeight(cursorInfoLabel.getBoundsInLocal().getHeight());
+			}
 		}
 	}
 	public void setupInfoLabel() {

@@ -16,4 +16,5 @@ public interface MessageReceiver {
 
     void accept(String message, MessageCallback callback);
     Hashtable<String, MessageCallback> getAccepts();
+    void listenTo(Messenger messenger);
 }

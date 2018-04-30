@@ -31,12 +31,14 @@ public class GameLogic {
 
 	public static void startGame() {
 		Map map = Map.getInstance();
-		GameScene scene = new GameScene(App.windowWidth, App.windowHeight, App.getApplicationWindow(), map);
+		GameScene scene = new GameScene(App.windowWidth, App.windowHeight, App.getApplicationWindow(), map, map.getMessenger());
 		GameScreen screen = new GameScreen(App.windowWidth, App.windowHeight, scene, App.getApplicationWindow());
+		
 		App.getUserInterface().putSubScene("game", screen);
 		App.getUserInterface().setSubScene("game");
 		App.getUserInterface().setMapAndBindControls(map);
 		((Group)scene.getRoot()).getChildren().add(map.getComponent());
+		
 		loop = new GameLoop(scene.getGameCamera());
 		loop.start();
 	}

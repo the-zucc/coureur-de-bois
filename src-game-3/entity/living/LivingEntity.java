@@ -1,6 +1,7 @@
 package entity.living;
 
 import characteristic.*;
+import characteristic.positionnable.Positionnable;
 import entity.GravityAffectedCollidingEntity;
 import game.GameLogic;
 import game.Map;
@@ -45,12 +46,13 @@ public abstract  class LivingEntity extends GravityAffectedCollidingEntity imple
 	@Override
 	public void update(double secondsPassed){
 		updateMovementVector();
+		processFlinch();
 		super.update(secondsPassed);
 		updateActions(secondsPassed);
 		if(shouldUpdateComponent())
 			updateComponent();
 	}
-	
+
 	public abstract void updateActions(double secondsPassed);
 
 	@Override
@@ -172,11 +174,49 @@ public abstract  class LivingEntity extends GravityAffectedCollidingEntity imple
 	}
 	protected void takeDamage(double amount, MessageReceiver attacker) {
 		hp-=amount;
-		if(hp < 0) {
-			//messenger.send("dead", this);
+		if(attacker instanceof Positionnable){
+			flinch(((Positionnable) attacker).getPosition());
+		}
+		else{
+			flinch(null);
+		}
+		if(hp <= 0) {
+			messenger.send("dead", this);
 		}
 	}
+	private boolean flinching = false;
+	private Point3D flinchMovement = null;
+	private Point3D flinchMovementToSubtract = null;
+	protected void flinch(Point3D from) {
+		if(from != null){
+			flinching = true;
+			flinchMovement = getPosition().subtract(from).normalize();
+			flinchMovementToSubtract = flinchMovement.multiply(1/30);
+		}else{
+			jump();
+		}
+		
+	}
+	private void processFlinch() {
+		if(flinching){
+			if(flinchMovement != null){
+				flinchMovement = flinchMovement.subtract(flinchMovementToSubtract);
+				System.out.println(flinchMovement);
+				if(flinchMovement.equals(Point3D.ZERO)){
+					flinchMovement = null;
+					flinchMovementToSubtract = null;
+					flinching = false;
+				}
+			}
+			moveTo(getPosition().add(flinchMovement));
+		}
+	}
+
+
 	protected void attack(MessageReceiver target, double damage) {
-		messenger.send("attack", target, damage, this);
+		messenger.send("damage", target, damage, this);
+	}
+	protected void addXP(double xp){
+		
 	}
 }

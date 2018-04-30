@@ -19,6 +19,7 @@ public class InputHandler {
         playerBoundKeyCodes.add(KeyCode.TAB);
         playerBoundKeyCodes.add(KeyCode.Q);
         playerBoundKeyCodes.add(KeyCode.E);
+        playerBoundKeyCodes.add(KeyCode.F);
         playerBoundKeyCodes.add(KeyCode.SPACE);
         playerBoundKeyCodes.add(KeyCode.SHIFT);
         this.map = map;

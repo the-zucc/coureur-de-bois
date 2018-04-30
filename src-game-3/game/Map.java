@@ -18,6 +18,7 @@ import entity.living.animal.Fox;
 import entity.living.human.Player;
 import entity.statics.tree.PineTree;
 import entity.statics.village.Tipi;
+import entity.wearable.WeaponEntity;
 import entity.statics.tree.TreeNormal;
 import game.settings.Preferences;
 import javafx.geometry.Point2D;
@@ -137,6 +138,8 @@ public class Map implements ComponentOwner, Updateable, MessageReceiver{
 			int sheepCount)
 	{
 		messenger = createMessenger();
+		listenTo(messenger);
+		
 		collideables = new ArrayList<Collideable>();
 		collisionCols = (int)mapWidth/collisionMapDivisionWidth;
 		collisionRows = (int)mapHeight/collisionMapDivisionHeight;
@@ -199,6 +202,8 @@ public class Map implements ComponentOwner, Updateable, MessageReceiver{
 		accept("dead", (params)->{
 			removeEntity((Entity)params[0]);
 		});
+		Point3D swordPos = new Point3D(currentPlayer.get2DPosition().getX()+10, getHeightAt(currentPlayer.get2DPosition().add(new Point2D(10,10))), currentPlayer.get2DPosition().getY()+10);
+		addEntity(new WeaponEntity(swordPos, this, messenger));
 	}
 
 	private Messenger createMessenger() {
@@ -380,11 +385,17 @@ public class Map implements ComponentOwner, Updateable, MessageReceiver{
 		return componentOwners;
 	}
 
+	private int updateableCounter = 0;
+	boolean isUpdating = false;
 	@Override
 	public void update(double secondsPassed) {
-		for(Updateable u:updateables){
+		isUpdating = true;
+		for (updateableCounter = 0; updateableCounter < updateables.size(); updateableCounter++) {
+			Updateable u = updateables.get(updateableCounter);
 			u.update(secondsPassed);
 		}
+		processCallbackQueue();
+		isUpdating = false;
 	}
 
 	@Override
@@ -437,6 +448,9 @@ public class Map implements ComponentOwner, Updateable, MessageReceiver{
 			componentOwners.remove((ComponentOwner)e);
 			getComponent().getChildren().remove(((ComponentOwner)e).getComponent());
 		}
+		if(isUpdating){
+			updateableCounter--;			
+		}
     }
     
 	@Override
@@ -446,6 +460,7 @@ public class Map implements ComponentOwner, Updateable, MessageReceiver{
 
 	@Override
 	public void set2DPosition(Point2D position2d) {
+		
 	}
 
 	@Override
@@ -524,7 +539,7 @@ public class Map implements ComponentOwner, Updateable, MessageReceiver{
 	}
 	
 	/**
-	 * For messenger design pattern
+	 * For messenger
 	 */
 	private ArrayList<Messenger> messengers = new ArrayList<Messenger>();
 	@Override
@@ -585,6 +600,12 @@ public class Map implements ComponentOwner, Updateable, MessageReceiver{
 	@Override
 	public Hashtable<String, MessageCallback> getAccepts(){
 		return accepts;
+	}
+
+	@Override
+	public void listenTo(Messenger messenger) {
+		getMessengers().add(messenger);
+		messenger.addReceiver(this);
 	}
 	
 }

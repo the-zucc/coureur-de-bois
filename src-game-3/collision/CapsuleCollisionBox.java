@@ -5,18 +5,24 @@ import game.Map;
 import javafx.geometry.Point3D;
 
 public class CapsuleCollisionBox extends CollisionBox {
-	private Point3D p1;
+	
 
 	public CapsuleCollisionBox(Collideable collideable, Map map) {
 		super(collideable, map);
 	}
-
+	private Point3D p1;
 	public Point3D getP1() {
 		return p1;
 	}
+	
 	private Point3D p2;
 	public Point3D getP2(){
 		return p2;
+	}
+	public void setP2(Point3D p2){
+		if(p2.distance(p1) > this.p2.distance(p1)){
+			//clamp pour la distance de la capsule
+		}
 	}
 
 

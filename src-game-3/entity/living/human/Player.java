@@ -10,6 +10,7 @@ import characteristic.interactive.UserControllable;
 import characteristic.positionnable.Collideable;
 import collision.CollisionBox;
 import collision.SphericalCollisionBox;
+import entity.living.LivingEntity;
 import game.GameLogic;
 import game.Map;
 import javafx.fxml.FXMLLoader;
@@ -37,6 +38,12 @@ public class Player extends Human implements UserControllable, AttachableReceive
 
 	public Player(Point3D position, Map map, Messenger messenger) {
 		super(position, map, messenger,  1);
+		accept("right_clicked", (params)->{
+			System.out.println("rightClick");
+			if(params[0] instanceof LivingEntity){
+				attack((LivingEntity)params[0],10);
+			}
+		});		
 	}
 
 	@Override
@@ -47,6 +54,7 @@ public class Player extends Human implements UserControllable, AttachableReceive
 	@Override
 	public void updateActions(double secondsPassed){
 		messenger.send("player_position",get2DPosition());
+		messenger.send("player_position_3D",getPosition(), this);
 	}
 
 	@Override
@@ -171,7 +179,7 @@ public class Player extends Human implements UserControllable, AttachableReceive
 
 	@Override
 	public CollisionBox buildCollisionBox() {
-		return new SphericalCollisionBox(GameLogic.getMeterLength(),this, new Point3D(0,0,0), map);
+		return new SphericalCollisionBox(GameLogic.getMeterLength()*0.6,this, new Point3D(0,0,0), map);
 	}
 
 	@Override
@@ -208,6 +216,8 @@ public class Player extends Human implements UserControllable, AttachableReceive
 			this.setIsRunning(keyDown);
 		else if(code.equals(KeyCode.SPACE))
 			this.jump();
+		else if(code.equals(KeyCode.F))
+			this.detach(wieldedWeapon);
 		ke.consume();
 	}
 

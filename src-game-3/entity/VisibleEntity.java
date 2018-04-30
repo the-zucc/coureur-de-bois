@@ -31,8 +31,7 @@ public abstract class VisibleEntity extends Entity implements ComponentOwner, Me
 	public VisibleEntity(Point3D position, Messenger messenger){
 		super();
 		this.messenger = messenger;
-		getMessengers().add(messenger);
-		messenger.addReceiver(this);
+		listenTo(messenger);
 		setPosition(position);
 		component = buildComponent();
 		component.setTranslateX(position.getX());
@@ -64,7 +63,7 @@ public abstract class VisibleEntity extends Entity implements ComponentOwner, Me
 				}
 			}
 			else if(e.getButton() == MouseButton.SECONDARY){
-				
+				messenger.send("right_clicked", this);
 			}
 		});
 	}
@@ -189,5 +188,10 @@ public abstract class VisibleEntity extends Entity implements ComponentOwner, Me
 	@Override
 	public Hashtable<String, MessageCallback> getAccepts(){
 		return accepts;
+	}
+	@Override
+	public void listenTo(Messenger messenger){
+		getMessengers().add(messenger);
+		messenger.addReceiver(this);
 	}
 }

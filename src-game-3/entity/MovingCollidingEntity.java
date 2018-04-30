@@ -53,7 +53,6 @@ public abstract class MovingCollidingEntity extends VisibleCollidingEntity{
 							}
 						}
 					}
-
 				}catch(ArrayIndexOutOfBoundsException e){
 					
 				}catch(Exception e){
@@ -71,7 +70,9 @@ public abstract class MovingCollidingEntity extends VisibleCollidingEntity{
 		processCallbackQueue();
 		Point3D nextPos = computeNextPosition(secondsPassed);
 		moveTo(nextPos);
-		collisionBox.update();
+		if(collisionBox != null){
+			collisionBox.update();
+		}
 		correctCollisions();
 	}
 }
