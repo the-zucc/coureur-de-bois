@@ -53,11 +53,11 @@ public abstract class VisibleEntity extends Entity implements ComponentOwner, Me
 				if(pane != null) {
 					pane.setTranslateX(e.getSceneX());
 					pane.setTranslateY(e.getSceneY());
-					((Group)App.getUserInterface().getGameScreen().getRoot()).getChildren().add(pane);
+					App.getUserInterface().getGameScreen().getUiRoot().getChildren().add(pane);
 					Node closerNode = getPaneDismissNode(pane);
 					if(closerNode != null) {
 						closerNode.setOnMouseClicked((e2)->{
-							((Group)App.getUserInterface().getGameScreen().getRoot()).getChildren().remove(pane);
+							App.getUserInterface().getGameScreen().getUiRoot().getChildren().remove(pane);
 						});
 					}
 					this.onClick(e);
@@ -184,7 +184,12 @@ public abstract class VisibleEntity extends Entity implements ComponentOwner, Me
 	@Override
 	public void receiveMessage(String message){
 		if(getAccepts().containsKey(message)){
-			callbackQueue.put(message, null);
+			if(callbackQueue.containsKey(message)) {
+				callbackQueue.get(message).add(null);
+			}
+			else {
+				callbackQueue.put(message, new ArrayList<Object[]>());
+			}
 		}
 	}
 

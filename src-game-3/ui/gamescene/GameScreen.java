@@ -4,24 +4,48 @@ import characteristic.Updateable;
 
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Group;
 import javafx.scene.SceneAntialiasing;
 import javafx.scene.SubScene;
 import javafx.scene.control.Label;
+import javafx.scene.control.ProgressBar;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import ui.floatingpane.FloatingPane;
+import util.NodeUtils;
 
+import java.io.IOException;
 import java.util.Hashtable;
 
-public class GameScreen extends SubScene implements Updateable {
+public class GameScreen extends SubScene implements Updateable{
     private GameScene gameScene;
     private Group root;
+    public Group getUiRoot() {
+    	return root;
+    }
+    private ProgressBar manaBar;
+    public void showNewMana(double mana, double maxMana) {
+    	manaBar.setProgress(mana/maxMana);
+    }
+    private ProgressBar hpBar;
+    public void showNewHP(double hp, double maxHp) {
+    	hpBar.setProgress(hp/maxHp);
+    }
     public GameScreen(double w, double h, GameScene gs, Stage window){
         super(new Group(),w,h,false, SceneAntialiasing.DISABLED);
-        gameScene = gs;
-        root = (Group)getRoot();
+        try {
+			setRoot(FXMLLoader.load(getClass().getResource("/fxml/player_stats_ingame.fxml")));
+			root = (Group)(NodeUtils.getChildByID(getRoot(), "uiRoot"));
+			gameScene = (GameScene)(NodeUtils.getChildByID(getRoot(), "gameScene"));
+			manaBar = (ProgressBar)(NodeUtils.getChildByID(getRoot(), "manaBar"));
+			hpBar = (ProgressBar)(NodeUtils.getChildByID(getRoot(), "hpBar"));
+		} catch (IOException e) {
+			root = (Group)getRoot();
+			gameScene = gs;
+			e.printStackTrace();
+		}
         cursorLabelGroup = new Group();
         cursorInfoLabel = new Label("");
         cursorInfoLabel.setTextFill(Color.WHITE);

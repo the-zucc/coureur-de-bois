@@ -3,6 +3,8 @@ package entity.living.human;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import app.App;
+import characteristic.MessageReceiver;
 import characteristic.Messenger;
 import characteristic.attachable.Attachable;
 import characteristic.attachable.AttachableReceiver;
@@ -40,12 +42,20 @@ public class Player extends Human implements UserControllable, AttachableReceive
 	public Player(Point3D position, Map map, Messenger messenger) {
 		super(position, map, messenger,  1);
 		hp=1000;
+		maxHp = hp;
 		accept("right_clicked", (params)->{
-			System.out.println("rightClick");
-			if(params[0] instanceof LivingEntity){
+			if(params.length > 0 && params[0] instanceof LivingEntity){
 				attack((LivingEntity)params[0],10);
 			}
-		});		
+			else {
+				attack(null, 10);
+			}
+		});
+		accept("mouse_moved", (params)->{
+			MouseEvent me = (MouseEvent)params[0];
+			mouseX = me.getSceneX()-App.getUserInterface().getWidth()/2;
+			mouseY = me.getSceneY()-App.getUserInterface().getHeight()/2;
+		});
 	}
 	
 	@Override
@@ -308,5 +318,20 @@ public class Player extends Human implements UserControllable, AttachableReceive
 	@Override
 	protected Node getPaneDismissNode(Parent onClickedPane) {
 		return null;
+	}
+	@Override
+	protected void takeDamage(double amount, MessageReceiver attacker) {
+		super.takeDamage(amount, attacker);
+		App.getUserInterface().getGameScreen().showNewHP(hp, maxHp);
+	}
+	/**
+	 * for the player to look in the direction of the mouse
+	 */
+	private double mouseX = 0;
+	private double mouseY = 0;
+	@Override
+	protected double computeAngleFromMovement(Point3D movement) {
+		double ang = Math.toDegrees(Math.atan2(mouseY, mouseX));
+		return ang;
 	}
 }

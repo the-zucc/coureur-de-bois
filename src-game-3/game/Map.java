@@ -192,7 +192,7 @@ public class Map implements ComponentOwner, Updateable, MessageReceiver{
 		}
 		for(int i= 0; i < villageCount; i++){
 			Point2D villagePos = PositionGenerator.generate2DPositionNotInVillages(this, villages);
-			Village v = new Village(villagePos, tipiCount, 2000,villagerCount, this);
+			Village v = new Village(villagePos, tipiCount, 40*GameLogic.getMeterLength(),villagerCount, this);
 			villages.add(v);
 			v.addEntitiesToMap(this);
 		}
@@ -587,7 +587,12 @@ public class Map implements ComponentOwner, Updateable, MessageReceiver{
 	@Override
 	public void receiveMessage(String message){
 		if(getAccepts().containsKey(message)){
-			callbackQueue.put(message, null);
+			if(callbackQueue.containsKey(message)) {
+				callbackQueue.get(message).add(null);
+			}
+			else {
+				callbackQueue.put(message, new ArrayList<Object[]>());
+			}
 		}
 	}
 

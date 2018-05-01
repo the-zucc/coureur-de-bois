@@ -25,7 +25,7 @@ public class WeaponEntity extends MovingCollidingEntity implements Attachable {
 	
 	public WeaponEntity(Point3D position, Map map, Messenger messenger) {
 		super(position, map, messenger);
-		this.relativePosition = new Point3D(0.5*GameLogic.getMeterLength(),-0.7*GameLogic.getMeterLength(),0);
+		this.relativePosition = new Point3D(0.5*GameLogic.getMeterLength(),0,0);
 		this.accept("player_position_3D", (params)->{
 			Point3D playerPos = (Point3D)params[0];
 			if(playerPos.distance(getPosition())<GameLogic.getMeterLength()){

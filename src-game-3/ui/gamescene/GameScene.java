@@ -55,13 +55,15 @@ public class GameScene extends SubScene implements MessageReceiver {
 				GameScene.this.setHeight(newValue.doubleValue());
 			}
 		});
-		/*
+		
 		setOnMouseClicked((e)->{
 			if(e.getButton() == MouseButton.SECONDARY){
 				messenger.send("right_clicked");
 			}
 		});
-		*/
+		setOnMouseMoved((e)->{
+			messenger.send("mouse_moved", e);
+		});
 	}
 	public Group getGameRoot(){
 		return gameRoot;
@@ -134,7 +136,11 @@ public class GameScene extends SubScene implements MessageReceiver {
 	@Override
 	public void receiveMessage(String message){
 		if(getAccepts().containsKey(message)){
-			callbackQueue.put(message, null);
+			if(callbackQueue.containsKey(message)) {
+				callbackQueue.get(message).add(null);			}
+			else {
+				callbackQueue.put(message, new ArrayList<Object[]>());
+			}
 		}
 	}
 

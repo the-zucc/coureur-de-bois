@@ -1,5 +1,7 @@
 package entity.living;
 
+import java.util.ArrayList;
+
 import characteristic.*;
 import characteristic.positionnable.Positionnable;
 import entity.GravityAffectedCollidingEntity;
@@ -13,6 +15,7 @@ public abstract  class LivingEntity extends GravityAffectedCollidingEntity imple
 	
 	//private Point3D gravity;
 	protected double hp;
+	protected double maxHp;
 	private boolean up, down, left, right, newOrientation, isRunning;
 	private Point3D oldMovement;
 	private Point3D jumpVector = new Point3D(0,-40,0);
@@ -30,6 +33,7 @@ public abstract  class LivingEntity extends GravityAffectedCollidingEntity imple
 		target = null;
 		rotationAngle = 0;
 		hp = 100;
+		maxHp = hp;
 		accept("damage", (params)->{
 			if(params[0] == this) {
 				Double amount = (Double)params[1];
@@ -175,7 +179,7 @@ public abstract  class LivingEntity extends GravityAffectedCollidingEntity imple
 	protected void takeDamage(double amount, MessageReceiver attacker) {
 		hp-=amount;
 		if(attacker instanceof Positionnable){
-			flinch(((Positionnable) attacker).getPosition());
+			flinch(((Positionnable)attacker).getPosition());
 		}
 		else{
 			flinch(null);
@@ -184,33 +188,32 @@ public abstract  class LivingEntity extends GravityAffectedCollidingEntity imple
 			messenger.send("dead", this);
 		}
 	}
-	private boolean flinching = false;
+	private ArrayList<Point3D> flinchMovements = new ArrayList<Point3D>();
+	private ArrayList<Point3D> flinchMovementsToSubtract = new ArrayList<Point3D>();
 	private Point3D flinchMovement = null;
-	private Point3D flinchMovementToSubtract = null;
+	
 	protected void flinch(Point3D from) {
-		if(!flinching){
-			if(from != null){
-				flinching = true;
-				flinchMovement = getPosition().subtract(from).normalize();
-				flinchMovementToSubtract = new Point3D(flinchMovement.getX()/30, flinchMovement.getY()/30, flinchMovement.getZ()/30);
-			}else{
-				jump();
-			}			
+		if(from != null){
+			Point3D flinchMovement = getPosition().subtract(from).normalize();
+			Point3D flinchMovementToSubtract = new Point3D(flinchMovement.getX()/30, flinchMovement.getY()/30, flinchMovement.getZ()/30);
+			flinchMovements.add(flinchMovement);
+			flinchMovementsToSubtract.add(flinchMovementToSubtract);
+		}else{
+			jump();
 		}
 	}
 	private void processFlinch() {
-		if(flinching){
-			if(flinchMovement != null){
-				flinchMovement = flinchMovement.subtract(flinchMovementToSubtract);
-				System.out.println(flinchMovement);
-				System.out.println(flinchMovementToSubtract);
-				if(flinchMovement.getX()<flinchMovementToSubtract.getX()){
-					flinchMovement = null;
-					flinchMovementToSubtract = null;
-					flinching = false;
-				}else{
-					moveTo(getPosition().add(flinchMovement));					
-				}
+		for(int i = 0; i < flinchMovements.size(); i++) {
+			Point3D flinchMovement = flinchMovements.get(i);
+			Point3D flinchMovementToSubtract = flinchMovementsToSubtract.get(i);
+			flinchMovement = flinchMovement.subtract(flinchMovementToSubtract);
+			if(flinchMovement.getX()<flinchMovementToSubtract.getX()){
+				flinchMovements.remove(i);
+				flinchMovementsToSubtract.remove(i);
+				i--;
+			}else{
+				moveTo(getPosition().add(flinchMovement));
+				flinchMovements.set(i, flinchMovement);
 			}
 		}
 	}
@@ -220,6 +223,11 @@ public abstract  class LivingEntity extends GravityAffectedCollidingEntity imple
 		messenger.send("damage", target, damage, this);
 	}
 	protected void addXP(double xp){
+		
+	}
+
+	protected void updateOrientation() {
+		// TODO Auto-generated method stub
 		
 	}
 }
