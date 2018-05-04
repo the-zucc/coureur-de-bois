@@ -21,7 +21,7 @@ public class CapsuleCollisionBox extends CollisionBox {
 	}
 	public void setP2(Point3D p2){
 		if(p2.distance(p1) > this.p2.distance(p1)){
-			//clamp pour la distance de la capsule
+			
 		}
 	}
 
@@ -61,7 +61,7 @@ public class CapsuleCollisionBox extends CollisionBox {
 
 	@Override
 	public boolean collidesCapsuleBox(CapsuleCollisionBox b1) {
-		// TODO Auto-generated method stub
+		
 		return false;
 	}
 

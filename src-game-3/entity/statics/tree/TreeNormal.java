@@ -113,4 +113,9 @@ public class TreeNormal extends StaticVisibleCollidingEntity {
 		return NodeUtils.getChildByID(onClickedPane, "label");
 	}
 
+	@Override
+	public boolean shouldUpdate() {
+		return true;
+	}
+
 }

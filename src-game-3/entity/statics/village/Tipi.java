@@ -104,4 +104,9 @@ public class Tipi extends StaticVisibleCollidingEntity {
 	protected Node getPaneDismissNode(Parent onClickedPane) {
 		return onClickedPane;
 	}
+
+	@Override
+	public boolean shouldUpdate() {
+		return true;
+	}
 }

@@ -18,14 +18,14 @@ import javafx.scene.shape.Box;
 import javafx.scene.transform.Rotate;
 import visual.Component;
 
-public class WeaponEntity extends MovingCollidingEntity implements Attachable {
+public abstract class WeaponEntity extends MovingCollidingEntity implements Attachable {
 
 	private AttachableReceiver receiver;
 	private Point3D relativePosition;
 	
 	public WeaponEntity(Point3D position, Map map, Messenger messenger) {
 		super(position, map, messenger);
-		this.relativePosition = new Point3D(0.5*GameLogic.getMeterLength(),0,0);
+		this.relativePosition = computeWieldedPosition();
 		this.accept("player_position_3D", (params)->{
 			Point3D playerPos = (Point3D)params[0];
 			if(playerPos.distance(getPosition())<GameLogic.getMeterLength()){
@@ -36,7 +36,9 @@ public class WeaponEntity extends MovingCollidingEntity implements Attachable {
 			
 		});
 	}
-
+	
+	protected abstract Point3D computeWieldedPosition();
+	
 	@Override
 	public boolean shouldUpdate() {
 		return true;
@@ -98,21 +100,6 @@ public class WeaponEntity extends MovingCollidingEntity implements Attachable {
 	}
 
 	@Override
-	public Component buildComponent() {
-		Component returnVal = new Component(getId());
-		double meter = GameLogic.getMeterLength();
-		Box sword = new Box(0.1*meter, meter,0.1*meter);
-		sword.setTranslateY(-sword.getHeight());
-		returnVal.getChildren().add(sword);
-		return returnVal;
-	}
-
-	@Override
-	public CollisionBox buildCollisionBox() {
-		return null;
-	}
-
-	@Override
 	public void onCollides(Collideable c) {
 		
 	}
@@ -147,26 +134,14 @@ public class WeaponEntity extends MovingCollidingEntity implements Attachable {
 			Point3D add = new Point3D(0,height,0);
 			getComponent().setPosition(getPosition().add(add));
 		}
-		else{
-			if(attacking){
-				ticksSinceAttack++;
-				getComponent().setRotationAxis(Rotate.X_AXIS);
-				getComponent().setRotate(getComponent().getRotate()-10);
-				if(ticksSinceAttack == 8){
-					ticksSinceAttack = 0;
-					attacking = false;
-					getComponent().setRotate(0);
-				}
-			}
-		}
 	}
-	private boolean attacking = false;
-	private double ticksSinceAttack = 0;
+	
 	public void attack(MessageReceiver mr){
 		MessageReceiver attacker = (MessageReceiver)getReceiver();
 		messenger.send("damage", mr, computeDamage(), attacker);
-		attacking = true;
+		playAttackAnimation();
 	}
+	protected abstract void playAttackAnimation();
 	protected double computeDamage(){
 		return Math.random()*10+20;
 	}

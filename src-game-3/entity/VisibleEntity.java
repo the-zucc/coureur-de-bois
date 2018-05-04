@@ -5,10 +5,13 @@ import java.util.ConcurrentModificationException;
 import java.util.Hashtable;
 import java.util.Iterator;
 
+import animator.Animator;
 import app.App;
+import characteristic.Animatable;
 import characteristic.ComponentOwner;
 import characteristic.MessageReceiver;
 import characteristic.Messenger;
+import characteristic.Updateable;
 import characteristic.interactive.Hoverable;
 import characteristic.positionnable.Collideable;
 import characteristic.positionnable.Positionnable2D;
@@ -23,14 +26,15 @@ import javafx.scene.input.MouseButton;
 import util.MessageCallback;
 import visual.Component;
 
-public abstract class VisibleEntity extends Entity implements ComponentOwner, MessageReceiver{
-	
+public abstract class VisibleEntity extends Entity implements Updateable, ComponentOwner, MessageReceiver, Animatable{
+	protected Animator animator;
 	private Component component;
 	protected Point3D position;
 	protected Point2D position2D;
 	protected Messenger messenger;
 	public VisibleEntity(Point3D position, Messenger messenger){
 		super();
+		this.animator = new Animator();
 		this.messenger = messenger;
 		listenTo(messenger);
 		setPosition(position);
@@ -207,5 +211,12 @@ public abstract class VisibleEntity extends Entity implements ComponentOwner, Me
 	public void listenTo(Messenger messenger){
 		getMessengers().add(messenger);
 		messenger.addReceiver(this);
+	}
+	public Animator getAnimator() {
+		return animator;
+	}
+	@Override
+	public void update(double secondsPassed) {
+		animator.playAnimations();
 	}
 }

@@ -23,7 +23,6 @@ public class SphericalCollisionBox extends CollisionBox {
 	
 	@Override
 	protected boolean collidesSphericalBox(SphericalCollisionBox box) {
-		//inline function to get the most performance out of it
 		return Math.hypot(Math.hypot(box.getPosition().getX()-position.getX(), box.getPosition().getZ()-position.getZ()),box.getPosition().getY()-position.getY()) < (box.getRadius()+radius);
 	}
 

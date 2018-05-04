@@ -66,8 +66,10 @@ public abstract class MovingCollidingEntity extends VisibleCollidingEntity{
 		else
 			return Point3D.ZERO;
 	}
+	@Override
 	public void update(double secondsPassed){
 		processCallbackQueue();
+		super.update(secondsPassed);
 		Point3D nextPos = computeNextPosition(secondsPassed);
 		moveTo(nextPos);
 		if(collisionBox != null){
