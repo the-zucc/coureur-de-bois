@@ -27,6 +27,9 @@ public class Animator {
 			tmp.play();
 			if(tmp.isDone()) {
 				animations.remove(i);
+				if(tmp.getCallback() != null){
+					tmp.getCallback().run();
+				}
 				if(tmp.getNext() != null) {
 					if(tmp.getNext() == tmp) {
 						tmp.resetTickCount();
@@ -37,5 +40,9 @@ public class Animator {
 			}
 		}
 	}
-	
+
+    public Animator done(Runnable callback) {
+		currentAnimation.setCallback(callback);
+		return this;
+    }
 }

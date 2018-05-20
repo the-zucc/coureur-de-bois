@@ -5,6 +5,8 @@ public class Animation {
 	private int tickCount = 0;
 	private Runnable job;
 	private Animation next;
+	private Runnable callback = null;
+
 	protected Animation(Runnable job, int ticks) {
 		this.job = job;
 		this.ticks = ticks;
@@ -15,6 +17,12 @@ public class Animation {
 	}
 	protected boolean isDone() {
 		return ticks < tickCount;
+	}
+	protected void setCallback(Runnable callback){
+		this.callback = callback;
+	}
+	protected Runnable getCallback(){
+		return callback;
 	}
 	protected Animation getNext(){
 		return next;

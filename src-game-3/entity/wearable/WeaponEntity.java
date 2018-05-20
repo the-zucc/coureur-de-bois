@@ -76,10 +76,9 @@ public abstract class WeaponEntity extends MovingCollidingEntity implements Atta
 
 	@Override
 	public void onDetach(AttachableReceiver ar) {
-		setPosition(receiver.getPosition().add(new Point3D(10,map.getHeightAt(receiver.get2DPosition()),10)));
+		setPosition(receiver.getPosition().add(new Point3D(10,0,10)));
 		ticksSinceDrop=0;
 		receiver = null;
-		relativePosition = null;
 		map.removeEntity(this);
 		map.addEntity(this);
 	}
@@ -96,7 +95,10 @@ public abstract class WeaponEntity extends MovingCollidingEntity implements Atta
 
 	@Override
 	public Point3D computeAbsolutePosition() {
-		return receiver.getPosition().add(getPositionRelativeToReceiver());
+		if(receiver != null){
+			return receiver.getPosition().add(getPositionRelativeToReceiver());
+		}
+		return getPosition();
 	}
 
 	@Override
@@ -109,10 +111,7 @@ public abstract class WeaponEntity extends MovingCollidingEntity implements Atta
 		return null;
 	}
 
-	@Override
-	protected String getMouseToolTipText() {
-		return "Standard sword";
-	}
+
 
 	@Override
 	protected Parent buildOnClickedPane() {
@@ -134,14 +133,13 @@ public abstract class WeaponEntity extends MovingCollidingEntity implements Atta
 			Point3D add = new Point3D(0,height,0);
 			getComponent().setPosition(getPosition().add(add));
 		}
+		System.out.println("pos"+computeAbsolutePosition());
 	}
 	
 	public void attack(MessageReceiver mr){
 		MessageReceiver attacker = (MessageReceiver)getReceiver();
 		messenger.send("damage", mr, computeDamage(), attacker);
-		playAttackAnimation();
 	}
-	protected abstract void playAttackAnimation();
 	protected double computeDamage(){
 		return Math.random()*10+20;
 	}

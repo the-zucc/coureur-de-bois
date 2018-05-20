@@ -18,6 +18,7 @@ import entity.living.animal.Fox;
 import entity.living.human.Player;
 import entity.statics.tree.PineTree;
 import entity.statics.village.Tipi;
+import entity.wearable.LongSword;
 import entity.wearable.StandardSword;
 import entity.wearable.WeaponEntity;
 import entity.statics.tree.TreeNormal;
@@ -205,6 +206,8 @@ public class Map implements ComponentOwner, Updateable, MessageReceiver{
 		});
 		Point3D swordPos = new Point3D(currentPlayer.get2DPosition().getX()+10, getHeightAt(currentPlayer.get2DPosition().add(new Point2D(10,10))), currentPlayer.get2DPosition().getY()+10);
 		addEntity(new StandardSword(swordPos, this, messenger));
+        Point3D swordPos2 = new Point3D(currentPlayer.get2DPosition().getX()-10, getHeightAt(currentPlayer.get2DPosition().add(new Point2D(10,10))), currentPlayer.get2DPosition().getY()+10);
+        addEntity(new LongSword(swordPos, this, messenger));
 	}
 
 	private Messenger createMessenger() {
