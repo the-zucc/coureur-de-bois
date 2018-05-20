@@ -35,7 +35,7 @@ public class TreeNormal extends StaticVisibleCollidingEntity {
         Box leaves = new Box(2*meter, 1.8*meter, 2*meter);
 
         leaves.setTranslateY(-(trunk.getHeight()+leaves.getHeight()/2));
-        leaves.setMaterial(new PhongMaterial(Color.LAWNGREEN));
+        leaves.setMaterial(new PhongMaterial(Color.WHITE));
 
         trunk.setMaterial(new PhongMaterial(Color.SADDLEBROWN));
         trunk.setTranslateY(-trunk.getHeight()/2);

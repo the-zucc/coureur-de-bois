@@ -30,7 +30,7 @@ public class PositionGenerator {
 			double x = Math.random() * mapWidth - mapWidth / 2;
 			double z = Math.random() * mapHeight - mapHeight / 2;
 			pos = new Point2D(x, z);
-		}while(map.getWaterLevel() < map.getHeightAt(pos));
+		}while(map.getWaterLevel() <= map.getHeightAt(pos));
 
 		Point3D returnVal = new Point3D(pos.getX(),map.getHeightAt(pos),pos.getY());
 		return returnVal;

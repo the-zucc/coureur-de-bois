@@ -10,12 +10,14 @@ import characteristic.attachable.Attachable;
 import characteristic.attachable.AttachableReceiver;
 import characteristic.interactive.UserControllable;
 import characteristic.positionnable.Collideable;
+import characteristic.positionnable.Positionnable;
 import collision.CollisionBox;
 import collision.SphericalCollisionBox;
 import entity.living.LivingEntity;
 import game.GameLogic;
 import game.Map;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Point2D;
 import javafx.geometry.Point3D;
 import javafx.scene.Cursor;
 import javafx.scene.Group;
@@ -32,8 +34,10 @@ import javafx.scene.shape.Box;
 import javafx.scene.transform.Rotate;
 import ui.gamescene.GameCamera;
 import util.NodeUtils;
+import util.PositionGenerator;
 import visual.Component;
 import visual.LegComponent;
+import entity.wearable.StandardSword;
 
 public class Player extends Human implements UserControllable, AttachableReceiver{
 	
@@ -44,17 +48,45 @@ public class Player extends Human implements UserControllable, AttachableReceive
 		hp=1000;
 		maxHp = hp;
 		accept("right_clicked", (params)->{
-			if(params.length > 0 && params[0] instanceof LivingEntity){
-				attack((LivingEntity)params[0],10);
-			}
-			else {
-				attack(null, 10);
+			if(params != null) {
+				if(params.length > 0) {
+					if(params[0] instanceof LivingEntity){
+						addUpdate(()->{
+							this.startMovingTo(((LivingEntity)params[0]).get2DPosition());
+						}, ()->{
+							boolean hasWeapon = this.wieldedWeapon != null;
+							double maxDist = hasWeapon ? ((StandardSword)wieldedWeapon).getSwordLength() : GameLogic.getMeterLength()*1.5;
+							boolean checkDistance = Player.this.getPosition().distance(((LivingEntity)params[0]).getPosition()) < maxDist;
+							return checkDistance;
+						}, ()->{
+							attack((LivingEntity)params[0],10);
+						});
+					}else if(params[0]instanceof Positionnable){
+						addUpdate(()->{
+							this.startMovingTo(((Positionnable)params[0]).get2DPosition());							
+						}, ()->{
+							return this.distanceFrom((Positionnable)params[0]) < GameLogic.getMeterLength();
+						}, ()->{
+							
+						});
+						
+					}
+				}
+				else {
+					attack(null, 10);
+				}				
 			}
 		});
 		accept("mouse_moved", (params)->{
 			MouseEvent me = (MouseEvent)params[0];
 			mouseX = me.getSceneX()-App.getUserInterface().getWidth()/2;
 			mouseY = me.getSceneY()-App.getUserInterface().getHeight()/2;
+		});
+		accept("hp", (params)->{
+			if(params[0] == this) {
+				double hpBoost = (Double)params[1];
+				takeDamage(-hpBoost, null);
+			}
 		});
 	}
 	
@@ -82,7 +114,7 @@ public class Player extends Human implements UserControllable, AttachableReceive
 	@Override
 	public void updateActions(double secondsPassed){
 		messenger.send("player_position",get2DPosition());
-		messenger.send("player_position_3D",getPosition(), this);
+		messenger.send("position_3D",getPosition(), this);
 	}
 
 	@Override
@@ -245,7 +277,7 @@ public class Player extends Human implements UserControllable, AttachableReceive
 		else if(code.equals(KeyCode.SPACE))
 			this.jump();
 		else if(code.equals(KeyCode.F))
-			this.detach(wieldedWeapon);
+			this.dropWeapon();
 		ke.consume();
 	}
 

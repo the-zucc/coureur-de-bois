@@ -10,6 +10,8 @@ import game.Map;
 import javafx.geometry.Point2D;
 import javafx.geometry.Point3D;
 import javafx.scene.transform.Rotate;
+import util.StopCondition;
+import visual.Component;
 
 public abstract  class LivingEntity extends GravityAffectedCollidingEntity implements ComponentUpdateable{
 	
@@ -21,6 +23,26 @@ public abstract  class LivingEntity extends GravityAffectedCollidingEntity imple
 	private Point3D jumpVector = new Point3D(0,-40,0);
 	private Point2D target;
 	protected double rotationAngle;
+	private ArrayList<Runnable> additionnalUpdates = new ArrayList<Runnable>();
+	private ArrayList<StopCondition> additionnalUpdatesStopConditions = new ArrayList<StopCondition>();
+	private ArrayList<Runnable> additionnalUpdatesCallbacks = new ArrayList<Runnable>();
+	protected void addUpdate(Runnable job, StopCondition condition, Runnable callback) {
+		additionnalUpdates.add(job);
+		additionnalUpdatesStopConditions.add(condition);
+		additionnalUpdatesCallbacks.add(callback);
+	}
+	private void processUpdates() {
+		for(int i = 0; i < additionnalUpdates.size(); i++) {
+			additionnalUpdates.get(i).run();
+			if(additionnalUpdatesStopConditions.get(i).shouldStop()) {
+				additionnalUpdates.remove(i);
+				additionnalUpdatesStopConditions.remove(i);
+				additionnalUpdatesCallbacks.get(i).run();
+				additionnalUpdatesCallbacks.remove(i);
+				i--;
+			}
+		}
+	}
 	protected double computeComponentRotationAngle(double rotationAngle){
 		return rotationAngle+90;
 	}
@@ -52,6 +74,7 @@ public abstract  class LivingEntity extends GravityAffectedCollidingEntity imple
 		updateMovementVector();
 		processFlinch();
 		super.update(secondsPassed);
+		processUpdates();
 		updateActions(secondsPassed);
 		if(shouldUpdateComponent())
 			updateComponent();
@@ -178,16 +201,28 @@ public abstract  class LivingEntity extends GravityAffectedCollidingEntity imple
 	}
 	protected void takeDamage(double amount, MessageReceiver attacker) {
 		hp-=amount;
-		if(attacker instanceof Positionnable){
-			flinch(((Positionnable)attacker).getPosition());
-		}
-		else{
-			flinch(null);
-		}
-		if(hp <= 0) {
-			messenger.send("dead", this);
+		if(amount > 0) {
+			if(attacker instanceof Positionnable){
+				
+				flinch(((Positionnable)attacker).getPosition());
+			}
+			else{
+				flinch(null);
+			}
+			if(hp <= 0) {
+				Component c = getComponent();
+				animator.animate(()->{
+					c.getTransforms().add(new Rotate(1, Rotate.Z_AXIS));
+				}, 50).done(()->{
+					messenger.send("dead", this);
+					onDeath();
+				});
+			}
+		}else {
+			
 		}
 	}
+	protected abstract void onDeath();
 	private ArrayList<Point3D> flinchMovements = new ArrayList<Point3D>();
 	private ArrayList<Point3D> flinchMovementsToSubtract = new ArrayList<Point3D>();
 	private Point3D flinchMovement = null;

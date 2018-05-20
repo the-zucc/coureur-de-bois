@@ -32,8 +32,10 @@ public abstract class VisibleEntity extends Entity implements Updateable, Compon
 	protected Point3D position;
 	protected Point2D position2D;
 	protected Messenger messenger;
-	public VisibleEntity(Point3D position, Messenger messenger){
+	protected Map map;
+	public VisibleEntity(Point3D position, Map map, Messenger messenger){
 		super();
+		this.map = map;
 		this.animator = new Animator();
 		this.messenger = messenger;
 		listenTo(messenger);
@@ -139,84 +141,73 @@ public abstract class VisibleEntity extends Entity implements Updateable, Compon
 	public ArrayList<Messenger> getMessengers(){
 		return messengers;
 	}
-	
-	Hashtable<String, ArrayList<Object[]>> callbackQueue = new Hashtable<String, ArrayList<Object[]>>();
-	@Override
-	public Hashtable<String, ArrayList<Object[]>> getCallbackQueue(){
-		return callbackQueue;
-	}
 
 	@Override
 	public void processCallbackQueue(){
-		Iterator<String> iterator = callbackQueue.keySet().iterator();
+
 		try{
-			while(iterator.hasNext()){
-				String key = iterator.next();
-				ArrayList<Object[]> paramsList = getCallbackQueue().get(key);
-				for(Object[] params:paramsList){
-					if(params != null){
-						getAccepts().get(key).run(params);
-					}
-					else{
-						getAccepts().get(key).run();
-					}
-					getCallbackQueue().get(key).remove(params);
-				}
-				iterator.remove();
-				getCallbackQueue().remove(key);
+			ArrayList<String> receivedMessages = getReceivedMessages();
+			ArrayList<Object[]> receivedParams = getReceivedParams();
+			while(!receivedMessages.isEmpty()) {
+				getAccepts().get(receivedMessages.get(0)).run(receivedParams.get(0));
+				receivedMessages.remove(0);
+				receivedParams.remove(0);
 			}
 		}catch(ConcurrentModificationException cme){
 			processCallbackQueue();
 			return;
 		}
-		callbackQueue.clear();
 	}
 	@Override
 	public void receiveMessage(String message, Object... params){
-		if(getAccepts().containsKey(message)){
-			if(!getCallbackQueue().containsKey(message)){
-				ArrayList<Object[]> paramsArray = new ArrayList<Object[]>();
-				paramsArray.add(params);
-				getCallbackQueue().put(message, paramsArray);
-			}
-			else{
-				getCallbackQueue().get(message).add(params);
-			}
-		}
+		getReceivedMessages().add(message);
+		getReceivedParams().add(params);
 	}
 
 	@Override
 	public void receiveMessage(String message){
-		if(getAccepts().containsKey(message)){
-			if(callbackQueue.containsKey(message)) {
-				callbackQueue.get(message).add(null);
-			}
-			else {
-				callbackQueue.put(message, new ArrayList<Object[]>());
-			}
-		}
+		getReceivedMessages().add(message);
+		getReceivedParams().add(null);
 	}
 
 	@Override
 	public void accept(String message, MessageCallback callback){
 		getAccepts().put(message, callback);
+		messenger.setupListener(message, this);
 	}
-
+	
 	Hashtable<String, MessageCallback> accepts = new Hashtable<String, MessageCallback>();
 	@Override
 	public Hashtable<String, MessageCallback> getAccepts(){
 		return accepts;
 	}
+	
 	@Override
 	public void listenTo(Messenger messenger){
 		getMessengers().add(messenger);
 		messenger.addReceiver(this);
 	}
+	
+	ArrayList<String>  receivedMessages = new ArrayList<String>();
+	@Override
+	public ArrayList<String> getReceivedMessages(){
+		return receivedMessages;
+	}
+	
+	ArrayList<Object[]> receivedParams = new ArrayList<Object[]>();
+	@Override
+	public ArrayList<Object[]> getReceivedParams(){
+		return receivedParams;
+	}
+	
 	public Animator getAnimator() {
 		return animator;
 	}
+	
 	@Override
 	public void update(double secondsPassed) {
 		animator.playAnimations();
+		processCallbackQueue();
 	}
+	
 }

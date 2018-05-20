@@ -139,4 +139,10 @@ public class Sheep extends LivingEntity {
 		return null;
 	}
 
+	@Override
+	protected void onDeath() {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

@@ -5,7 +5,10 @@ import characteristic.Messenger;
 import characteristic.attachable.Attachable;
 import characteristic.attachable.AttachableReceiver;
 import entity.living.LivingEntity;
+import entity.wearable.LongSword;
+import entity.wearable.StandardSword;
 import entity.wearable.WeaponEntity;
+import game.GameLogic;
 import game.Map;
 import javafx.geometry.Point3D;
 import visual.Component;
@@ -21,7 +24,9 @@ public abstract class Human extends LivingEntity implements AttachableReceiver {
 		this.level = level;
 		accept("wield_weapon", (params)->{
 			if(params[0] == this){
-				wieldWeapon((WeaponEntity)params[1]);
+				if(wieldedWeapon == null) {
+					wieldWeapon((WeaponEntity)params[1]);					
+				}
 			}
 		});
 	}
@@ -76,6 +81,12 @@ public abstract class Human extends LivingEntity implements AttachableReceiver {
 		attach(we);
 	}
 	
+	public void dropWeapon() {
+		//messenger.send("dropped", we);
+		detach(wieldedWeapon);
+		wieldedWeapon = null;
+	}
+	
 	@Override
 	protected void attack(MessageReceiver target, double damage) {
 		if(wieldedWeapon != null){
@@ -84,5 +95,10 @@ public abstract class Human extends LivingEntity implements AttachableReceiver {
 		else{
 			super.attack(target, damage);
 		}
+	}
+	@Override
+	protected void onDeath() {
+		double meter = GameLogic.getMeterLength();
+		messenger.send("drop", Math.random() > 0.5 ? new StandardSword(getPosition().add(new Point3D(meter, 0, meter)), map, messenger) : new LongSword(new Point3D(meter, 0, meter), map, messenger));
 	}
 }

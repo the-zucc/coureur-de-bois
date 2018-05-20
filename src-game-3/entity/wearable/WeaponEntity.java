@@ -7,6 +7,8 @@ import characteristic.attachable.AttachableReceiver;
 import characteristic.positionnable.Collideable;
 import collision.CollisionBox;
 import entity.MovingCollidingEntity;
+import entity.VisibleEntity;
+import entity.drops.DroppableFloatingEntity;
 import game.GameLogic;
 import game.Map;
 import javafx.geometry.Point3D;
@@ -18,7 +20,7 @@ import javafx.scene.shape.Box;
 import javafx.scene.transform.Rotate;
 import visual.Component;
 
-public abstract class WeaponEntity extends MovingCollidingEntity implements Attachable {
+public abstract class WeaponEntity extends DroppableFloatingEntity implements Attachable {
 
 	private AttachableReceiver receiver;
 	private Point3D relativePosition;
@@ -27,14 +29,24 @@ public abstract class WeaponEntity extends MovingCollidingEntity implements Atta
 		super(position, map, messenger);
 		this.relativePosition = computeWieldedPosition();
 		this.accept("player_position_3D", (params)->{
-			Point3D playerPos = (Point3D)params[0];
-			if(playerPos.distance(getPosition())<GameLogic.getMeterLength()){
-				messenger.send("wield_weapon", params[1], this);
+			if(receiver == null) {
+				Point3D playerPos = (Point3D)params[0];
+				if(playerPos.distance(getPosition())<GameLogic.getMeterLength()){
+					messenger.send("wield_weapon", params[1], this);
+				}				
 			}
 		});
-		this.accept("wielded", (params)->{
+		//this.accept("wielded", (params)->{
 			
-		});
+		//});
+	}
+	@Override
+	protected boolean canBePickedUp() {
+		return receiver == null;
+	}
+	@Override
+	protected void onPickup(Object... params ) {
+		messenger.send("wield_weapon", params[1], this);
 	}
 	
 	protected abstract Point3D computeWieldedPosition();
@@ -62,12 +74,10 @@ public abstract class WeaponEntity extends MovingCollidingEntity implements Atta
 	}
 
 	@Override
-	public double computeCollidingWeight() {
-		return 1;
-	}
-
-	@Override
 	public void onAttach(AttachableReceiver ar) {
+		ticksSinceDrop = 0;
+		getComponent().setRotationAxis(Rotate.Y_AXIS);
+		getComponent().setRotate(ticksSinceDrop);
 		getComponent().setTranslateX(this.getPositionRelativeToReceiver().getX());
 		getComponent().setTranslateY(this.getPositionRelativeToReceiver().getY());
 		getComponent().setTranslateZ(this.getPositionRelativeToReceiver().getZ());
@@ -102,11 +112,6 @@ public abstract class WeaponEntity extends MovingCollidingEntity implements Atta
 	}
 
 	@Override
-	public void onCollides(Collideable c) {
-		
-	}
-
-	@Override
 	protected Cursor getHoveredCursor() {
 		return null;
 	}
@@ -123,17 +128,10 @@ public abstract class WeaponEntity extends MovingCollidingEntity implements Atta
 		return null;
 	}
 	
-	private int ticksSinceDrop = 0;
 	@Override
 	public void update(double secondsPassed){
 		super.update(secondsPassed);
-		if(getReceiver() == null){
-			ticksSinceDrop++;
-			double height = Math.sin(((double)ticksSinceDrop)/10)-GameLogic.getMeterLength();
-			Point3D add = new Point3D(0,height,0);
-			getComponent().setPosition(getPosition().add(add));
-		}
-		System.out.println("pos"+computeAbsolutePosition());
+
 	}
 	
 	public void attack(MessageReceiver mr){
@@ -142,5 +140,9 @@ public abstract class WeaponEntity extends MovingCollidingEntity implements Atta
 	}
 	protected double computeDamage(){
 		return Math.random()*10+20;
+	}
+	@Override
+	protected boolean shouldFloat() {
+		return getReceiver() == null;
 	}
 }

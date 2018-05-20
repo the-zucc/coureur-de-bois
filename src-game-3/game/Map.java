@@ -1,6 +1,7 @@
 package game;
 
 import java.util.ArrayList;
+import java.util.ConcurrentModificationException;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.concurrent.ThreadLocalRandom;
@@ -25,12 +26,17 @@ import entity.statics.tree.TreeNormal;
 import game.settings.Preferences;
 import javafx.geometry.Point2D;
 import javafx.geometry.Point3D;
+import javafx.scene.Group;
+import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
+import javafx.scene.shape.Cylinder;
 import javafx.scene.shape.DrawMode;
 import javafx.scene.shape.MeshView;
 import javafx.scene.shape.TriangleMesh;
+import javafx.scene.transform.Rotate;
+import javafx.scene.transform.Translate;
 import perlin.PerlinNoise;
 import ui.gamescene.GameCamera;
 import util.MessageCallback;
@@ -54,7 +60,7 @@ public class Map implements ComponentOwner, Updateable, MessageReceiver{
 					Preferences.getVillageRadius(),
 					Preferences.getVillageTipiCount(),
 					Preferences.getVillageVillagerCount(),
-					1000);
+					700);
 		}
 		return instance;
 	}
@@ -83,9 +89,14 @@ public class Map implements ComponentOwner, Updateable, MessageReceiver{
 	public Component buildComponent() {
 		Component returnVal = new Component("id_map");
 		returnVal.setPosition(position);
-		returnVal.addChildComponent(buildFloorMesh());
+		Component floorMesh = buildFloorMesh();
+		returnVal.addChildComponent(floorMesh);
 		returnVal.addChildComponent(buildWaterMesh((float)waterLevel));
-
+		floorMesh.setOnMouseClicked((e)->{
+			if(e.getButton() == MouseButton.SECONDARY) {
+				messenger.send("right_clicked", PositionGenerator.convert2D(e.getPickResult().getIntersectedPoint()));
+			}
+		});
 		return returnVal;
 	}
 	@Override
@@ -208,6 +219,9 @@ public class Map implements ComponentOwner, Updateable, MessageReceiver{
 		addEntity(new StandardSword(swordPos, this, messenger));
         Point3D swordPos2 = new Point3D(currentPlayer.get2DPosition().getX()-10, getHeightAt(currentPlayer.get2DPosition().add(new Point2D(10,10))), currentPlayer.get2DPosition().getY()+10);
         addEntity(new LongSword(swordPos, this, messenger));
+        accept("drop", (params)->{
+        	addEntity((Entity)params[0]);
+        });
 	}
 
 	private Messenger createMessenger() {
@@ -215,15 +229,19 @@ public class Map implements ComponentOwner, Updateable, MessageReceiver{
 			private ArrayList<MessageReceiver> receivers = new ArrayList<MessageReceiver>();
 			@Override
 			public void notifyReceivers(String message) {
-			    for(MessageReceiver r:getReceivers()){
-			        r.receiveMessage(message);
-                }
+			    if(getListeners().containsKey(message)) {
+			    	for(MessageReceiver r:getListeners().get(message)) {
+			    		r.receiveMessage(message);
+			    	}
+            	}
 			}
 
 			@Override
 			public void notifyReceivers(String message, Object... params) {
-                for(MessageReceiver r:getReceivers()){
-                    r.receiveMessage(message, params);
+				if(getListeners().containsKey(message)) {
+	                for(MessageReceiver r:getListeners().get(message)){
+	                    r.receiveMessage(message, params);
+	                }
                 }
 			}
 
@@ -234,6 +252,7 @@ public class Map implements ComponentOwner, Updateable, MessageReceiver{
 
             @Override
             public void send(String message, Object... params) {
+            	
                 notifyReceivers(message, params);
             }
 
@@ -250,6 +269,25 @@ public class Map implements ComponentOwner, Updateable, MessageReceiver{
 			@Override
 			public void removeReceiver(MessageReceiver o) {
 				receivers.remove(o);
+				for(String key:getListeners().keySet()) {
+					ArrayList<MessageReceiver> tmp = getListeners().get(key);
+					if(tmp.contains(o)) {
+						tmp.remove(o);
+					}
+				}
+			}
+
+			@Override
+			public Hashtable<String, ArrayList<MessageReceiver>> getListeners() {
+				return listeners;
+			}
+			private Hashtable<String, ArrayList<MessageReceiver>> listeners = new Hashtable<String, ArrayList<MessageReceiver>>(); 
+			@Override
+			public void setupListener(String message, MessageReceiver receiver) {
+				if(!getListeners().containsKey(message)) {
+					listeners.put(message, new ArrayList<MessageReceiver>());
+				}
+				listeners.get(message).add(receiver);
 			}
 		};
 	}
@@ -290,10 +328,10 @@ public class Map implements ComponentOwner, Updateable, MessageReceiver{
 			double arg0p0z = arg0.getY()-p0.getZ();
 			
 			double returnVal = ((normal.getX() * (arg0p0x) + normal.getZ() * (arg0p0z)/* - letD*/)/-normal.getY()) + p0.getY();
-			/*
-			if(returnVal > GameScene.getWaterHeight())
-				returnVal = GameScene.getWaterHeight();
-			*/
+			
+			if(returnVal > waterLevel)
+				returnVal = waterLevel;
+			
 			//App.getUserInterface().getGameScene().createConnection(triangle[0], triangle[1], new PhongMaterial(Color.BLACK));
 			//App.getUserInterface().getGameScene().createConnection(triangle[1], triangle[2], new PhongMaterial(Color.BLACK));
 			//App.getUserInterface().getGameScene().createConnection(triangle[2], triangle[0], new PhongMaterial(Color.BLACK));
@@ -335,7 +373,7 @@ public class Map implements ComponentOwner, Updateable, MessageReceiver{
 
 		MeshView floorMeshView = new MeshView(mesh);
 		floorMeshView.setDrawMode(DrawMode.FILL);
-		floorMeshView.setMaterial(new PhongMaterial(Color.GREEN));
+		floorMeshView.setMaterial(new PhongMaterial(Color.WHITE));
 		floorMeshView.setTranslateX(0);
 		floorMeshView.setTranslateZ(0);
 		returnVal.getChildren().add(floorMeshView);
@@ -360,7 +398,7 @@ public class Map implements ComponentOwner, Updateable, MessageReceiver{
 		mesh.getTexCoords().addAll(0,0);
 
         MeshView meshView = new MeshView(mesh);
-        meshView.setMaterial(new PhongMaterial(new Color(0,0,0.5,0.6)));
+        meshView.setMaterial(new PhongMaterial(new Color(0,0.1,0.2,0.7)));
 		returnVal.getChildren().add(meshView);
 	    return returnVal;
     }
@@ -378,7 +416,7 @@ public class Map implements ComponentOwner, Updateable, MessageReceiver{
 		//generate random heights
 		for(int z = 0; z < rows+1; z++) {
 			for(int x = 0; x < cols+1; x++) {
-				float y = perlin.smoothNoise(x*multiplicator, z*multiplicator, 32, 24)*(float)(1000*GameLogic.getMeterLength());
+				float y = perlin.smoothNoise(x*multiplicator, z*multiplicator, 32, 24)*(float)(2000*GameLogic.getMeterLength());
 				returnVal[z][x]=y;
 			}
 		}
@@ -451,6 +489,11 @@ public class Map implements ComponentOwner, Updateable, MessageReceiver{
 		if(e instanceof ComponentOwner) {
 			componentOwners.remove((ComponentOwner)e);
 			getComponent().getChildren().remove(((ComponentOwner)e).getComponent());
+		}
+		if(e instanceof MessageReceiver) {
+			if(messenger.getReceivers().contains(e)) {
+				messenger.removeReceiver((MessageReceiver)e);
+			}
 		}
 		if(isUpdating){
 			updateableCounter--;			
@@ -545,76 +588,91 @@ public class Map implements ComponentOwner, Updateable, MessageReceiver{
 	/**
 	 * For messenger
 	 */
+	/**
+	 * Section pour Messenger
+	**/
 	private ArrayList<Messenger> messengers = new ArrayList<Messenger>();
 	@Override
 	public ArrayList<Messenger> getMessengers(){
 		return messengers;
 	}
-	
-	Hashtable<String, ArrayList<Object[]>> callbackQueue = new Hashtable<String, ArrayList<Object[]>>();
-	@Override
-	public Hashtable<String, ArrayList<Object[]>> getCallbackQueue(){
-		return callbackQueue;
-	}
 
 	@Override
 	public void processCallbackQueue(){
-		Iterator<String> iterator = callbackQueue.keySet().iterator();
-		while(iterator.hasNext()){
-			String key = iterator.next();
-			ArrayList<Object[]> paramsList = getCallbackQueue().get(key);
-			for(Object[] params:paramsList){
-				if(params != null){
-					getAccepts().get(key).run(params);
-				}
-				else{
-					getAccepts().get(key).run();
-				}
+
+		try{
+			ArrayList<String> receivedMessages = getReceivedMessages();
+			ArrayList<Object[]> receivedParams = getReceivedParams();
+			while(!receivedMessages.isEmpty()) {
+				getAccepts().get(receivedMessages.get(0)).run(receivedParams.get(0));
+				receivedMessages.remove(0);
+				receivedParams.remove(0);
 			}
+		}catch(ConcurrentModificationException cme){
+			processCallbackQueue();
+			return;
 		}
-		callbackQueue.clear();
 	}
 	@Override
 	public void receiveMessage(String message, Object... params){
-		if(getAccepts().containsKey(message)){
-			if(!getCallbackQueue().containsKey(message)){
-				ArrayList<Object[]> paramsArray = new ArrayList<Object[]>();
-				paramsArray.add(params);
-				getCallbackQueue().put(message, paramsArray);
-			}
-			else{
-				getCallbackQueue().get(message).add(params);
-			}
-		}
+		getReceivedMessages().add(message);
+		getReceivedParams().add(params);
 	}
 
 	@Override
 	public void receiveMessage(String message){
-		if(getAccepts().containsKey(message)){
-			if(callbackQueue.containsKey(message)) {
-				callbackQueue.get(message).add(null);
-			}
-			else {
-				callbackQueue.put(message, new ArrayList<Object[]>());
-			}
-		}
+		getReceivedMessages().add(message);
+		getReceivedParams().add(null);
 	}
 
 	@Override
 	public void accept(String message, MessageCallback callback){
 		getAccepts().put(message, callback);
+		messenger.setupListener(message, this);
 	}
-
+	
 	Hashtable<String, MessageCallback> accepts = new Hashtable<String, MessageCallback>();
 	@Override
 	public Hashtable<String, MessageCallback> getAccepts(){
 		return accepts;
 	}
-
+	
 	@Override
-	public void listenTo(Messenger messenger) {
+	public void listenTo(Messenger messenger){
 		getMessengers().add(messenger);
 		messenger.addReceiver(this);
 	}
 	
+	ArrayList<String>  receivedMessages = new ArrayList<String>();
+	@Override
+	public ArrayList<String> getReceivedMessages(){
+		return receivedMessages;
+	}
+	
+	ArrayList<Object[]> receivedParams = new ArrayList<Object[]>();
+	@Override
+	public ArrayList<Object[]> getReceivedParams(){
+		return receivedParams;
+	}
+	
+	public Cylinder createConnection(Point3D origin, Point3D target, PhongMaterial material) {
+	    Point3D yAxis = new Point3D(0, 1, 0);
+	    Point3D diff = target.subtract(origin);
+	    double height = diff.magnitude();
+
+	    Point3D mid = target.midpoint(origin);
+	    Translate moveToMidpoint = new Translate(mid.getX(), mid.getY(), mid.getZ());
+
+	    Point3D axisOfRotation = diff.crossProduct(yAxis);
+	    double angle = Math.acos(diff.normalize().dotProduct(yAxis));
+	    Rotate rotateAroundCenter = new Rotate(-Math.toDegrees(angle), axisOfRotation);
+
+	    Cylinder line = new Cylinder(1, height);
+
+	    line.getTransforms().addAll(moveToMidpoint, rotateAroundCenter);
+	    line.setMaterial(material);
+
+	    getComponent().getChildren().addAll(line);
+	    return line;
+	}
 }

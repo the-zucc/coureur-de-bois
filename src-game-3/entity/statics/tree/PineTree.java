@@ -13,9 +13,14 @@ import util.MeshFactory;
 import visual.Component;
 
 public class PineTree extends TreeNormal {
-
+	private PhongMaterial material;
     public PineTree(Point3D position, Map map, Messenger messenger) {
         super(position, map, messenger);
+        if(Math.random() > 0.7) {
+        	material = new PhongMaterial(Color.DARKGREEN);        	
+        }else {
+        	material = new PhongMaterial(Color.WHITE);
+        }
     }
 
     @Override
@@ -44,7 +49,8 @@ public class PineTree extends TreeNormal {
         mv1.setRotationAxis(Rotate.Y_AXIS);
         mv1.setRotate(Math.random()*Math.PI*2);
         mv1.setTranslateY(translateY);
-        mv1.setMaterial(new PhongMaterial(Color.DARKGREEN));
+        mv1.setMaterial(material);
+        
 
         returnVal.getChildren().add(mv1);
 

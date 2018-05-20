@@ -39,7 +39,7 @@ public class GameLogic {
 		App.getUserInterface().setMapAndBindControls(map);
 		((Group)scene.getRoot()).getChildren().add(map.getComponent());
 		
-		loop = new GameLoop(scene.getGameCamera());
+		loop = new GameLoop(scene.getGameCamera(), scene);
 		loop.start();
 	}
 

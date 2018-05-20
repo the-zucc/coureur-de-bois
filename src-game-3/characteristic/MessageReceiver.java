@@ -7,8 +7,8 @@ import java.util.Hashtable;
 
 public interface MessageReceiver {
 	ArrayList<Messenger> getMessengers();
-	
-    Hashtable<String, ArrayList<Object[]>> getCallbackQueue();
+	ArrayList<String> getReceivedMessages();
+	ArrayList<Object[]> getReceivedParams();
     void processCallbackQueue();
 
     void receiveMessage(String message, Object... params);

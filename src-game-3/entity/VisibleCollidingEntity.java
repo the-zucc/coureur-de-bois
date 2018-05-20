@@ -16,7 +16,6 @@ import visual.Component;
 
 public abstract class VisibleCollidingEntity extends VisibleEntity implements Collideable, MessageReceiver {
 	protected CollisionBox collisionBox;
-	protected Map map;
 	protected int collisionMapRow;
 	public void setCollisionMapRow(int collisionMapRow){
 		this.collisionMapRow = collisionMapRow;
@@ -35,10 +34,9 @@ public abstract class VisibleCollidingEntity extends VisibleEntity implements Co
 	}
 	
 	public VisibleCollidingEntity(Point3D position, Map map, Messenger messenger) {
-		super(position, messenger);
+		super(position, map, messenger);
 		
 		collisionBox = buildCollisionBox();
-		this.map = map;
 		this.collisionMapRow = map.getCollisionRowFor(get2DPosition());
 		this.collisionMapColumn = map.getCollisionColumnFor(get2DPosition());
 	}
