@@ -23,26 +23,7 @@ public abstract  class LivingEntity extends GravityAffectedCollidingEntity imple
 	private Point3D jumpVector = new Point3D(0,-40,0);
 	private Point2D target;
 	protected double rotationAngle;
-	private ArrayList<Runnable> additionnalUpdates = new ArrayList<Runnable>();
-	private ArrayList<StopCondition> additionnalUpdatesStopConditions = new ArrayList<StopCondition>();
-	private ArrayList<Runnable> additionnalUpdatesCallbacks = new ArrayList<Runnable>();
-	protected void addUpdate(Runnable job, StopCondition condition, Runnable callback) {
-		additionnalUpdates.add(job);
-		additionnalUpdatesStopConditions.add(condition);
-		additionnalUpdatesCallbacks.add(callback);
-	}
-	private void processUpdates() {
-		for(int i = 0; i < additionnalUpdates.size(); i++) {
-			additionnalUpdates.get(i).run();
-			if(additionnalUpdatesStopConditions.get(i).shouldStop()) {
-				additionnalUpdates.remove(i);
-				additionnalUpdatesStopConditions.remove(i);
-				additionnalUpdatesCallbacks.get(i).run();
-				additionnalUpdatesCallbacks.remove(i);
-				i--;
-			}
-		}
-	}
+	
 	protected double computeComponentRotationAngle(double rotationAngle){
 		return rotationAngle+90;
 	}
@@ -74,7 +55,6 @@ public abstract  class LivingEntity extends GravityAffectedCollidingEntity imple
 		updateMovementVector();
 		processFlinch();
 		super.update(secondsPassed);
-		processUpdates();
 		updateActions(secondsPassed);
 		if(shouldUpdateComponent())
 			updateComponent();

@@ -3,6 +3,7 @@ package entity.statics.tree;
 import characteristic.Messenger;
 import characteristic.positionnable.Collideable;
 import collision.CollisionBox;
+import entity.drops.HealthBoost;
 import entity.statics.StaticVisibleCollidingEntity;
 import game.GameLogic;
 import game.Map;
@@ -17,6 +18,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
 import visual.Component;
 import javafx.scene.shape.Box;
+import javafx.scene.transform.Rotate;
 import util.NodeUtils;
 
 import java.util.concurrent.ThreadLocalRandom;
@@ -24,9 +26,32 @@ import java.util.concurrent.ThreadLocalRandom;
 public class TreeNormal extends StaticVisibleCollidingEntity {
     public TreeNormal(Point3D position, Map map, Messenger messenger) {
         super(position, map, messenger);
+        accept("cut_down_tree", (params)->{
+        	if(params[0] == this) {
+        		this.getCutDown();
+        	}
+        });
     }
+    
+    private double fallingSpeed = 0;
+    private void getCutDown() {
+    	int ticks = 45;
+    	double fallingAccel = 0.2;
+    	Component c = getComponent();
+    	double ang = Math.random()*360;
+    	Point3D rotationAxis = new Point3D(Math.cos(ang), 0, Math.sin(ang));
+    	animator.animate(()->{
+    		fallingSpeed+=fallingAccel;
+    		c.getTransforms().add(new Rotate(fallingSpeed, rotationAxis));
+    	}, ticks/2).then(()->{
+    		
+    	}, 20).done(()->{
+    		map.removeEntity(this);
+    		messenger.send("drop", new HealthBoost(getPosition(), map, messenger));
+    	});
+	}
 
-    @Override
+	@Override
     public Component buildComponent() {
         Component returnVal = new Component(getId());
 

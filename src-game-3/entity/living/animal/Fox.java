@@ -236,7 +236,6 @@ public class Fox extends LivingEntity {
 
 	@Override
 	protected void onDeath() {
-		
 		messenger.send("drop", new HealthBoost(getPosition(), map, messenger));
 	}
 }

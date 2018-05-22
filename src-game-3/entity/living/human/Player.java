@@ -14,6 +14,7 @@ import characteristic.positionnable.Positionnable;
 import collision.CollisionBox;
 import collision.SphericalCollisionBox;
 import entity.living.LivingEntity;
+import entity.statics.tree.TreeNormal;
 import game.GameLogic;
 import game.Map;
 import javafx.fxml.FXMLLoader;
@@ -54,13 +55,22 @@ public class Player extends Human implements UserControllable, AttachableReceive
 						addUpdate(()->{
 							this.startMovingTo(((LivingEntity)params[0]).get2DPosition());
 						}, ()->{
+
 							boolean hasWeapon = this.wieldedWeapon != null;
-							double maxDist = hasWeapon ? ((StandardSword)wieldedWeapon).getSwordLength() : GameLogic.getMeterLength()*1.5;
+							double maxDist;
+							if(hasWeapon && wieldedWeapon instanceof StandardSword) {
+								maxDist = hasWeapon ? ((StandardSword)wieldedWeapon).getSwordLength() : GameLogic.getMeterLength()*1.5;
+							}
+							else {
+								maxDist = GameLogic.getMeterLength();
+							}
 							boolean checkDistance = Player.this.getPosition().distance(((LivingEntity)params[0]).getPosition()) < maxDist;
 							return checkDistance;
 						}, ()->{
 							attack((LivingEntity)params[0],10);
 						});
+					}else if(params[0] instanceof TreeNormal){
+						goCutDownTree((TreeNormal)params[0]);
 					}else if(params[0]instanceof Positionnable){
 						addUpdate(()->{
 							this.startMovingTo(((Positionnable)params[0]).get2DPosition());							
@@ -264,15 +274,17 @@ public class Player extends Human implements UserControllable, AttachableReceive
 	public void keyAction(KeyEvent ke, boolean keyDown) {
 		// TODO Auto-generated method stub
 		KeyCode code = ke.getCode();
-		if(code.equals(KeyCode.W))
-			this.setUp(keyDown);
-		else if(code.equals(KeyCode.A))
-			this.setLeft(keyDown);
-		else if(code.equals(KeyCode.S))
-			this.setDown(keyDown);
-		else if(code.equals(KeyCode.D))
-			this.setRight(keyDown);
-		else if(code.equals(KeyCode.SHIFT))
+		if(!isDoingAction()) {
+			if(code.equals(KeyCode.W))
+				this.setUp(keyDown);
+			else if(code.equals(KeyCode.A))
+				this.setLeft(keyDown);
+			else if(code.equals(KeyCode.S))
+				this.setDown(keyDown);
+			else if(code.equals(KeyCode.D))
+				this.setRight(keyDown);
+		}
+		if(code.equals(KeyCode.SHIFT))
 			this.setIsRunning(keyDown);
 		else if(code.equals(KeyCode.SPACE))
 			this.jump();

@@ -22,6 +22,7 @@ import entity.statics.village.Tipi;
 import entity.wearable.LongSword;
 import entity.wearable.StandardSword;
 import entity.wearable.WeaponEntity;
+import entity.wearable.WoodCuttersAxe;
 import entity.statics.tree.TreeNormal;
 import game.settings.Preferences;
 import javafx.geometry.Point2D;
@@ -218,7 +219,9 @@ public class Map implements ComponentOwner, Updateable, MessageReceiver{
 		Point3D swordPos = new Point3D(currentPlayer.get2DPosition().getX()+10, getHeightAt(currentPlayer.get2DPosition().add(new Point2D(10,10))), currentPlayer.get2DPosition().getY()+10);
 		addEntity(new StandardSword(swordPos, this, messenger));
         Point3D swordPos2 = new Point3D(currentPlayer.get2DPosition().getX()-10, getHeightAt(currentPlayer.get2DPosition().add(new Point2D(10,10))), currentPlayer.get2DPosition().getY()+10);
-        addEntity(new LongSword(swordPos, this, messenger));
+        addEntity(new LongSword(swordPos2, this, messenger));
+        Point3D swordPos3 = new Point3D(currentPlayer.get2DPosition().getX(), getHeightAt(currentPlayer.get2DPosition().add(new Point2D(10,10))), currentPlayer.get2DPosition().getY()+10);
+        addEntity(new WoodCuttersAxe(swordPos3, this, messenger));
         accept("drop", (params)->{
         	addEntity((Entity)params[0]);
         });

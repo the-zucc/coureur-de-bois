@@ -25,10 +25,31 @@ import javafx.scene.Parent;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import util.MessageCallback;
+import util.StopCondition;
 import visual.Component;
 
 public abstract class VisibleEntity extends Entity implements Updateable, ComponentOwner, MessageReceiver, Animatable{
 	protected Animator animator;
+	private ArrayList<Runnable> additionnalUpdates = new ArrayList<Runnable>();
+	private ArrayList<StopCondition> additionnalUpdatesStopConditions = new ArrayList<StopCondition>();
+	private ArrayList<Runnable> additionnalUpdatesCallbacks = new ArrayList<Runnable>();
+	protected void addUpdate(Runnable job, StopCondition condition, Runnable callback) {
+		additionnalUpdates.add(job);
+		additionnalUpdatesStopConditions.add(condition);
+		additionnalUpdatesCallbacks.add(callback);
+	}
+	private void processUpdates() {
+		for(int i = 0; i < additionnalUpdates.size(); i++) {
+			additionnalUpdates.get(i).run();
+			if(additionnalUpdatesStopConditions.get(i).shouldStop()) {
+				additionnalUpdates.remove(i);
+				additionnalUpdatesStopConditions.remove(i);
+				additionnalUpdatesCallbacks.get(i).run();
+				additionnalUpdatesCallbacks.remove(i);
+				i--;
+			}
+		}
+	}
 	private Component component;
 	protected Point3D position;
 	protected Point2D position2D;
@@ -89,9 +110,9 @@ public abstract class VisibleEntity extends Entity implements Updateable, Compon
 	public void onHover(MouseEvent me) {
 		animator.animate(()->{
 			double scale = getComponent().getScaleX();
-			getComponent().setScaleX(scale*1.02);
-			getComponent().setScaleY(scale*1.02);
-			getComponent().setScaleZ(scale*1.02);
+			getComponent().setScaleX(scale*1.015);
+			getComponent().setScaleY(scale*1.015);
+			getComponent().setScaleZ(scale*1.015);
 		}, ticksToGrow);
 	}
 	
@@ -230,6 +251,7 @@ public abstract class VisibleEntity extends Entity implements Updateable, Compon
 	public void update(double secondsPassed) {
 		animator.playAnimations();
 		processCallbackQueue();
+		processUpdates();
 	}
 	
 }

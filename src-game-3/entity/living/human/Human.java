@@ -4,7 +4,9 @@ import characteristic.MessageReceiver;
 import characteristic.Messenger;
 import characteristic.attachable.Attachable;
 import characteristic.attachable.AttachableReceiver;
+import characteristic.positionnable.Positionnable;
 import entity.living.LivingEntity;
+import entity.statics.tree.TreeNormal;
 import entity.wearable.LongSword;
 import entity.wearable.StandardSword;
 import entity.wearable.WeaponEntity;
@@ -18,7 +20,19 @@ import java.util.ArrayList;
 public abstract class Human extends LivingEntity implements AttachableReceiver {
 	int level;
 	WeaponEntity wieldedWeapon;
-
+	
+	private boolean isDoingAction = false;
+	protected void toggleIsDoingAction() {
+		isDoingAction = !isDoingAction;
+		setUp(false);
+		setDown(false);
+		setLeft(false);
+		setRight(false);
+	}
+	protected boolean isDoingAction() {
+		return isDoingAction;
+	}
+	
 	public Human(Point3D position, Map map, Messenger messenger, int level) {
 		super(position, map, messenger);
 		this.level = level;
@@ -100,5 +114,25 @@ public abstract class Human extends LivingEntity implements AttachableReceiver {
 	protected void onDeath() {
 		double meter = GameLogic.getMeterLength();
 		messenger.send("drop", Math.random() > 0.5 ? new StandardSword(getPosition().add(new Point3D(meter, 0, meter)), map, messenger) : new LongSword(new Point3D(meter, 0, meter), map, messenger));
+	}
+	protected boolean isCuttingDownTree = false;
+	protected void goCutDownTree(TreeNormal tree) {
+		toggleIsDoingAction();
+		if(!isCuttingDownTree) {
+			isCuttingDownTree = true;
+			addUpdate(()->{
+				this.startMovingTo(tree.get2DPosition());
+			}, ()->{
+				return this.distanceFrom(tree) < 2.5*GameLogic.getMeterLength();
+			}, ()->{
+				animator.animate(()->{
+					attack(null, 10);
+				}, 120).done(()->{
+					messenger.send("cut_down_tree", tree);
+					isCuttingDownTree = false;
+					toggleIsDoingAction();
+				});
+			});
+		}
 	}
 }
