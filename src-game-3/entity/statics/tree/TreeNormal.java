@@ -71,17 +71,7 @@ public class TreeNormal extends StaticVisibleCollidingEntity {
 	public double computeCollidingWeight() {
 		return 1;
 	}
-
-	@Override
-	public void onHover(MouseEvent me) {
-		
-	}
-
-	@Override
-	public void onUnHover(MouseEvent me) {
-		
-	}
-
+	
 	@Override
 	protected Cursor getHoveredCursor() {
 		return Cursor.DEFAULT;

@@ -219,7 +219,9 @@ public abstract  class LivingEntity extends GravityAffectedCollidingEntity imple
 				});
 			}
 		}else {
-			
+			if(getHp() > maxHp) {
+				hp = maxHp;
+			}
 		}
 	}
 	protected abstract void onDeath();

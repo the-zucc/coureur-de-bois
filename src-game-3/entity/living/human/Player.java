@@ -316,18 +316,6 @@ public class Player extends Human implements UserControllable, AttachableReceive
 	}
 
 	@Override
-	public void onHover(MouseEvent me) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void onUnHover(MouseEvent me) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
 	protected Cursor getHoveredCursor() {
 		return Cursor.DEFAULT;
 	}

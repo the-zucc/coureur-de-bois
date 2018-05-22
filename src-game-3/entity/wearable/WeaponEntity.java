@@ -28,17 +28,14 @@ public abstract class WeaponEntity extends DroppableFloatingEntity implements At
 	public WeaponEntity(Point3D position, Map map, Messenger messenger) {
 		super(position, map, messenger);
 		this.relativePosition = computeWieldedPosition();
-		this.accept("player_position_3D", (params)->{
+		accept("position_3D", (params)->{
 			if(receiver == null) {
 				Point3D playerPos = (Point3D)params[0];
 				if(playerPos.distance(getPosition())<GameLogic.getMeterLength()){
 					messenger.send("wield_weapon", params[1], this);
-				}				
+				}
 			}
 		});
-		//this.accept("wielded", (params)->{
-			
-		//});
 	}
 	@Override
 	protected boolean canBePickedUp() {
@@ -46,7 +43,9 @@ public abstract class WeaponEntity extends DroppableFloatingEntity implements At
 	}
 	@Override
 	protected void onPickup(Object... params ) {
-		messenger.send("wield_weapon", params[1], this);
+		if(this.receiver == null) {
+			messenger.send("wield_weapon", params[1], this);			
+		}
 	}
 	
 	protected abstract Point3D computeWieldedPosition();
@@ -54,16 +53,6 @@ public abstract class WeaponEntity extends DroppableFloatingEntity implements At
 	@Override
 	public boolean shouldUpdate() {
 		return true;
-	}
-
-	@Override
-	public void onHover(MouseEvent me) {
-		
-	}
-
-	@Override
-	public void onUnHover(MouseEvent me) {
-		
 	}
 
 	@Override

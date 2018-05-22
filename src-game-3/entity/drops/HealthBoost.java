@@ -33,26 +33,9 @@ public class HealthBoost extends DroppableFloatingEntity {
 		messenger.send("hp", params[1], hpBoost);
 		map.removeEntity(this);
 	}
-	private int ticksToGrow = 8;
-	@Override
-	public void onHover(MouseEvent me) {
-		animator.animate(()->{
-			double scale = getComponent().getScaleX();
-			getComponent().setScaleX(scale*1.02);
-			getComponent().setScaleY(scale*1.02);
-			getComponent().setScaleZ(scale*1.02);
-		}, ticksToGrow);
-	}
+	
 
-	@Override
-	public void onUnHover(MouseEvent me) {
-		animator.animate(()->{
-			double scale = getComponent().getScaleX();
-			getComponent().setScaleX(scale/1.02);
-			getComponent().setScaleY(scale/1.02);
-			getComponent().setScaleZ(scale/1.02);
-		}, ticksToGrow);
-	}
+	
 
 	@Override
 	public void onClick(MouseEvent me) {

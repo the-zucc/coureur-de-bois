@@ -69,16 +69,6 @@ public class Tipi extends StaticVisibleCollidingEntity {
 	}
 
 	@Override
-	public void onHover(MouseEvent me) {
-		
-	}
-
-	@Override
-	public void onUnHover(MouseEvent me) {
-		
-	}
-
-	@Override
 	protected String getMouseToolTipText() {
 		return "tipi";
 	}

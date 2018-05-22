@@ -23,6 +23,7 @@ import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseEvent;
 import util.MessageCallback;
 import visual.Component;
 
@@ -82,7 +83,28 @@ public abstract class VisibleEntity extends Entity implements Updateable, Compon
 		this.position = position;
 		set2DPosition(compute2DPosition(position));
 	}
-
+	
+	private int ticksToGrow = 8;
+	@Override
+	public void onHover(MouseEvent me) {
+		animator.animate(()->{
+			double scale = getComponent().getScaleX();
+			getComponent().setScaleX(scale*1.02);
+			getComponent().setScaleY(scale*1.02);
+			getComponent().setScaleZ(scale*1.02);
+		}, ticksToGrow);
+	}
+	
+	@Override
+	public void onUnHover(MouseEvent me) {
+		animator.animate(()->{
+			double scale = getComponent().getScaleX();
+			getComponent().setScaleX(scale/1.02);
+			getComponent().setScaleY(scale/1.02);
+			getComponent().setScaleZ(scale/1.02);
+		}, ticksToGrow);
+	}
+	
 	@Override
 	public Point3D getPosition() {
 		return this.position;

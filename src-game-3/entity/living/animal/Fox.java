@@ -201,16 +201,6 @@ public class Fox extends LivingEntity {
 	}
 
 	@Override
-	public void onHover(MouseEvent me) {
-		
-	}
-
-	@Override
-	public void onUnHover(MouseEvent me) {
-		
-	}
-
-	@Override
 	protected Cursor getHoveredCursor() {
 		return Cursor.HAND;
 	}

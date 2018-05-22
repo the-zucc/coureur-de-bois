@@ -138,16 +138,6 @@ public class Villager extends Human implements Hoverable{
 	public void onCollides(Collideable c) {
 		
 	}
-
-	@Override
-	public void onHover(MouseEvent me) {
-		
-	}
-
-	@Override
-	public void onUnHover(MouseEvent me) {
-		
-	}
 	
 	public double getDistanceFromVillage(){
 		return get2DPosition().distance(village.get2DPosition());
