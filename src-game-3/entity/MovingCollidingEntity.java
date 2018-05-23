@@ -68,7 +68,6 @@ public abstract class MovingCollidingEntity extends VisibleCollidingEntity{
 	}
 	@Override
 	public void update(double secondsPassed){
-		processCallbackQueue();
 		super.update(secondsPassed);
 		Point3D nextPos = computeNextPosition(secondsPassed);
 		moveTo(nextPos);

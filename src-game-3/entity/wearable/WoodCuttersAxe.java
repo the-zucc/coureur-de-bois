@@ -25,7 +25,6 @@ public class WoodCuttersAxe extends WeaponEntity{
 
 	@Override
 	protected String getMouseToolTipText() {
-		
 		return "Woodcutter's axe";
 	}
 

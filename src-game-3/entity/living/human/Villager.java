@@ -7,6 +7,9 @@ import characteristic.interactive.Hoverable;
 import characteristic.positionnable.Collideable;
 import collision.CollisionBox;
 import collision.SphericalCollisionBox;
+import entity.wearable.LongSword;
+import entity.wearable.StandardSword;
+import entity.wearable.WeaponEntity;
 import game.GameLogic;
 import game.Map;
 import javafx.fxml.FXMLLoader;
@@ -38,7 +41,19 @@ public class Villager extends Human implements Hoverable{
 		accept("yall_jump", (params)->{
 			jump();
 		});
-		
+		accept("wield_weapon", (params)->{
+			if(params[0] == this){
+				if(wieldedWeapon == null) {
+					wieldWeapon((WeaponEntity)params[1]);
+				}
+			}
+		});
+		/*
+		if(Math.random()>0.65) {*/
+			WeaponEntity entity = Math.random() > 0.8 ? new LongSword(getPosition(), map, messenger) : new StandardSword(getPosition(), map, messenger);
+			map.addEntity(entity);
+			messenger.send("wield_weapon", this, entity);
+		//}
 	}
     public Villager(Point3D position, Map map, Messenger messenger, Village v) {
         super(position, map, messenger, (int)(Math.random()*10)+1);
@@ -111,7 +126,7 @@ public class Villager extends Human implements Hoverable{
         boxNose.setTranslateZ(0.25*meter+0.1*meter);
 
         //hair
-        PhongMaterial materialHair = new PhongMaterial(Color.ORANGERED);
+        PhongMaterial materialHair = new PhongMaterial(Color.BLACK);
         Box boxHair = new Box(0.695*meter, 0.1*meter, 0.695*meter);
         //Box boxHair2 = new Box(5, )
         boxHair.setMaterial(materialHair);
@@ -128,12 +143,7 @@ public class Villager extends Human implements Hoverable{
 		returnVal.setCursor(Cursor.HAND);
 		return returnVal;
 	}
-
-	@Override
-	public CollisionBox buildCollisionBox() {
-		return new SphericalCollisionBox(0.5*GameLogic.getMeterLength(),this, new Point3D(0,0,0), map);
-	}
-
+	
 	@Override
 	public void onCollides(Collideable c) {
 		
@@ -167,7 +177,6 @@ public class Villager extends Human implements Hoverable{
 			((Label)(NodeUtils.getChildByID(returnVal, "hpLabel"))).setText(String.valueOf(getHp()));
 			return returnVal;
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return null;

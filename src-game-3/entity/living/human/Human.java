@@ -5,8 +5,10 @@ import characteristic.Messenger;
 import characteristic.attachable.Attachable;
 import characteristic.attachable.AttachableReceiver;
 import characteristic.positionnable.Positionnable;
+import collision.CollisionBox;
+import collision.SphericalCollisionBox;
 import entity.living.LivingEntity;
-import entity.statics.tree.TreeNormal;
+import entity.statics.tree.Tree;
 import entity.wearable.LongSword;
 import entity.wearable.StandardSword;
 import entity.wearable.WeaponEntity;
@@ -16,10 +18,12 @@ import javafx.geometry.Point3D;
 import visual.Component;
 
 import java.util.ArrayList;
+import java.util.Hashtable;
 
 public abstract class Human extends LivingEntity implements AttachableReceiver {
 	int level;
 	WeaponEntity wieldedWeapon;
+	protected Hashtable<String, Integer> items = new Hashtable<String, Integer>();
 	
 	private boolean isDoingAction = false;
 	protected void toggleIsDoingAction() {
@@ -63,9 +67,9 @@ public abstract class Human extends LivingEntity implements AttachableReceiver {
 	@Override
 	public void detach(Attachable a) {
 		if(getAttachables().contains(a)){
+			a.onDetach(this);
 			getAttachables().remove(a);
 			getComponent().removeChildComponent(a.getComponent());
-			a.onDetach(this);
 		}
 	}
 
@@ -116,7 +120,7 @@ public abstract class Human extends LivingEntity implements AttachableReceiver {
 		messenger.send("drop", Math.random() > 0.5 ? new StandardSword(getPosition().add(new Point3D(meter, 0, meter)), map, messenger) : new LongSword(new Point3D(meter, 0, meter), map, messenger));
 	}
 	protected boolean isCuttingDownTree = false;
-	protected void goCutDownTree(TreeNormal tree) {
+	protected void goCutDownTree(Tree tree) {
 		toggleIsDoingAction();
 		if(!isCuttingDownTree) {
 			isCuttingDownTree = true;
@@ -128,11 +132,15 @@ public abstract class Human extends LivingEntity implements AttachableReceiver {
 				animator.animate(()->{
 					attack(null, 10);
 				}, 120).done(()->{
-					messenger.send("cut_down_tree", tree);
+					messenger.send("cut_down_tree", tree, wieldedWeapon);
 					isCuttingDownTree = false;
 					toggleIsDoingAction();
 				});
 			});
 		}
+	}
+	@Override
+	public CollisionBox buildCollisionBox() {
+		return new SphericalCollisionBox(GameLogic.getMeterLength()*0.6,this, new Point3D(0,0,0), map);
 	}
 }

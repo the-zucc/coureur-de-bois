@@ -24,6 +24,7 @@ public class GameCamera extends PerspectiveCamera implements Attachable{
 	private Point3D accelZ;
 	private Map map;
 	private Point2D position2D;
+	private double angle;
 	
 	public GameCamera(double dist, AttachableReceiver ar, Map map){
 		super(true);
@@ -42,9 +43,9 @@ public class GameCamera extends PerspectiveCamera implements Attachable{
 		//component.setTranslateY(ty);
 		double tz = -dist;
 		//component.setTranslateZ(tz);
-
-		component.setRotationAxis(Rotate.X_AXIS);
-		component.setRotate(-45);
+		this.angle = -45;
+		//component.setRotationAxis(Rotate.X_AXIS);
+		//component.setRotate(angle);
 		
 		double accel = 0.1;
 		speeds = Point3D.ZERO;
@@ -83,6 +84,11 @@ public class GameCamera extends PerspectiveCamera implements Attachable{
 		
 		Utils3D.lookat(getComponent(), map.getCurrentPlayer().getPosition());
 		*/
+		getComponent().setTranslateX(relativePosition.getX());
+		getComponent().setTranslateY(relativePosition.getY());
+		getComponent().setTranslateZ(relativePosition.getZ());
+		getComponent().setRotationAxis(Rotate.X_AXIS);
+		getComponent().setRotate(angle);
 	}
 
 	@Override
@@ -92,13 +98,15 @@ public class GameCamera extends PerspectiveCamera implements Attachable{
 
     @Override
 	public void onAttach(AttachableReceiver ar) {
+    	this.setAngle(angle);
 		getComponent().setTranslateX(relativePosition.getX());
 		getComponent().setTranslateY(relativePosition.getY());
 		getComponent().setTranslateZ(relativePosition.getZ());
 	}
 	@Override
 	public void onDetach(AttachableReceiver ar) {
-		this.relativePosition = computeAbsolutePosition();
+		//this.relativePosition = computeAbsolutePosition();
+		this.relativePosition = getComponent().localToScene(relativePosition);
 		if(ar == getReceiver()){
             receiver.getComponent().removeChildComponent(getComponent());
             receiver = null;
@@ -190,5 +198,19 @@ public class GameCamera extends PerspectiveCamera implements Attachable{
 	@Override
 	public void onClick(MouseEvent me) {
 		
+	}
+	public void setAngle(double angle) {
+		this.angle = angle;
+		double y = -Math.cos(Math.toRadians(-90-angle))*this.dist;
+		double z = Math.sin(Math.toRadians(-90-angle))*this.dist;
+		System.out.println(angle);
+		System.out.println("y: "+y);
+		System.out.println("z: "+z);
+		this.relativePosition = new Point3D(0, y, z);
+		System.out.println(relativePosition);
+	}
+
+	public double getAngle() {
+		return angle;
 	}
 }

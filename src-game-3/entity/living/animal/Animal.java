@@ -1,43 +1,35 @@
 package entity.living.animal;
 
+import java.io.IOException;
+
 import characteristic.Messenger;
 import characteristic.positionnable.Collideable;
 import collision.CollisionBox;
+import entity.drops.HealthBoost;
 import entity.living.LivingEntity;
 import game.GameLogic;
 import game.Map;
-import javafx.geometry.Point2D;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Point3D;
 import javafx.scene.Cursor;
 import javafx.scene.Node;
 import javafx.scene.Parent;
+import javafx.scene.control.Label;
+import javafx.scene.control.TitledPane;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.paint.Color;
-import javafx.scene.paint.PhongMaterial;
-import javafx.scene.shape.Box;
+import util.NodeUtils;
 import util.PositionGenerator;
 import visual.Component;
 
-public class Sheep extends LivingEntity {
-
-
-	public Sheep(Point3D position, Map map, Messenger messenger) {
+public abstract class Animal extends LivingEntity{
+	
+	public Animal(Point3D position, Map map, Messenger messenger) {
 		super(position, map, messenger);
+		submissionFactor = computeSubmissionFactor();
 	}
-
-	@Override
-	public double computeCollidingWeight() {
-		return 1;
-	}
-
-	@Override
-	protected double computeXpReward() {
-		return 100;
-	}
-
 	@Override
 	public void updateActions(double secondsPassed) {
-	    double actionChoiceTreshold = 0.015;
+		double actionChoiceTreshold = 0.015;
         double a = Math.random()*100;
         if (a < actionChoiceTreshold) {
             setUp(true);
@@ -60,14 +52,18 @@ public class Sheep extends LivingEntity {
 		} else {
             double mapWidth = Map.getInstance().getMapWidth();
             if(getPosition().getX() > mapWidth/2 || getPosition().getX() < -mapWidth/2)
-                startMovingTo(Point2D.ZERO);
+            	startMovingTo(PositionGenerator.generate2DPositionInRadius(get2DPosition(), 1000));
         }
-
 	}
+	private double submissionFactor;
+	public double getSubmissionFactor() {
+		return submissionFactor;
+	}
+	protected abstract double computeSubmissionFactor(); 
 
 	@Override
-	public void additionalComponentUpdates() {
-		
+	public double computeCollidingWeight() {
+		return 1;
 	}
 
 	@Override
@@ -76,63 +72,28 @@ public class Sheep extends LivingEntity {
 	}
 
 	@Override
-	public Component buildComponent() {
-		Component returnVal = new Component(getId());
-		double meter = GameLogic.getMeterLength();
-		Box box = new Box(meter,meter,meter*1.2);
-		box.setTranslateY(-meter/2);
-		
-		Box head = new Box(0.4*meter, 0.4*meter, 0.4*meter);
-		head.setMaterial(new PhongMaterial(Color.BLACK));
-		head.setTranslateY(-0.6*meter);
-		head.setTranslateZ(0.7*meter);
-		
-		returnVal.getChildren().addAll(box, head);
-		return returnVal;
-	}
-
-	@Override
-	public CollisionBox buildCollisionBox() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public void onCollides(Collideable c) {
-		
-	}
-
-	@Override
 	protected Cursor getHoveredCursor() {
-		return Cursor.HAND;
+		return Cursor.DEFAULT;
 	}
-
-	@Override
-	protected String getMouseToolTipText() {
-		return "Sheep";
-	}
-
-	@Override
-	public void onClick(MouseEvent me) {
-		// TODO Auto-generated method stub
-		
-	}
-
+	
 	@Override
 	protected Parent buildOnClickedPane() {
+		TitledPane root;
+		try {
+			root = FXMLLoader.load(getClass().getResource("/fxml/entity_pane.fxml"));
+			root.setText(getClass().getSimpleName());
+			Label hpLabel = (Label)NodeUtils.getChildByID(root, "hpLabel");
+			hpLabel.setText(String.valueOf(10));
+			return root;
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
 		return null;
 	}
 
 	@Override
 	protected Node getPaneDismissNode(Parent onClickedPane) {
-		
-		return null;
-	}
-
-	@Override
-	protected void onDeath() {
-		// TODO Auto-generated method stub
-		
+		return onClickedPane;
 	}
 
 }

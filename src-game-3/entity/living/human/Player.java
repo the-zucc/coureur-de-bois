@@ -14,9 +14,10 @@ import characteristic.positionnable.Positionnable;
 import collision.CollisionBox;
 import collision.SphericalCollisionBox;
 import entity.living.LivingEntity;
-import entity.statics.tree.TreeNormal;
+import entity.statics.tree.Tree;
 import game.GameLogic;
 import game.Map;
+import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Point2D;
 import javafx.geometry.Point3D;
@@ -43,6 +44,7 @@ import entity.wearable.StandardSword;
 public class Player extends Human implements UserControllable, AttachableReceiver{
 	
 	private static Point3D jumpVector = new Point3D(0, -40*GameLogic.getMeterLength(), 0);
+	private GameCamera gameCamera;
 
 	public Player(Point3D position, Map map, Messenger messenger) {
 		super(position, map, messenger,  1);
@@ -51,40 +53,47 @@ public class Player extends Human implements UserControllable, AttachableReceive
 		accept("right_clicked", (params)->{
 			if(params != null) {
 				if(params.length > 0) {
-					if(params[0] instanceof LivingEntity){
-						addUpdate(()->{
-							this.startMovingTo(((LivingEntity)params[0]).get2DPosition());
-						}, ()->{
-
-							boolean hasWeapon = this.wieldedWeapon != null;
-							double maxDist;
-							if(hasWeapon && wieldedWeapon instanceof StandardSword) {
-								maxDist = hasWeapon ? ((StandardSword)wieldedWeapon).getSwordLength() : GameLogic.getMeterLength()*1.5;
+					if(params[0] != this) {
+						if(params[0] instanceof LivingEntity){
+							if(!isDoingAction()) {
+								this.toggleIsDoingAction();
+								addUpdate(()->{
+									this.startMovingTo(((LivingEntity)params[0]).get2DPosition());
+									boolean hasWeapon = this.wieldedWeapon != null;
+									double maxDist;
+									if(hasWeapon && wieldedWeapon instanceof StandardSword) {
+										maxDist = hasWeapon ? ((StandardSword)wieldedWeapon).getSwordLength()*1.5 : GameLogic.getMeterLength()*1.5;
+									}
+									else {
+										maxDist = GameLogic.getMeterLength();
+									}
+									boolean checkDistance = Player.this.getPosition().distance(((LivingEntity)params[0]).getPosition()) < maxDist;
+									if(checkDistance) {
+										attack((LivingEntity)params[0],10);									
+									}
+								}, ()->{
+									return ((LivingEntity)params[0]).getHp() <= 0;
+								}, ()->{
+									this.toggleIsDoingAction();
+								});								
 							}
-							else {
-								maxDist = GameLogic.getMeterLength();
-							}
-							boolean checkDistance = Player.this.getPosition().distance(((LivingEntity)params[0]).getPosition()) < maxDist;
-							return checkDistance;
-						}, ()->{
-							attack((LivingEntity)params[0],10);
-						});
-					}else if(params[0] instanceof TreeNormal){
-						goCutDownTree((TreeNormal)params[0]);
-					}else if(params[0]instanceof Positionnable){
-						addUpdate(()->{
-							this.startMovingTo(((Positionnable)params[0]).get2DPosition());							
-						}, ()->{
-							return this.distanceFrom((Positionnable)params[0]) < GameLogic.getMeterLength();
-						}, ()->{
+						}else if(params[0] instanceof Tree){
+							goCutDownTree((Tree)params[0]);
+						}else if(params[0]instanceof Positionnable){
+							addUpdate(()->{
+								this.startMovingTo(((Positionnable)params[0]).get2DPosition());							
+							}, ()->{
+								return this.distanceFrom((Positionnable)params[0]) < GameLogic.getMeterLength();
+							}, ()->{
+								
+							});
 							
-						});
-						
+						}
+					}
+					else {
+						attack(null, 10);
 					}
 				}
-				else {
-					attack(null, 10);
-				}				
 			}
 		});
 		accept("mouse_moved", (params)->{
@@ -98,18 +107,44 @@ public class Player extends Human implements UserControllable, AttachableReceive
 				takeDamage(-hpBoost, null);
 			}
 		});
+		accept("item_picked_up", (params)->{
+			if(params[0] == this) {
+				String key = params[1].getClass().getName();
+				if(!items.containsKey(key)) {
+					items.put(key,1);
+				}else {
+					items.put(key,items.get(key)+1);
+				}
+			}
+		});
+		accept("toggle_god_mode", (params)->{
+			toggleShouldFall();
+		});
 	}
-	
+	private boolean shouldFall = true;
+	private void toggleShouldFall() {
+		shouldFall = !shouldFall;
+	}
+	@Override
+	protected boolean shouldFall(){
+		return shouldFall;
+	}
+
 	@Override
 	public void attach(Attachable a) {
 		if(a instanceof GameCamera){
 			super.attach(a);
+			gameCamera = (GameCamera)a;
 		}
 		else{
 			if(a.getComponent().getParent() instanceof Component){
-				((Component) a.getComponent().getParent()).removeChildComponent(a.getComponent());
+				Platform.runLater(()->{
+					((Component) a.getComponent().getParent()).removeChildComponent(a.getComponent());
+				});
 			}
-			((Component)NodeUtils.getChildByID(getComponent(), getId()+"_body")).addChildComponent(a.getComponent());
+			Platform.runLater(()->{
+				((Component)NodeUtils.getChildByID(getComponent(), getId()+"_body")).addChildComponent(a.getComponent());
+			});
 			a.onAttach(this);
 			getAttachables().add(a);
 			onAttachActions(a);
@@ -247,10 +282,6 @@ public class Player extends Human implements UserControllable, AttachableReceive
 		return realReturnVal;*/
 	}
 
-	@Override
-	public CollisionBox buildCollisionBox() {
-		return new SphericalCollisionBox(GameLogic.getMeterLength()*0.6,this, new Point3D(0,0,0), map);
-	}
 
 	@Override
 	protected double computeMovementSpeed() {
@@ -317,8 +348,10 @@ public class Player extends Human implements UserControllable, AttachableReceive
 	public void updateComponent(){
 		Component playerBody = getComponent().getSubComponent(getId()+"_body");
 		getComponent().setPosition(getPosition());
-		playerBody.setRotationAxis(Rotate.Y_AXIS);
-		playerBody.setRotate(computeComponentRotationAngle(rotationAngle));
+		if(!isDoingAction()) {
+			playerBody.setRotationAxis(Rotate.Y_AXIS);
+			playerBody.setRotate(computeComponentRotationAngle(rotationAngle));
+		}
 		additionalComponentUpdates();
 	}
 	@Override
@@ -365,5 +398,14 @@ public class Player extends Human implements UserControllable, AttachableReceive
 	protected double computeAngleFromMovement(Point3D movement) {
 		double ang = Math.toDegrees(Math.atan2(mouseY, mouseX));
 		return ang;
+	}
+	@Override
+	protected void onDeath(){
+		detach(gameCamera);
+		super.onDeath();
+	}
+
+	public Attachable getGameCamera() {
+		return gameCamera;
 	}
 }

@@ -29,16 +29,6 @@ public class SphericalCollisionBox extends CollisionBox{
 	}
 
 	@Override
-	public Point3D getCorrectionCapsuleBox(CapsuleCollisionBox b1) {
-		return null;
-	}
-
-	@Override
-	public boolean collidesCapsuleBox(CapsuleCollisionBox b1) {
-		return false;
-	}
-
-	@Override
 	public Point3D getCorrectionSphericalBox(SphericalCollisionBox box) {
 		Point3D position = getPosition();
 

@@ -2,9 +2,11 @@ package entity.living;
 
 import java.util.ArrayList;
 
+import app.App;
 import characteristic.*;
 import characteristic.positionnable.Positionnable;
 import entity.GravityAffectedCollidingEntity;
+import entity.living.human.Player;
 import game.GameLogic;
 import game.Map;
 import javafx.geometry.Point2D;
@@ -43,6 +45,7 @@ public abstract  class LivingEntity extends GravityAffectedCollidingEntity imple
 				takeDamage(amount, (MessageReceiver)params[2]);
 			}
 		});
+		
 	}
 
 	protected abstract double computeXpReward();
@@ -191,6 +194,9 @@ public abstract  class LivingEntity extends GravityAffectedCollidingEntity imple
 			}
 			if(hp <= 0) {
 				Component c = getComponent();
+				if(this instanceof Player) {
+					((Player)this).detach(((Player)this).getGameCamera());
+				}
 				animator.animate(()->{
 					c.getTransforms().add(new Rotate(1, Rotate.Z_AXIS));
 				}, 50).done(()->{
@@ -244,7 +250,6 @@ public abstract  class LivingEntity extends GravityAffectedCollidingEntity imple
 	}
 
 	protected void updateOrientation() {
-		// TODO Auto-generated method stub
 		
 	}
 }

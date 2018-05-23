@@ -1,6 +1,5 @@
 package entity.drops;
 
-import app.App;
 import characteristic.Messenger;
 import game.GameLogic;
 import game.Map;
@@ -12,15 +11,19 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.Box;
+import javafx.scene.transform.Rotate;
 import visual.Component;
 
-public class HealthBoost extends DroppableFloatingEntity {
-	private String entityName;
-	private double hpBoost;
-	public HealthBoost(Point3D position, Map map, Messenger messenger) {
+public class WoodPiece extends DroppableFloatingEntity{
+
+	public WoodPiece(Point3D position, Map map, Messenger messenger) {
 		super(position, map, messenger);
-		hpBoost = Math.random() * 50 + 25;
-		entityName = hpBoost < 35 ? "minor health boost": hpBoost < 50 ? "medium health boost" : "high efficiency health boost";  
+		
+	}
+
+	@Override
+	public void onClick(MouseEvent me) {
+		
 	}
 
 	@Override
@@ -30,16 +33,8 @@ public class HealthBoost extends DroppableFloatingEntity {
 
 	@Override
 	protected void onPickup(Object... params) {
-		messenger.send("hp", params[1], hpBoost);
+		messenger.send("item_picked_up", params[1], this);
 		messenger.send("remove", this);
-	}
-	
-
-	
-
-	@Override
-	public void onClick(MouseEvent me) {
-		messenger.send("right_clicked", this);
 	}
 
 	@Override
@@ -49,21 +44,23 @@ public class HealthBoost extends DroppableFloatingEntity {
 
 	@Override
 	protected String getMouseToolTipText() {
-		return entityName;
+		return "Pieces of wood";
 	}
 
 	@Override
 	public Component buildComponent() {
-		PhongMaterial material = new PhongMaterial(Color.RED);
 		Component returnVal = new Component(getId());
 		double meter = GameLogic.getMeterLength();
-		Box vertical = new Box(meter*0.2,meter*0.600001/*wtf, 0.6 fonctionne pas. ca fonctionnait avant*/, meter*0.2);
-		vertical.setTranslateY(-vertical.getHeight()/2);
-		vertical.setMaterial(material);
-		Box horizontal = new Box(meter*0.6,meter*0.2, meter*0.2);
-		horizontal.setTranslateY(-(horizontal.getHeight()*1.5));
-		horizontal.setMaterial(material);
-		returnVal.getChildren().addAll(vertical, horizontal);
+		PhongMaterial woodMaterial = new PhongMaterial(Color.BROWN);
+		Box pieceOfWood1 = new Box(0.4*meter, meter, 0.4*meter);
+		pieceOfWood1.setMaterial(woodMaterial);
+		pieceOfWood1.getTransforms().add(new Rotate(45, Rotate.Z_AXIS));
+		Box pieceOfWood2 = new Box(0.4*meter, meter, 0.4*meter);
+		pieceOfWood2.setMaterial(woodMaterial);
+		pieceOfWood2.getTransforms().add(new Rotate(45, Rotate.Z_AXIS));
+		pieceOfWood2.setTranslateX(pieceOfWood1.getWidth()*1.01);
+		pieceOfWood2.setTranslateZ(pieceOfWood1.getDepth()*1.01);
+		returnVal.getChildren().addAll(pieceOfWood1, pieceOfWood2);
 		return returnVal;
 	}
 
@@ -74,7 +71,6 @@ public class HealthBoost extends DroppableFloatingEntity {
 
 	@Override
 	protected Node getPaneDismissNode(Parent onClickedPane) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 

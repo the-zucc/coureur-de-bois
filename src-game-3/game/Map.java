@@ -15,6 +15,7 @@ import characteristic.positionnable.Collideable;
 import characteristic.positionnable.Positionnable2D;
 import entity.Entity;
 import entity.MovingCollidingEntity;
+import entity.living.animal.Beaver;
 import entity.living.animal.Fox;
 import entity.living.human.Player;
 import entity.statics.tree.PineTree;
@@ -23,8 +24,9 @@ import entity.wearable.LongSword;
 import entity.wearable.StandardSword;
 import entity.wearable.WeaponEntity;
 import entity.wearable.WoodCuttersAxe;
-import entity.statics.tree.TreeNormal;
+import entity.statics.tree.Tree;
 import game.settings.Preferences;
+import javafx.application.Platform;
 import javafx.geometry.Point2D;
 import javafx.geometry.Point3D;
 import javafx.scene.Group;
@@ -61,7 +63,7 @@ public class Map implements ComponentOwner, Updateable, MessageReceiver{
 					Preferences.getVillageRadius(),
 					Preferences.getVillageTipiCount(),
 					Preferences.getVillageVillagerCount(),
-					700);
+					1500);
 		}
 		return instance;
 	}
@@ -138,6 +140,10 @@ public class Map implements ComponentOwner, Updateable, MessageReceiver{
 	public Messenger getMessenger() {
 		return messenger;
 	}
+	private ArrayList<Tree> trees = new ArrayList<Tree>();
+	public ArrayList<Tree> getTrees(){
+		return trees;
+	}
 	
 	public Map(double mapWidth,
 			double mapHeight,
@@ -190,13 +196,13 @@ public class Map implements ComponentOwner, Updateable, MessageReceiver{
 
 		for (int i = 0; i < treeCount; i++) {
 			Point3D pos = PositionGenerator.generateRandom3DPositionOnFloor(this);
-			TreeNormal tree;
+			Tree tree;
 			double val = Math.random();
 			if(val > 0.5){
 				tree = new PineTree(pos, this, messenger);
 			}
 			else{
-				tree = new TreeNormal(pos,this, messenger);
+				tree = new Tree(pos,this, messenger);
 			}
 			addEntity(tree);
 		}
@@ -211,19 +217,28 @@ public class Map implements ComponentOwner, Updateable, MessageReceiver{
 			v.addEntitiesToMap(this);
 		}
 		for(int i = 0; i < sheepCount; i++){
-			addEntity(new Fox(PositionGenerator.generateRandom3DPositionOnFloor(this), this, messenger));
+			addEntity(new Beaver(PositionGenerator.generateRandom3DPositionOnFloor(this), this, messenger));
 		}
 		accept("dead", (params)->{
 			removeEntity((Entity)params[0]);
 		});
-		Point3D swordPos = new Point3D(currentPlayer.get2DPosition().getX()+10, getHeightAt(currentPlayer.get2DPosition().add(new Point2D(10,10))), currentPlayer.get2DPosition().getY()+10);
-		addEntity(new StandardSword(swordPos, this, messenger));
-        Point3D swordPos2 = new Point3D(currentPlayer.get2DPosition().getX()-10, getHeightAt(currentPlayer.get2DPosition().add(new Point2D(10,10))), currentPlayer.get2DPosition().getY()+10);
-        addEntity(new LongSword(swordPos2, this, messenger));
-        Point3D swordPos3 = new Point3D(currentPlayer.get2DPosition().getX(), getHeightAt(currentPlayer.get2DPosition().add(new Point2D(10,10))), currentPlayer.get2DPosition().getY()+10);
-        addEntity(new WoodCuttersAxe(swordPos3, this, messenger));
+		for(int i = 0; i < sheepCount; i++) {
+			Point3D swordPos = PositionGenerator.generateRandom3DPositionOnFloor(this);
+			double val = Math.random();
+			if(val > 0.8) {
+				addEntity(new StandardSword(swordPos, this, messenger));
+			}else if(val > 0.6) {
+				addEntity(new LongSword(swordPos, this, messenger));
+			}else if(val > 0.4) {
+				addEntity(new WoodCuttersAxe(swordPos, this, messenger));
+			}
+		}
+        
         accept("drop", (params)->{
         	addEntity((Entity)params[0]);
+        });
+        accept("remove", (params)->{
+        	removeEntity((Entity)params[0]);
         });
 	}
 
@@ -233,8 +248,8 @@ public class Map implements ComponentOwner, Updateable, MessageReceiver{
 			@Override
 			public void notifyReceivers(String message) {
 			    if(getListeners().containsKey(message)) {
-			    	for(MessageReceiver r:getListeners().get(message)) {
-			    		r.receiveMessage(message);
+			    	for(MessageReceiver m: getListeners().get(message)) {
+			    		m.receiveMessage(message);
 			    	}
             	}
 			}
@@ -242,10 +257,10 @@ public class Map implements ComponentOwner, Updateable, MessageReceiver{
 			@Override
 			public void notifyReceivers(String message, Object... params) {
 				if(getListeners().containsKey(message)) {
-	                for(MessageReceiver r:getListeners().get(message)){
-	                    r.receiveMessage(message, params);
-	                }
-                }
+			    	for(MessageReceiver m: getListeners().get(message)) {
+			    		m.receiveMessage(message, params);
+			    	}
+            	}
 			}
 
 			@Override
@@ -276,6 +291,9 @@ public class Map implements ComponentOwner, Updateable, MessageReceiver{
 					ArrayList<MessageReceiver> tmp = getListeners().get(key);
 					if(tmp.contains(o)) {
 						tmp.remove(o);
+						if(key.equals("cut_down_tree")) {
+							System.out.println("trees"+tmp.size());
+						}
 					}
 				}
 			}
@@ -360,18 +378,14 @@ public class Map implements ComponentOwner, Updateable, MessageReceiver{
 			for(double x = -mapWidth/2; x < mapWidth/2; x += vertexSeparationWidth, xi++){
 				p1 = new Point3D(x,heightMatrix[zi][xi],z);
 				floorVertices[zi][xi] = p1;
-				//System.out.println("zi:"+zi+" z:"+z+" xi:"+xi+" x:"+x);
 				mesh.getPoints().addAll((float)p1.getX(), (float)p1.getY(), (float)p1.getZ());
 				if(zi<rows-1 && xi < cols-1){
 					int idx = xi+(zi*cols);
-					//System.out.println("idx:"+idx);
-					//System.out.println("idx+cols:"+(idx+cols));
 					mesh.getFaces().addAll(idx+1,0,idx,0,idx+cols,0);
 					mesh.getFaces().addAll(idx+cols,0,idx+cols+1,0,idx+1,0);
 				}
 			}
 		}
-		//System.out.println(((mesh.getPoints().size()/3)-1)+" points");
 		mesh.getTexCoords().addAll(0,0);
 
 		MeshView floorMeshView = new MeshView(mesh);
@@ -392,11 +406,8 @@ public class Map implements ComponentOwner, Updateable, MessageReceiver{
         mesh.getPoints().addAll((float)mapWidth/2, waterLevel, (float)mapHeight/2);
         mesh.getPoints().addAll((float)mapWidth/2, waterLevel, (float)-mapHeight/2);
 
-		//mesh.getFaces().addAll(0,0,2,0,1,0); //add primary face
-		mesh.getFaces().addAll(0,0,1,0,2,0); //add secondary Width face
+		mesh.getFaces().addAll(0,0,1,0,2,0);
 		mesh.getFaces().addAll(3,0,2,0,1,0);
-		//mesh.getFaces().addAll(2,0,0,0,1,0); //add primary face
-		//mesh.getFaces().addAll(1,0,0,0,3,0); //add secondary Width face
 
 		mesh.getTexCoords().addAll(0,0);
 
@@ -419,7 +430,7 @@ public class Map implements ComponentOwner, Updateable, MessageReceiver{
 		//generate random heights
 		for(int z = 0; z < rows+1; z++) {
 			for(int x = 0; x < cols+1; x++) {
-				float y = perlin.smoothNoise(x*multiplicator, z*multiplicator, 32, 24)*(float)(2000*GameLogic.getMeterLength());
+				float y = perlin.smoothNoise(x*multiplicator, z*multiplicator, 32, 24)*(float)(800*GameLogic.getMeterLength());
 				returnVal[z][x]=y;
 			}
 		}
@@ -432,17 +443,32 @@ public class Map implements ComponentOwner, Updateable, MessageReceiver{
 
 	private int updateableCounter = 0;
 	boolean isUpdating = false;
+	Updateable currentUpdateable = null;
 	@Override
 	public void update(double secondsPassed) {
 		isUpdating = true;
-		for (updateableCounter = 0; updateableCounter < updateables.size(); updateableCounter++) {
-			Updateable u = updateables.get(updateableCounter);
-			u.update(secondsPassed);
-		}
+		/*MessageReceiver m = messenger.getReceivers().get(0);
+		for(int i = 0; i < messenger.getReceivers().size(); i++) {
+			if(!messenger.getReceivers().contains(m)) {
+				i--;
+			}
+			m = messenger.getReceivers().get(i);
+			m.processCallbackQueue();
+		}*/
+		updateUpdateables(secondsPassed);
 		processCallbackQueue();
 		isUpdating = false;
 	}
-
+	private void updateUpdateables(double secondsPassed) {
+		try {
+			for (Updateable u:updateables) {
+				u.update(secondsPassed);
+			}
+		}catch(ConcurrentModificationException e) {
+			e.printStackTrace();
+			updateUpdateables(secondsPassed);
+		}
+	}
 	@Override
 	public boolean shouldUpdate() {
 		return true;
@@ -469,12 +495,15 @@ public class Map implements ComponentOwner, Updateable, MessageReceiver{
 		}
 		if(e instanceof ComponentOwner) {
 			componentOwners.add((ComponentOwner)e);
-			getComponent().addChildComponent(((ComponentOwner)e).getComponent());
+			Platform.runLater(()->{getComponent().addChildComponent(((ComponentOwner)e).getComponent());});
+		}
+		if(e instanceof Tree) {
+			trees.add((Tree)e);
 		}
 		entities.add(e);
 	}
     
-    public void removeEntity(Entity e) {
+    private void removeEntity(Entity e) {
     	if(e instanceof Updateable){
 			updateables.remove(((Updateable)e));
 		}
@@ -491,15 +520,25 @@ public class Map implements ComponentOwner, Updateable, MessageReceiver{
 		}
 		if(e instanceof ComponentOwner) {
 			componentOwners.remove((ComponentOwner)e);
-			getComponent().getChildren().remove(((ComponentOwner)e).getComponent());
+			Platform.runLater(()->{
+				getComponent().getChildren().remove(((ComponentOwner)e).getComponent());
+			});
 		}
 		if(e instanceof MessageReceiver) {
 			if(messenger.getReceivers().contains(e)) {
 				messenger.removeReceiver((MessageReceiver)e);
 			}
 		}
+		if(e instanceof Tree) {
+			trees.remove(e);
+		}
 		if(isUpdating){
-			updateableCounter--;			
+			if(e instanceof Updateable) {
+				if(e == currentUpdateable) {
+					updateableCounter--;
+					System.out.println(updateableCounter);
+				}
+			}
 		}
     }
     

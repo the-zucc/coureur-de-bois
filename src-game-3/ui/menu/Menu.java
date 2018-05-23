@@ -96,34 +96,42 @@ public class Menu extends SubScene {
 		
 		waterLevelHBox = buildHBox(spaceSize);
 		waterLevelTextField = new TextField();
+		waterLevelTextField.setText(String.valueOf(Preferences.getWaterLevel()));
 		waterLevelHBox.getChildren().addAll(new Label("Water level: "), waterLevelTextField);
 		
 		mapWidthHBox = buildHBox(spaceSize);
 		mapWidthTextField = new TextField();
+		mapWidthTextField.setText(String.valueOf(Preferences.getMapWidth()));
 		mapWidthHBox.getChildren().addAll(new Label("Map width: "), mapWidthTextField);
 		
-		mapHeightTextField = new TextField();
 		mapHeightHBox = buildHBox(spaceSize);
+		mapHeightTextField = new TextField();
+		mapHeightTextField.setText(String.valueOf(Preferences.getMapHeight()));
 		mapHeightHBox.getChildren().addAll(new Label("Map height: "), mapHeightTextField);
-
-		treeCountTextField = new TextField();
+		
 		treeCountHBox = buildHBox(spaceSize);
+		treeCountTextField = new TextField();
+		treeCountTextField.setText(String.valueOf(Preferences.getTreeCount()));
 		treeCountHBox.getChildren().addAll(new Label("Tree count: "), treeCountTextField);
 
-		villageRadiusTextField = new TextField();
 		villageRadiusHBox = buildHBox(spaceSize);
+		villageRadiusTextField = new TextField();
+		villageRadiusTextField.setText(String.valueOf(Preferences.getVillageRadius()));
 		villageRadiusHBox.getChildren().addAll(new Label("Village size: "), villageRadiusTextField);
 
-		villageCountTextField = new TextField();
 		villageCountHBox = buildHBox(spaceSize);
+		villageCountTextField = new TextField();
+		villageCountTextField.setText(String.valueOf(Preferences.getVillageCount()));
 		villageCountHBox.getChildren().addAll(new Label("Village count: "), villageCountTextField);
 
-		villageVillagerCountTextField = new TextField();
 		villageVillagerCountHBox = buildHBox(spaceSize);
+		villageVillagerCountTextField = new TextField();
+		villageVillagerCountTextField.setText(String.valueOf(Preferences.getVillageVillagerCount()));
 		villageVillagerCountHBox.getChildren().addAll(new Label("Villagers/village:"), villageVillagerCountTextField);
 
 		villageTipiCountHBox = buildHBox(spaceSize);
 		villageTipiCountTextField = new TextField();
+		villageTipiCountTextField.setText(String.valueOf(Preferences.getVillageTipiCount()));
 		villageTipiCountHBox.getChildren().addAll(new Label("Tipis/Village:"), villageTipiCountTextField);
 
 		gamePreferencesVBox.getChildren().addAll(mapWidthHBox, mapHeightHBox, treeCountHBox, waterLevelHBox, villageCountHBox, villageRadiusHBox, villageTipiCountHBox, villageVillagerCountHBox);

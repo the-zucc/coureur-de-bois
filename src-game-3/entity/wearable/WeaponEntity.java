@@ -78,8 +78,8 @@ public abstract class WeaponEntity extends DroppableFloatingEntity implements At
 		setPosition(receiver.getPosition().add(new Point3D(10,0,10)));
 		ticksSinceDrop=0;
 		receiver = null;
-		map.removeEntity(this);
-		map.addEntity(this);
+		messenger.send("remove", this);
+		messenger.send("drop", this);		
 	}
 
 	@Override

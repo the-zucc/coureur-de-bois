@@ -120,9 +120,9 @@ public abstract class VisibleEntity extends Entity implements Updateable, Compon
 	public void onUnHover(MouseEvent me) {
 		animator.animate(()->{
 			double scale = getComponent().getScaleX();
-			getComponent().setScaleX(scale/1.02);
-			getComponent().setScaleY(scale/1.02);
-			getComponent().setScaleZ(scale/1.02);
+			getComponent().setScaleX(scale/1.015);
+			getComponent().setScaleY(scale/1.015);
+			getComponent().setScaleZ(scale/1.015);
 		}, ticksToGrow);
 	}
 	
@@ -197,6 +197,7 @@ public abstract class VisibleEntity extends Entity implements Updateable, Compon
 				receivedParams.remove(0);
 			}
 		}catch(ConcurrentModificationException cme){
+			System.out.println("cme");
 			processCallbackQueue();
 			return;
 		}

@@ -13,7 +13,9 @@ import visual.Component;
 
 public abstract class GravityAffectedCollidingEntity extends MovingCollidingEntity implements GravityAffected{
 	private Point3D gravity;
-
+	protected boolean shouldFall() {
+		return true;
+	}
 	public GravityAffectedCollidingEntity(Point3D position, Map map, Messenger messenger) {
 		super(position, map, messenger);
 		gravity = new Point3D(0,0,0);
@@ -29,8 +31,10 @@ public abstract class GravityAffectedCollidingEntity extends MovingCollidingEnti
 	 * updates the gravity vector to the new value with the applied gravity acceleration.
 	 */
 	public void updateGravityVector(double secondsPassed) {
-		if(position.getY() < Map.getInstance().getHeightAt(position2D)){
-			gravity = gravity.add(GameLogic.getGravity().multiply(secondsPassed));
+		if(shouldFall()) {
+			if(position.getY() < Map.getInstance().getHeightAt(position2D)){
+				gravity = gravity.add(GameLogic.getGravity().multiply(secondsPassed));
+			}			
 		}
 	}
 	@Override
@@ -54,7 +58,9 @@ public abstract class GravityAffectedCollidingEntity extends MovingCollidingEnti
 		updateGravityVector(secondsPassed);
 		Point3D next = super.computeNextPosition(secondsPassed);
 		if(next != null){
-			next =  next.add(getGravity().multiply(secondsPassed));
+			if(shouldFall()) {
+				next =  next.add(getGravity().multiply(secondsPassed));				
+			}
 		}
 		double floorHeight=Map.getInstance().getHeightAt(PositionGenerator.convert2D(next));
 		if(next.getY() > floorHeight){

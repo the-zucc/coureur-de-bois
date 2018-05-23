@@ -32,6 +32,9 @@ public class InputHandler {
     		if(e.getCode().equals(KeyCode.F11)){
     			App.getApplicationWindow().setFullScreen(!App.getApplicationWindow().isFullScreen());
     		}
+    		if(e.getCode().equals(KeyCode.G)) {
+    			map.getMessenger().send("toggle_god_mode");
+    		}
     	}
     }
     public void handleKeyUp(KeyEvent e){

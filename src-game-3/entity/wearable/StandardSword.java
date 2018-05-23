@@ -61,14 +61,10 @@ public class StandardSword extends WeaponEntity{
 				c.setRotate(c.getRotate()-6);
 			}, 8).done(()->{
 				if(mr instanceof Positionnable) {
-					if(((Positionnable) mr).getPosition().distance(getReceiver().getPosition()) < swordLength){
-						System.out.println(swordLength);
-						System.out.println(((Positionnable) mr).getPosition().distance(getReceiver().getPosition()));
-						super.attack(mr);
-					}
+					super.attack(mr);
 				}else{
 					System.out.println("attacc");
-					super.attack(mr);				
+					super.attack(mr);
 				}
 			}).then(()->{
 				c.setTranslateZ(c.getTranslateZ()-0.25);

@@ -13,7 +13,7 @@ public class Preferences {
 	}
 
 
-	private static double mapHeight = 8000;
+	private static double mapHeight = 4000;
 	public static double getMapHeight() {
 		return mapHeight;
 	}
@@ -22,7 +22,7 @@ public class Preferences {
 	}
 
 
-	private static double mapWidth = 8000;
+	private static double mapWidth = 4000;
 	public static double getMapWidth() {
 		return mapWidth;
 	}
@@ -31,7 +31,7 @@ public class Preferences {
 	}
 
 
-	private static double mapDetail = 16*GameLogic.getMeterLength();
+	private static double mapDetail = 4*GameLogic.getMeterLength();
 	public static double getMapDetail() {
 		return mapDetail;
 	}
@@ -40,7 +40,7 @@ public class Preferences {
 	}
 
 
-	private static int treeCount = 3000;
+	private static int treeCount = 1500;
 	public static int getTreeCount() {
 		return treeCount;
 	}

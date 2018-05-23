@@ -70,7 +70,7 @@ public class UserInterface extends Scene implements Updateable {
 	}
 
 	public GameScene getGameScene() {
-		return gameScene;
+		return gameScreen.getGameScene();
 	}
 
 	public GameScreen getGameScreen() {

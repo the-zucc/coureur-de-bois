@@ -32,12 +32,11 @@ public abstract class DroppableFloatingEntity extends VisibleEntity{
 	public void update(double secondsPassed) {
 		super.update(secondsPassed);
 		if(shouldFloat()){
-			ticksSinceDrop++;
 			double height = Math.sin(((double)ticksSinceDrop)/10)-GameLogic.getMeterLength();
 			Point3D add = new Point3D(0,height,0);
 			getComponent().setPosition(getPosition().add(add));
 			getComponent().setRotationAxis(Rotate.Y_AXIS);
-			getComponent().setRotate(ticksSinceDrop);
+			getComponent().setRotate(getComponent().getRotate()+1);
 		}
 			
 	}

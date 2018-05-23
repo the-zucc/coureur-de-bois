@@ -33,17 +33,13 @@ import util.PositionGenerator;
 import visual.Component;
 import visual.LegComponent;
 
-public class Fox extends LivingEntity {
+public class Fox extends Animal {
 	
-	private double submissionFactor;
+	
 	public Fox(Point3D position, Map map, Messenger messenger) {
 		super(position, map, messenger);
-		accept("yall_jump", (params)->{
-			jump();
-		});
-		if(submissionFactor > 0.85) {
+		if(getSubmissionFactor() > 0.85) {
 			accept("position_3D",(params)->{
-				
 					if(params[1] != this) {
 						Point3D playerPos = (Point3D)params[0];
 						if(playerPos.distance(getPosition()) < 10 * GameLogic.getMeterLength()) {
@@ -69,32 +65,8 @@ public class Fox extends LivingEntity {
 
 	@Override
 	public void updateActions(double secondsPassed) {
-	    double actionChoiceTreshold = 0.015;
-        double a = Math.random()*100;
-        if (a < actionChoiceTreshold) {
-            setUp(true);
-        } else if (a < 2 * actionChoiceTreshold) {
-            setUp(false);
-        } else if (a < 3 * actionChoiceTreshold) {
-            setDown(true);
-        } else if (a < 4 * actionChoiceTreshold) {
-            setDown(false);
-        } else if (a < 5 * actionChoiceTreshold) {
-            setLeft(true);
-        } else if (a < 6 * actionChoiceTreshold) {
-            setLeft(false);
-        } else if (a < 7 * actionChoiceTreshold) {
-            setRight(true);
-        } else if (a < 8 * actionChoiceTreshold) {
-            setRight(false);
-        } else if (a < 9 * actionChoiceTreshold) {
-			startMovingTo(PositionGenerator.generate2DPositionInRadius(get2DPosition(), 1000));
-		} else {
-            double mapWidth = Map.getInstance().getMapWidth();
-            if(getPosition().getX() > mapWidth/2 || getPosition().getX() < -mapWidth/2)
-                startMovingTo(Point2D.ZERO);
-        }
-        if(submissionFactor < 0.2) {
+		super.updateActions(secondsPassed);
+        if(getSubmissionFactor() < 0.2) {
         	messenger.send("position_3D", getPosition(), this);        	
         }
 	}
@@ -116,12 +88,9 @@ public class Fox extends LivingEntity {
 
 	@Override
 	public Component buildComponent() {
-		/*NOT CLEAN AT ALL. SORRY*/
-		this.submissionFactor = Math.random();
 		PhongMaterial material = new PhongMaterial(Color.ORANGE);
 		Component returnVal = new Component(getId());
-		double meter = GameLogic.getMeterLength()*(submissionFactor+0.5);
-		
+		double meter = GameLogic.getMeterLength();
 		Box body = new Box(0.3*meter,0.3*meter,0.8*meter);
 		body.setTranslateY(-(0.4*meter));
 		body.setMaterial(material);
@@ -201,11 +170,6 @@ public class Fox extends LivingEntity {
 	}
 
 	@Override
-	protected Cursor getHoveredCursor() {
-		return Cursor.HAND;
-	}
-
-	@Override
 	protected String getMouseToolTipText() {
 		return "Fox";
 	}
@@ -216,20 +180,6 @@ public class Fox extends LivingEntity {
 	}
 
 	@Override
-	protected Parent buildOnClickedPane() {
-		TitledPane root;
-		try {
-			root = FXMLLoader.load(getClass().getResource("/fxml/entity_pane.fxml"));
-			Label l = (Label)NodeUtils.getChildByID(root, "hpLabel");
-			l.setText(String.valueOf(10));
-			return root;
-		} catch (IOException e1) {
-			e1.printStackTrace();
-		}
-		return null;
-	}
-
-	@Override
 	protected Node getPaneDismissNode(Parent onClickedPane) {
 		return onClickedPane;
 	}
@@ -237,5 +187,10 @@ public class Fox extends LivingEntity {
 	@Override
 	protected void onDeath() {
 		messenger.send("drop", new HealthBoost(getPosition(), map, messenger));
+	}
+
+	@Override
+	protected double computeSubmissionFactor() {
+		return Math.random();
 	}
 }

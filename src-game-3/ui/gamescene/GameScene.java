@@ -24,6 +24,7 @@ import javafx.scene.SubScene;
 import javafx.scene.control.Label;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseButton;
+import javafx.scene.input.ScrollEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.Box;
@@ -48,7 +49,7 @@ public class GameScene extends SubScene implements MessageReceiver, Updateable{
 		this.map = map;
 		this.messenger = messenger;
 		gameRoot = (Group)getRoot();
-		gameCamera = new GameCamera(20*GameLogic.getMeterLength(), Map.getInstance().getCurrentPlayer(), map);
+		gameCamera = new GameCamera(20*GameLogic.getMeterLength(), map.getCurrentPlayer(), map);
 		setCamera(gameCamera);
 		//Utils3D.lookat(gameCamera, map.getCurrentPlayer().getPosition());
 		window.widthProperty().addListener(new ChangeListener<Number>() {
@@ -71,6 +72,14 @@ public class GameScene extends SubScene implements MessageReceiver, Updateable{
 		});
 		setOnMouseMoved((e)->{
 			messenger.send("mouse_moved", e);
+		});
+		setOnScroll(new EventHandler<ScrollEvent>() {
+
+			@Override
+			public void handle(ScrollEvent arg0) {
+				gameCamera.setAngle(gameCamera.getAngle()+(arg0.getDeltaY()/20));
+			}
+			
 		});
 	}
 	public Group getGameRoot(){

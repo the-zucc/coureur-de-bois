@@ -7,13 +7,15 @@ import javafx.geometry.Point3D;
 import javafx.scene.Group;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
+import javafx.scene.shape.Box;
 import javafx.scene.shape.MeshView;
 import javafx.scene.transform.Rotate;
 import util.MeshFactory;
 import visual.Component;
 
-public class PineTree extends TreeNormal {
+public class PineTree extends Tree {
 	private PhongMaterial material;
+	private double scale;
     public PineTree(Point3D position, Map map, Messenger messenger) {
         super(position, map, messenger);
         if(Math.random() > 0.7) {
@@ -25,14 +27,20 @@ public class PineTree extends TreeNormal {
 
     @Override
     public Component buildComponent() {
-
-        return recurseBuildPyramids(getId(), (float)(4*GameLogic.getMeterLength()), (float)(2.4*GameLogic.getMeterLength()), 2);
+    	PhongMaterial trunkMaterial = new PhongMaterial(Color.SADDLEBROWN);
+    	Component returnVal = recurseBuildPyramids(getId(), (float)(4*GameLogic.getMeterLength()), (float)(2.4*GameLogic.getMeterLength()), 2);
+    	double meter = GameLogic.getMeterLength();
+    	Box trunk = new Box(0.75*meter, 2*meter, 0.75*meter);
+    	trunk.setTranslateY(-trunk.getHeight()/2);
+    	trunk.setMaterial(trunkMaterial);
+    	returnVal.getChildren().add(trunk);
+        return returnVal;
     }
 
     private Component recurseBuildPyramids(String id, float baseSectionHeight, float baseSectionRadius, int sectionCount){
         Component returnVal = new Component(getId());
 
-        returnVal.getChildren().add(pyramidCreate(-baseSectionHeight/2,baseSectionHeight+(float)(0.3*GameLogic.getMeterLength()) ,baseSectionRadius,null, sectionCount));
+        returnVal.getChildren().add(pyramidCreate(-baseSectionHeight/3,baseSectionHeight+(float)(0.3*GameLogic.getMeterLength()) ,baseSectionRadius,null, sectionCount));
 
         return returnVal;
     }

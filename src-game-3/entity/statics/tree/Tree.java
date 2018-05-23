@@ -3,8 +3,12 @@ package entity.statics.tree;
 import characteristic.Messenger;
 import characteristic.positionnable.Collideable;
 import collision.CollisionBox;
+import collision.SphericalCollisionBox;
 import entity.drops.HealthBoost;
+import entity.drops.WoodPiece;
+import entity.living.animal.Beaver;
 import entity.statics.StaticVisibleCollidingEntity;
+import entity.wearable.WoodCuttersAxe;
 import game.GameLogic;
 import game.Map;
 import javafx.geometry.Point3D;
@@ -23,18 +27,21 @@ import util.NodeUtils;
 
 import java.util.concurrent.ThreadLocalRandom;
 
-public class TreeNormal extends StaticVisibleCollidingEntity {
-    public TreeNormal(Point3D position, Map map, Messenger messenger) {
+public class Tree extends StaticVisibleCollidingEntity {
+	
+    public Tree(Point3D position, Map map, Messenger messenger) {
         super(position, map, messenger);
         accept("cut_down_tree", (params)->{
+        	//System.out.println("lags here");
         	if(params[0] == this) {
-        		this.getCutDown();
+        		boolean shouldDropWood = params[1] != null && params[1] instanceof WoodCuttersAxe; 
+        		this.getCutDown(shouldDropWood);
         	}
         });
     }
     
     private double fallingSpeed = 0;
-    private void getCutDown() {
+    private void getCutDown(boolean shouldDropWood) {
     	int ticks = 45;
     	double fallingAccel = 0.2;
     	Component c = getComponent();
@@ -46,8 +53,10 @@ public class TreeNormal extends StaticVisibleCollidingEntity {
     	}, ticks/2).then(()->{
     		
     	}, 20).done(()->{
-    		map.removeEntity(this);
-    		messenger.send("drop", new HealthBoost(getPosition(), map, messenger));
+    		messenger.send("remove", this);
+    		if(shouldDropWood) {
+    			messenger.send("drop", new WoodPiece(getPosition(), map, messenger));
+    		}
     	});
 	}
 
@@ -79,7 +88,7 @@ public class TreeNormal extends StaticVisibleCollidingEntity {
 
     @Override
     public CollisionBox buildCollisionBox() {
-        return null;
+        return new SphericalCollisionBox(GameLogic.getMeterLength()/2, this, Point3D.ZERO, map);
     }
 
     @Override
@@ -127,10 +136,13 @@ public class TreeNormal extends StaticVisibleCollidingEntity {
 		
 		return NodeUtils.getChildByID(onClickedPane, "label");
 	}
-
+	
 	@Override
 	public boolean shouldUpdate() {
 		return true;
 	}
-
+	@Override
+	public void update(double secondsPassed) {
+		super.update(secondsPassed);
+	}
 }
