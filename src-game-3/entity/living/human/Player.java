@@ -43,12 +43,12 @@ import entity.wearable.StandardSword;
 
 public class Player extends Human implements UserControllable, AttachableReceiver{
 	
-	private static Point3D jumpVector = new Point3D(0, -40*GameLogic.getMeterLength(), 0);
+	private static Point3D jumpVector = new Point3D(0, -20*GameLogic.getMeterLength(), 0);
 	private GameCamera gameCamera;
 
 	public Player(Point3D position, Map map, Messenger messenger) {
 		super(position, map, messenger,  1);
-		hp=1000;
+		hp=300;
 		maxHp = hp;
 		accept("right_clicked", (params)->{
 			if(params != null) {
@@ -105,6 +105,13 @@ public class Player extends Human implements UserControllable, AttachableReceive
 			if(params[0] == this) {
 				double hpBoost = (Double)params[1];
 				takeDamage(-hpBoost, null);
+			}
+		});
+		accept("max_hp", (params)->{
+			if(params[0] == this) {
+				double hpBoost = (Double)params[1];
+				takeDamage(-hpBoost, null);
+				maxHp = maxHp+hpBoost;
 			}
 		});
 		accept("item_picked_up", (params)->{
@@ -287,7 +294,7 @@ public class Player extends Human implements UserControllable, AttachableReceive
 	protected double computeMovementSpeed() {
 		double speed = 15*GameLogic.getMeterLength();
 		if(isRunning())
-			return speed*3;
+			return speed*1.5;
 		return speed;
 	}
 

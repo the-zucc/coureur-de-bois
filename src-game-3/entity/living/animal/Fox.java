@@ -40,15 +40,15 @@ public class Fox extends Animal {
 		super(position, map, messenger);
 		if(getSubmissionFactor() > 0.85) {
 			accept("position_3D",(params)->{
-					if(params[1] != this) {
-						Point3D playerPos = (Point3D)params[0];
-						if(playerPos.distance(getPosition()) < 10 * GameLogic.getMeterLength()) {
-							startMovingTo(PositionGenerator.convert2D(playerPos));
-							if(playerPos.distance(getPosition()) < GameLogic.getMeterLength()*1.2) {
-								attack((LivingEntity)params[1], 10);
-							}
-						}				
-					}
+				if(params[1] != this) {
+					Point3D playerPos = (Point3D)params[0];
+					if(playerPos.distance(getPosition()) < 10 * GameLogic.getMeterLength()) {
+						startMovingTo(PositionGenerator.convert2D(playerPos));
+						if(playerPos.distance(getPosition()) < GameLogic.getMeterLength()*1.2) {
+							attack((LivingEntity)params[1], 10);
+						}
+					}				
+				}
 			});
 		}
 	}

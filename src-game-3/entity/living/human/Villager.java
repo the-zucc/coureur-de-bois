@@ -7,6 +7,7 @@ import characteristic.interactive.Hoverable;
 import characteristic.positionnable.Collideable;
 import collision.CollisionBox;
 import collision.SphericalCollisionBox;
+import entity.drops.MaxHealthBoost;
 import entity.living.LivingEntity;
 import entity.wearable.LongSword;
 import entity.wearable.StandardSword;
@@ -236,5 +237,11 @@ public class Villager extends Human implements Hoverable{
 	@Override
 	protected Node getPaneDismissNode(Parent onClickedPane) {
 		return onClickedPane;
+	}
+	@Override
+	protected void onDeath() {
+		super.onDeath();
+		double meter = GameLogic.getMeterLength();
+		messenger.send("drop", Math.random() > 0.85 ? new LongSword(getPosition(), map, messenger) : new MaxHealthBoost(getPosition(), map, messenger));
 	}
 }

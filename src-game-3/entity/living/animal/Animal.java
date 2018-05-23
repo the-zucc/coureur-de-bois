@@ -26,6 +26,7 @@ public abstract class Animal extends LivingEntity{
 	public Animal(Point3D position, Map map, Messenger messenger) {
 		super(position, map, messenger);
 		submissionFactor = computeSubmissionFactor();
+		
 	}
 	@Override
 	public void updateActions(double secondsPassed) {
@@ -53,6 +54,9 @@ public abstract class Animal extends LivingEntity{
             double mapWidth = Map.getInstance().getMapWidth();
             if(getPosition().getX() > mapWidth/2 || getPosition().getX() < -mapWidth/2)
             	startMovingTo(PositionGenerator.generate2DPositionInRadius(get2DPosition(), 1000));
+        }
+        if(submissionFactor < 0.05) {
+        	messenger.send("position_3D", getPosition(), this);        	
         }
 	}
 	private double submissionFactor;

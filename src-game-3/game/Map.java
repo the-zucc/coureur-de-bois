@@ -217,7 +217,12 @@ public class Map implements ComponentOwner, Updateable, MessageReceiver{
 			v.addEntitiesToMap(this);
 		}
 		for(int i = 0; i < sheepCount; i++){
-			addEntity(new Beaver(PositionGenerator.generateRandom3DPositionOnFloor(this), this, messenger));
+			if(Math.random() > 0.5) {
+				addEntity(new Beaver(PositionGenerator.generateRandom3DPositionOnFloor(this), this, messenger));				
+			}else {
+				addEntity(new Fox(PositionGenerator.generateRandom3DPositionOnFloor(this), this, messenger));
+			}
+			
 		}
 		accept("dead", (params)->{
 			removeEntity((Entity)params[0]);
@@ -225,11 +230,11 @@ public class Map implements ComponentOwner, Updateable, MessageReceiver{
 		for(int i = 0; i < sheepCount; i++) {
 			Point3D swordPos = PositionGenerator.generateRandom3DPositionOnFloor(this);
 			double val = Math.random();
-			if(val > 0.8) {
+			if(val > 0.95) {
 				addEntity(new StandardSword(swordPos, this, messenger));
-			}else if(val > 0.6) {
+			}else if(val > 0.9) {
 				addEntity(new LongSword(swordPos, this, messenger));
-			}else if(val > 0.4) {
+			}else if(val > 0.85) {
 				addEntity(new WoodCuttersAxe(swordPos, this, messenger));
 			}
 		}

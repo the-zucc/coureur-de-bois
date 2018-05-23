@@ -123,8 +123,7 @@ public abstract class Human extends LivingEntity implements AttachableReceiver {
 	}
 	@Override
 	protected void onDeath() {
-		double meter = GameLogic.getMeterLength();
-		messenger.send("drop", Math.random() > 0.5 ? new StandardSword(getPosition().add(new Point3D(meter, 0, meter)), map, messenger) : new LongSword(new Point3D(meter, 0, meter), map, messenger));
+		
 	}
 	protected boolean isCuttingDownTree = false;
 	protected void goCutDownTree(Tree tree) {

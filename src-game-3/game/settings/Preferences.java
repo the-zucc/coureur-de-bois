@@ -49,7 +49,7 @@ public class Preferences {
 	}
 
 
-	private static double villageRadius = 500;
+	private static double villageRadius = 10*GameLogic.getMeterLength();
 	public static double getVillageRadius(){
 		return villageRadius;
 	}
@@ -58,7 +58,7 @@ public class Preferences {
 	}
 
 
-	private static int villageCount = 5;
+	private static int villageCount = 8;
 	public static void setVillageCount(int villageCount) {
 		Preferences.villageCount = villageCount;
 	}
