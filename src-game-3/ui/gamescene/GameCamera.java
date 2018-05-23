@@ -203,11 +203,7 @@ public class GameCamera extends PerspectiveCamera implements Attachable{
 		this.angle = angle;
 		double y = -Math.cos(Math.toRadians(-90-angle))*this.dist;
 		double z = Math.sin(Math.toRadians(-90-angle))*this.dist;
-		System.out.println(angle);
-		System.out.println("y: "+y);
-		System.out.println("z: "+z);
 		this.relativePosition = new Point3D(0, y, z);
-		System.out.println(relativePosition);
 	}
 
 	public double getAngle() {

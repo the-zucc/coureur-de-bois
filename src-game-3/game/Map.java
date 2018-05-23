@@ -296,9 +296,6 @@ public class Map implements ComponentOwner, Updateable, MessageReceiver{
 					ArrayList<MessageReceiver> tmp = getListeners().get(key);
 					if(tmp.contains(o)) {
 						tmp.remove(o);
-						if(key.equals("cut_down_tree")) {
-							System.out.println("trees"+tmp.size());
-						}
 					}
 				}
 			}

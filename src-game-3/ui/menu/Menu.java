@@ -3,6 +3,7 @@ package ui.menu;
 import game.GameLogic;
 import game.settings.Preferences;
 import game.settings.Settings;
+import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -151,9 +152,9 @@ public class Menu extends SubScene {
 		//start game button
 		startGameButton = new Button("start game");
 		startGameButton.setPrefSize(200,100);
-		startGameButton.setOnMouseClicked(new EventHandler<MouseEvent>(){
+		startGameButton.setOnAction(new EventHandler<ActionEvent>(){
 			@Override
-			public void handle(MouseEvent arg0) {
+			public void handle(ActionEvent arg0) {
 				action_startGameButton();
 			}
 		});
@@ -207,7 +208,6 @@ public class Menu extends SubScene {
 		if(mapWidthTextField.getText().length() > 0){
 			try{
 				double mapWidth = Double.parseDouble(mapWidthTextField.getText());
-				System.out.println("mapwidth read: "+mapWidth);
 				Preferences.setMapWidth(mapWidth);
 			}catch(Exception e){
 				System.out.println("invalid map width.");

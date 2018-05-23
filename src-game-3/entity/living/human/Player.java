@@ -55,27 +55,29 @@ public class Player extends Human implements UserControllable, AttachableReceive
 				if(params.length > 0) {
 					if(params[0] != this) {
 						if(params[0] instanceof LivingEntity){
-							if(!isDoingAction()) {
-								this.toggleIsDoingAction();
-								addUpdate(()->{
-									this.startMovingTo(((LivingEntity)params[0]).get2DPosition());
-									boolean hasWeapon = this.wieldedWeapon != null;
-									double maxDist;
-									if(hasWeapon && wieldedWeapon instanceof StandardSword) {
-										maxDist = hasWeapon ? ((StandardSword)wieldedWeapon).getSwordLength()*1.5 : GameLogic.getMeterLength()*1.5;
-									}
-									else {
-										maxDist = GameLogic.getMeterLength();
-									}
-									boolean checkDistance = Player.this.getPosition().distance(((LivingEntity)params[0]).getPosition()) < maxDist;
-									if(checkDistance) {
-										attack((LivingEntity)params[0],10);									
-									}
-								}, ()->{
-									return ((LivingEntity)params[0]).getHp() <= 0;
-								}, ()->{
+							if(wieldedWeapon != null) {
+								if(!isDoingAction()) {
 									this.toggleIsDoingAction();
-								});								
+									addUpdate(()->{
+										this.startMovingTo(((LivingEntity)params[0]).get2DPosition());
+										boolean hasWeapon = this.wieldedWeapon != null;
+										double maxDist;
+										if(hasWeapon && wieldedWeapon instanceof StandardSword) {
+											maxDist = hasWeapon ? ((StandardSword)wieldedWeapon).getSwordLength()*1.5 : GameLogic.getMeterLength()*1.5;
+										}
+										else {
+											maxDist = GameLogic.getMeterLength();
+										}
+										boolean checkDistance = Player.this.getPosition().distance(((LivingEntity)params[0]).getPosition()) < maxDist;
+										if(checkDistance) {
+											attack((LivingEntity)params[0],10);									
+										}
+									}, ()->{
+										return ((LivingEntity)params[0]).getHp() <= 0;
+									}, ()->{
+										this.toggleIsDoingAction();
+									});								
+								}
 							}
 						}else if(params[0] instanceof Tree){
 							goCutDownTree((Tree)params[0]);
@@ -126,11 +128,22 @@ public class Player extends Human implements UserControllable, AttachableReceive
 		});
 		accept("toggle_god_mode", (params)->{
 			toggleShouldFall();
+			toggleShouldShowPlayer();
 		});
 	}
 	private boolean shouldFall = true;
 	private void toggleShouldFall() {
 		shouldFall = !shouldFall;
+	}
+	Component playerNode = null;
+	private void toggleShouldShowPlayer() {
+		if(playerNode == null){
+			playerNode = (Component)(NodeUtils.getChildByID(getComponent(), getId()+"_body"));
+			getComponent().removeChildComponent(playerNode);
+		}else {
+			getComponent().addChildComponent(playerNode);
+			playerNode = null;
+		}
 	}
 	@Override
 	protected boolean shouldFall(){
@@ -356,8 +369,10 @@ public class Player extends Human implements UserControllable, AttachableReceive
 		Component playerBody = getComponent().getSubComponent(getId()+"_body");
 		getComponent().setPosition(getPosition());
 		if(!isDoingAction()) {
-			playerBody.setRotationAxis(Rotate.Y_AXIS);
-			playerBody.setRotate(computeComponentRotationAngle(rotationAngle));
+			if(playerBody != null) {
+				playerBody.setRotationAxis(Rotate.Y_AXIS);
+				playerBody.setRotate(computeComponentRotationAngle(rotationAngle));				
+			}
 		}
 		additionalComponentUpdates();
 	}
