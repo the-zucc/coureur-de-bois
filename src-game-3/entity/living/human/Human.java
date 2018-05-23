@@ -14,7 +14,10 @@ import entity.wearable.StandardSword;
 import entity.wearable.WeaponEntity;
 import game.GameLogic;
 import game.Map;
+import javafx.application.Platform;
 import javafx.geometry.Point3D;
+import ui.gamescene.GameCamera;
+import util.NodeUtils;
 import visual.Component;
 
 import java.util.ArrayList;
@@ -41,7 +44,7 @@ public abstract class Human extends LivingEntity implements AttachableReceiver {
 		super(position, map, messenger);
 		this.level = level;
 		accept("wield_weapon", (params)->{
-			if(params[0] == this){
+			if(params[0] == Human.this){
 				if(wieldedWeapon == null) {
 					wieldWeapon((WeaponEntity)params[1]);					
 				}
@@ -56,9 +59,13 @@ public abstract class Human extends LivingEntity implements AttachableReceiver {
 	@Override
 	public void attach(Attachable a) {
 		if(a.getComponent().getParent() instanceof Component){
-			((Component) a.getComponent().getParent()).removeChildComponent(a.getComponent());
+			Platform.runLater(()->{
+				((Component) a.getComponent().getParent()).removeChildComponent(a.getComponent());
+			});
 		}
-		getComponent().addChildComponent(a.getComponent());
+		Platform.runLater(()->{
+			getComponent().addChildComponent(a.getComponent());
+		});
 		a.onAttach(this);
 		getAttachables().add(a);
 		onAttachActions(a);

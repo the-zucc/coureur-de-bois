@@ -78,7 +78,7 @@ public class Beaver extends Animal {
 		}
 		tail.setRotationAxis(Rotate.X_AXIS);
 		ticks+=0.5;
-		tail.setRotate(tail.getRotate()+2*Math.sin(ticks));
+		tail.setRotate(tail.getRotate()+3.5*Math.sin(ticks));
 	}
 
 	@Override

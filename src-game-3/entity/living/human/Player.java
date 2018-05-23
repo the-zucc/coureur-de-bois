@@ -158,7 +158,7 @@ public class Player extends Human implements UserControllable, AttachableReceive
 
 	@Override
 	public void updateActions(double secondsPassed){
-		messenger.send("player_position",get2DPosition());
+		messenger.send("player_position",get2DPosition(), this);
 		messenger.send("position_3D",getPosition(), this);
 	}
 

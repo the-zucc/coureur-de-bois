@@ -20,7 +20,12 @@ public abstract  class LivingEntity extends GravityAffectedCollidingEntity imple
 	//private Point3D gravity;
 	protected double hp;
 	protected double maxHp;
-	private boolean up, down, left, right, newOrientation, isRunning;
+	protected boolean up;
+	protected boolean down;
+	protected boolean left;
+	protected boolean right;
+	private boolean newOrientation;
+	private boolean isRunning;
 	private Point3D oldMovement;
 	private Point3D jumpVector = new Point3D(0,-40,0);
 	private Point2D target;

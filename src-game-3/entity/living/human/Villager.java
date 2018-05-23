@@ -7,6 +7,7 @@ import characteristic.interactive.Hoverable;
 import characteristic.positionnable.Collideable;
 import collision.CollisionBox;
 import collision.SphericalCollisionBox;
+import entity.living.LivingEntity;
 import entity.wearable.LongSword;
 import entity.wearable.StandardSword;
 import entity.wearable.WeaponEntity;
@@ -14,6 +15,7 @@ import game.GameLogic;
 import game.Map;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Point3D;
+import javafx.geometry.Point2D;
 import javafx.scene.Cursor;
 import javafx.scene.Node;
 import javafx.scene.Parent;
@@ -36,28 +38,79 @@ public class Villager extends Human implements Hoverable{
 	    return this.village;
 	}
 
-	public Villager(Point3D position, Map map, Messenger messenger) {
+	public Villager(Point3D position, Map map, Messenger messenger, WeaponEntity e) {
 		super(position, map, messenger, (int)(Math.random()*10)+1);
 		accept("yall_jump", (params)->{
 			jump();
 		});
 		accept("wield_weapon", (params)->{
-			if(params[0] == this){
-				if(wieldedWeapon == null) {
-					wieldWeapon((WeaponEntity)params[1]);
-				}
+        	if(params[0] == this) {
+        		wieldWeapon((WeaponEntity)params[1]);
+        	}
+        });
+		accept("player_position", (params)->{
+			if(((Point2D)params[0]).distance(get2DPosition()) < 10*GameLogic.getMeterLength()) {
+				addUpdate(()->{
+					boolean hasWeapon = this.wieldedWeapon != null;
+					double maxDist;
+					if(hasWeapon && wieldedWeapon instanceof StandardSword) {
+						maxDist = hasWeapon ? ((StandardSword)wieldedWeapon).getSwordLength()*1.5 : GameLogic.getMeterLength()*1.5;
+					}
+					else {
+						maxDist = GameLogic.getMeterLength();
+					}
+					boolean checkDistance = Villager.this.getPosition().distance(((LivingEntity)params[1]).getPosition()) < maxDist;
+					if(checkDistance) {
+						attack((LivingEntity)params[1],10);									
+					}
+				}, ()->{
+					return ((Player)params[1]).get2DPosition().distance(get2DPosition()) > 10*GameLogic.getMeterLength() && ((Player)params[1]).getHp() <= 0;
+				}, ()->{
+					this.toggleIsDoingAction();
+				});
 			}
 		});
 		/*
 		if(Math.random()>0.65) {*/
-			WeaponEntity entity = Math.random() > 0.8 ? new LongSword(getPosition(), map, messenger) : new StandardSword(getPosition(), map, messenger);
-			map.addEntity(entity);
-			messenger.send("wield_weapon", this, entity);
+		WeaponEntity entity = Math.random() > 0.8 ? new LongSword(getPosition(), map, messenger) : new StandardSword(getPosition(), map, messenger);
+		map.addEntity(entity);
+		wieldWeapon(entity);
 		//}
 	}
     public Villager(Point3D position, Map map, Messenger messenger, Village v) {
         super(position, map, messenger, (int)(Math.random()*10)+1);
         village = v;
+        accept("wield_weapon", (params)->{
+        	if(params[0] == this) {
+        		wieldWeapon((WeaponEntity)params[1]);
+        	}
+        });
+        accept("player_position", (params)->{
+			if(((Point2D)params[0]).distance(get2DPosition()) < 10*GameLogic.getMeterLength()) {
+				addUpdate(()->{
+					startMovingTo(((Player)params[1]).get2DPosition());
+					boolean hasWeapon = this.wieldedWeapon != null;
+					double maxDist;
+					if(hasWeapon && wieldedWeapon instanceof StandardSword) {
+						maxDist = hasWeapon ? ((StandardSword)wieldedWeapon).getSwordLength()*1.5 : GameLogic.getMeterLength()*1.5;
+					}
+					else {
+						maxDist = GameLogic.getMeterLength();
+					}
+					boolean checkDistance = Villager.this.getPosition().distance(((LivingEntity)params[1]).getPosition()) < maxDist;
+					if(checkDistance) {
+						attack((LivingEntity)params[1],10);									
+					}
+				}, ()->{
+					return ((Player)params[1]).get2DPosition().distance(get2DPosition()) > 10*GameLogic.getMeterLength() && ((Player)params[1]).getHp() <= 0;
+				}, ()->{
+					this.toggleIsDoingAction();
+				});
+			}
+		});
+        WeaponEntity entity = Math.random() > 0.8 ? new LongSword(getPosition(), map, messenger) : new StandardSword(getPosition(), map, messenger);
+		map.addEntity(entity);
+		wieldWeapon(entity);
     }
 
 	@Override
@@ -166,7 +219,6 @@ public class Villager extends Human implements Hoverable{
 	}
 	@Override
 	public void onClick(MouseEvent me) {
-		// TODO Auto-generated method stub
 		
 	}
 	@Override
