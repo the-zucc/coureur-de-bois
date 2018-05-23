@@ -1,0 +1,8 @@
+Pour joueur au jeu: simplement exécuter "CoureurDesBois.jar"
+
+NOTE:
+    rarement, le jeu gèle à la génération de la map. Dans les rares fois que cela arrive, il suffit de le redémarrer et le tour est joué.
+
+Auteur: Laurier Lavoie-Giasson
+Date: hiver 2018
+Organisation: Cégep du Vieux-Montréal

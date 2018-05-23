@@ -1,0 +1,18 @@
+Afin de pouvoir développer, le code source de la dernière itération est sous src-game-3.
+
+Autrement, les anciennes itérations sont présentes sours src, src-game et src-game-2.
+
+Aucune librairie externe n'est nécessaire pour développer ou exécuter le jeu, tout est fait à partir des librairies de base de Java.
+
+CEPENDANT:
+Il est nécessaire d'avoir JavaFX pour le développement.
+
+NOTE: dans Eclipse, il faut ajouter une règle d'accès à JavaFX dans la librairie système.
+
+    clic droit sur le porojet -> Propriétés -> Java build Path -> onglet "librairies" -> étendre "JRE System Library" -> clic sur "Access rules"
+    -> clic à droite sur "edit" -> une fenêtre s'ouvrira -> "add" -> une autre fenêtre s'ouvrira -> indiquer "javafx/**" dans la case "rule Pattern" et mettre
+    "Accessible" dans la case "Resolution".
+
+Auteur: Laurier Lavoie-Giasson
+Date: hiver 2018
+Organisation: Cégep du Vieux-Montréal
