@@ -1,6 +1,7 @@
 package game;
 
 import app.App;
+import entity.statics.tree.Tree;
 import javafx.geometry.Point3D;
 import javafx.scene.Group;
 import ui.gamescene.GameScene;

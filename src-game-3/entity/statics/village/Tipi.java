@@ -5,6 +5,7 @@ import java.io.IOException;
 import characteristic.Messenger;
 import characteristic.positionnable.Collideable;
 import collision.CollisionBox;
+import collision.SphericalCollisionBox;
 import entity.statics.StaticVisibleCollidingEntity;
 import game.GameLogic;
 import game.Map;
@@ -17,6 +18,7 @@ import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import util.MeshFactory;
 import util.NodeUtils;
+import village.HouseMap;
 import visual.Component;
 
 public class Tipi extends StaticVisibleCollidingEntity {
@@ -29,13 +31,25 @@ public class Tipi extends StaticVisibleCollidingEntity {
     public double getHeight(){
         return height;
     }
+    private HouseMap houseMap;
 
     public Tipi(Point3D position, Map map, Messenger messenger) {
         super(position, map, messenger);
         this.radius = 100;
         this.height = 175;
+        accept("enter_house", (params) -> {
+        	this.houseMap = buildHouseMap();
+        	messenger.send("pause_enter_house", this);
+		});
     }
+    protected HouseMap buildHouseMap(){
+    	try{
+			HouseMap map = new HouseMap();
+		}catch(Exception e){
 
+		}
+    	return null;//TODO remove this asap
+	}
     @Override
     public Component buildComponent() {
         Component returnVal = new Component(getId());
@@ -45,7 +59,7 @@ public class Tipi extends StaticVisibleCollidingEntity {
 
     @Override
     public CollisionBox buildCollisionBox() {
-        return null;
+        return new SphericalCollisionBox(GameLogic.getMeterLength()*2, this, Point3D.ZERO, this.map);
     }
 
     @Override
@@ -55,12 +69,12 @@ public class Tipi extends StaticVisibleCollidingEntity {
 
     @Override
     public Point3D getAllCorrections() {
-        return null;
+        return Point3D.ZERO;
     }
 
     @Override
 	public double computeCollidingWeight() {
-		return 0;
+		return 1;
 	}
 
 	@Override
@@ -75,7 +89,7 @@ public class Tipi extends StaticVisibleCollidingEntity {
 
 	@Override
 	public void onClick(MouseEvent me) {
-		
+
 	}
 
 	@Override

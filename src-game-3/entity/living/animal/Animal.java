@@ -56,7 +56,7 @@ public abstract class Animal extends LivingEntity{
             	startMovingTo(PositionGenerator.generate2DPositionInRadius(get2DPosition(), 1000));
         }
         if(submissionFactor < 0.05) {
-        	messenger.send("position_3D", getPosition(), this);        	
+        	messenger.send("position_3D", getPosition(), this);
         }
 	}
 	private double submissionFactor;
@@ -82,16 +82,6 @@ public abstract class Animal extends LivingEntity{
 	
 	@Override
 	protected Parent buildOnClickedPane() {
-		TitledPane root;
-		try {
-			root = FXMLLoader.load(getClass().getResource("/fxml/entity_pane.fxml"));
-			root.setText(getClass().getSimpleName());
-			Label hpLabel = (Label)NodeUtils.getChildByID(root, "hpLabel");
-			hpLabel.setText(String.valueOf(10));
-			return root;
-		} catch (IOException e1) {
-			e1.printStackTrace();
-		}
 		return null;
 	}
 

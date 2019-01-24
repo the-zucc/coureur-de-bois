@@ -46,7 +46,6 @@ public abstract class VisibleCollidingEntity extends VisibleEntity implements Co
 	
 	protected void correctCollisions(){
 		Point3D corrections = getAllCorrections();
-		//System.out.println("corrections "+getClass().getName()+" "+corrections);
 		if(corrections != null){
 			moveTo(getPosition().add(corrections));
 			if(getPosition().getY()>map.getHeightAt(get2DPosition())) {
@@ -113,4 +112,9 @@ public abstract class VisibleCollidingEntity extends VisibleEntity implements Co
 
 	@Override
 	public abstract boolean canMoveOnCollision();
+	@Override
+	public void update(double secondsPassed){
+		super.update(secondsPassed);
+		getCollisionBox().update();
+	}
 }

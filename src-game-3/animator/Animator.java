@@ -39,6 +39,7 @@ public class Animator {
 				i--;
 			}
 		}
+
 	}
 
     public Animator done(Runnable callback) {

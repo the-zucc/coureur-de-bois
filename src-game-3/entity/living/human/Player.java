@@ -184,7 +184,6 @@ public class Player extends Human implements UserControllable, AttachableReceive
 
 	@Override
 	public void onCollides(Collideable c) {
-		
 	}
 
 	@Override

@@ -44,6 +44,7 @@ import perlin.PerlinNoise;
 import ui.gamescene.GameCamera;
 import util.MessageCallback;
 import util.PositionGenerator;
+import village.HouseMap;
 import village.Village;
 import visual.Component;
 
@@ -53,17 +54,21 @@ public class Map implements ComponentOwner, Updateable, MessageReceiver{
 	
 	public static Map getInstance() {
 		if (instance == null) {
-			instance = new Map(Preferences.getMapWidth(),
-					Preferences.getMapHeight(),
-					Preferences.getMapDetail(),
-					Preferences.getMapDetail(),
-					Preferences.getWaterLevel(),
-					Preferences.getTreeCount(),
-					Preferences.getVillageCount(),
-					Preferences.getVillageRadius(),
-					Preferences.getVillageTipiCount(),
-					Preferences.getVillageVillagerCount(),
-					1500);
+			try {
+				instance = new Map(Preferences.getMapWidth(),
+						Preferences.getMapHeight(),
+						Preferences.getMapDetail(),
+						Preferences.getMapDetail(),
+						Preferences.getWaterLevel(),
+						Preferences.getTreeCount(),
+						Preferences.getVillageCount(),
+						Preferences.getVillageRadius(),
+						Preferences.getVillageTipiCount(),
+						Preferences.getVillageVillagerCount(),
+						1250);
+			}catch(Exception e){
+				return getInstance();
+			}
 		}
 		return instance;
 	}
@@ -83,7 +88,7 @@ public class Map implements ComponentOwner, Updateable, MessageReceiver{
 	public Point3D getPosition() {
 		return position;
 	}
-	private Component component;
+	protected Component component;
 	@Override
 	public Component getComponent() {
 		return component;
@@ -114,9 +119,9 @@ public class Map implements ComponentOwner, Updateable, MessageReceiver{
 	}
 
 
-	private GameCamera gameCamera;
-	private double mapWidth;
-	private double mapHeight;
+	protected GameCamera gameCamera;
+	protected double mapWidth;
+	protected double mapHeight;
 	public double getMapWidth(){
 		return mapWidth;
 	}
@@ -130,13 +135,13 @@ public class Map implements ComponentOwner, Updateable, MessageReceiver{
 	private Point3D[][] floorVertices;
 	private double waterLevel;
 
-	private ArrayList<Collideable> collideables;
+	protected ArrayList<Collideable> collideables;
 	private ArrayList<Updateable> updateables;
 	private ArrayList<Entity> entities;
 	private ArrayList<ComponentOwner> componentOwners;
 	private ArrayList<Village> villages;
 	
-	private Messenger messenger;
+	protected Messenger messenger;
 	public Messenger getMessenger() {
 		return messenger;
 	}
@@ -144,7 +149,20 @@ public class Map implements ComponentOwner, Updateable, MessageReceiver{
 	public ArrayList<Tree> getTrees(){
 		return trees;
 	}
-	
+	private Map currentMap;
+	public Map() throws Exception{
+		this(Preferences.getMapWidth(),
+				Preferences.getMapHeight(),
+				Preferences.getMapDetail(),
+				Preferences.getMapDetail(),
+				Preferences.getWaterLevel(),
+				Preferences.getTreeCount(),
+				Preferences.getVillageCount(),
+				Preferences.getVillageRadius(),
+				Preferences.getVillageTipiCount(),
+				Preferences.getVillageVillagerCount(),
+				1250);
+	}
 	public Map(double mapWidth,
 			double mapHeight,
 			double vertexSeparationWidth,
@@ -155,11 +173,20 @@ public class Map implements ComponentOwner, Updateable, MessageReceiver{
 			double villageRadius,
 			int tipiCount,
 			int villagerCount,
-			int sheepCount)
+			int sheepCount) throws Exception
 	{
+		/**
+		 * current Map, where the player is.
+		 */
+		this.currentMap = this;
+		/**
+		 * messenger functionality
+		 */
 		messenger = createMessenger();
 		listenTo(messenger);
-		
+		/**
+		 * collisions
+		 */
 		collideables = new ArrayList<Collideable>();
 		collisionCols = (int)mapWidth/collisionMapDivisionWidth;
 		collisionRows = (int)mapHeight/collisionMapDivisionHeight;
@@ -169,6 +196,9 @@ public class Map implements ComponentOwner, Updateable, MessageReceiver{
 				collisionMap[i][j] = new ArrayList<Collideable>();
 			}
 		}
+		/**
+		 * updates
+		 */
 		updateables = new ArrayList<Updateable>();
 		componentOwners = new ArrayList<ComponentOwner>();
 		entities = new ArrayList<Entity>();
@@ -212,6 +242,7 @@ public class Map implements ComponentOwner, Updateable, MessageReceiver{
 		}
 		for(int i= 0; i < villageCount; i++){
 			Point2D villagePos = PositionGenerator.generate2DPositionNotInVillages(this, villages);
+
 			Village v = new Village(villagePos, tipiCount, 40*GameLogic.getMeterLength(),villagerCount, this);
 			villages.add(v);
 			v.addEntitiesToMap(this);
@@ -245,13 +276,17 @@ public class Map implements ComponentOwner, Updateable, MessageReceiver{
         accept("remove", (params)->{
         	removeEntity((Entity)params[0]);
         });
+        accept("pause_enter_house", (params)->{
+        	//this.currentMap = (params[0]);
+		});
 	}
 
-	private Messenger createMessenger() {
+	protected Messenger createMessenger() {
 		return new Messenger() {
 			private ArrayList<MessageReceiver> receivers = new ArrayList<MessageReceiver>();
 			@Override
 			public void notifyReceivers(String message) {
+
 			    if(getListeners().containsKey(message)) {
 			    	for(MessageReceiver m: getListeners().get(message)) {
 			    		m.receiveMessage(message);
@@ -275,7 +310,6 @@ public class Map implements ComponentOwner, Updateable, MessageReceiver{
 
             @Override
             public void send(String message, Object... params) {
-            	
                 notifyReceivers(message, params);
             }
 
@@ -585,10 +619,10 @@ public class Map implements ComponentOwner, Updateable, MessageReceiver{
 	 * COLLISIONS
 	 */
 	//static variables
-	private static int collisionMapDivisionWidth=(int)(5*GameLogic.getMeterLength());
-	private static int collisionMapDivisionHeight=collisionMapDivisionWidth;
-	private int collisionCols;
-	private int collisionRows;
+	protected static int collisionMapDivisionWidth=(int)(5*GameLogic.getMeterLength());
+	protected static int collisionMapDivisionHeight=collisionMapDivisionWidth;
+	protected int collisionCols;
+	protected int collisionRows;
 	
 	public static int getCollisionMapDivisionWidth(){
 		return collisionMapDivisionWidth;
@@ -596,7 +630,7 @@ public class Map implements ComponentOwner, Updateable, MessageReceiver{
 	public static int getCollisionMapDivisionHeight(){
 		return collisionMapDivisionHeight;
 	}
-	private ArrayList<Collideable>[][] collisionMap;
+	protected ArrayList<Collideable>[][] collisionMap;
 	private ArrayList<Collideable> bigCollideables;
 	public ArrayList<Collideable> getBigCollideables(){
 		return bigCollideables;

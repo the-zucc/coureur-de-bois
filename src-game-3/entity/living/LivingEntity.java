@@ -4,7 +4,9 @@ import java.util.ArrayList;
 
 import app.App;
 import characteristic.*;
+import characteristic.positionnable.Collideable;
 import characteristic.positionnable.Positionnable;
+import entity.Entity;
 import entity.GravityAffectedCollidingEntity;
 import entity.living.human.Player;
 import game.GameLogic;
@@ -30,7 +32,24 @@ public abstract  class LivingEntity extends GravityAffectedCollidingEntity imple
 	private Point3D jumpVector = new Point3D(0,-40,0);
 	private Point2D target;
 	protected double rotationAngle;
-	
+	private boolean isAtTarget = false;
+	private Positionnable targetEntity = null;
+	protected void setTargetEntity(Positionnable p){
+		this.targetEntity = p;
+	}
+	protected Positionnable getTargetEntity() {
+		return targetEntity;
+	}
+	protected boolean isAtTarget(){
+		if(this.targetEntity != null && this.targetEntity instanceof Collideable){
+			if(isAtTarget == true){
+				isAtTarget = !isAtTarget;
+				return true;
+			}
+		}
+		return this.position2D.distance(this.target) < GameLogic.getMeterLength();
+	}
+
 	protected double computeComponentRotationAngle(double rotationAngle){
 		return rotationAngle+90;
 	}
@@ -256,5 +275,11 @@ public abstract  class LivingEntity extends GravityAffectedCollidingEntity imple
 
 	protected void updateOrientation() {
 		
+	}
+	@Override
+	public void onCollides(Collideable c){
+		if(c == this.targetEntity){
+			isAtTarget = true;
+		}
 	}
 }

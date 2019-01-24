@@ -1,7 +1,5 @@
 package entity.living.animal;
 
-import java.util.ArrayList;
-
 import characteristic.Messenger;
 import characteristic.positionnable.Collideable;
 import collision.CollisionBox;
@@ -11,7 +9,6 @@ import entity.drops.WoodPiece;
 import entity.statics.tree.Tree;
 import game.GameLogic;
 import game.Map;
-import javafx.geometry.Point2D;
 import javafx.geometry.Point3D;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
@@ -26,6 +23,8 @@ public class Beaver extends Animal {
 	private Tree targetTree;
 	private boolean isCuttingDownTree = false;
 	private boolean isTransportingWood = false;
+
+
 	public Beaver(Point3D position, Map map, Messenger messenger) {
 		super(position, map, messenger);
 	}
@@ -34,11 +33,15 @@ public class Beaver extends Animal {
 		isCuttingDownTree = true;
 		addUpdate(()->{
 			startMovingTo(targetTree.get2DPosition());
+			setTargetEntity(targetTree);
 		}, ()->{
-			return getPosition().distance(targetTree.getPosition()) < GameLogic.getMeterLength();
+			return isAtTarget();
 		}, ()->{
+
 			animator.animate(()->{
-				
+				if(this.getPosition().getY() < map.getHeightAt(get2DPosition())){
+					this.jump();
+				}
 			}, 300).done(()->{
 				messenger.send("cut_down_tree", targetTree, this);
 				Beaver.this.targetTree = null;
@@ -83,7 +86,7 @@ public class Beaver extends Animal {
 
 	@Override
 	protected String getMouseToolTipText() {
-		return null;
+		return "Beaver";
 	}
 	Box tail;
 	@Override
@@ -145,13 +148,6 @@ public class Beaver extends Animal {
 		return new SphericalCollisionBox(GameLogic.getMeterLength()/3, this, new Point3D(0,-2.5,0), map);
 	}
 
-
-
-	@Override
-	public void onCollides(Collideable c) {
-		// TODO Auto-generated method stub
-		
-	}
 	@Override
 	protected void onDeath() {
 		double meter = GameLogic.getMeterLength();

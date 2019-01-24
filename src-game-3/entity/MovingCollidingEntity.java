@@ -50,6 +50,8 @@ public abstract class MovingCollidingEntity extends VisibleCollidingEntity{
 						if(c.getCollisionBox() != null && getCollisionBox() != null && c != this) {
 							if(getCollisionBox().collides(c.getCollisionBox())){
 								corrections = corrections.add(this.getCorrection(c));
+								this.onCollides(c);
+								//c.onCollides(this);
 							}
 						}
 					}

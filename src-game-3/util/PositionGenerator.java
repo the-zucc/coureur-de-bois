@@ -45,8 +45,10 @@ public class PositionGenerator {
 	public static Point3D getFloorPosition(Point2D xz, Map map){
 		return new Point3D(xz.getX(), map.getHeightAt(xz), xz.getY());
 	}
-	public static Point2D generate2DPositionNotInVillages(Map map, ArrayList<Village> villages){
+	public static Point2D generate2DPositionNotInVillages(Map map, ArrayList<Village> villages) throws Exception{
 		Point2D pos;
+		int inVillageCount = 0;//counter, incremented each time the program tries to generate a position,
+		// so that if no position is found after a certain number of tries, it restarts throws an exception (to generate a new map)
 		boolean inVillage = false;
 		do{
 			inVillage = false;
@@ -55,6 +57,10 @@ public class PositionGenerator {
 					villages) {
 				if(v.get2DPosition().distance(pos) < v.getRadius())
 					inVillage = true;
+			}
+			inVillageCount++;
+			if(inVillageCount > 10000){
+				throw new Exception("Had to recreate a map, was too small for the number of villages.");
 			}
 		}while(inVillage);
 		return pos;

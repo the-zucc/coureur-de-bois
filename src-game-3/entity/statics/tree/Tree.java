@@ -27,7 +27,7 @@ import util.NodeUtils;
 
 import java.util.concurrent.ThreadLocalRandom;
 
-public class Tree extends StaticVisibleCollidingEntity {
+public class Tree extends StaticVisibleCollidingEntity{
 	
     public Tree(Point3D position, Map map, Messenger messenger) {
         super(position, map, messenger);
@@ -86,9 +86,9 @@ public class Tree extends StaticVisibleCollidingEntity {
         return returnVal;
     }
 
-    @Override
+	@Override
     public CollisionBox buildCollisionBox() {
-        return new SphericalCollisionBox(GameLogic.getMeterLength()/2, this, Point3D.ZERO, map);
+        return new SphericalCollisionBox(GameLogic.getMeterLength()*2, this, Point3D.ZERO, map);
     }
 
     @Override
@@ -96,10 +96,10 @@ public class Tree extends StaticVisibleCollidingEntity {
 
     }
 
-    @Override
-    public Point3D getAllCorrections() {
-        return null;
-    }
+	@Override
+	public Point3D getAllCorrections() {
+		return Point3D.ZERO;
+	}
 
 	@Override
 	public double computeCollidingWeight() {
@@ -118,8 +118,7 @@ public class Tree extends StaticVisibleCollidingEntity {
 
 	@Override
 	public void onClick(MouseEvent me) {
-		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
