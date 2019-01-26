@@ -7,6 +7,12 @@ I did a mistake when starting the project: I chose to use JavaFX to handle the U
 The IntelliJ IDEA project is located in folder `/src-game-3`. Under the project structure, the language level needs to be set to "8". JavaFX needs to be in your JDK, so either use OpenJDK with OpenJFX, or a version of Oracle JDK that includes JavaFX.
 ### Planned features and improvements
 - walk-in feature for homes
-- fixing the lag
+- fix problem where the whole map (or most of it) is underwater
+- make villagers friendly
+- add more animals
+  - wolves
+  - mooses
+- biomes
+- seasons (map would be initialized either during the winter or the summer)
 ### Tech used
 - JavaFX
