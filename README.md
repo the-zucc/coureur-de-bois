@@ -12,6 +12,7 @@ The IntelliJ IDEA project is located in folder `/src-game-3`. Under the project 
 - add more animals
   - wolves
   - mooses
+- trading system
 - biomes
 - seasons (map would be initialized either during the winter or the summer)
 ### Tech used
