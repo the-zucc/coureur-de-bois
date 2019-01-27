@@ -1,25 +1,14 @@
 package entity.living.animal;
 
-import java.io.IOException;
-
 import characteristic.Messenger;
-import characteristic.positionnable.Collideable;
-import collision.CollisionBox;
-import entity.drops.HealthBoost;
 import entity.living.LivingEntity;
 import game.GameLogic;
 import game.Map;
-import javafx.fxml.FXMLLoader;
 import javafx.geometry.Point3D;
 import javafx.scene.Cursor;
 import javafx.scene.Node;
 import javafx.scene.Parent;
-import javafx.scene.control.Label;
-import javafx.scene.control.TitledPane;
-import javafx.scene.input.MouseEvent;
-import util.NodeUtils;
 import util.PositionGenerator;
-import visual.Component;
 
 public abstract class Animal extends LivingEntity{
 	
@@ -51,7 +40,7 @@ public abstract class Animal extends LivingEntity{
         } else if (a < 9 * actionChoiceTreshold) {
 			startMovingTo(PositionGenerator.generate2DPositionInRadius(get2DPosition(), 1000));
 		} else {
-            double mapWidth = Map.getInstance().getMapWidth();
+            double mapWidth = Map.getMainMap().getMapWidth();
             if(getPosition().getX() > mapWidth/2 || getPosition().getX() < -mapWidth/2)
             	startMovingTo(PositionGenerator.generate2DPositionInRadius(get2DPosition(), 1000));
         }

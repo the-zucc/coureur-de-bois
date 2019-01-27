@@ -3,7 +3,6 @@ package entity;
 import java.util.ArrayList;
 import java.util.ConcurrentModificationException;
 import java.util.Hashtable;
-import java.util.Iterator;
 
 import animator.Animator;
 import app.App;
@@ -12,15 +11,12 @@ import characteristic.ComponentOwner;
 import characteristic.MessageReceiver;
 import characteristic.Messenger;
 import characteristic.Updateable;
-import characteristic.interactive.Hoverable;
-import characteristic.positionnable.Collideable;
 import characteristic.positionnable.Positionnable;
 import characteristic.positionnable.Positionnable2D;
 import game.Map;
 import javafx.geometry.Point2D;
 import javafx.geometry.Point3D;
 import javafx.scene.Cursor;
-import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.input.MouseButton;
@@ -64,6 +60,9 @@ public abstract class VisibleEntity extends Entity implements Updateable, Compon
 	protected Point2D position2D;
 	protected Messenger messenger;
 	protected Map map;
+	public void setMap(Map map) {
+		this.map = map;
+	}
 	public VisibleEntity(Point3D position, Map map, Messenger messenger){
 		super();
 		this.map = map;
@@ -159,7 +158,7 @@ public abstract class VisibleEntity extends Entity implements Updateable, Compon
 
 	@Override
 	public void placeComponentInScene() {
-		Map.getInstance().getComponent().addChildComponent(getComponent());
+		Map.getMainMap().getComponent().addChildComponent(getComponent());
 		getComponent().setTranslateX(getPosition().getX());
 		getComponent().setTranslateY(getPosition().getY());
 		getComponent().setTranslateZ(getPosition().getZ());

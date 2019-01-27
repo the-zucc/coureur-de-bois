@@ -34,14 +34,19 @@ public class Tipi extends StaticVisibleCollidingEntity implements Reachable {
         return height;
     }
     private HouseMap houseMap;
+    public HouseMap getHouseMap(){
+    	return this.houseMap;
+	}
 
     public Tipi(Point3D position, Map map, Messenger messenger) {
         super(position, map, messenger);
         this.radius = 100;
         this.height = 175;
-        accept("enter_house", (params) -> {
-        	this.houseMap = buildHouseMap();
-        	messenger.send("pause_enter_house", this);
+        accept("reached_entity", (params) -> {
+        	if(params[0] == this){
+				this.houseMap = buildHouseMap();
+				messenger.send("pause_enter_house", this);
+			}
 		});
         this.reachableRadius = computeReachableRadius();
     }

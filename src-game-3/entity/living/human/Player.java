@@ -8,11 +8,13 @@ import characteristic.attachable.AttachableReceiver;
 import characteristic.interactive.UserControllable;
 import characteristic.positionnable.Collideable;
 import characteristic.positionnable.Positionnable;
+import characteristic.positionnable.Reachable;
 import entity.living.LivingEntity;
 import entity.statics.tree.Tree;
 import game.GameLogic;
 import game.Map;
 import javafx.application.Platform;
+import javafx.geometry.Point2D;
 import javafx.geometry.Point3D;
 import javafx.scene.Cursor;
 import javafx.scene.Node;
@@ -28,6 +30,8 @@ import ui.gamescene.GameCamera;
 import util.NodeUtils;
 import visual.Component;
 import entity.wearable.StandardSword;
+
+import java.util.ArrayList;
 
 public class Player extends Human implements UserControllable, AttachableReceiver{
 	
@@ -168,6 +172,21 @@ public class Player extends Human implements UserControllable, AttachableReceive
 	public void updateActions(double secondsPassed){
 		messenger.send("player_position",get2DPosition(), this);
 		messenger.send("position_3D",getPosition(), this);
+		Point2D position = get2DPosition();
+		int column = map.getCollisionColumnFor(position);
+		int row = map.getCollisionRowFor(position);
+		ArrayList<Collideable>[][] collisionMap = map.getCollisionMap();
+		for (int i = row-1; i < row+1; i++) {
+			for (int j = column-1; j < column+1; j++) {
+				for (Collideable c : collisionMap[row][column]) {
+					if(c instanceof Reachable){
+						if(((Reachable) c).getReachableRadius() > distanceFrom(c)){
+							messenger.send("reached_entity", c, this);
+						}
+					}
+				}
+			}
+		}
 	}
 
 	@Override

@@ -1,8 +1,11 @@
 package village;
 
 import characteristic.positionnable.Collideable;
+import entity.Entity;
+import entity.living.human.Player;
 import game.Map;
 import game.settings.Preferences;
+import javafx.geometry.Point3D;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.MeshView;
@@ -12,6 +15,7 @@ import visual.Component;
 import java.util.ArrayList;
 
 public class HouseMap extends Map {
+    protected Point3D spawnPoint;
     public HouseMap() throws Exception{
         /**
          * setting the map parameters
@@ -33,12 +37,14 @@ public class HouseMap extends Map {
         collideables = new ArrayList<Collideable>();
         collisionCols = (int)mapWidth/collisionMapDivisionWidth;
         collisionRows = (int)mapHeight/collisionMapDivisionHeight;
-        collisionMap = new ArrayList[collisionRows][collisionRows];
+        collisionMap = new ArrayList[collisionRows][collisionCols];
+
         for(int i = 0; i < collisionRows; i++){
             for(int j = 0; j < collisionCols; j++){
                 collisionMap[i][j] = new ArrayList<Collideable>();
             }
         }
+        spawnPoint = Point3D.ZERO;
     }
     @Override
     public Component buildComponent() {
@@ -60,5 +66,12 @@ public class HouseMap extends Map {
         meshView.setMaterial(new PhongMaterial(new Color(0,0,0,1)));
         returnVal.getChildren().add(meshView);
         return returnVal;
+    }
+    @Override
+    public void addEntity(Entity e){
+        if(e instanceof Player){
+            ((Player) e).setPosition(this.spawnPoint);
+        }
+        super.addEntity(e);
     }
 }

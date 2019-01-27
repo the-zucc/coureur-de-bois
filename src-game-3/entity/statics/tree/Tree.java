@@ -39,6 +39,7 @@ public class Tree extends StaticVisibleCollidingEntity implements Reachable{
 	private double reachableRadius;
     public Tree(Point3D position, Map map, Messenger messenger) {
         super(position, map, messenger);
+
         accept("cut_down_tree_human", (params)->{
         	if(params[0] == this) {
         		if(params[1] != null){
@@ -56,9 +57,9 @@ public class Tree extends StaticVisibleCollidingEntity implements Reachable{
         accept("cut_down_tree_beaver", (params)->{
         	if(params[0] == this){
 				this.health-=4;
-			}
-			if(this.getHealth() <= 0){
-				this.getCutDown(true);
+                if(this.getHealth() <= 0){
+                    this.getCutDown(true);
+                }
 			}
 		});
         this.reachableRadius = computeReachableRadius();

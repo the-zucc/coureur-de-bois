@@ -1,7 +1,6 @@
 package game;
 
 import app.App;
-import entity.statics.tree.Tree;
 import javafx.geometry.Point3D;
 import javafx.scene.Group;
 import ui.gamescene.GameScene;
@@ -26,12 +25,18 @@ public class GameLogic {
 	}
 	
 	public static void mainLoop(double secondsPassed) {
-		Map.getInstance().update(secondsPassed);
+		Map currentMap = Map.getMainMap().getCurrentMap();
+		if(currentMap != null){
+			currentMap.update(secondsPassed);
+		}
+		else{
+			Map.getMainMap().update(secondsPassed);
+		}
 		updateCount++;
 	}
 
 	public static void startGame() {
-		Map map = Map.getInstance();
+		Map map = Map.getMainMap();
 		GameScene scene = new GameScene(App.windowWidth, App.windowHeight, App.getApplicationWindow(), map, map.getMessenger());
 		GameScreen screen = new GameScreen(App.windowWidth, App.windowHeight, scene, App.getApplicationWindow());
 		

@@ -2,44 +2,34 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="7eb98043-cb81-464d-82ed-93d1a3fffedb" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/characteristic/positionnable/Reachable.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../production/src-game-3/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../production/src-game-3/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../production/src-game-3/characteristic/positionnable/Positionnable.class" beforeDir="false" afterPath="$PROJECT_DIR$/../production/src-game-3/characteristic/positionnable/Positionnable.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../production/src-game-3/characteristic/positionnable/Positionnable2D.class" beforeDir="false" afterPath="$PROJECT_DIR$/../production/src-game-3/characteristic/positionnable/Positionnable2D.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../production/src-game-3/characteristic/positionnable/Reachable.class" beforeDir="false" afterPath="$PROJECT_DIR$/../production/src-game-3/characteristic/positionnable/Reachable.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../production/src-game-3/entity/GravityAffectedCollidingEntity.class" beforeDir="false" afterPath="$PROJECT_DIR$/../production/src-game-3/entity/GravityAffectedCollidingEntity.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../production/src-game-3/entity/VisibleEntity.class" beforeDir="false" afterPath="$PROJECT_DIR$/../production/src-game-3/entity/VisibleEntity.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../production/src-game-3/entity/living/LivingEntity.class" beforeDir="false" afterPath="$PROJECT_DIR$/../production/src-game-3/entity/living/LivingEntity.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../production/src-game-3/entity/living/animal/Beaver.class" beforeDir="false" afterPath="$PROJECT_DIR$/../production/src-game-3/entity/living/animal/Beaver.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../production/src-game-3/entity/living/human/Human.class" beforeDir="false" afterPath="$PROJECT_DIR$/../production/src-game-3/entity/living/human/Human.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../production/src-game-3/entity/living/animal/Animal.class" beforeDir="false" afterPath="$PROJECT_DIR$/../production/src-game-3/entity/living/animal/Animal.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../production/src-game-3/entity/living/human/Player$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/../production/src-game-3/entity/living/human/Player$1.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../production/src-game-3/entity/living/human/Player.class" beforeDir="false" afterPath="$PROJECT_DIR$/../production/src-game-3/entity/living/human/Player.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../production/src-game-3/entity/living/human/Villager.class" beforeDir="false" afterPath="$PROJECT_DIR$/../production/src-game-3/entity/living/human/Villager.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../production/src-game-3/entity/statics/tree/PineTree.class" beforeDir="false" afterPath="$PROJECT_DIR$/../production/src-game-3/entity/statics/tree/PineTree.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../production/src-game-3/entity/statics/tree/Tree.class" beforeDir="false" afterPath="$PROJECT_DIR$/../production/src-game-3/entity/statics/tree/Tree.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../production/src-game-3/entity/statics/village/Tipi.class" beforeDir="false" afterPath="$PROJECT_DIR$/../production/src-game-3/entity/statics/village/Tipi.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../production/src-game-3/game/GameLogic.class" beforeDir="false" afterPath="$PROJECT_DIR$/../production/src-game-3/game/GameLogic.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../production/src-game-3/game/Map$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/../production/src-game-3/game/Map$1.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../production/src-game-3/game/Map.class" beforeDir="false" afterPath="$PROJECT_DIR$/../production/src-game-3/game/Map.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../production/src-game-3/ui/floatingpane/FloatingPane.class" beforeDir="false" afterPath="$PROJECT_DIR$/../production/src-game-3/ui/floatingpane/FloatingPane.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../production/src-game-3/ui/gamescene/GameCamera.class" beforeDir="false" afterPath="$PROJECT_DIR$/../production/src-game-3/ui/gamescene/GameCamera.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../production/src-game-3/village/Village.class" beforeDir="false" afterPath="$PROJECT_DIR$/../production/src-game-3/village/Village.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../production/src-game-3/visual/Component.class" beforeDir="false" afterPath="$PROJECT_DIR$/../production/src-game-3/visual/Component.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../production/src-game-3/village/HouseMap.class" beforeDir="false" afterPath="$PROJECT_DIR$/../production/src-game-3/village/HouseMap.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/animator/Animation.java" beforeDir="false" afterPath="$PROJECT_DIR$/animator/Animation.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/animator/Animator.java" beforeDir="false" afterPath="$PROJECT_DIR$/animator/Animator.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/characteristic/positionnable/Positionnable.java" beforeDir="false" afterPath="$PROJECT_DIR$/characteristic/positionnable/Positionnable.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/characteristic/positionnable/Positionnable2D.java" beforeDir="false" afterPath="$PROJECT_DIR$/characteristic/positionnable/Positionnable2D.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/characteristic/positionnable/Reachable.java" beforeDir="false" afterPath="$PROJECT_DIR$/characteristic/positionnable/Reachable.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/entity/GravityAffectedCollidingEntity.java" beforeDir="false" afterPath="$PROJECT_DIR$/entity/GravityAffectedCollidingEntity.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/entity/VisibleEntity.java" beforeDir="false" afterPath="$PROJECT_DIR$/entity/VisibleEntity.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/entity/living/LivingEntity.java" beforeDir="false" afterPath="$PROJECT_DIR$/entity/living/LivingEntity.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/entity/living/animal/Beaver.java" beforeDir="false" afterPath="$PROJECT_DIR$/entity/living/animal/Beaver.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/entity/living/human/Human.java" beforeDir="false" afterPath="$PROJECT_DIR$/entity/living/human/Human.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/entity/living/animal/Animal.java" beforeDir="false" afterPath="$PROJECT_DIR$/entity/living/animal/Animal.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/entity/living/human/Player.java" beforeDir="false" afterPath="$PROJECT_DIR$/entity/living/human/Player.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/entity/living/human/Villager.java" beforeDir="false" afterPath="$PROJECT_DIR$/entity/living/human/Villager.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/entity/statics/tree/PineTree.java" beforeDir="false" afterPath="$PROJECT_DIR$/entity/statics/tree/PineTree.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/entity/statics/tree/Tree.java" beforeDir="false" afterPath="$PROJECT_DIR$/entity/statics/tree/Tree.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/entity/statics/village/Tipi.java" beforeDir="false" afterPath="$PROJECT_DIR$/entity/statics/village/Tipi.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/game/GameLogic.java" beforeDir="false" afterPath="$PROJECT_DIR$/game/GameLogic.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/game/Map.java" beforeDir="false" afterPath="$PROJECT_DIR$/game/Map.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ui/floatingpane/FloatingPane.java" beforeDir="false" afterPath="$PROJECT_DIR$/ui/floatingpane/FloatingPane.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ui/gamescene/GameCamera.java" beforeDir="false" afterPath="$PROJECT_DIR$/ui/gamescene/GameCamera.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/village/Village.java" beforeDir="false" afterPath="$PROJECT_DIR$/village/Village.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/visual/Component.java" beforeDir="false" afterPath="$PROJECT_DIR$/visual/Component.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/village/HouseMap.java" beforeDir="false" afterPath="$PROJECT_DIR$/village/HouseMap.java" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -50,43 +40,29 @@
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/entity/living/animal/Beaver.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="385">
-              <caret line="44" column="47" lean-forward="true" selection-start-line="44" selection-start-column="47" selection-end-line="45" selection-end-column="52" />
-              <folding>
-                <element signature="imports" expanded="true" />
-                <element signature="e#1890#1891#0" expanded="true" />
-                <element signature="e#2775#2776#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/entity/statics/tree/Tree.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-1440">
-              <caret line="55" column="15" selection-start-line="55" selection-start-column="15" selection-end-line="55" selection-end-column="15" />
+            <state relative-caret-position="440">
+              <caret line="58" column="31" selection-start-line="58" selection-start-column="31" selection-end-line="58" selection-end-column="31" />
               <folding>
                 <element signature="e#1122#1123#0" expanded="true" />
                 <element signature="e#1147#1148#0" expanded="true" />
-                <element signature="e#3664#3665#0" expanded="true" />
-                <element signature="e#3690#3691#0" expanded="true" />
-                <element signature="e#3744#3745#0" expanded="true" />
-                <element signature="e#3759#3760#0" expanded="true" />
-                <element signature="e#3810#3811#0" expanded="true" />
-                <element signature="e#3838#3839#0" expanded="true" />
-                <element signature="e#3892#3893#0" expanded="true" />
-                <element signature="e#3912#3913#0" expanded="true" />
-                <element signature="e#4350#4351#0" expanded="true" />
-                <element signature="e#4368#4369#0" expanded="true" />
-                <element signature="e#4423#4424#0" expanded="true" />
-                <element signature="e#4457#4458#0" expanded="true" />
-                <element signature="e#4511#4512#0" expanded="true" />
-                <element signature="e#4572#4573#0" expanded="true" />
-                <element signature="e#4622#4623#0" expanded="true" />
-                <element signature="e#4656#4657#0" expanded="true" />
+                <element signature="e#3870#3871#0" expanded="true" />
+                <element signature="e#3896#3897#0" expanded="true" />
+                <element signature="e#3950#3951#0" expanded="true" />
+                <element signature="e#3965#3966#0" expanded="true" />
+                <element signature="e#4016#4017#0" expanded="true" />
+                <element signature="e#4044#4045#0" expanded="true" />
+                <element signature="e#4098#4099#0" expanded="true" />
+                <element signature="e#4118#4119#0" expanded="true" />
+                <element signature="e#4556#4557#0" expanded="true" />
+                <element signature="e#4574#4575#0" expanded="true" />
+                <element signature="e#4629#4630#0" expanded="true" />
+                <element signature="e#4663#4664#0" expanded="true" />
+                <element signature="e#4717#4718#0" expanded="true" />
+                <element signature="e#4778#4779#0" expanded="true" />
+                <element signature="e#4828#4829#0" expanded="true" />
+                <element signature="e#4862#4863#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -99,12 +75,6 @@
               <caret line="287" column="19" selection-start-line="287" selection-start-column="19" selection-end-line="287" selection-end-column="19" />
               <folding>
                 <element signature="imports" expanded="true" />
-                <element signature="e#5563#5564#0" expanded="true" />
-                <element signature="e#5587#5588#0" expanded="true" />
-                <element signature="e#5849#5850#0" expanded="true" />
-                <element signature="e#5873#5874#0" expanded="true" />
-                <element signature="e#7789#7790#0" expanded="true" />
-                <element signature="e#7842#7843#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -113,62 +83,61 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/entity/living/human/Player.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1577">
-              <caret line="334" column="22" selection-start-line="334" selection-start-column="22" selection-end-line="334" selection-end-column="22" />
+            <state relative-caret-position="637">
+              <caret line="449" column="5" selection-start-line="449" selection-start-column="5" selection-end-line="449" selection-end-column="5" />
             </state>
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/entity/living/human/Human.java">
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/game/Map.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="597">
-              <caret line="156" column="51" selection-start-line="156" selection-start-column="51" selection-end-line="156" selection-end-column="51" />
+            <state relative-caret-position="265">
+              <caret line="290" column="28" selection-start-line="290" selection-start-column="28" selection-end-line="290" selection-end-column="28" />
               <folding>
-                <element signature="e#1119#1120#0" expanded="true" />
-                <element signature="e#1147#1148#0" expanded="true" />
-                <element signature="e#4198#4199#0" expanded="true" />
-                <element signature="e#4257#4258#0" expanded="true" />
+                <element signature="e#9234#9235#0" expanded="true" />
+                <element signature="e#9269#9270#0" expanded="true" />
+                <element signature="e#9357#9358#0" expanded="true" />
+                <element signature="e#9421#9422#0" expanded="true" />
+                <element signature="e#9489#9490#0" expanded="true" />
+                <element signature="e#9516#9517#0" expanded="true" />
+                <element signature="e#9578#9579#0" expanded="true" />
+                <element signature="e#9605#9606#0" expanded="true" />
+                <element signature="e#9957#9958#0" expanded="true" />
+                <element signature="e#9984#9985#0" expanded="true" />
+                <element signature="e#14757#14758#0" expanded="true" />
+                <element signature="e#14786#14787#0" expanded="true" />
+                <element signature="e#15632#15633#0" expanded="true" />
+                <element signature="e#17580#17581#0" expanded="true" />
+                <element signature="e#17719#17720#0" expanded="true" />
+                <element signature="e#17842#17843#0" expanded="true" />
+                <element signature="e#17900#17901#0" expanded="true" />
+                <element signature="e#18406#18407#0" expanded="true" />
+                <element signature="e#18445#18446#0" expanded="true" />
+                <element signature="e#18497#18498#0" expanded="true" />
+                <element signature="e#18537#18538#0" expanded="true" />
+                <element signature="e#18691#18692#0" expanded="true" />
+                <element signature="e#18720#18721#0" expanded="true" />
+                <element signature="e#18776#18777#0" expanded="true" />
+                <element signature="e#18802#18803#0" expanded="true" />
+                <element signature="e#19647#19648#0" expanded="true" />
+                <element signature="e#19671#19672#0" expanded="true" />
+                <element signature="e#20723#20724#0" expanded="true" />
+                <element signature="e#20744#20745#0" expanded="true" />
+                <element signature="e#20995#20996#0" expanded="true" />
+                <element signature="e#21025#21026#0" expanded="true" />
+                <element signature="e#21152#21153#0" expanded="true" />
+                <element signature="e#21180#21181#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/entity/VisibleEntity.java">
+        <entry file="file://$PROJECT_DIR$/game/GameLogic.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-643">
-              <caret line="163" column="59" lean-forward="true" selection-start-line="163" selection-start-column="59" selection-end-line="163" selection-end-column="59" />
-              <folding>
-                <element signature="e#1236#1261#0" expanded="true" />
-                <element signature="e#1347#1367#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/visual/Component.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="280">
-              <caret line="21" selection-start-line="21" selection-end-line="21" />
-              <folding>
-                <element signature="e#1491#1492#0" expanded="true" />
-                <element signature="e#1549#1550#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/ui/gamescene/GameCamera.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2380">
-              <caret line="132" column="58" selection-start-line="132" selection-start-column="58" selection-end-line="132" selection-end-column="58" />
-              <folding>
-                <element signature="e#3971#3972#0" expanded="true" />
-                <element signature="e#4029#4030#0" expanded="true" />
-              </folding>
+            <state relative-caret-position="420">
+              <caret line="29" column="17" selection-start-line="29" selection-start-column="17" selection-end-line="29" selection-end-column="17" />
             </state>
           </provider>
         </entry>
@@ -176,9 +145,11 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/entity/statics/village/Tipi.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1680">
-              <caret line="121" column="16" selection-start-line="121" selection-start-column="16" selection-end-line="121" selection-end-column="16" />
+            <state relative-caret-position="260">
+              <caret line="37" column="29" selection-start-line="37" selection-start-column="29" selection-end-line="37" selection-end-column="29" />
               <folding>
+                <element signature="e#1036#1037#0" expanded="true" />
+                <element signature="e#1051#1052#0" expanded="true" />
                 <element signature="e#2958#2959#0" expanded="true" />
                 <element signature="e#3000#3001#0" expanded="true" />
               </folding>
@@ -218,8 +189,16 @@
       <find>cutD</find>
       <find>additionalUp</find>
       <find>cancelA</find>
-      <find>update</find>
       <find>attac</find>
+      <find>update</find>
+      <find>row</find>
+      <find>getCollisionMap</find>
+      <find>static</find>
+      <find>HouseMap</find>
+      <find>this.currentMap</find>
+      <find>pause</find>
+      <find>currentMap</find>
+      <find>map.</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -229,28 +208,28 @@
     <option name="CHANGED_PATHS">
       <list>
         <option value="$PROJECT_DIR$/app/App.java" />
-        <option value="$PROJECT_DIR$/game/GameLogic.java" />
         <option value="$PROJECT_DIR$/util/PositionGenerator.java" />
-        <option value="$PROJECT_DIR$/village/HouseMap.java" />
         <option value="$PROJECT_DIR$/entity/MovingCollidingEntity.java" />
         <option value="$PROJECT_DIR$/entity/VisibleCollidingEntity.java" />
         <option value="$PROJECT_DIR$/entity/living/animal/Animal.java" />
         <option value="$PROJECT_DIR$/entity/statics/StaticVisibleCollidingEntity.java" />
-        <option value="$PROJECT_DIR$/characteristic/positionnable/Reachable.java" />
         <option value="$PROJECT_DIR$/characteristic/positionnable/Positionnable.java" />
         <option value="$PROJECT_DIR$/visual/Component.java" />
-        <option value="$PROJECT_DIR$/game/Map.java" />
         <option value="$PROJECT_DIR$/ui/gamescene/GameCamera.java" />
         <option value="$PROJECT_DIR$/entity/statics/tree/PineTree.java" />
-        <option value="$PROJECT_DIR$/entity/statics/village/Tipi.java" />
         <option value="$PROJECT_DIR$/animator/Animation.java" />
         <option value="$PROJECT_DIR$/animator/Animator.java" />
-        <option value="$PROJECT_DIR$/entity/VisibleEntity.java" />
-        <option value="$PROJECT_DIR$/entity/living/human/Player.java" />
         <option value="$PROJECT_DIR$/entity/living/LivingEntity.java" />
         <option value="$PROJECT_DIR$/entity/living/animal/Beaver.java" />
         <option value="$PROJECT_DIR$/entity/living/human/Human.java" />
         <option value="$PROJECT_DIR$/entity/statics/tree/Tree.java" />
+        <option value="$PROJECT_DIR$/characteristic/positionnable/Reachable.java" />
+        <option value="$PROJECT_DIR$/village/HouseMap.java" />
+        <option value="$PROJECT_DIR$/entity/statics/village/Tipi.java" />
+        <option value="$PROJECT_DIR$/game/GameLogic.java" />
+        <option value="$PROJECT_DIR$/entity/living/human/Player.java" />
+        <option value="$PROJECT_DIR$/entity/VisibleEntity.java" />
+        <option value="$PROJECT_DIR$/game/Map.java" />
       </list>
     </option>
   </component>
@@ -265,6 +244,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="PackagesPane" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -276,6 +256,17 @@
               <item name="src-game-3" type="b2602c69:ProjectViewProjectNode" />
               <item name="src-game-3" type="462c0819:PsiDirectoryNode" />
               <item name="animator" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="src-game-3" type="b2602c69:ProjectViewProjectNode" />
+              <item name="src-game-3" type="462c0819:PsiDirectoryNode" />
+              <item name="characteristic" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="src-game-3" type="b2602c69:ProjectViewProjectNode" />
+              <item name="src-game-3" type="462c0819:PsiDirectoryNode" />
+              <item name="characteristic" type="462c0819:PsiDirectoryNode" />
+              <item name="positionnable" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="src-game-3" type="b2602c69:ProjectViewProjectNode" />
@@ -340,14 +331,13 @@
           <select />
         </subPane>
       </pane>
-      <pane id="PackagesPane" />
       <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1548571011150" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1548609624704" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
@@ -402,11 +392,12 @@
       <workItem from="1548347947468" duration="15210000" />
       <workItem from="1548536577590" duration="8804000" />
       <workItem from="1548561307363" duration="9774000" />
+      <workItem from="1548604718594" duration="4906000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="33788000" />
+    <option name="totallyTimeSpent" value="38694000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="27" width="2560" height="1413" extended-state="6" />
@@ -416,7 +407,7 @@
       <window_info id="Capture Tool" order="2" />
       <window_info id="Favorites" order="3" side_tool="true" />
       <window_info id="Image Layers" order="4" />
-      <window_info content_ui="combo" id="Project" order="5" visible="true" weight="0.13335988" />
+      <window_info content_ui="combo" id="Project" order="5" visible="true" weight="0.13415605" />
       <window_info id="Structure" order="6" side_tool="true" weight="0.25" />
       <window_info anchor="bottom" id="Docker" order="0" show_stripe_button="false" />
       <window_info anchor="bottom" id="Version Control" order="1" />
@@ -444,6 +435,13 @@
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="1" />
+  </component>
+  <component name="XDebuggerManager">
+    <watches-manager>
+      <configuration name="Application">
+        <watch expression="pos" />
+      </configuration>
+    </watches-manager>
   </component>
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/app/App.java">
@@ -477,34 +475,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/util/PositionGenerator.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="265">
-          <caret line="50" column="131" selection-start-line="50" selection-start-column="131" selection-end-line="50" selection-end-column="131" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/game/GameLogic.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="297">
-          <caret line="28" column="48" selection-start-line="28" selection-start-column="48" selection-end-line="28" selection-end-column="48" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/entity/living/animal/Fox.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-420">
           <caret line="40" column="42" selection-start-line="40" selection-start-column="42" selection-end-line="40" selection-end-column="42" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/village/HouseMap.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="577">
-          <caret line="59" column="62" selection-start-line="59" selection-start-column="62" selection-end-line="59" selection-end-column="62" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -588,75 +562,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/entity/Entity.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="80">
-          <caret line="4" column="22" selection-start-line="4" selection-start-column="22" selection-end-line="4" selection-end-column="22" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/characteristic/positionnable/Positionnable.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="140">
-          <caret line="7" column="48" selection-start-line="7" selection-start-column="48" selection-end-line="7" selection-end-column="48" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/characteristic/positionnable/Reachable.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="120">
-          <caret line="6" column="14" selection-start-line="6" selection-start-column="14" selection-end-line="6" selection-end-column="14" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/game/Map.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="637">
-          <caret line="94" column="58" selection-start-line="94" selection-start-column="58" selection-end-line="94" selection-end-column="58" />
-          <folding>
-            <element signature="e#2644#2645#0" expanded="true" />
-            <element signature="e#2659#2660#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/util/MeshFactory.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="560">
           <caret line="31" column="5" lean-forward="true" selection-start-line="31" selection-start-column="5" selection-end-line="31" selection-end-column="5" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ui/gamescene/GameCamera.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2380">
-          <caret line="132" column="58" selection-start-line="132" selection-start-column="58" selection-end-line="132" selection-end-column="58" />
-          <folding>
-            <element signature="e#3971#3972#0" expanded="true" />
-            <element signature="e#4029#4030#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/entity/statics/village/Tipi.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1680">
-          <caret line="121" column="16" selection-start-line="121" selection-start-column="16" selection-end-line="121" selection-end-column="16" />
-          <folding>
-            <element signature="e#2958#2959#0" expanded="true" />
-            <element signature="e#3000#3001#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/visual/Component.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="280">
-          <caret line="21" selection-start-line="21" selection-end-line="21" />
-          <folding>
-            <element signature="e#1491#1492#0" expanded="true" />
-            <element signature="e#1549#1550#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -692,13 +601,107 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/entity/VisibleEntity.java">
+    <entry file="file://$PROJECT_DIR$/entity/living/animal/Beaver.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-643">
-          <caret line="163" column="59" lean-forward="true" selection-start-line="163" selection-start-column="59" selection-end-line="163" selection-end-column="59" />
+        <state relative-caret-position="540">
+          <caret line="44" column="47" selection-start-line="44" selection-start-column="47" selection-end-line="45" selection-end-column="52" />
           <folding>
-            <element signature="e#1236#1261#0" expanded="true" />
-            <element signature="e#1347#1367#0" expanded="true" />
+            <element signature="imports" expanded="true" />
+            <element signature="e#1861#1862#0" expanded="true" />
+            <element signature="e#1890#1891#0" expanded="true" />
+            <element signature="e#2753#2754#0" expanded="true" />
+            <element signature="e#2775#2776#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/entity/living/human/Human.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2620">
+          <caret line="156" column="51" selection-start-line="156" selection-start-column="51" selection-end-line="156" selection-end-column="51" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/visual/Component.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="280">
+          <caret line="21" selection-start-line="21" selection-end-line="21" />
+          <folding>
+            <element signature="e#1491#1492#0" expanded="true" />
+            <element signature="e#1549#1550#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ui/gamescene/GameCamera.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2380">
+          <caret line="132" column="58" selection-start-line="132" selection-start-column="58" selection-end-line="132" selection-end-column="58" />
+          <folding>
+            <element signature="e#3971#3972#0" expanded="true" />
+            <element signature="e#4029#4030#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/characteristic/positionnable/Reachable.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="80">
+          <caret line="4" column="65" selection-start-line="4" selection-start-column="65" selection-end-line="4" selection-end-column="65" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/characteristic/positionnable/Positionnable.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="80">
+          <caret line="4" column="17" selection-start-line="4" selection-start-column="17" selection-end-line="4" selection-end-column="17" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar:///usr/lib/jvm/java-8-openjdk-amd64/jre/lib/ext/jfxrt.jar!/javafx/scene/Parent.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="274">
+          <caret line="62" column="67" selection-start-line="62" selection-start-column="67" selection-end-line="62" selection-end-column="67" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ui/gamescene/GameScene.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1160">
+          <caret line="132" column="9" lean-forward="true" selection-start-line="132" selection-start-column="9" selection-end-line="132" selection-end-column="9" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/util/PositionGenerator.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="460">
+          <caret line="32" column="60" lean-forward="true" selection-start-line="32" selection-start-column="60" selection-end-line="32" selection-end-column="60" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/entity/statics/tree/Tree.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="440">
+          <caret line="58" column="31" selection-start-line="58" selection-start-column="31" selection-end-line="58" selection-end-column="31" />
+          <folding>
+            <element signature="e#1122#1123#0" expanded="true" />
+            <element signature="e#1147#1148#0" expanded="true" />
+            <element signature="e#3870#3871#0" expanded="true" />
+            <element signature="e#3896#3897#0" expanded="true" />
+            <element signature="e#3950#3951#0" expanded="true" />
+            <element signature="e#3965#3966#0" expanded="true" />
+            <element signature="e#4016#4017#0" expanded="true" />
+            <element signature="e#4044#4045#0" expanded="true" />
+            <element signature="e#4098#4099#0" expanded="true" />
+            <element signature="e#4118#4119#0" expanded="true" />
+            <element signature="e#4556#4557#0" expanded="true" />
+            <element signature="e#4574#4575#0" expanded="true" />
+            <element signature="e#4629#4630#0" expanded="true" />
+            <element signature="e#4663#4664#0" expanded="true" />
+            <element signature="e#4717#4718#0" expanded="true" />
+            <element signature="e#4778#4779#0" expanded="true" />
+            <element signature="e#4828#4829#0" expanded="true" />
+            <element signature="e#4862#4863#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -709,71 +712,106 @@
           <caret line="287" column="19" selection-start-line="287" selection-start-column="19" selection-end-line="287" selection-end-column="19" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#5563#5564#0" expanded="true" />
-            <element signature="e#5587#5588#0" expanded="true" />
-            <element signature="e#5849#5850#0" expanded="true" />
-            <element signature="e#5873#5874#0" expanded="true" />
-            <element signature="e#7789#7790#0" expanded="true" />
-            <element signature="e#7842#7843#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/entity/living/animal/Beaver.java">
+    <entry file="file://$PROJECT_DIR$/entity/Entity.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="385">
-          <caret line="44" column="47" lean-forward="true" selection-start-line="44" selection-start-column="47" selection-end-line="45" selection-end-column="52" />
+        <state relative-caret-position="80">
+          <caret line="4" column="22" selection-start-line="4" selection-start-column="22" selection-end-line="4" selection-end-column="22" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/entity/VisibleEntity.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="320">
+          <caret line="63" column="23" selection-start-line="63" selection-start-column="8" selection-end-line="63" selection-end-column="23" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/game/GameLoop.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="480">
+          <caret line="27" selection-start-line="27" selection-end-line="27" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/village/HouseMap.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="540">
+          <caret line="27" column="18" selection-start-line="27" selection-start-column="18" selection-end-line="27" selection-end-column="18" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#1890#1891#0" expanded="true" />
-            <element signature="e#2775#2776#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/game/GameLogic.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="420">
+          <caret line="29" column="17" selection-start-line="29" selection-start-column="17" selection-end-line="29" selection-end-column="17" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/entity/statics/village/Tipi.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="260">
+          <caret line="37" column="29" selection-start-line="37" selection-start-column="29" selection-end-line="37" selection-end-column="29" />
+          <folding>
+            <element signature="e#1036#1037#0" expanded="true" />
+            <element signature="e#1051#1052#0" expanded="true" />
+            <element signature="e#2958#2959#0" expanded="true" />
+            <element signature="e#3000#3001#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/entity/living/human/Player.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1577">
-          <caret line="334" column="22" selection-start-line="334" selection-start-column="22" selection-end-line="334" selection-end-column="22" />
+        <state relative-caret-position="637">
+          <caret line="449" column="5" selection-start-line="449" selection-start-column="5" selection-end-line="449" selection-end-column="5" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/entity/living/human/Human.java">
+    <entry file="file://$PROJECT_DIR$/game/Map.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="597">
-          <caret line="156" column="51" selection-start-line="156" selection-start-column="51" selection-end-line="156" selection-end-column="51" />
+        <state relative-caret-position="265">
+          <caret line="290" column="28" selection-start-line="290" selection-start-column="28" selection-end-line="290" selection-end-column="28" />
           <folding>
-            <element signature="e#1119#1120#0" expanded="true" />
-            <element signature="e#1147#1148#0" expanded="true" />
-            <element signature="e#4198#4199#0" expanded="true" />
-            <element signature="e#4257#4258#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/entity/statics/tree/Tree.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1440">
-          <caret line="55" column="15" selection-start-line="55" selection-start-column="15" selection-end-line="55" selection-end-column="15" />
-          <folding>
-            <element signature="e#1122#1123#0" expanded="true" />
-            <element signature="e#1147#1148#0" expanded="true" />
-            <element signature="e#3664#3665#0" expanded="true" />
-            <element signature="e#3690#3691#0" expanded="true" />
-            <element signature="e#3744#3745#0" expanded="true" />
-            <element signature="e#3759#3760#0" expanded="true" />
-            <element signature="e#3810#3811#0" expanded="true" />
-            <element signature="e#3838#3839#0" expanded="true" />
-            <element signature="e#3892#3893#0" expanded="true" />
-            <element signature="e#3912#3913#0" expanded="true" />
-            <element signature="e#4350#4351#0" expanded="true" />
-            <element signature="e#4368#4369#0" expanded="true" />
-            <element signature="e#4423#4424#0" expanded="true" />
-            <element signature="e#4457#4458#0" expanded="true" />
-            <element signature="e#4511#4512#0" expanded="true" />
-            <element signature="e#4572#4573#0" expanded="true" />
-            <element signature="e#4622#4623#0" expanded="true" />
-            <element signature="e#4656#4657#0" expanded="true" />
+            <element signature="e#9234#9235#0" expanded="true" />
+            <element signature="e#9269#9270#0" expanded="true" />
+            <element signature="e#9357#9358#0" expanded="true" />
+            <element signature="e#9421#9422#0" expanded="true" />
+            <element signature="e#9489#9490#0" expanded="true" />
+            <element signature="e#9516#9517#0" expanded="true" />
+            <element signature="e#9578#9579#0" expanded="true" />
+            <element signature="e#9605#9606#0" expanded="true" />
+            <element signature="e#9957#9958#0" expanded="true" />
+            <element signature="e#9984#9985#0" expanded="true" />
+            <element signature="e#14757#14758#0" expanded="true" />
+            <element signature="e#14786#14787#0" expanded="true" />
+            <element signature="e#15632#15633#0" expanded="true" />
+            <element signature="e#17580#17581#0" expanded="true" />
+            <element signature="e#17719#17720#0" expanded="true" />
+            <element signature="e#17842#17843#0" expanded="true" />
+            <element signature="e#17900#17901#0" expanded="true" />
+            <element signature="e#18406#18407#0" expanded="true" />
+            <element signature="e#18445#18446#0" expanded="true" />
+            <element signature="e#18497#18498#0" expanded="true" />
+            <element signature="e#18537#18538#0" expanded="true" />
+            <element signature="e#18691#18692#0" expanded="true" />
+            <element signature="e#18720#18721#0" expanded="true" />
+            <element signature="e#18776#18777#0" expanded="true" />
+            <element signature="e#18802#18803#0" expanded="true" />
+            <element signature="e#19647#19648#0" expanded="true" />
+            <element signature="e#19671#19672#0" expanded="true" />
+            <element signature="e#20723#20724#0" expanded="true" />
+            <element signature="e#20744#20745#0" expanded="true" />
+            <element signature="e#20995#20996#0" expanded="true" />
+            <element signature="e#21025#21026#0" expanded="true" />
+            <element signature="e#21152#21153#0" expanded="true" />
+            <element signature="e#21180#21181#0" expanded="true" />
           </folding>
         </state>
       </provider>

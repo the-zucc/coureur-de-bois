@@ -3,7 +3,6 @@ package game;
 import java.util.ArrayList;
 import java.util.ConcurrentModificationException;
 import java.util.Hashtable;
-import java.util.Iterator;
 import java.util.concurrent.ThreadLocalRandom;
 
 import app.App;
@@ -23,7 +22,6 @@ import entity.statics.tree.PineTree;
 import entity.statics.village.Tipi;
 import entity.wearable.LongSword;
 import entity.wearable.StandardSword;
-import entity.wearable.WeaponEntity;
 import entity.wearable.WoodCuttersAxe;
 import entity.statics.tree.Tree;
 import game.settings.Preferences;
@@ -31,6 +29,7 @@ import javafx.application.Platform;
 import javafx.geometry.Point2D;
 import javafx.geometry.Point3D;
 import javafx.scene.Group;
+import javafx.scene.Parent;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
@@ -43,20 +42,20 @@ import javafx.scene.transform.Rotate;
 import javafx.scene.transform.Translate;
 import perlin.PerlinNoise;
 import ui.gamescene.GameCamera;
+import ui.gamescene.GameScene;
 import util.MessageCallback;
 import util.PositionGenerator;
-import village.HouseMap;
 import village.Village;
 import visual.Component;
 
 public class Map implements ComponentOwner, Updateable, MessageReceiver{
 	
-	private static Map instance;
+	private static Map mainMap;
 	
-	public static Map getInstance() {
-		if (instance == null) {
+	public static Map getMainMap() {
+		if (mainMap == null) {
 			try {
-				instance = new Map(Preferences.getMapWidth(),
+				mainMap = new Map(Preferences.getMapWidth(),
 						Preferences.getMapHeight(),
 						Preferences.getMapDetail(),
 						Preferences.getMapDetail(),
@@ -68,10 +67,10 @@ public class Map implements ComponentOwner, Updateable, MessageReceiver{
 						Preferences.getVillageVillagerCount(),
 						500);
 			}catch(Exception e){
-				return getInstance();
+				return getMainMap();
 			}
 		}
-		return instance;
+		return mainMap;
 	}
 
 	private Player currentPlayer;
@@ -156,19 +155,14 @@ public class Map implements ComponentOwner, Updateable, MessageReceiver{
 	public ArrayList<Tree> getTrees(){
 		return trees;
 	}
+
 	private Map currentMap;
+	public Map getCurrentMap() {
+		return currentMap;
+	}
+
 	public Map() throws Exception{
-		this(Preferences.getMapWidth(),
-				Preferences.getMapHeight(),
-				Preferences.getMapDetail(),
-				Preferences.getMapDetail(),
-				Preferences.getWaterLevel(),
-				Preferences.getTreeCount(),
-				Preferences.getVillageCount(),
-				Preferences.getVillageRadius(),
-				Preferences.getVillageTipiCount(),
-				Preferences.getVillageVillagerCount(),
-				1250);
+
 	}
 	public Map(double mapWidth,
 			double mapHeight,
@@ -197,7 +191,7 @@ public class Map implements ComponentOwner, Updateable, MessageReceiver{
 		collideables = new ArrayList<Collideable>();
 		collisionCols = (int)mapWidth/collisionMapDivisionWidth;
 		collisionRows = (int)mapHeight/collisionMapDivisionHeight;
-		collisionMap = new ArrayList[collisionRows][collisionRows];
+		collisionMap = new ArrayList[collisionRows][collisionCols];
 		for(int i = 0; i < collisionRows; i++){
 			for(int j = 0; j < collisionCols; j++){
 				collisionMap[i][j] = new ArrayList<Collideable>();
@@ -284,8 +278,31 @@ public class Map implements ComponentOwner, Updateable, MessageReceiver{
         	removeEntity((Entity)params[0]);
         });
         accept("pause_enter_house", (params)->{
-        	//this.currentMap = (params[0]);
+        	if(params[0] instanceof Tipi){
+        		setCurrentMap(((Tipi)params[0]).getHouseMap());
+			}
+        	else{
+				System.out.println(params[0].getClass().getName()+" "+params[0]+" is not a map.");
+			}
 		});
+	}
+
+	private void setCurrentMap(Map map) {
+		//TODO fix this asap
+		this.currentMap = map;
+		Component c = getComponent();
+		Group parent = (Group)c.getParent();
+		if(parent != null){
+			parent.getChildren().remove(c);
+			try{
+				parent.getChildren().add(map.getComponent());
+			}catch(Exception e){
+
+			}
+			currentPlayer.setMap(map);
+			this.removeEntity(currentPlayer);
+			map.addEntity(currentPlayer);
+		}
 	}
 
 	protected Messenger createMessenger() {
@@ -760,4 +777,5 @@ public class Map implements ComponentOwner, Updateable, MessageReceiver{
 	    getComponent().getChildren().addAll(line);
 	    return line;
 	}
+
 }

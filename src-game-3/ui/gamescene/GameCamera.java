@@ -111,7 +111,7 @@ public class GameCamera extends PerspectiveCamera implements Attachable{
 		if(ar == getReceiver()){
             receiver.getComponent().removeChildComponent(getComponent());
             receiver = null;
-            Map.getInstance().getComponent().addChildComponent(getComponent());
+            Map.getMainMap().getComponent().addChildComponent(getComponent());
         }
 	}
 
