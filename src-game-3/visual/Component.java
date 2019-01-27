@@ -51,6 +51,12 @@ public class Component extends Group implements Positionnable{
 	public Point3D getPosition() {
 		return position;
 	}
+
+	@Override
+	public double distanceFrom(Positionnable p) {
+		return p.getPosition().distance(this.getPosition());
+	}
+
 	@Override
 	public Point2D compute2DPosition(Point3D position3d) {
 		
@@ -65,7 +71,7 @@ public class Component extends Group implements Positionnable{
 		return position2D;
 	}
 	@Override
-	public double distanceFrom(Positionnable2D arg0) {
+	public double distance2DFrom(Positionnable2D arg0) {
 		return arg0.get2DPosition().distance(position2D);
 	}
 }

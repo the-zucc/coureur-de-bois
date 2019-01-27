@@ -1,8 +1,5 @@
 package entity.living.human;
 
-import java.io.IOException;
-import java.util.ArrayList;
-
 import app.App;
 import characteristic.MessageReceiver;
 import characteristic.Messenger;
@@ -11,22 +8,15 @@ import characteristic.attachable.AttachableReceiver;
 import characteristic.interactive.UserControllable;
 import characteristic.positionnable.Collideable;
 import characteristic.positionnable.Positionnable;
-import collision.CollisionBox;
-import collision.SphericalCollisionBox;
 import entity.living.LivingEntity;
 import entity.statics.tree.Tree;
 import game.GameLogic;
 import game.Map;
 import javafx.application.Platform;
-import javafx.fxml.FXMLLoader;
-import javafx.geometry.Point2D;
 import javafx.geometry.Point3D;
 import javafx.scene.Cursor;
-import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Parent;
-import javafx.scene.control.Label;
-import javafx.scene.control.TitledPane;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
@@ -36,9 +26,7 @@ import javafx.scene.shape.Box;
 import javafx.scene.transform.Rotate;
 import ui.gamescene.GameCamera;
 import util.NodeUtils;
-import util.PositionGenerator;
 import visual.Component;
-import visual.LegComponent;
 import entity.wearable.StandardSword;
 
 public class Player extends Human implements UserControllable, AttachableReceiver{
@@ -57,7 +45,7 @@ public class Player extends Human implements UserControllable, AttachableReceive
 						if(params[0] instanceof LivingEntity){
 							if(wieldedWeapon != null) {
 								if(!isDoingAction()) {
-									this.toggleIsDoingAction();
+									this.startDoingAction();
 									addUpdate(()->{
 										this.startMovingTo(((LivingEntity)params[0]).get2DPosition());
 										boolean hasWeapon = this.wieldedWeapon != null;
@@ -75,7 +63,7 @@ public class Player extends Human implements UserControllable, AttachableReceive
 									}, ()->{
 										return ((LivingEntity)params[0]).getHp() <= 0;
 									}, ()->{
-										this.toggleIsDoingAction();
+										this.startDoingAction();
 									});								
 								}
 							}
@@ -85,7 +73,7 @@ public class Player extends Human implements UserControllable, AttachableReceive
 							addUpdate(()->{
 								this.startMovingTo(((Positionnable)params[0]).get2DPosition());							
 							}, ()->{
-								return this.distanceFrom((Positionnable)params[0]) < GameLogic.getMeterLength();
+								return this.distance2DFrom((Positionnable)params[0]) < GameLogic.getMeterLength();
 							}, ()->{
 								
 							});
@@ -324,15 +312,27 @@ public class Player extends Human implements UserControllable, AttachableReceive
 	public void keyAction(KeyEvent ke, boolean keyDown) {
 		// TODO Auto-generated method stub
 		KeyCode code = ke.getCode();
-		if(!isDoingAction()) {
-			if(code.equals(KeyCode.W))
+		switch(code){
+			case W:
 				this.setUp(keyDown);
-			else if(code.equals(KeyCode.A))
+				break;
+			case A:
 				this.setLeft(keyDown);
-			else if(code.equals(KeyCode.S))
+				break;
+			case S:
 				this.setDown(keyDown);
-			else if(code.equals(KeyCode.D))
+				break;
+			case D:
 				this.setRight(keyDown);
+				break;
+			case SHIFT:
+				break;
+			case SPACE:
+				break;
+			case F:
+		}
+		if(isDoingAction() && (ke.equals(KeyCode.W) || ke.equals(KeyCode.A) || ke.equals(KeyCode.S) || ke.equals(KeyCode.D))){
+			cancelMainAction();
 		}
 		if(code.equals(KeyCode.SHIFT))
 			this.setIsRunning(keyDown);

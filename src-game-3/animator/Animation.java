@@ -33,4 +33,7 @@ public class Animation {
 	public void resetTickCount() {
 		tickCount = 0;
 	}
+	public Runnable getJob(){
+		return job;
+	}
 }

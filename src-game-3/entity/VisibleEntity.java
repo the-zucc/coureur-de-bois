@@ -14,6 +14,7 @@ import characteristic.Messenger;
 import characteristic.Updateable;
 import characteristic.interactive.Hoverable;
 import characteristic.positionnable.Collideable;
+import characteristic.positionnable.Positionnable;
 import characteristic.positionnable.Positionnable2D;
 import game.Map;
 import javafx.geometry.Point2D;
@@ -31,26 +32,34 @@ import visual.Component;
 public abstract class VisibleEntity extends Entity implements Updateable, ComponentOwner, MessageReceiver, Animatable{
 	protected Animator animator;
 	private ArrayList<Runnable> additionnalUpdates = new ArrayList<Runnable>();
-	private ArrayList<StopCondition> additionnalUpdatesStopConditions = new ArrayList<StopCondition>();
-	private ArrayList<Runnable> additionnalUpdatesCallbacks = new ArrayList<Runnable>();
-	protected void addUpdate(Runnable job, StopCondition condition, Runnable callback) {
+	private Hashtable<Runnable, StopCondition> additionnalUpdatesStopConditions = new Hashtable<Runnable, StopCondition>();
+	private Hashtable<Runnable, Runnable> additionnalUpdatesCallbacks = new Hashtable<Runnable, Runnable>();
+
+	protected int addUpdate(Runnable job, StopCondition condition, Runnable callback) {
 		additionnalUpdates.add(job);
-		additionnalUpdatesStopConditions.add(condition);
-		additionnalUpdatesCallbacks.add(callback);
+		additionnalUpdatesStopConditions.put(job, condition);
+		additionnalUpdatesCallbacks.put(job, callback);
+		return additionnalUpdates.size()-1;//return the index of the update in the arrayList
+	}
+	protected void removeUpdate(Runnable update){
+		additionnalUpdates.remove(update);
+		additionnalUpdatesStopConditions.remove(update);
+		additionnalUpdatesCallbacks.remove(update);
 	}
 	private void processUpdates() {
 		for(int i = 0; i < additionnalUpdates.size(); i++) {
-			additionnalUpdates.get(i).run();
-			if(additionnalUpdatesStopConditions.get(i).shouldStop()) {
-				additionnalUpdates.remove(i);
-				additionnalUpdatesStopConditions.remove(i);
-				additionnalUpdatesCallbacks.get(i).run();
-				additionnalUpdatesCallbacks.remove(i);
-				i--;
+			Runnable r = additionnalUpdates.get(i);
+			r.run();
+			if(additionnalUpdatesStopConditions.get(r).shouldStop()) {
+				additionnalUpdates.remove(i);//remove the update function pointer
+				additionnalUpdatesStopConditions.remove(r);//remove the stop condition's function pointer
+				additionnalUpdatesCallbacks.get(r).run();//run the callback
+				additionnalUpdatesCallbacks.remove(r);//remove the callback
+				i--;//decrement
 			}
 		}
 	}
-	private Component component;
+	protected Component component;
 	protected Point3D position;
 	protected Point2D position2D;
 	protected Messenger messenger;
@@ -132,6 +141,10 @@ public abstract class VisibleEntity extends Entity implements Updateable, Compon
 	}
 
 	@Override
+	public double distanceFrom(Positionnable p){
+		return p.getPosition().distance(this.getPosition());
+	}
+	@Override
 	public abstract Component buildComponent();
 	
 	@Override
@@ -161,7 +174,7 @@ public abstract class VisibleEntity extends Entity implements Updateable, Compon
 	public Point2D get2DPosition(){
 		return position2D;
 	}
-	public double distanceFrom(Positionnable2D arg0){
+	public double distance2DFrom(Positionnable2D arg0){
 		return position2D.distance(arg0.get2DPosition());
 	}
 	/**
@@ -170,9 +183,9 @@ public abstract class VisibleEntity extends Entity implements Updateable, Compon
 	 */
 	protected abstract Parent buildOnClickedPane();
 	/**
-	 * should be defined in relation to {@link buildOnClickedPane()}. returns the element that has to be clicked by the
+	 * should be defined in relation to buildOnClickedPane(). returns the element that has to be clicked by the
 	 * user in order to dismiss the pane after clicking on the entity.
-	 * @param the pane build by buildOnClickedPane() 
+	 * @param onClickedPane the pane build by buildOnClickedPane()
 	 * @return the Node that has to be clicked to dismiss the pane.
 	 */
 	protected abstract Node getPaneDismissNode(Parent onClickedPane);

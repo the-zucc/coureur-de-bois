@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import characteristic.Messenger;
 import characteristic.positionnable.Collideable;
+import characteristic.positionnable.Reachable;
 import collision.CollisionBox;
 import collision.SphericalCollisionBox;
 import entity.statics.StaticVisibleCollidingEntity;
@@ -21,13 +22,14 @@ import util.NodeUtils;
 import village.HouseMap;
 import visual.Component;
 
-public class Tipi extends StaticVisibleCollidingEntity {
+public class Tipi extends StaticVisibleCollidingEntity implements Reachable {
 
-    private double radius;
+	private final double reachableRadius;
+	private final double radius;
     public double getRadius(){
         return radius;
     }
-    private double height;
+    private final double height;
     public double getHeight(){
         return height;
     }
@@ -41,6 +43,7 @@ public class Tipi extends StaticVisibleCollidingEntity {
         	this.houseMap = buildHouseMap();
         	messenger.send("pause_enter_house", this);
 		});
+        this.reachableRadius = computeReachableRadius();
     }
     protected HouseMap buildHouseMap(){
     	try{
@@ -112,5 +115,15 @@ public class Tipi extends StaticVisibleCollidingEntity {
 	@Override
 	public boolean shouldUpdate() {
 		return true;
+	}
+
+	@Override
+	public double computeReachableRadius() {
+		return 6*GameLogic.getMeterLength();
+	}
+
+	@Override
+	public double getReachableRadius() {
+		return this.reachableRadius;
 	}
 }

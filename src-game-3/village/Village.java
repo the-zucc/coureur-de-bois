@@ -67,7 +67,7 @@ public class Village implements Positionnable2D{
 	}
 
 	@Override
-	public double distanceFrom(Positionnable2D arg0) {
+	public double distance2DFrom(Positionnable2D arg0) {
 		return get2DPosition().distance(arg0.get2DPosition());
 	}
 

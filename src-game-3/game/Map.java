@@ -12,6 +12,7 @@ import characteristic.MessageReceiver;
 import characteristic.Messenger;
 import characteristic.Updateable;
 import characteristic.positionnable.Collideable;
+import characteristic.positionnable.Positionnable;
 import characteristic.positionnable.Positionnable2D;
 import entity.Entity;
 import entity.MovingCollidingEntity;
@@ -65,7 +66,7 @@ public class Map implements ComponentOwner, Updateable, MessageReceiver{
 						Preferences.getVillageRadius(),
 						Preferences.getVillageTipiCount(),
 						Preferences.getVillageVillagerCount(),
-						1250);
+						500);
 			}catch(Exception e){
 				return getInstance();
 			}
@@ -88,6 +89,12 @@ public class Map implements ComponentOwner, Updateable, MessageReceiver{
 	public Point3D getPosition() {
 		return position;
 	}
+
+	@Override
+	public double distanceFrom(Positionnable p) {
+		return p.getPosition().distance(this.getPosition());
+	}
+
 	protected Component component;
 	@Override
 	public Component getComponent() {
@@ -594,7 +601,7 @@ public class Map implements ComponentOwner, Updateable, MessageReceiver{
 	}
 
 	@Override
-	public double distanceFrom(Positionnable2D arg0) {
+	public double distance2DFrom(Positionnable2D arg0) {
 		return Point2D.ZERO.distance(arg0.get2DPosition());
 	}
 

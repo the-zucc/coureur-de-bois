@@ -2,6 +2,7 @@ package ui.gamescene;
 
 import characteristic.attachable.Attachable;
 import characteristic.attachable.AttachableReceiver;
+import characteristic.positionnable.Positionnable;
 import characteristic.positionnable.Positionnable2D;
 import game.Map;
 import javafx.geometry.Point2D;
@@ -128,6 +129,11 @@ public class GameCamera extends PerspectiveCamera implements Attachable{
 	}
 
 	@Override
+	public double distanceFrom(Positionnable p) {
+		return p.getPosition().distance(this.getPosition());
+	}
+
+	@Override
 	public Point3D getPositionRelativeToReceiver() {
 		return relativePosition;
 	}
@@ -180,7 +186,7 @@ public class GameCamera extends PerspectiveCamera implements Attachable{
 	}
 
 	@Override
-	public double distanceFrom(Positionnable2D arg0) {
+	public double distance2DFrom(Positionnable2D arg0) {
 		
 		return get2DPosition().distance(arg0.get2DPosition());
 	}

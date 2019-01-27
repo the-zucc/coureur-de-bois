@@ -13,9 +13,10 @@ import javafx.scene.transform.Rotate;
 import util.MeshFactory;
 import visual.Component;
 
+import java.util.concurrent.ThreadLocalRandom;
+
 public class PineTree extends Tree {
 	private PhongMaterial material;
-	private double scale;
     public PineTree(Point3D position, Map map, Messenger messenger) {
         super(position, map, messenger);
         if(Math.random() > 0.7) {
@@ -34,6 +35,12 @@ public class PineTree extends Tree {
     	trunk.setTranslateY(-trunk.getHeight()/2);
     	trunk.setMaterial(trunkMaterial);
     	returnVal.getChildren().add(trunk);
+        treeScale = ThreadLocalRandom.current().nextDouble(1.5)+1;
+
+        returnVal.setScaleX(treeScale);
+        returnVal.setScaleY(treeScale);
+        returnVal.setScaleZ(treeScale);
+        
         return returnVal;
     }
 

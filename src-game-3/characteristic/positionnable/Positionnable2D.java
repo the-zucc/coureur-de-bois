@@ -7,5 +7,5 @@ public interface Positionnable2D{
 	public Point2D compute2DPosition(Point3D position3D);
 	public void set2DPosition(Point2D position2D);
 	public Point2D get2DPosition();
-	public double distanceFrom(Positionnable2D arg0);
+	public double distance2DFrom(Positionnable2D arg0);
 }

@@ -1,7 +1,6 @@
 package entity.living.animal;
 
 import characteristic.Messenger;
-import characteristic.positionnable.Collideable;
 import collision.CollisionBox;
 import collision.SphericalCollisionBox;
 import entity.drops.HealthBoost;
@@ -28,26 +27,37 @@ public class Beaver extends Animal {
 	public Beaver(Point3D position, Map map, Messenger messenger) {
 		super(position, map, messenger);
 	}
-	
+
+	long treeAttackCooldown = 1000;
+    long lastTreeAttack;
 	protected void goCutDownTree(Tree targetTree) {
 		isCuttingDownTree = true;
-		addUpdate(()->{
-			startMovingTo(targetTree.get2DPosition());
-			setTargetEntity(targetTree);
-		}, ()->{
-			return isAtTarget();
-		}, ()->{
+		this.targetTree = targetTree;
+        setTargetEntity(targetTree);
+		startMainAction(()->{
+            startMovingTo(targetTree.get2DPosition());
+        }, ()->{
+            return isAtTarget();
+        }, ()->{
+		    startMainAction(()->{
+		        long thisTreeAttack = System.currentTimeMillis();
+		        long delay = thisTreeAttack - lastTreeAttack;
+		        if(delay > treeAttackCooldown){
+		            lastTreeAttack = thisTreeAttack;
+		            jump();
+                    messenger.send("cut_down_tree_beaver", targetTree);
+                }
 
-			animator.animate(()->{
-				if(this.getPosition().getY() < map.getHeightAt(get2DPosition())){
-					this.jump();
-				}
-			}, 300).done(()->{
-				messenger.send("cut_down_tree", targetTree, this);
-				Beaver.this.targetTree = null;
-				Beaver.this.isCuttingDownTree = false;
-			});
-		});
+            }, ()->{
+		        if(this.targetTree != null){
+                    return this.targetTree.getHealth() <= 0;
+                }
+		        return false;
+		    }, ()->{
+                Beaver.this.targetTree = null;
+                Beaver.this.isCuttingDownTree = false;
+            });
+        });
 	}
 
 	@Override
@@ -67,7 +77,7 @@ public class Beaver extends Animal {
 				int count = 0;
 				while(targetTree == null && count < 10) {
 					potentialTarget = map.getTrees().get((int)Math.floor(Math.random()*map.getTrees().size()));
-					if(potentialTarget.distanceFrom(this) < 10*GameLogic.getMeterLength()) {
+					if(potentialTarget.distance2DFrom(this) < 10*GameLogic.getMeterLength()) {
 						targetTree = potentialTarget;
 					}
 					count++;

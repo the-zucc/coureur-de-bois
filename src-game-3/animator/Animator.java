@@ -41,6 +41,14 @@ public class Animator {
 		}
 
 	}
+	public void removeAnimation(Runnable animation){
+		for(int i = 0; i < animations.size(); i++){
+			Animation a = animations.get(i);
+			if(a.getJob() == animation){
+				animations.remove(i);
+			}
+		}
+	}
 
     public Animator done(Runnable callback) {
 		currentAnimation.setCallback(callback);

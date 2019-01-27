@@ -5,8 +5,6 @@ import java.io.IOException;
 import characteristic.Messenger;
 import characteristic.interactive.Hoverable;
 import characteristic.positionnable.Collideable;
-import collision.CollisionBox;
-import collision.SphericalCollisionBox;
 import entity.drops.MaxHealthBoost;
 import entity.living.LivingEntity;
 import entity.wearable.LongSword;
@@ -67,7 +65,7 @@ public class Villager extends Human implements Hoverable{
 				}, ()->{
 					return ((Player)params[1]).get2DPosition().distance(get2DPosition()) > 10*GameLogic.getMeterLength() && ((Player)params[1]).getHp() <= 0;
 				}, ()->{
-					this.toggleIsDoingAction();
+					this.startDoingAction();
 				});
 			}
 		});
@@ -105,7 +103,7 @@ public class Villager extends Human implements Hoverable{
 				}, ()->{
 					return ((Player)params[1]).get2DPosition().distance(get2DPosition()) > 10*GameLogic.getMeterLength() && ((Player)params[1]).getHp() <= 0;
 				}, ()->{
-					this.toggleIsDoingAction();
+					this.startDoingAction();
 				});
 			}
 		});
