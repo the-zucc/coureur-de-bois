@@ -13,7 +13,7 @@ public class Preferences {
 	}
 
 
-	private static double mapHeight = 4000;
+	private static double mapHeight = 800;
 	public static double getMapHeight() {
 		return mapHeight;
 	}
@@ -22,7 +22,7 @@ public class Preferences {
 	}
 
 
-	private static double mapWidth = 4000;
+	private static double mapWidth = 800;
 	public static double getMapWidth() {
 		return mapWidth;
 	}
@@ -40,7 +40,7 @@ public class Preferences {
 	}
 
 
-	private static int treeCount = 1500;
+	private static int treeCount = 150;
 	public static int getTreeCount() {
 		return treeCount;
 	}
@@ -58,7 +58,7 @@ public class Preferences {
 	}
 
 
-	private static int villageCount = 8;
+	private static int villageCount = 1;
 	public static void setVillageCount(int villageCount) {
 		Preferences.villageCount = villageCount;
 	}

@@ -65,7 +65,7 @@ public class Map implements ComponentOwner, Updateable, MessageReceiver{
 						Preferences.getVillageRadius(),
 						Preferences.getVillageTipiCount(),
 						Preferences.getVillageVillagerCount(),
-						500);
+						150);
 			}catch(Exception e){
 				return getMainMap();
 			}
@@ -142,9 +142,9 @@ public class Map implements ComponentOwner, Updateable, MessageReceiver{
 	private double waterLevel;
 
 	protected ArrayList<Collideable> collideables;
-	private ArrayList<Updateable> updateables;
-	private ArrayList<Entity> entities;
-	private ArrayList<ComponentOwner> componentOwners;
+	protected ArrayList<Updateable> updateables;
+	protected ArrayList<Entity> entities;
+	protected ArrayList<ComponentOwner> componentOwners;
 	private ArrayList<Village> villages;
 	
 	protected Messenger messenger;
@@ -550,7 +550,7 @@ public class Map implements ComponentOwner, Updateable, MessageReceiver{
 					((MovingCollidingEntity) e).setCollisionMapColum(col);
 				}
 			}catch(ArrayIndexOutOfBoundsException aioobe){
-				
+
 			}
 		}
 		if(e instanceof ComponentOwner) {

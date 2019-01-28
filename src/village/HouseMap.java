@@ -5,6 +5,7 @@ import entity.Entity;
 import entity.living.human.Player;
 import game.Map;
 import game.settings.Preferences;
+import javafx.geometry.Point2D;
 import javafx.geometry.Point3D;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
@@ -17,11 +18,14 @@ import java.util.ArrayList;
 public class HouseMap extends Map {
     protected Point3D spawnPoint;
     public HouseMap() throws Exception{
+        updateables = new ArrayList<>();
+        entities = new ArrayList<>();
+        componentOwners = new ArrayList<>();
         /**
          * setting the map parameters
          */
-        this.mapHeight = Math.random()*10;
-        this.mapHeight = Math.random()*10;
+        this.mapHeight = 100;
+        this.mapWidth = 100;
         /**
          * visual component
          */
@@ -45,6 +49,10 @@ public class HouseMap extends Map {
             }
         }
         spawnPoint = Point3D.ZERO;
+    }
+    @Override
+    public double getHeightAt(Point2D position){
+        return 0;
     }
     @Override
     public Component buildComponent() {

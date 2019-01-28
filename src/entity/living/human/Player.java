@@ -179,7 +179,7 @@ public class Player extends Human implements UserControllable, AttachableReceive
 		for (int i = row-1; i < row+1; i++) {
 			for (int j = column-1; j < column+1; j++) {
 				for (Collideable c : collisionMap[row][column]) {
-					if(c instanceof Reachable){
+					if(c instanceof Reachable) {
 						if(((Reachable) c).getReachableRadius() > distanceFrom(c)){
 							messenger.send("reached_entity", c, this);
 						}
@@ -448,4 +448,5 @@ public class Player extends Human implements UserControllable, AttachableReceive
 	public Attachable getGameCamera() {
 		return gameCamera;
 	}
+
 }

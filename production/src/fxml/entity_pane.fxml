@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TitledPane?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+
+<TitledPane animated="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="220.0" prefWidth="220.0" text="entity_name" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1">
+   <content>
+      <VBox prefHeight="200.0" prefWidth="100.0">
+         <children>
+            <AnchorPane fx:id="hpPane" prefHeight="30.0" prefWidth="198.0">
+               <children>
+                  <Label layoutX="14.0" layoutY="8.0" text="HP:" />
+                  <Label fx:id="hpLabel" layoutX="170.0" layoutY="8.0" text="hp" />
+               </children>
+            </AnchorPane>
+            <AnchorPane fx:id="levelPane" prefHeight="30.0" prefWidth="198.0">
+               <children>
+                  <Label layoutX="14.0" layoutY="8.0" text="Level:" />
+                  <Label fx:id="levelLabel" layoutX="159.0" layoutY="8.0" text="level" />
+               </children>
+            </AnchorPane>
+            <AnchorPane fx:id="dropsPane" prefHeight="115.0" prefWidth="201.0">
+               <children>
+                  <Label layoutX="14.0" layoutY="8.0" text="Drops:" />
+                  <Label fx:id="dropsLabel" layoutX="156.0" layoutY="8.0" text="drops" />
+               </children>
+            </AnchorPane>
+         </children>
+      </VBox>
+   </content>
+</TitledPane>

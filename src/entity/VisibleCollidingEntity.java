@@ -117,4 +117,9 @@ public abstract class VisibleCollidingEntity extends VisibleEntity implements Co
 		super.update(secondsPassed);
 		getCollisionBox().update();
 	}
+	@Override
+	public void setMap(Map map){
+		getCollisionBox().setMap(map);
+		super.setMap(map);
+	}
 }

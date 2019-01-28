@@ -15,6 +15,9 @@ public abstract class CollisionBox {
 		return tooBigForCollisionOptimization;
 	}
 	protected Map map;
+	public void setMap(Map map){
+	    this.map = map;
+    }
 	public CollisionBox(Collideable collideable, Map map){
 		this.tooBigForCollisionOptimization = isTooBigForCollisionOptimization();
 		this.collideable = collideable;

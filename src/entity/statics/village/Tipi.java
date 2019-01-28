@@ -52,11 +52,10 @@ public class Tipi extends StaticVisibleCollidingEntity implements Reachable {
     }
     protected HouseMap buildHouseMap(){
     	try{
-			HouseMap map = new HouseMap();
+			return new HouseMap();
 		}catch(Exception e){
-
+    		return null;
 		}
-    	return null;//TODO remove this asap
 	}
     @Override
     public Component buildComponent() {
