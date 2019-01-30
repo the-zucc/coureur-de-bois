@@ -58,7 +58,7 @@ public abstract class GravityAffectedCollidingEntity extends MovingCollidingEnti
 				next =  next.add(getGravity().multiply(secondsPassed));				
 			}
 		}
-		double floorHeight=Map.getMainMap().getHeightAt(PositionGenerator.convert2D(next));
+		double floorHeight=this.map.getHeightAt(PositionGenerator.convert2D(next));
 		if(next.getY() > floorHeight){
 			next = new Point3D(next.getX(), floorHeight, next.getZ());
 			resetGravityVector();

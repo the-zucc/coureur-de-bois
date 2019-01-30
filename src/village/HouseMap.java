@@ -3,6 +3,8 @@ package village;
 import characteristic.positionnable.Collideable;
 import entity.Entity;
 import entity.living.human.Player;
+import entity.statics.furniture.Table;
+import game.GameLogic;
 import game.Map;
 import game.settings.Preferences;
 import javafx.geometry.Point2D;
@@ -49,6 +51,7 @@ public class HouseMap extends Map {
             }
         }
         spawnPoint = Point3D.ZERO;
+        addEntity(new Table(Point3D.ZERO.add(GameLogic.getMeterLength(), 0, GameLogic.getMeterLength()), this, getMessenger()));
     }
     @Override
     public double getHeightAt(Point2D position){

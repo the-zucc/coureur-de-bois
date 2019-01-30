@@ -77,6 +77,9 @@ public class Map implements ComponentOwner, Updateable, MessageReceiver{
 	public Player getCurrentPlayer(){
 		return currentPlayer;
 	}
+	public void setCurrentPlayer(Player p){
+		currentPlayer = p;
+	}
 	
 	private Point3D position;
 	@Override
@@ -302,6 +305,7 @@ public class Map implements ComponentOwner, Updateable, MessageReceiver{
 			currentPlayer.setMap(map);
 			this.removeEntity(currentPlayer);
 			map.addEntity(currentPlayer);
+			map.setCurrentPlayer(currentPlayer);
 		}
 	}
 
