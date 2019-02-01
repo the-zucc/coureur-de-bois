@@ -37,7 +37,7 @@ public class Villager extends Human implements Hoverable{
 	    return this.village;
 	}
 
-	public Villager(Point3D position, Map map, Messenger messenger, WeaponEntity e) {
+	public Villager(Point3D position, Map map, Messenger messenger) {
 		super(position, map, messenger, (int)(Math.random()*10)+1);
 		accept("yall_jump", (params)->{
 			jump();
@@ -48,7 +48,7 @@ public class Villager extends Human implements Hoverable{
         	}
         });
 		accept("player_position", (params)->{
-			if(((Point2D)params[0]).distance(get2DPosition()) < 10*GameLogic.getMeterLength()) {
+			if(this.map == Map.getMainMap() && Math.random() > 0.3 && ((Point2D)params[0]).distance(get2DPosition()) < 10*GameLogic.getMeterLength()) {
 				addUpdate(()->{
 					boolean hasWeapon = this.wieldedWeapon != null;
 					double maxDist;
@@ -127,28 +127,30 @@ public class Villager extends Human implements Hoverable{
 	public void updateActions(double secondsPassed) {
 	    double actionChoiceTreshold = 0.015;
         double a = Math.random()*100;
-        if (a < actionChoiceTreshold) {
-            setUp(true);
-        } else if (a < 2 * actionChoiceTreshold) {
-            setUp(false);
-        } else if (a < 3 * actionChoiceTreshold) {
-            setDown(true);
-        } else if (a < 4 * actionChoiceTreshold) {
-            setDown(false);
-        } else if (a < 5 * actionChoiceTreshold) {
-            setLeft(true);
-        } else if (a < 6 * actionChoiceTreshold) {
-            setLeft(false);
-        } else if (a < 7 * actionChoiceTreshold) {
-            setRight(true);
-        } else if (a < 8 * actionChoiceTreshold) {
-            setRight(false);
-        } else if (a < 9 * actionChoiceTreshold) {
-			startMovingTo(village.get2DPosition());
-		} else {
-            double mapWidth = Map.getMainMap().getMapWidth();
-            if(getPosition().getX() > mapWidth/2 || getPosition().getX() < -mapWidth/2)
+        if(this.map == Map.getMainMap()){
+            if (a < actionChoiceTreshold) {
+                setUp(true);
+            } else if (a < 2 * actionChoiceTreshold) {
+                setUp(false);
+            } else if (a < 3 * actionChoiceTreshold) {
+                setDown(true);
+            } else if (a < 4 * actionChoiceTreshold) {
+                setDown(false);
+            } else if (a < 5 * actionChoiceTreshold) {
+                setLeft(true);
+            } else if (a < 6 * actionChoiceTreshold) {
+                setLeft(false);
+            } else if (a < 7 * actionChoiceTreshold) {
+                setRight(true);
+            } else if (a < 8 * actionChoiceTreshold) {
+                setRight(false);
+            } else if (a < 9 * actionChoiceTreshold) {
                 startMovingTo(village.get2DPosition());
+            } else {
+                double mapWidth = Map.getMainMap().getMapWidth();
+                if(getPosition().getX() > mapWidth/2 || getPosition().getX() < -mapWidth/2)
+                    startMovingTo(village.get2DPosition());
+            }
         }
 	}
 

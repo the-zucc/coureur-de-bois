@@ -15,6 +15,7 @@ import characteristic.positionnable.Positionnable;
 import characteristic.positionnable.Positionnable2D;
 import entity.Entity;
 import entity.MovingCollidingEntity;
+import entity.VisibleEntity;
 import entity.living.animal.Beaver;
 import entity.living.animal.Fox;
 import entity.living.human.Player;
@@ -294,6 +295,7 @@ public class Map implements ComponentOwner, Updateable, MessageReceiver{
 		//TODO fix this asap
 		this.currentMap = map;
 		Component c = getComponent();
+
 		Group parent = (Group)c.getParent();
 		if(parent != null){
 			parent.getChildren().remove(c);
@@ -302,6 +304,7 @@ public class Map implements ComponentOwner, Updateable, MessageReceiver{
 			}catch(Exception e){
 
 			}
+			App.getUserInterface().getGameScreen().setFill(Color.BLACK);
 			currentPlayer.setMap(map);
 			this.removeEntity(currentPlayer);
 			map.addEntity(currentPlayer);
@@ -539,6 +542,9 @@ public class Map implements ComponentOwner, Updateable, MessageReceiver{
 	}
 
     public void addEntity(Entity e){
+		if(e instanceof VisibleEntity){
+			((VisibleEntity) e).setMap(this);
+		}
 		if(e instanceof Updateable){
 			updateables.add(((Updateable)e));
 		}

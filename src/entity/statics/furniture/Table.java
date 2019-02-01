@@ -9,9 +9,13 @@ import game.GameLogic;
 import game.Map;
 import javafx.geometry.Point3D;
 import javafx.scene.Cursor;
+import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.paint.Color;
+import javafx.scene.paint.Material;
+import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.Box;
 import util.IdMaker;
 import visual.Component;
@@ -33,20 +37,32 @@ public class Table extends StaticVisibleCollidingEntity {
 
     @Override
     public Component buildComponent() {
-        Component returnVal = new Component(IdMaker.next());
+        Component returnVal = new Component(getId());
+        Group table = buildTableWithLegs(1.0, 1.0, 0.5, 0.2, new PhongMaterial(Color.BISQUE));
+        returnVal.getChildren().add(table);
+        return returnVal;
+    }
+    public static Group buildTableWithLegs(double widthInMeters,
+                                           double lengthInMeters,
+                                           double heightInMeters,
+                                           double thicknessInMeters, Material material){
 
-        double tableTopThickness = 0.2*GameLogic.getMeterLength();
-        double tableTopWidth = 1.5*GameLogic.getMeterLength();
-        double tableTopLength = 1.0*GameLogic.getMeterLength();
+        double tableTopThickness = thicknessInMeters*GameLogic.getMeterLength();
+        double tableTopWidth = widthInMeters*GameLogic.getMeterLength();
+        double tableTopLength = lengthInMeters*GameLogic.getMeterLength();
+        double tableHeight = heightInMeters*GameLogic.getMeterLength();
+
+        Group returnVal = new Group();
 
         Box tableTop = new Box(tableTopWidth, tableTopThickness, tableTopLength);
-        double tableHeight = GameLogic.getMeterLength()/2;
         tableTop.setTranslateY(-(tableHeight+tableTop.getHeight()/2));
+        tableTop.setMaterial(material);
         Box[] tableLegs =  new Box[4];
         double tableLegThickness = 0.10*GameLogic.getMeterLength();
         for(int i = 0; i < 4; i++){
             tableLegs[i] = new Box(tableLegThickness, tableHeight, tableLegThickness);
             tableLegs[i].setTranslateY(-(tableHeight/2));
+            tableLegs[i].setMaterial(material);
         }
         tableLegs[0].setTranslateX(-(tableTopWidth/2 - tableLegThickness/2));
         tableLegs[0].setTranslateZ(-(tableTopLength/2 - tableLegThickness/2));
@@ -97,7 +113,7 @@ public class Table extends StaticVisibleCollidingEntity {
 
     @Override
     public boolean shouldUpdate() {
-        return false;
+        return true;
     }
 
     @Override

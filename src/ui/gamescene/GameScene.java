@@ -212,4 +212,7 @@ public class GameScene extends SubScene implements MessageReceiver, Updateable{
 	public boolean shouldUpdate() {
 		return true;
 	}
+	public void setBackgroundColor(Color color){
+		this.setFill(color);
+	}
 }

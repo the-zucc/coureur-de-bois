@@ -2,7 +2,10 @@ package village;
 
 import characteristic.positionnable.Collideable;
 import entity.Entity;
+import entity.VisibleEntity;
 import entity.living.human.Player;
+import entity.living.human.Villager;
+import entity.statics.furniture.Chair;
 import entity.statics.furniture.Table;
 import game.GameLogic;
 import game.Map;
@@ -13,6 +16,8 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.MeshView;
 import javafx.scene.shape.TriangleMesh;
+import util.Direction;
+import util.PositionGenerator;
 import visual.Component;
 
 import java.util.ArrayList;
@@ -26,8 +31,8 @@ public class HouseMap extends Map {
         /**
          * setting the map parameters
          */
-        this.mapHeight = 100;
-        this.mapWidth = 100;
+        this.mapHeight = 6*GameLogic.getMeterLength();
+        this.mapWidth = 6*GameLogic.getMeterLength();
         /**
          * visual component
          */
@@ -35,7 +40,7 @@ public class HouseMap extends Map {
         /**
          * messenger functions
          */
-        messenger = createMessenger();
+        messenger = getMainMap().getMessenger();
         listenTo(messenger);
         /**
          *
@@ -51,7 +56,29 @@ public class HouseMap extends Map {
             }
         }
         spawnPoint = Point3D.ZERO;
-        addEntity(new Table(Point3D.ZERO.add(GameLogic.getMeterLength(), 0, GameLogic.getMeterLength()), this, getMessenger()));
+        Point2D random = PositionGenerator.generate2DPositionInRadius(Point2D.ZERO, 3*GameLogic.getMeterLength());
+        Point3D randomPoint = new Point3D(random.getX(), getHeightAt(random), random.getY());
+        addEntity(new Table(randomPoint.add(0, 0, 0),
+                this,
+                getMessenger()));
+        addEntity(new Chair(randomPoint.add(GameLogic.getMeterLength(), 0, 0),
+                this,
+                getMessenger()).rotate(Direction.FACING_WEST));
+        addEntity(new Chair(randomPoint.add(-GameLogic.getMeterLength(), 0, 0),
+                            this,
+                            getMessenger()).rotate(Direction.FACING_EAST)
+                );
+        addEntity(new Chair(randomPoint.add(0, 0, GameLogic.getMeterLength()),
+                this,
+                getMessenger()).rotate(Direction.FACING_SOUTH)
+        );
+        addEntity(new Chair(randomPoint.add(0, 0, -GameLogic.getMeterLength()),
+                this,
+                getMessenger()).rotate(Direction.FACING_NORTH)
+        );
+        addEntity(new Villager(
+                new Point3D(Math.random()*this.mapWidth-this.mapWidth/2, 0, Math.random()*this.mapHeight-this.mapHeight/2),
+                this, getMessenger()));
     }
     @Override
     public double getHeightAt(Point2D position){
@@ -74,7 +101,7 @@ public class HouseMap extends Map {
         mesh.getTexCoords().addAll(0,0);
 
         MeshView meshView = new MeshView(mesh);
-        meshView.setMaterial(new PhongMaterial(new Color(0,0,0,1)));
+        meshView.setMaterial(new PhongMaterial(Color.SADDLEBROWN));
         returnVal.getChildren().add(meshView);
         return returnVal;
     }
@@ -83,6 +110,8 @@ public class HouseMap extends Map {
         if(e instanceof Player){
             ((Player) e).setPosition(this.spawnPoint);
         }
+        if(e instanceof VisibleEntity)
+            ((VisibleEntity) e).setMap(this);
         super.addEntity(e);
     }
 }
