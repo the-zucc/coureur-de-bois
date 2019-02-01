@@ -1,23 +1,21 @@
 package village;
 
 import java.util.ArrayList;
-import java.util.concurrent.ThreadLocalRandom;
 
 import characteristic.positionnable.*;
 import entity.living.human.Villager;
-import entity.statics.village.Tipi;
+import entity.statics.village.House;
 import game.Map;
 import javafx.geometry.Point2D;
 import javafx.geometry.Point3D;
 import util.EntityFactory;
-import util.PositionGenerator;
 
 public class Village implements Positionnable2D{
 	private Point3D position;
 	private ArrayList<Villager> villagers;
-	private ArrayList<Tipi> tipis;
-	public ArrayList<Tipi> getTipis() {
-		return tipis;
+	private ArrayList<House> houses;
+	public ArrayList<House> getHouses() {
+		return houses;
 	}
 
 	private Point2D position2D;
@@ -27,7 +25,7 @@ public class Village implements Positionnable2D{
 		this.radius = radius;
 		this.position2D = position2D;
 		villagers = new ArrayList<Villager>();
-		tipis = new ArrayList<Tipi>();
+		houses = new ArrayList<House>();
 
 		for (int i = 0; i < villagerCount; i++) {
 			double x, y, z;
@@ -35,8 +33,8 @@ public class Village implements Positionnable2D{
 			villagers.add(v);
 		}
 		for (int i = 0; i < tipiCount; i++) {
-			Tipi t = EntityFactory.buildTipiAroundVillage(this, m);
-			tipis.add(t);
+			House t = EntityFactory.buildTipiAroundVillage(this, m);
+			houses.add(t);
 		}
 
 	}
@@ -45,7 +43,7 @@ public class Village implements Positionnable2D{
 		for (Villager v :villagers) {
 			m.addEntity(v);
 		}
-		for (Tipi t:tipis) {
+		for (House t: houses) {
 			m.addEntity(t);
 		}
 	}

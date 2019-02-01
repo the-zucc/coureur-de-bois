@@ -1,8 +1,7 @@
 package util;
 
-import entity.Entity;
 import entity.living.human.Villager;
-import entity.statics.village.Tipi;
+import entity.statics.village.House;
 import game.Map;
 import javafx.geometry.Point3D;
 import village.Village;
@@ -13,9 +12,9 @@ public class EntityFactory {
         Villager returnVal = new Villager(position, map, map.getMessenger(), v);
         return returnVal;
     }
-    public static Tipi buildTipiAroundVillage(Village v, Map map){
+    public static House buildTipiAroundVillage(Village v, Map map){
         Point3D position = PositionGenerator.getFloorPosition(PositionGenerator.generateTipiPositionInVillage(v), map);
-        Tipi returnVal = new Tipi(position, map, map.getMessenger());
+        House returnVal = new House(position, map, map.getMessenger());
         return returnVal;
     }
 }

@@ -2,8 +2,7 @@ package util;
 
 import java.util.ArrayList;
 
-import characteristic.positionnable.Positionnable2D;
-import entity.statics.village.Tipi;
+import entity.statics.village.House;
 import game.Map;
 import javafx.geometry.Point2D;
 import javafx.geometry.Point3D;
@@ -71,8 +70,8 @@ public class PositionGenerator {
 		do {
 			positionInvalid = false;
 			pos = generate2DPositionInRadius(v.get2DPosition(), v.getRadius());
-			for (Tipi t :
-					v.getTipis()) {
+			for (House t :
+					v.getHouses()) {
 				if(t.get2DPosition().distance(pos) < t.getRadius()){
 					positionInvalid = true;
 				}

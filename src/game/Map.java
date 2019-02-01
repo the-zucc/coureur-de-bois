@@ -20,7 +20,7 @@ import entity.living.animal.Beaver;
 import entity.living.animal.Fox;
 import entity.living.human.Player;
 import entity.statics.tree.PineTree;
-import entity.statics.village.Tipi;
+import entity.statics.village.House;
 import entity.wearable.LongSword;
 import entity.wearable.StandardSword;
 import entity.wearable.WoodCuttersAxe;
@@ -30,7 +30,6 @@ import javafx.application.Platform;
 import javafx.geometry.Point2D;
 import javafx.geometry.Point3D;
 import javafx.scene.Group;
-import javafx.scene.Parent;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
@@ -43,7 +42,6 @@ import javafx.scene.transform.Rotate;
 import javafx.scene.transform.Translate;
 import perlin.PerlinNoise;
 import ui.gamescene.GameCamera;
-import ui.gamescene.GameScene;
 import util.MessageCallback;
 import util.PositionGenerator;
 import village.Village;
@@ -243,7 +241,7 @@ public class Map implements ComponentOwner, Updateable, MessageReceiver{
 		}
 		for (int i = 0; i < tipiCount; i++) {
 			Point3D pos = PositionGenerator.generateRandom3DPositionOnFloor(this);
-			addEntity(new Tipi(pos, this, messenger));
+			addEntity(new House(pos, this, messenger));
 		}
 		for(int i= 0; i < villageCount; i++){
 			Point2D villagePos = PositionGenerator.generate2DPositionNotInVillages(this, villages);
@@ -282,8 +280,8 @@ public class Map implements ComponentOwner, Updateable, MessageReceiver{
         	removeEntity((Entity)params[0]);
         });
         accept("pause_enter_house", (params)->{
-        	if(params[0] instanceof Tipi){
-        		setCurrentMap(((Tipi)params[0]).getHouseMap());
+        	if(params[0] instanceof House){
+        		setCurrentMap(((House)params[0]).getHouseMap());
 			}
         	else{
 				System.out.println(params[0].getClass().getName()+" "+params[0]+" is not a map.");
