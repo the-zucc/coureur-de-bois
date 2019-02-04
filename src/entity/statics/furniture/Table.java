@@ -107,7 +107,7 @@ public class Table extends StaticVisibleCollidingEntity {
     }
 
     @Override
-    public double computeCollidingWeight() {
+    public float computeCollidingWeight() {
         return 0;
     }
 

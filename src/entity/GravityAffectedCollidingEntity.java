@@ -50,7 +50,7 @@ public abstract class GravityAffectedCollidingEntity extends MovingCollidingEnti
 	/**
 	 * computes the next position. uses the superclass' method, but adds gravity to the returned value.
 	 */
-	public Point3D computeNextPosition(double secondsPassed){
+	public Point3D computeNextPosition(float secondsPassed){
 		updateGravityVector(secondsPassed);
 		Point3D next = super.computeNextPosition(secondsPassed);
 		if(next != null){
@@ -58,7 +58,7 @@ public abstract class GravityAffectedCollidingEntity extends MovingCollidingEnti
 				next =  next.add(getGravity().multiply(secondsPassed));				
 			}
 		}
-		double floorHeight=this.map.getHeightAt(PositionGenerator.convert2D(next));
+		float floorHeight = this.map.getHeightAt(PositionGenerator.convert2D(next));
 		if(next.getY() > floorHeight){
 			next = new Point3D(next.getX(), floorHeight, next.getZ());
 			resetGravityVector();
@@ -68,7 +68,8 @@ public abstract class GravityAffectedCollidingEntity extends MovingCollidingEnti
 		}
 		return position;
 	}
-	public void update(double secondsPassed){
+	@Override
+	public void update(float secondsPassed){
 		super.update(secondsPassed);
 	}
 }

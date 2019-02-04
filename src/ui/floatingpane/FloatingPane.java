@@ -45,8 +45,8 @@ public abstract class FloatingPane extends Group implements Positionnable2D {
 		return position2D;
 	}
 	@Override
-	public double distance2DFrom(Positionnable2D arg0) {
-		return arg0.get2DPosition().distance(get2DPosition());
+	public float distance2DFrom(Positionnable2D arg0) {
+		return (float)arg0.get2DPosition().distance(get2DPosition());
 	}
 	
 }

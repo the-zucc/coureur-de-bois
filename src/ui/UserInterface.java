@@ -27,7 +27,7 @@ public class UserInterface extends Scene implements Updateable {
 	private InputHandler inputHandler;
 	
 
-	public UserInterface(double width, double height) {
+	public UserInterface(float width, float height) {
 		super(new Group(), width, height, false, SceneAntialiasing.DISABLED);
 		uiRoot = (Group)getRoot();
 		subScenes = new Hashtable<String, SubScene>();
@@ -37,7 +37,7 @@ public class UserInterface extends Scene implements Updateable {
 	}
 
 	@Override
-	public void update(double secondsPassed) {
+	public void update(float secondsPassed) {
 		
 	}
 	public void setMapAndBindControls(Map map){

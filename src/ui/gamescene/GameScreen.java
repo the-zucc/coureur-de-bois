@@ -26,14 +26,14 @@ public class GameScreen extends SubScene implements Updateable{
     	return root;
     }
     private ProgressBar manaBar;
-    public void showNewMana(double mana, double maxMana) {
+    public void showNewMana(float mana, float maxMana) {
     	manaBar.setProgress(mana/maxMana);
     }
     private ProgressBar hpBar;
-    public void showNewHP(double hp, double maxHp) {
+    public void showNewHP(float hp, float maxHp) {
     	hpBar.setProgress(hp/maxHp);
     }
-    public GameScreen(double w, double h, GameScene gs, Stage window){
+    public GameScreen(float w, float h, GameScene gs, Stage window){
         super(new Group(),w,h,false, SceneAntialiasing.DISABLED);
         try {
 			setRoot(FXMLLoader.load(getClass().getResource("/fxml/player_stats_ingame.fxml")));
@@ -76,7 +76,7 @@ public class GameScreen extends SubScene implements Updateable{
     }
 
     @Override
-    public void update(double secondsPassed) {
+    public void update(float secondsPassed) {
 
     }
 
@@ -107,8 +107,8 @@ public class GameScreen extends SubScene implements Updateable{
 		}
 	}
 	public void setupInfoLabel() {
-		double hSpacing = 4;
-		double vSpacing = 2;
+		float hSpacing = 4;
+		float vSpacing = 2;
 		cursorInfoLabel.setTranslateX(hSpacing);
 		cursorInfoLabel.setTranslateY(vSpacing);
 		this.setOnMouseMoved((e)->{

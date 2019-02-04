@@ -81,7 +81,7 @@ public class HouseMap extends Map {
                 this, getMessenger()));
     }
     @Override
-    public double getHeightAt(Point2D position){
+    public float getHeightAt(Point2D position){
         return 0;
     }
     @Override

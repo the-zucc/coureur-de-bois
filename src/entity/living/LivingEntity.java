@@ -20,8 +20,8 @@ import visual.Component;
 public abstract class LivingEntity extends GravityAffectedCollidingEntity implements ComponentUpdateable {
 
     //private Point3D gravity;
-    protected double hp;
-    protected double maxHp;
+    protected float hp;
+    protected float maxHp;
     protected boolean up;
     protected boolean down;
     protected boolean left;
@@ -31,7 +31,7 @@ public abstract class LivingEntity extends GravityAffectedCollidingEntity implem
     private Point3D oldMovement;
     private Point3D jumpVector = new Point3D(0, -40, 0);
     private Point2D target;
-    protected double rotationAngle;
+    protected float rotationAngle;
     private boolean isAtTarget = false;
     private Positionnable targetEntity = null;
 
@@ -59,7 +59,7 @@ public abstract class LivingEntity extends GravityAffectedCollidingEntity implem
         return this.position2D.distance(this.target) < GameLogic.getMeterLength();
     }
 
-    protected double computeComponentRotationAngle(double rotationAngle) {
+    protected float computeComponentRotationAngle(float rotationAngle) {
         return rotationAngle + 90;
     }
 
@@ -89,7 +89,7 @@ public abstract class LivingEntity extends GravityAffectedCollidingEntity implem
     }
 
     @Override
-    public void update(double secondsPassed) {
+    public void update(float secondsPassed) {
         updateMovementVector();
         processFlinch();
         super.update(secondsPassed);
@@ -99,7 +99,7 @@ public abstract class LivingEntity extends GravityAffectedCollidingEntity implem
             updateComponent();
     }
 
-    public abstract void updateActions(double secondsPassed);
+    public abstract void updateActions(float secondsPassed);
 
     @Override
     public boolean shouldUpdateComponent() {
@@ -171,12 +171,12 @@ public abstract class LivingEntity extends GravityAffectedCollidingEntity implem
      *
      * @return the movement speed to use when computing the movmement vector for this entity.
      */
-    protected abstract double computeMovementSpeed();
+    protected abstract float computeMovementSpeed();
 
-    protected double computeAngleFromMovement(Point3D movement) {
+    protected float computeAngleFromMovement(Point3D movement) {
         if (movement.equals(Point3D.ZERO))
             return rotationAngle;
-        double angle = new Point3D(movement.getX(), 0, movement.getZ()).angle(Rotate.X_AXIS);
+        float angle = (float)new Point3D(movement.getX(), 0, movement.getZ()).angle(Rotate.X_AXIS);
         if (movement.getZ() > 0)
             angle *= -1;
         return angle;

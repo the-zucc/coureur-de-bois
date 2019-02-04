@@ -124,9 +124,9 @@ public class Villager extends Human implements Hoverable{
 	}
 
 	@Override
-	public void updateActions(double secondsPassed) {
-	    double actionChoiceTreshold = 0.015;
-        double a = Math.random()*100;
+	public void updateActions(float secondsPassed) {
+	    float actionChoiceTreshold = 0.015f;
+        float a = (float)Math.random()*100;
         if(this.map == Map.getMainMap()){
             if (a < actionChoiceTreshold) {
                 setUp(true);
@@ -155,7 +155,7 @@ public class Villager extends Human implements Hoverable{
 	}
 
 	@Override
-	protected double computeMovementSpeed() {
+	protected float computeMovementSpeed() {
 		return 6*GameLogic.getMeterLength();
 	}
 	
@@ -207,7 +207,7 @@ public class Villager extends Human implements Hoverable{
 		return get2DPosition().distance(village.get2DPosition());
 	}
 	@Override
-	public double computeCollidingWeight() {
+	public float computeCollidingWeight() {
 		return 1;
 	}
 	@Override
@@ -241,7 +241,7 @@ public class Villager extends Human implements Hoverable{
 	@Override
 	protected void onDeath() {
 		super.onDeath();
-		double meter = GameLogic.getMeterLength();
+		float meter = GameLogic.getMeterLength();
 		messenger.send("drop", Math.random() > 0.85 ? new LongSword(getPosition(), map, messenger) : new MaxHealthBoost(getPosition(), map, messenger));
 	}
 }

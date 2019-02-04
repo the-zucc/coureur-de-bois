@@ -61,12 +61,12 @@ public class Beaver extends Animal {
 	}
 
 	@Override
-	protected double computeSubmissionFactor() {
-		return Math.random()/2;
+	protected float computeSubmissionFactor() {
+		return (float)Math.random()/2;
 	}
 	private double ticks = 0;
 	@Override
-	public void updateActions(double secondsPassed) {
+	public void updateActions(float secondsPassed) {
 		if(targetTree != null) {
 			if(!isCuttingDownTree) {
 				goCutDownTree(targetTree);

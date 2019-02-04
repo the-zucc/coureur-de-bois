@@ -29,7 +29,7 @@ public abstract class DroppableFloatingEntity extends VisibleEntity{
 	protected abstract void onPickup(Object... params);
 	protected double ticksSinceDrop = 0;
 	@Override
-	public void update(double secondsPassed) {
+	public void update(float secondsPassed) {
 		super.update(secondsPassed);
 		if(shouldFloat()){
 			double height = Math.sin(((double)ticksSinceDrop)/10)-GameLogic.getMeterLength();

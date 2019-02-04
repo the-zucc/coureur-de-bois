@@ -18,9 +18,9 @@ public abstract class Animal extends LivingEntity{
 		
 	}
 	@Override
-	public void updateActions(double secondsPassed) {
-		double actionChoiceTreshold = 0.015;
-        double a = Math.random()*100;
+	public void updateActions(float secondsPassed) {
+		float actionChoiceTreshold = 0.015f;
+        float a = (float)Math.random()*100;
         if (a < actionChoiceTreshold) {
             setUp(true);
         } else if (a < 2 * actionChoiceTreshold) {
@@ -48,19 +48,19 @@ public abstract class Animal extends LivingEntity{
         	messenger.send("position_3D", getPosition(), this);
         }
 	}
-	private double submissionFactor;
-	public double getSubmissionFactor() {
+	private float submissionFactor;
+	public float getSubmissionFactor() {
 		return submissionFactor;
 	}
-	protected abstract double computeSubmissionFactor(); 
+	protected abstract float computeSubmissionFactor();
 
 	@Override
-	public double computeCollidingWeight() {
+	public float computeCollidingWeight() {
 		return 1;
 	}
 
 	@Override
-	protected double computeMovementSpeed() {
+	protected float computeMovementSpeed() {
 		return 5*GameLogic.getMeterLength();
 	}
 

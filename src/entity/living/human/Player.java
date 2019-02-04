@@ -103,7 +103,7 @@ public class Player extends Human implements UserControllable, AttachableReceive
 		});
 		accept("max_hp", (params)->{
 			if(params[0] == this) {
-				double hpBoost = (Double)params[1];
+				float hpBoost = (Float)params[1];
 				takeDamage(-hpBoost, null);
 				maxHp = maxHp+hpBoost;
 			}
@@ -169,7 +169,7 @@ public class Player extends Human implements UserControllable, AttachableReceive
 	}
 
 	@Override
-	public void updateActions(double secondsPassed){
+	public void updateActions(float secondsPassed){
 		messenger.send("player_position",get2DPosition(), this);
 		messenger.send("position_3D",getPosition(), this);
 		Point2D position = get2DPosition();
@@ -315,10 +315,10 @@ public class Player extends Human implements UserControllable, AttachableReceive
 
 
 	@Override
-	protected double computeMovementSpeed() {
-		double speed = 15*GameLogic.getMeterLength();
+	protected float computeMovementSpeed() {
+		float speed = 15*GameLogic.getMeterLength();
 		if(isRunning())
-			return speed*1.5;
+			return speed*1.5f;
 		return speed;
 	}
 
@@ -383,7 +383,7 @@ public class Player extends Human implements UserControllable, AttachableReceive
 	}
 
 	@Override
-	public double computeCollidingWeight() {
+	public float computeCollidingWeight() {
 		return 1;
 	}
 
@@ -440,8 +440,8 @@ public class Player extends Human implements UserControllable, AttachableReceive
 	private double mouseX = 0;
 	private double mouseY = 0;
 	@Override
-	protected double computeAngleFromMovement(Point3D movement) {
-		double ang = Math.toDegrees(Math.atan2(mouseY, mouseX));
+	protected float computeAngleFromMovement(Point3D movement) {
+		float ang = (float)Math.toDegrees(Math.atan2(mouseY, mouseX));
 		return ang;
 	}
 	@Override

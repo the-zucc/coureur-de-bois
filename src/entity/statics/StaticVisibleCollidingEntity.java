@@ -18,7 +18,7 @@ public abstract class StaticVisibleCollidingEntity extends VisibleCollidingEntit
 	public abstract Component buildComponent();
 
 	@Override
-	public Point3D computeNextPosition(double secondsPassed) {
+	public Point3D computeNextPosition(float secondsPassed) {
 		return position;
 	}
 

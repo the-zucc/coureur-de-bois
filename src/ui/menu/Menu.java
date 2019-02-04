@@ -23,8 +23,8 @@ public class Menu extends SubScene {
 	
 	private static String BUTTONTEXT_ENABLED = "Enabled";
 	private static String BUTTONTEXT_DISABLED = "Disabled";
-	private static double TOGGLEBUTTON_WIDTH = 75;
-	private static double TOGGLEBUTTON_HEIGHT = 25;
+	private static float TOGGLEBUTTON_WIDTH = 75;
+	private static float TOGGLEBUTTON_HEIGHT = 25;
 	
 	private Group menuRoot;
 	
@@ -207,7 +207,7 @@ public class Menu extends SubScene {
 	private void action_setGamePreferences(){
 		if(mapWidthTextField.getText().length() > 0){
 			try{
-				double mapWidth = Double.parseDouble(mapWidthTextField.getText());
+				float mapWidth = Float.parseFloat(mapWidthTextField.getText());
 				Preferences.setMapWidth(mapWidth);
 			}catch(Exception e){
 				System.out.println("invalid map width.");
@@ -215,7 +215,7 @@ public class Menu extends SubScene {
 		}
 		if(mapHeightTextField.getText().length() > 0){
 			try{
-				double mapHeight = Double.parseDouble(mapHeightTextField.getText());
+				float mapHeight = Float.parseFloat(mapHeightTextField.getText());
 				System.out.println("mapHeight read: "+mapHeight);
 				Preferences.setMapHeight(mapHeight);
 			}catch(Exception e){
@@ -240,7 +240,7 @@ public class Menu extends SubScene {
 		}
 		if(villageRadiusTextField.getText().length() > 0){
 			try{
-				double villageRadius = Double.parseDouble(villageRadiusTextField.getText());
+				float villageRadius = Float.parseFloat(villageRadiusTextField.getText());
 				Preferences.setVillageRadius(villageRadius);
 			}catch(Exception e){
 				System.out.println("invalid village radius.");

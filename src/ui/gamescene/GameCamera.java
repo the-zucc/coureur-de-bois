@@ -15,7 +15,7 @@ import visual.Component;
 public class GameCamera extends PerspectiveCamera implements Attachable{
 
 	private Component component;
-	private double dist;
+	private float dist;
 	private AttachableReceiver receiver;
 	private Point3D relativePosition;
 	private Point3D position;
@@ -25,9 +25,9 @@ public class GameCamera extends PerspectiveCamera implements Attachable{
 	private Point3D accelZ;
 	private Map map;
 	private Point2D position2D;
-	private double angle;
+	private float angle;
 	
-	public GameCamera(double dist, AttachableReceiver ar, Map map){
+	public GameCamera(float dist, AttachableReceiver ar, Map map){
 		super(true);
 		
 		position=null;
@@ -57,7 +57,7 @@ public class GameCamera extends PerspectiveCamera implements Attachable{
 	}
 
 	@Override
-	public void update(double secondsPassed) {
+	public void update(float secondsPassed) {
 		/*
 		Point3D position = localToScene(Point3D.ZERO);
 		double heightParam = 5*GameLogic.getMeterLength();
@@ -129,8 +129,8 @@ public class GameCamera extends PerspectiveCamera implements Attachable{
 	}
 
 	@Override
-	public double distanceFrom(Positionnable p) {
-		return p.getPosition().distance(this.getPosition());
+	public float distanceFrom(Positionnable p) {
+		return (float)p.getPosition().distance(this.getPosition());
 	}
 
 	@Override
@@ -186,9 +186,9 @@ public class GameCamera extends PerspectiveCamera implements Attachable{
 	}
 
 	@Override
-	public double distance2DFrom(Positionnable2D arg0) {
+	public float distance2DFrom(Positionnable2D arg0) {
 		
-		return get2DPosition().distance(arg0.get2DPosition());
+		return (float)get2DPosition().distance(arg0.get2DPosition());
 	}
 
 	@Override
@@ -205,14 +205,14 @@ public class GameCamera extends PerspectiveCamera implements Attachable{
 	public void onClick(MouseEvent me) {
 		
 	}
-	public void setAngle(double angle) {
+	public void setAngle(float angle) {
 		this.angle = angle;
 		double y = -Math.cos(Math.toRadians(-90-angle))*this.dist;
 		double z = Math.sin(Math.toRadians(-90-angle))*this.dist;
 		this.relativePosition = new Point3D(0, y, z);
 	}
 
-	public double getAngle() {
+	public float getAngle() {
 		return angle;
 	}
 }

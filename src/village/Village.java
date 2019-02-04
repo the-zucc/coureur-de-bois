@@ -19,9 +19,9 @@ public class Village implements Positionnable2D{
 	}
 
 	private Point2D position2D;
-	private double radius;
+	private float radius;
 	
-	public Village(Point2D position2D, int tipiCount, double radius, int villagerCount, Map m) {
+	public Village(Point2D position2D, int tipiCount, float radius, int villagerCount, Map m) {
 		this.radius = radius;
 		this.position2D = position2D;
 		villagers = new ArrayList<Villager>();
@@ -65,11 +65,11 @@ public class Village implements Positionnable2D{
 	}
 
 	@Override
-	public double distance2DFrom(Positionnable2D arg0) {
-		return get2DPosition().distance(arg0.get2DPosition());
+	public float distance2DFrom(Positionnable2D arg0) {
+		return (float)get2DPosition().distance(arg0.get2DPosition());
 	}
 
-	public double getRadius() {
+	public float getRadius() {
 		return radius;
 	}
 }

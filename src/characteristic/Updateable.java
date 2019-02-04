@@ -1,6 +1,6 @@
 package characteristic;
 
 public interface Updateable{
-	public void update(double secondsPassed);
+	public void update(float secondsPassed);
 	public boolean shouldUpdate();
 }

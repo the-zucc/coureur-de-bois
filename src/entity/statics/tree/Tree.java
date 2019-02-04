@@ -32,11 +32,11 @@ import java.util.concurrent.ThreadLocalRandom;
 
 public class Tree extends StaticVisibleCollidingEntity implements Reachable{
 
-	protected double health = 20;
+	protected float health = 20;
 	public double getHealth(){
 		return this.health;
 	}
-	private double reachableRadius;
+	private float reachableRadius;
     public Tree(Point3D position, Map map, Messenger messenger) {
         super(position, map, messenger);
 
@@ -66,13 +66,13 @@ public class Tree extends StaticVisibleCollidingEntity implements Reachable{
 
     }
 
-    private double fallingSpeed = 0;
+    private float fallingSpeed = 0;
     private void getCutDown(boolean shouldDropWood) {
     	if(fallingSpeed == 0){
 			int ticks = 45;
-			double fallingAccel = 0.2;
+			float fallingAccel = 0.2f;
 			Component c = getComponent();
-			double ang = Math.random()*360;
+			float ang = (float)Math.random()*360;
 			Point3D rotationAxis = new Point3D(Math.cos(ang), 0, Math.sin(ang));
 			animator.animate(()->{
 				fallingSpeed+=fallingAccel;
@@ -133,7 +133,7 @@ public class Tree extends StaticVisibleCollidingEntity implements Reachable{
 	}
 
 	@Override
-	public double computeCollidingWeight() {
+	public float computeCollidingWeight() {
 		return 1;
 	}
 
@@ -172,17 +172,17 @@ public class Tree extends StaticVisibleCollidingEntity implements Reachable{
 		return true;
 	}
 	@Override
-	public void update(double secondsPassed) {
+	public void update(float secondsPassed) {
 		super.update(secondsPassed);
 	}
 
 	@Override
-	public double computeReachableRadius() {
-		return this.treeScale * GameLogic.getMeterLength() * 2;
+	public float computeReachableRadius() {
+		return (float)this.treeScale * GameLogic.getMeterLength() * 2;
 	}
 
 	@Override
-	public double getReachableRadius() {
+	public float getReachableRadius() {
 		return this.reachableRadius;
 	}
 }

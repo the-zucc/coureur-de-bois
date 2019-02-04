@@ -174,7 +174,7 @@ public abstract class Human extends LivingEntity implements AttachableReceiver {
 
 	@Override
 	public CollisionBox buildCollisionBox() {
-		return new SphericalCollisionBox(GameLogic.getMeterLength()*0.6,this, new Point3D(0,0,0), map);
+		return new SphericalCollisionBox(GameLogic.getMeterLength()*0.6f,this, new Point3D(0,0,0), map);
 	}
 	protected void attackTree(Tree tree){
 		messenger.send("cut_down_tree_human", wieldedWeapon);

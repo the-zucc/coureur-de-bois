@@ -12,8 +12,8 @@ public class App extends Application {
 		App.launch(args);
 	}
 	
-	public static double windowWidth = 1280;
-	public static double windowHeight = 720;
+	public static float windowWidth = 1280;
+	public static float windowHeight = 720;
 	
 	private static Stage applicationWindow;
 	public static Stage getApplicationWindow(){

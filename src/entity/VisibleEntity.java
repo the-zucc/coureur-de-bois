@@ -140,8 +140,8 @@ public abstract class VisibleEntity extends Entity implements Updateable, Compon
 	}
 
 	@Override
-	public double distanceFrom(Positionnable p){
-		return p.getPosition().distance(this.getPosition());
+	public float distanceFrom(Positionnable p){
+		return (float)p.getPosition().distance(this.getPosition());
 	}
 	@Override
 	public abstract Component buildComponent();
@@ -173,8 +173,8 @@ public abstract class VisibleEntity extends Entity implements Updateable, Compon
 	public Point2D get2DPosition(){
 		return position2D;
 	}
-	public double distance2DFrom(Positionnable2D arg0){
-		return position2D.distance(arg0.get2DPosition());
+	public float distance2DFrom(Positionnable2D arg0){
+		return (float)position2D.distance(arg0.get2DPosition());
 	}
 	/**
 	 * builds the pane that will be shown when clicking on the entity's component
@@ -261,7 +261,7 @@ public abstract class VisibleEntity extends Entity implements Updateable, Compon
 	}
 	
 	@Override
-	public void update(double secondsPassed) {
+	public void update(float secondsPassed) {
 		animator.playAnimations();
 		processCallbackQueue();
 		processUpdates();

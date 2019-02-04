@@ -82,7 +82,7 @@ public abstract class VisibleCollidingEntity extends VisibleEntity implements Co
 	}
 
 	@Override
-	public abstract Point3D computeNextPosition(double secondsPassed);
+	public abstract Point3D computeNextPosition(float secondsPassed);
 
 	@Override
 	public abstract CollisionBox buildCollisionBox();
@@ -113,7 +113,7 @@ public abstract class VisibleCollidingEntity extends VisibleEntity implements Co
 	@Override
 	public abstract boolean canMoveOnCollision();
 	@Override
-	public void update(double secondsPassed){
+	public void update(float secondsPassed){
 		super.update(secondsPassed);
 		getCollisionBox().update();
 	}

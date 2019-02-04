@@ -20,6 +20,7 @@ import entity.living.animal.Beaver;
 import entity.living.animal.Fox;
 import entity.living.human.Player;
 import entity.statics.tree.PineTree;
+import entity.statics.village.Cafe;
 import entity.statics.village.House;
 import entity.wearable.LongSword;
 import entity.wearable.StandardSword;
@@ -92,8 +93,8 @@ public class Map implements ComponentOwner, Updateable, MessageReceiver{
 	}
 
 	@Override
-	public double distanceFrom(Positionnable p) {
-		return p.getPosition().distance(this.getPosition());
+	public float distanceFrom(Positionnable p) {
+		return (float)p.getPosition().distance(this.getPosition());
 	}
 
 	protected Component component;
@@ -128,20 +129,20 @@ public class Map implements ComponentOwner, Updateable, MessageReceiver{
 
 
 	protected GameCamera gameCamera;
-	protected double mapWidth;
-	protected double mapHeight;
-	public double getMapWidth(){
+	protected float mapWidth;
+	protected float mapHeight;
+	public float getMapWidth(){
 		return mapWidth;
 	}
-	public double getMapHeight(){
+	public float getMapHeight(){
 		return mapHeight;
 	}
-	private double vertexSeparationWidth;
-	private double vertexSeparationHeight;
+	private float vertexSeparationWidth;
+	private float vertexSeparationHeight;
 	
 	private float[][] heightMatrix;
 	private Point3D[][] floorVertices;
-	private double waterLevel;
+	private float waterLevel;
 
 	protected ArrayList<Collideable> collideables;
 	protected ArrayList<Updateable> updateables;
@@ -166,14 +167,14 @@ public class Map implements ComponentOwner, Updateable, MessageReceiver{
 	public Map() throws Exception{
 
 	}
-	public Map(double mapWidth,
-			double mapHeight,
-			double vertexSeparationWidth,
-			double vertexSeparationHeight,
-			double waterLevel,
+	public Map(float mapWidth,
+			float mapHeight,
+			float vertexSeparationWidth,
+			float vertexSeparationHeight,
+			float waterLevel,
 			int treeCount,
 			int villageCount,
-			double villageRadius,
+			float villageRadius,
 			int tipiCount,
 			int villagerCount,
 			int sheepCount) throws Exception
@@ -230,7 +231,7 @@ public class Map implements ComponentOwner, Updateable, MessageReceiver{
 		for (int i = 0; i < treeCount; i++) {
 			Point3D pos = PositionGenerator.generateRandom3DPositionOnFloor(this);
 			Tree tree;
-			double val = Math.random();
+			float val = (float)Math.random();
 			if(val > 0.5){
 				tree = new PineTree(pos, this, messenger);
 			}
@@ -241,7 +242,7 @@ public class Map implements ComponentOwner, Updateable, MessageReceiver{
 		}
 		for (int i = 0; i < tipiCount; i++) {
 			Point3D pos = PositionGenerator.generateRandom3DPositionOnFloor(this);
-			addEntity(new House(pos, this, messenger));
+			addEntity(new Cafe(pos, this, messenger));
 		}
 		for(int i= 0; i < villageCount; i++){
 			Point2D villagePos = PositionGenerator.generate2DPositionNotInVillages(this, villages);
@@ -263,7 +264,7 @@ public class Map implements ComponentOwner, Updateable, MessageReceiver{
 		});
 		for(int i = 0; i < sheepCount; i++) {
 			Point3D swordPos = PositionGenerator.generateRandom3DPositionOnFloor(this);
-			double val = Math.random();
+			float val = (float)Math.random();
 			if(val > 0.95) {
 				addEntity(new StandardSword(swordPos, this, messenger));
 			}else if(val > 0.9) {
@@ -378,10 +379,10 @@ public class Map implements ComponentOwner, Updateable, MessageReceiver{
 		};
 	}
 
-	public double getHeightAt(Point2D arg0){
+	public float getHeightAt(Point2D arg0){
 		try {
-			double rowHeight = vertexSeparationHeight;
-			double rowWidth = vertexSeparationWidth;
+			float rowHeight = vertexSeparationHeight;
+			float rowWidth = vertexSeparationWidth;
 			
 			
 			int row = (int)((-arg0.getY()+mapHeight/2)/rowHeight);
@@ -409,11 +410,11 @@ public class Map implements ComponentOwner, Updateable, MessageReceiver{
 
 			Point3D normal = vect1.crossProduct(vect2).normalize();
 			
-			double arg0p0x = arg0.getX()-p0.getX();
+			float arg0p0x = (float)(arg0.getX()-p0.getX());
 
-			double arg0p0z = arg0.getY()-p0.getZ();
+			float arg0p0z = (float)(arg0.getY()-p0.getZ());
 			
-			double returnVal = ((normal.getX() * (arg0p0x) + normal.getZ() * (arg0p0z)/* - letD*/)/-normal.getY()) + p0.getY();
+			float returnVal = (float)(((normal.getX() * (arg0p0x) + normal.getZ() * (arg0p0z)/* - letD*/)/-normal.getY()) + p0.getY());
 			
 			if(returnVal > waterLevel)
 				returnVal = waterLevel;
@@ -438,9 +439,9 @@ public class Map implements ComponentOwner, Updateable, MessageReceiver{
 		int zi=0;
 		int xi;
 		TriangleMesh mesh = new TriangleMesh();
-		for(double z  = mapHeight/2; z > -mapHeight/2; z-= vertexSeparationHeight, zi++){
+		for(float z  = mapHeight/2; z > -mapHeight/2; z-= vertexSeparationHeight, zi++){
 			xi=0;
-			for(double x = -mapWidth/2; x < mapWidth/2; x += vertexSeparationWidth, xi++){
+			for(float x = -mapWidth/2; x < mapWidth/2; x += vertexSeparationWidth, xi++){
 				p1 = new Point3D(x,heightMatrix[zi][xi],z);
 				floorVertices[zi][xi] = p1;
 				mesh.getPoints().addAll((float)p1.getX(), (float)p1.getY(), (float)p1.getZ());
@@ -510,7 +511,7 @@ public class Map implements ComponentOwner, Updateable, MessageReceiver{
 	boolean isUpdating = false;
 	Updateable currentUpdateable = null;
 	@Override
-	public void update(double secondsPassed) {
+	public void update(float secondsPassed) {
 		isUpdating = true;
 		/*MessageReceiver m = messenger.getReceivers().get(0);
 		for(int i = 0; i < messenger.getReceivers().size(); i++) {
@@ -524,7 +525,7 @@ public class Map implements ComponentOwner, Updateable, MessageReceiver{
 		processCallbackQueue();
 		isUpdating = false;
 	}
-	private void updateUpdateables(double secondsPassed) {
+	private void updateUpdateables(float secondsPassed) {
 		try {
 			for (Updateable u:updateables) {
 				u.update(secondsPassed);
@@ -626,11 +627,11 @@ public class Map implements ComponentOwner, Updateable, MessageReceiver{
 	}
 
 	@Override
-	public double distance2DFrom(Positionnable2D arg0) {
-		return Point2D.ZERO.distance(arg0.get2DPosition());
+	public float distance2DFrom(Positionnable2D arg0) {
+		return (float)Point2D.ZERO.distance(arg0.get2DPosition());
 	}
 
-	public double getWaterLevel() {
+	public float getWaterLevel() {
 		return waterLevel;
 	}
 
@@ -768,13 +769,13 @@ public class Map implements ComponentOwner, Updateable, MessageReceiver{
 	public Cylinder createConnection(Point3D origin, Point3D target, PhongMaterial material) {
 	    Point3D yAxis = new Point3D(0, 1, 0);
 	    Point3D diff = target.subtract(origin);
-	    double height = diff.magnitude();
+	    float height = (float)diff.magnitude();
 
 	    Point3D mid = target.midpoint(origin);
 	    Translate moveToMidpoint = new Translate(mid.getX(), mid.getY(), mid.getZ());
 
 	    Point3D axisOfRotation = diff.crossProduct(yAxis);
-	    double angle = Math.acos(diff.normalize().dotProduct(yAxis));
+	    float angle = (float)Math.acos(diff.normalize().dotProduct(yAxis));
 	    Rotate rotateAroundCenter = new Rotate(-Math.toDegrees(angle), axisOfRotation);
 
 	    Cylinder line = new Cylinder(1, height);

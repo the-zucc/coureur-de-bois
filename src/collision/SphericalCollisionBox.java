@@ -6,8 +6,8 @@ import javafx.geometry.Point3D;
 
 public class SphericalCollisionBox extends CollisionBox{
 
-	private double radius;
-	public double getRadius(){
+	private float radius;
+	public float getRadius(){
 		return radius;
 	}
 	private Point3D relativePosition;
@@ -22,7 +22,7 @@ public class SphericalCollisionBox extends CollisionBox{
 		this.absolutePosition = computePosition();
 	};
 
-	public SphericalCollisionBox(double radius, Collideable collideable, Point3D relativePosition, Map map){
+	public SphericalCollisionBox(float radius, Collideable collideable, Point3D relativePosition, Map map){
 		super(collideable, map);
 		this.radius = radius;
 		this.relativePosition = relativePosition;
@@ -51,7 +51,7 @@ public class SphericalCollisionBox extends CollisionBox{
 	}
 
 	@Override
-	public double computeCollidingWeight() {
+	public float computeCollidingWeight() {
 		return getCollideable().computeCollidingWeight();
 	}
 

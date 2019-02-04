@@ -27,13 +27,13 @@ import visual.Component;
 
 public class House extends StaticVisibleCollidingEntity implements Reachable {
 
-	private final double reachableRadius;
-	private final double radius;
-	public double getRadius(){
+	private final float reachableRadius;
+	private final float radius;
+	public float getRadius(){
 		return radius;
 	}
-	private final double height;
-	public double getHeight(){
+	private final float height;
+	public float getHeight(){
 		return height;
 	}
 	private HouseMap houseMap;
@@ -45,7 +45,8 @@ public class House extends StaticVisibleCollidingEntity implements Reachable {
 		super(position, map, messenger);
 		this.radius = 100;
 		this.height = 175;
-        /*accept("reached_entity", (params) -> {
+		/*
+        accept("reached_entity", (params) -> {
         	if(params[0] == this){
 				this.houseMap = buildHouseMap();
 				messenger.send("pause_enter_house", this);
@@ -70,6 +71,7 @@ public class House extends StaticVisibleCollidingEntity implements Reachable {
 		float houseWidth = 5*meter;
 		float houseLength = houseWidth;
 		Box houseBase = new Box(houseWidth, houseHeight, houseLength);
+		houseBase.setDrawMode(DrawMode.LINE);
 		houseBase.setMaterial(houseMaterial);
 		returnVal.getChildren().add(houseBase);
 		houseBase.setTranslateY(-houseBase.getHeight()/2);
@@ -114,7 +116,7 @@ public class House extends StaticVisibleCollidingEntity implements Reachable {
 
 		roofMesh.getTexCoords().addAll(0,0);
 		MeshView roofMeshView = new MeshView(roofMesh);
-		roofMeshView.setDrawMode(DrawMode.FILL);
+		roofMeshView.setDrawMode(DrawMode.LINE);
 		roofMeshView.setMaterial(houseMaterial);
 		roofMeshView.setTranslateY(-houseBase.getHeight());
 		returnVal.getChildren().add(roofMeshView);
@@ -137,7 +139,7 @@ public class House extends StaticVisibleCollidingEntity implements Reachable {
 	}
 
 	@Override
-	public double computeCollidingWeight() {
+	public float computeCollidingWeight() {
 		return 1;
 	}
 
@@ -179,12 +181,12 @@ public class House extends StaticVisibleCollidingEntity implements Reachable {
 	}
 
 	@Override
-	public double computeReachableRadius() {
+	public float computeReachableRadius() {
 		return 6*GameLogic.getMeterLength();
 	}
 
 	@Override
-	public double getReachableRadius() {
+	public float getReachableRadius() {
 		return this.reachableRadius;
 	}
 }

@@ -54,7 +54,7 @@ public class Fox extends Animal {
 	}
 
 	@Override
-	public double computeCollidingWeight() {
+	public float computeCollidingWeight() {
 		return 1;
 	}
 
@@ -64,7 +64,7 @@ public class Fox extends Animal {
 	}
 
 	@Override
-	public void updateActions(double secondsPassed) {
+	public void updateActions(float secondsPassed) {
 		super.updateActions(secondsPassed);
         if(getSubmissionFactor() < 0.2) {
         	messenger.send("position_3D", getPosition(), this);        	
@@ -82,7 +82,7 @@ public class Fox extends Animal {
 	}
 
 	@Override
-	protected double computeMovementSpeed() {
+	protected float computeMovementSpeed() {
 		return 5*GameLogic.getMeterLength();
 	}
 
@@ -161,7 +161,7 @@ public class Fox extends Animal {
 
 	@Override
 	public CollisionBox buildCollisionBox() {
-		return new SphericalCollisionBox(0.5*GameLogic.getMeterLength(),this, new Point3D(0,0,0), map);
+		return new SphericalCollisionBox(0.5f*GameLogic.getMeterLength(),this, new Point3D(0,0,0), map);
 	}
 
 	@Override
@@ -190,7 +190,7 @@ public class Fox extends Animal {
 	}
 
 	@Override
-	protected double computeSubmissionFactor() {
-		return Math.random();
+	protected float computeSubmissionFactor() {
+		return (float)Math.random();
 	}
 }

@@ -23,7 +23,7 @@ public abstract class MovingCollidingEntity extends VisibleCollidingEntity{
 	public abstract Component buildComponent();
 
 	@Override
-	public Point3D computeNextPosition(double secondsPassed) {
+	public Point3D computeNextPosition(float secondsPassed) {
 		if(movement != null){
 			return getPosition().add(movement.multiply(secondsPassed));
 		}
@@ -69,7 +69,7 @@ public abstract class MovingCollidingEntity extends VisibleCollidingEntity{
 			return Point3D.ZERO;
 	}
 	@Override
-	public void update(double secondsPassed){
+	public void update(float secondsPassed){
 		super.update(secondsPassed);
 		Point3D nextPos = computeNextPosition(secondsPassed);
 		moveTo(nextPos);

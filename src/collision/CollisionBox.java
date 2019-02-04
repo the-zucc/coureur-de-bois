@@ -44,7 +44,7 @@ public abstract class CollisionBox {
 	public abstract Point3D getCorrectionSphericalBox(SphericalCollisionBox b1);
 	public abstract boolean collidesSphericalBox(SphericalCollisionBox b1);
 	public abstract boolean movesOnCollision();
-	public abstract double computeCollidingWeight();
+	public abstract float computeCollidingWeight();
 
 	protected abstract boolean isTooBigForCollisionOptimization();
 	public abstract void update();

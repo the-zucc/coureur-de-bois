@@ -25,7 +25,7 @@ public class GameLoop extends AnimationTimer {
 
 	@Override
 	public void handle(long arg0) {
-		GameLogic.mainLoop((arg0-lastFrameNanos)/1e9);
+		GameLogic.mainLoop((float)((arg0-lastFrameNanos)/1e9));
 		gameCamera.update(arg0);
 		gameScene.update(arg0);
 		lastFrameNanos = arg0;

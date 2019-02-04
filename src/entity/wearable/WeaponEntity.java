@@ -118,7 +118,7 @@ public abstract class WeaponEntity extends DroppableFloatingEntity implements At
 	}
 	
 	@Override
-	public void update(double secondsPassed){
+	public void update(float secondsPassed){
 		super.update(secondsPassed);
 
 	}

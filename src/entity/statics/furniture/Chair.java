@@ -61,7 +61,7 @@ public class Chair extends StaticVisibleCollidingEntity {
 
     @Override
     public Component buildComponent() {
-        double meter = GameLogic.getMeterLength();
+        float meter = GameLogic.getMeterLength();
         Component returnVal = new Component(getId());
         Group chairBottom = Table.buildTableWithLegs(0.5, 0.5, 0.4, 0.1, new PhongMaterial(Color.BISQUE));
         returnVal.getChildren().add(chairBottom);
@@ -84,7 +84,7 @@ public class Chair extends StaticVisibleCollidingEntity {
 
     @Override
     public CollisionBox buildCollisionBox() {
-        return new SphericalCollisionBox(0.25, this, Point3D.ZERO.add(0,-0.25*GameLogic.getMeterLength(), 0), this.map);
+        return new SphericalCollisionBox(0.25f, this, Point3D.ZERO.add(0,-0.25*GameLogic.getMeterLength(), 0), this.map);
     }
 
     @Override
@@ -98,7 +98,7 @@ public class Chair extends StaticVisibleCollidingEntity {
     }
 
     @Override
-    public double computeCollidingWeight() {
+    public float computeCollidingWeight() {
         return 0;
     }
 

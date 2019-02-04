@@ -8,7 +8,7 @@ import ui.gamescene.GameScreen;
 
 public class GameLogic {
 
-	private static double meterLength = 5;
+	private static float meterLength = 5;
 
 	private static long updateCount = 0;
 	
@@ -24,7 +24,7 @@ public class GameLogic {
 		return gravity;
 	}
 	
-	public static void mainLoop(double secondsPassed) {
+	public static void mainLoop(float secondsPassed) {
 		Map currentMap = Map.getMainMap().getCurrentMap();
 		if(currentMap != null){
 			currentMap.update(secondsPassed);
@@ -49,7 +49,7 @@ public class GameLogic {
 		loop.start();
 	}
 
-	public static double getMeterLength() {
+	public static float getMeterLength() {
 		return meterLength;
 	}
 

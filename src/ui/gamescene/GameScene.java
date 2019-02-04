@@ -44,7 +44,7 @@ public class GameScene extends SubScene implements MessageReceiver, Updateable{
 		return gameCamera;
 	}
 	private Map map;
-	public GameScene(double arg1, double arg2, Stage window, Map map, Messenger messenger) {
+	public GameScene(float arg1, float arg2, Stage window, Map map, Messenger messenger) {
 		super(new Group(), arg1, arg2, true, Settings.getAntialiasingValue());
 		this.map = map;
 		this.messenger = messenger;
@@ -77,7 +77,7 @@ public class GameScene extends SubScene implements MessageReceiver, Updateable{
 
 			@Override
 			public void handle(ScrollEvent arg0) {
-				gameCamera.setAngle(gameCamera.getAngle()+(arg0.getDeltaY()/20));
+				gameCamera.setAngle((float)(gameCamera.getAngle()+(arg0.getDeltaY())/20));
 			}
 			
 		});
@@ -88,13 +88,13 @@ public class GameScene extends SubScene implements MessageReceiver, Updateable{
 	public void createConnection(Point3D origin, Point3D target, PhongMaterial material) {
 		Point3D yAxis = new Point3D(0, 1, 0);
 		Point3D diff = target.subtract(origin);
-		double height = diff.magnitude();
+		float height = (float)diff.magnitude();
 
 		Point3D mid = target.midpoint(origin);
 		Translate moveToMidpoint = new Translate(mid.getX(), mid.getY(), mid.getZ());
 
 		Point3D axisOfRotation = diff.crossProduct(yAxis);
-		double angle = Math.acos(diff.normalize().dotProduct(yAxis));
+		float angle = (float)Math.acos(diff.normalize().dotProduct(yAxis));
 		Rotate rotateAroundCenter = new Rotate(-Math.toDegrees(angle), axisOfRotation);
 
 		Cylinder line = new Cylinder(5, height);
@@ -175,11 +175,11 @@ public class GameScene extends SubScene implements MessageReceiver, Updateable{
 	}
 	private ArrayList<Box> snowFlakes = new ArrayList<Box>();
 	@Override
-	public void update(double secondsPassed) {
-		double meter = GameLogic.getMeterLength();
+	public void update(float secondsPassed) {
+		float meter = GameLogic.getMeterLength();
 		Point2D playerPos = map.getCurrentPlayer().get2DPosition();
-		double playerHeight = map.getCurrentPlayer().getPosition().getY();
-		double widthInMeters = 25;
+		float playerHeight = (float)map.getCurrentPlayer().getPosition().getY();
+		float widthInMeters = 25;
 		for(int i = 0; i < 3; i++) {
 			Box r = new Box(0.25,0.25,0.25);
 			r.setOpacity(2);

@@ -53,8 +53,8 @@ public class Component extends Group implements Positionnable{
 	}
 
 	@Override
-	public double distanceFrom(Positionnable p) {
-		return p.getPosition().distance(this.getPosition());
+	public float distanceFrom(Positionnable p) {
+		return (float)p.getPosition().distance(this.getPosition());
 	}
 
 	@Override
@@ -71,7 +71,7 @@ public class Component extends Group implements Positionnable{
 		return position2D;
 	}
 	@Override
-	public double distance2DFrom(Positionnable2D arg0) {
-		return arg0.get2DPosition().distance(position2D);
+	public float distance2DFrom(Positionnable2D arg0) {
+		return (float)arg0.get2DPosition().distance(position2D);
 	}
 }

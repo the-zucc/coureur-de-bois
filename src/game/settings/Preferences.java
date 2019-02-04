@@ -13,29 +13,29 @@ public class Preferences {
 	}
 
 
-	private static double mapHeight = 800;
-	public static double getMapHeight() {
+	private static float mapHeight = 800;
+	public static float getMapHeight() {
 		return mapHeight;
 	}
-	public static void setMapHeight(double value) {
+	public static void setMapHeight(float value) {
 		Preferences.mapHeight = value;
 	}
 
 
-	private static double mapWidth = 800;
-	public static double getMapWidth() {
+	private static float mapWidth = 800;
+	public static float getMapWidth() {
 		return mapWidth;
 	}
-	public static void setMapWidth(double value) {
+	public static void setMapWidth(float value) {
 		Preferences.mapWidth = value;
 	}
 
 
-	private static double mapDetail = 4*GameLogic.getMeterLength();
-	public static double getMapDetail() {
+	private static float mapDetail = 4*GameLogic.getMeterLength();
+	public static float getMapDetail() {
 		return mapDetail;
 	}
-	public static void setMapDetail(double mapDetail) {
+	public static void setMapDetail(float mapDetail) {
 		Preferences.mapDetail = mapDetail*GameLogic.getMeterLength();
 	}
 
@@ -49,11 +49,11 @@ public class Preferences {
 	}
 
 
-	private static double villageRadius = 10*GameLogic.getMeterLength();
-	public static double getVillageRadius(){
+	private static float villageRadius = 10*GameLogic.getMeterLength();
+	public static float getVillageRadius(){
 		return villageRadius;
 	}
-	public static void setVillageRadius(double villageRadius) {
+	public static void setVillageRadius(float villageRadius) {
 		Preferences.villageRadius = villageRadius;
 	}
 
