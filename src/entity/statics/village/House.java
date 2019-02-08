@@ -69,9 +69,9 @@ public class House extends StaticVisibleCollidingEntity implements Reachable {
 		float meter = (float)GameLogic.getMeterLength();
 		float houseHeight = 3*meter;
 		float houseWidth = 5*meter;
-		float houseLength = houseWidth;
+		float houseLength = 7*meter;
 		Box houseBase = new Box(houseWidth, houseHeight, houseLength);
-		houseBase.setDrawMode(DrawMode.LINE);
+		houseBase.setDrawMode(DrawMode.FILL);
 		houseBase.setMaterial(houseMaterial);
 		returnVal.getChildren().add(houseBase);
 		houseBase.setTranslateY(-houseBase.getHeight()/2);
@@ -116,7 +116,7 @@ public class House extends StaticVisibleCollidingEntity implements Reachable {
 
 		roofMesh.getTexCoords().addAll(0,0);
 		MeshView roofMeshView = new MeshView(roofMesh);
-		roofMeshView.setDrawMode(DrawMode.LINE);
+		roofMeshView.setDrawMode(DrawMode.FILL);
 		roofMeshView.setMaterial(houseMaterial);
 		roofMeshView.setTranslateY(-houseBase.getHeight());
 		returnVal.getChildren().add(roofMeshView);

@@ -9,6 +9,7 @@ import javafx.scene.Group;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.Box;
 import javafx.scene.shape.Mesh;
@@ -17,24 +18,24 @@ import javafx.scene.shape.TriangleMesh;
 import javafx.scene.text.Font;
 import visual.Component;
 
-public class Cafe extends House {
-    protected static String logo = getLogoURL();
+public class Market extends House {
+    private static String logo = getLogoURL();
     private static Image image = new Image(getLogoURL());
-    private static String getLogoURL() {
-        return "res/e.png";
+    protected static String getLogoURL() {
+        return "res/carrot.png";
     }
 
-    public Cafe(Point3D position, Map map, Messenger messenger) {
+    public Market(Point3D position, Map map, Messenger messenger) {
         super(position, map, messenger);
     }
     public Component buildComponent(){
-        //Component returnVal = super.buildComponent();
-        Component returnVal = new Component(getId());
+        Component returnVal = super.buildComponent();
+        Group signContainer = new Group();
         TriangleMesh signMesh = new TriangleMesh();
         float meter = GameLogic.getMeterLength();
-        float signWidth = 5*meter;
-        float signHeight = 5*meter;
-        float signDepth = 5*meter;
+        float signWidth = meter;
+        float signHeight = 0.75f*meter;
+        float signDepth = 0.1f*meter;
         float halfWidth = signWidth/2;
         float halfHeight = signHeight/2;
         float halfDepth = signDepth/2;
@@ -83,7 +84,14 @@ public class Cafe extends House {
         PhongMaterial material = new PhongMaterial();
         material.setDiffuseMap(image);
         mv.setMaterial(material);
-        returnVal.getChildren().add(mv);
+        Box sign = new Box(signWidth, signHeight, signDepth);
+
+        sign.setMaterial(new PhongMaterial(Color.SADDLEBROWN));
+
+        signContainer.getChildren().addAll(sign, mv);
+        signContainer.setTranslateX(-3*meter);
+        signContainer.setTranslateY(-2*meter);
+        returnVal.getChildren().add(signContainer);
         return returnVal;
     }
 }

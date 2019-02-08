@@ -20,7 +20,7 @@ import entity.living.animal.Beaver;
 import entity.living.animal.Fox;
 import entity.living.human.Player;
 import entity.statics.tree.PineTree;
-import entity.statics.village.Cafe;
+import entity.statics.village.Market;
 import entity.statics.village.House;
 import entity.wearable.LongSword;
 import entity.wearable.StandardSword;
@@ -31,6 +31,7 @@ import javafx.application.Platform;
 import javafx.geometry.Point2D;
 import javafx.geometry.Point3D;
 import javafx.scene.Group;
+import javafx.scene.image.Image;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
@@ -242,7 +243,7 @@ public class Map implements ComponentOwner, Updateable, MessageReceiver{
 		}
 		for (int i = 0; i < tipiCount; i++) {
 			Point3D pos = PositionGenerator.generateRandom3DPositionOnFloor(this);
-			addEntity(new Cafe(pos, this, messenger));
+			addEntity(new Market(pos, this, messenger));
 		}
 		for(int i= 0; i < villageCount; i++){
 			Point2D villagePos = PositionGenerator.generate2DPositionNotInVillages(this, villages);
@@ -439,6 +440,14 @@ public class Map implements ComponentOwner, Updateable, MessageReceiver{
 		int zi=0;
 		int xi;
 		TriangleMesh mesh = new TriangleMesh();
+
+		int textureSize = 16;
+		float textureDivWidth = 1.0f/textureSize;
+		for(int i = 0; i < textureSize; i++){
+			for(int j = 0; j < textureSize; j++){
+				mesh.getTexCoords().addAll(textureDivWidth*j, textureDivWidth*i);
+			}
+		}
 		for(float z  = mapHeight/2; z > -mapHeight/2; z-= vertexSeparationHeight, zi++){
 			xi=0;
 			for(float x = -mapWidth/2; x < mapWidth/2; x += vertexSeparationWidth, xi++){
@@ -447,16 +456,27 @@ public class Map implements ComponentOwner, Updateable, MessageReceiver{
 				mesh.getPoints().addAll((float)p1.getX(), (float)p1.getY(), (float)p1.getZ());
 				if(zi<rows-1 && xi < cols-1){
 					int idx = xi+(zi*cols);
-					mesh.getFaces().addAll(idx+1,0,idx,0,idx+cols,0);
-					mesh.getFaces().addAll(idx+cols,0,idx+cols+1,0,idx+1,0);
+					int texCoordIdxTopLeft = (zi*textureSize+xi) % (textureSize*textureSize);
+					int texCoordIdxTopRight = (zi*textureSize+xi+1) % (textureSize*textureSize);
+					int texCoordIdxBottomRight = ((zi+1)*textureSize+xi+1) % (textureSize*textureSize);
+					int texCoordIdxBottomLeft = ((zi+1)*textureSize+xi) % (textureSize*textureSize);
+					mesh.getFaces().addAll(idx+1,texCoordIdxTopRight,idx,texCoordIdxTopLeft,idx+cols,texCoordIdxBottomLeft);
+					mesh.getFaces().addAll(idx+cols,texCoordIdxBottomLeft,idx+cols+1,texCoordIdxBottomRight,idx+1,texCoordIdxTopRight);
 				}
 			}
 		}
-		mesh.getTexCoords().addAll(0,0);
+
 
 		MeshView floorMeshView = new MeshView(mesh);
 		floorMeshView.setDrawMode(DrawMode.FILL);
-		floorMeshView.setMaterial(new PhongMaterial(Color.WHITE));
+		PhongMaterial material = new PhongMaterial();
+		try{
+			Image image = new Image("res/grass.png");
+			material.setDiffuseMap(image);
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		floorMeshView.setMaterial(material);
 		floorMeshView.setTranslateX(0);
 		floorMeshView.setTranslateZ(0);
 		returnVal.getChildren().add(floorMeshView);

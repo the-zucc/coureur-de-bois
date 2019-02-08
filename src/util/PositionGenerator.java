@@ -59,6 +59,7 @@ public class PositionGenerator {
 			}
 			inVillageCount++;
 			if(inVillageCount > 10000){
+				System.out.println("Had to recreate a map, was too small for the number of villages.");
 				throw new Exception("Had to recreate a map, was too small for the number of villages.");
 			}
 		}while(inVillage);

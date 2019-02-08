@@ -2,107 +2,16 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="7eb98043-cb81-464d-82ed-93d1a3fffedb" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/../production/src/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../production/src/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../production/src/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../production/src/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../production/src/app/App.class" beforeDir="false" afterPath="$PROJECT_DIR$/../production/src/app/App.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../production/src/characteristic/Updateable.class" beforeDir="false" afterPath="$PROJECT_DIR$/../production/src/characteristic/Updateable.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../production/src/characteristic/positionnable/Collideable.class" beforeDir="false" afterPath="$PROJECT_DIR$/../production/src/characteristic/positionnable/Collideable.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../production/src/characteristic/positionnable/Moveable.class" beforeDir="false" afterPath="$PROJECT_DIR$/../production/src/characteristic/positionnable/Moveable.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../production/src/characteristic/positionnable/Positionnable.class" beforeDir="false" afterPath="$PROJECT_DIR$/../production/src/characteristic/positionnable/Positionnable.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../production/src/characteristic/positionnable/Positionnable2D.class" beforeDir="false" afterPath="$PROJECT_DIR$/../production/src/characteristic/positionnable/Positionnable2D.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../production/src/characteristic/positionnable/Reachable.class" beforeDir="false" afterPath="$PROJECT_DIR$/../production/src/characteristic/positionnable/Reachable.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../production/src/collision/CollisionBox.class" beforeDir="false" afterPath="$PROJECT_DIR$/../production/src/collision/CollisionBox.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../production/src/collision/SphericalCollisionBox.class" beforeDir="false" afterPath="$PROJECT_DIR$/../production/src/collision/SphericalCollisionBox.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../production/src/entity/GravityAffectedCollidingEntity.class" beforeDir="false" afterPath="$PROJECT_DIR$/../production/src/entity/GravityAffectedCollidingEntity.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../production/src/entity/MovingCollidingEntity.class" beforeDir="false" afterPath="$PROJECT_DIR$/../production/src/entity/MovingCollidingEntity.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../production/src/entity/VisibleCollidingEntity.class" beforeDir="false" afterPath="$PROJECT_DIR$/../production/src/entity/VisibleCollidingEntity.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../production/src/entity/VisibleEntity.class" beforeDir="false" afterPath="$PROJECT_DIR$/../production/src/entity/VisibleEntity.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../production/src/entity/drops/DroppableFloatingEntity.class" beforeDir="false" afterPath="$PROJECT_DIR$/../production/src/entity/drops/DroppableFloatingEntity.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../production/src/entity/drops/HealthBoost.class" beforeDir="false" afterPath="$PROJECT_DIR$/../production/src/entity/drops/HealthBoost.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../production/src/entity/drops/MaxHealthBoost.class" beforeDir="false" afterPath="$PROJECT_DIR$/../production/src/entity/drops/MaxHealthBoost.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../production/src/entity/drops/WoodPiece.class" beforeDir="false" afterPath="$PROJECT_DIR$/../production/src/entity/drops/WoodPiece.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../production/src/entity/living/LivingEntity.class" beforeDir="false" afterPath="$PROJECT_DIR$/../production/src/entity/living/LivingEntity.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../production/src/entity/living/animal/Animal.class" beforeDir="false" afterPath="$PROJECT_DIR$/../production/src/entity/living/animal/Animal.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../production/src/entity/living/animal/Beaver.class" beforeDir="false" afterPath="$PROJECT_DIR$/../production/src/entity/living/animal/Beaver.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../production/src/entity/living/animal/Fox.class" beforeDir="false" afterPath="$PROJECT_DIR$/../production/src/entity/living/animal/Fox.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../production/src/entity/living/human/Human.class" beforeDir="false" afterPath="$PROJECT_DIR$/../production/src/entity/living/human/Human.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../production/src/entity/living/human/Player.class" beforeDir="false" afterPath="$PROJECT_DIR$/../production/src/entity/living/human/Player.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../production/src/entity/living/human/Villager.class" beforeDir="false" afterPath="$PROJECT_DIR$/../production/src/entity/living/human/Villager.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../production/src/entity/statics/StaticVisibleCollidingEntity.class" beforeDir="false" afterPath="$PROJECT_DIR$/../production/src/entity/statics/StaticVisibleCollidingEntity.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../production/src/entity/statics/furniture/Chair.class" beforeDir="false" afterPath="$PROJECT_DIR$/../production/src/entity/statics/furniture/Chair.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../production/src/entity/statics/furniture/Table.class" beforeDir="false" afterPath="$PROJECT_DIR$/../production/src/entity/statics/furniture/Table.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../production/src/entity/statics/tree/PineTree.class" beforeDir="false" afterPath="$PROJECT_DIR$/../production/src/entity/statics/tree/PineTree.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../production/src/entity/statics/tree/Tree.class" beforeDir="false" afterPath="$PROJECT_DIR$/../production/src/entity/statics/tree/Tree.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../production/src/entity/statics/village/Cafe.class" beforeDir="false" afterPath="$PROJECT_DIR$/../production/src/entity/statics/village/Cafe.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../production/src/assets/coffee-beans.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../production/src/entity/statics/village/Cafe.class" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/../production/src/entity/statics/village/House.class" beforeDir="false" afterPath="$PROJECT_DIR$/../production/src/entity/statics/village/House.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../production/src/entity/wearable/LongSword.class" beforeDir="false" afterPath="$PROJECT_DIR$/../production/src/entity/wearable/LongSword.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../production/src/entity/wearable/StandardSword.class" beforeDir="false" afterPath="$PROJECT_DIR$/../production/src/entity/wearable/StandardSword.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../production/src/entity/wearable/WeaponEntity.class" beforeDir="false" afterPath="$PROJECT_DIR$/../production/src/entity/wearable/WeaponEntity.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../production/src/entity/wearable/WoodCuttersAxe.class" beforeDir="false" afterPath="$PROJECT_DIR$/../production/src/entity/wearable/WoodCuttersAxe.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../production/src/game/GameLogic.class" beforeDir="false" afterPath="$PROJECT_DIR$/../production/src/game/GameLogic.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../production/src/game/GameLoop.class" beforeDir="false" afterPath="$PROJECT_DIR$/../production/src/game/GameLoop.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../production/src/game/Map$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/../production/src/game/Map$1.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../production/src/game/Map.class" beforeDir="false" afterPath="$PROJECT_DIR$/../production/src/game/Map.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../production/src/game/settings/Preferences.class" beforeDir="false" afterPath="$PROJECT_DIR$/../production/src/game/settings/Preferences.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../production/src/ui/UserInterface.class" beforeDir="false" afterPath="$PROJECT_DIR$/../production/src/ui/UserInterface.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../production/src/ui/floatingpane/FloatingPane.class" beforeDir="false" afterPath="$PROJECT_DIR$/../production/src/ui/floatingpane/FloatingPane.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../production/src/ui/gamescene/GameCamera.class" beforeDir="false" afterPath="$PROJECT_DIR$/../production/src/ui/gamescene/GameCamera.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../production/src/ui/gamescene/GameScene$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/../production/src/ui/gamescene/GameScene$1.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../production/src/ui/gamescene/GameScene$2.class" beforeDir="false" afterPath="$PROJECT_DIR$/../production/src/ui/gamescene/GameScene$2.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../production/src/ui/gamescene/GameScene$3.class" beforeDir="false" afterPath="$PROJECT_DIR$/../production/src/ui/gamescene/GameScene$3.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../production/src/ui/gamescene/GameScene.class" beforeDir="false" afterPath="$PROJECT_DIR$/../production/src/ui/gamescene/GameScene.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../production/src/ui/gamescene/GameScreen$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/../production/src/ui/gamescene/GameScreen$1.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../production/src/ui/gamescene/GameScreen$2.class" beforeDir="false" afterPath="$PROJECT_DIR$/../production/src/ui/gamescene/GameScreen$2.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../production/src/ui/gamescene/GameScreen.class" beforeDir="false" afterPath="$PROJECT_DIR$/../production/src/ui/gamescene/GameScreen.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../production/src/ui/menu/Menu.class" beforeDir="false" afterPath="$PROJECT_DIR$/../production/src/ui/menu/Menu.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../production/src/util/EntityFactory.class" beforeDir="false" afterPath="$PROJECT_DIR$/../production/src/util/EntityFactory.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../production/src/util/PositionGenerator.class" beforeDir="false" afterPath="$PROJECT_DIR$/../production/src/util/PositionGenerator.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../production/src/village/HouseMap.class" beforeDir="false" afterPath="$PROJECT_DIR$/../production/src/village/HouseMap.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../production/src/village/Village.class" beforeDir="false" afterPath="$PROJECT_DIR$/../production/src/village/Village.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../production/src/visual/Component.class" beforeDir="false" afterPath="$PROJECT_DIR$/../production/src/visual/Component.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/App.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/App.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/characteristic/Updateable.java" beforeDir="false" afterPath="$PROJECT_DIR$/characteristic/Updateable.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/characteristic/positionnable/Collideable.java" beforeDir="false" afterPath="$PROJECT_DIR$/characteristic/positionnable/Collideable.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/characteristic/positionnable/Moveable.java" beforeDir="false" afterPath="$PROJECT_DIR$/characteristic/positionnable/Moveable.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/characteristic/positionnable/Positionnable.java" beforeDir="false" afterPath="$PROJECT_DIR$/characteristic/positionnable/Positionnable.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/characteristic/positionnable/Positionnable2D.java" beforeDir="false" afterPath="$PROJECT_DIR$/characteristic/positionnable/Positionnable2D.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/characteristic/positionnable/Reachable.java" beforeDir="false" afterPath="$PROJECT_DIR$/characteristic/positionnable/Reachable.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/collision/CollisionBox.java" beforeDir="false" afterPath="$PROJECT_DIR$/collision/CollisionBox.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/collision/SphericalCollisionBox.java" beforeDir="false" afterPath="$PROJECT_DIR$/collision/SphericalCollisionBox.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/entity/GravityAffectedCollidingEntity.java" beforeDir="false" afterPath="$PROJECT_DIR$/entity/GravityAffectedCollidingEntity.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/entity/MovingCollidingEntity.java" beforeDir="false" afterPath="$PROJECT_DIR$/entity/MovingCollidingEntity.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/entity/VisibleCollidingEntity.java" beforeDir="false" afterPath="$PROJECT_DIR$/entity/VisibleCollidingEntity.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/entity/VisibleEntity.java" beforeDir="false" afterPath="$PROJECT_DIR$/entity/VisibleEntity.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/entity/drops/DroppableFloatingEntity.java" beforeDir="false" afterPath="$PROJECT_DIR$/entity/drops/DroppableFloatingEntity.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/entity/living/LivingEntity.java" beforeDir="false" afterPath="$PROJECT_DIR$/entity/living/LivingEntity.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/entity/living/animal/Animal.java" beforeDir="false" afterPath="$PROJECT_DIR$/entity/living/animal/Animal.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/entity/living/animal/Beaver.java" beforeDir="false" afterPath="$PROJECT_DIR$/entity/living/animal/Beaver.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/entity/living/animal/Fox.java" beforeDir="false" afterPath="$PROJECT_DIR$/entity/living/animal/Fox.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/entity/living/human/Human.java" beforeDir="false" afterPath="$PROJECT_DIR$/entity/living/human/Human.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/entity/living/human/Player.java" beforeDir="false" afterPath="$PROJECT_DIR$/entity/living/human/Player.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/entity/living/human/Villager.java" beforeDir="false" afterPath="$PROJECT_DIR$/entity/living/human/Villager.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/entity/statics/StaticVisibleCollidingEntity.java" beforeDir="false" afterPath="$PROJECT_DIR$/entity/statics/StaticVisibleCollidingEntity.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/entity/statics/furniture/Chair.java" beforeDir="false" afterPath="$PROJECT_DIR$/entity/statics/furniture/Chair.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/entity/statics/furniture/Table.java" beforeDir="false" afterPath="$PROJECT_DIR$/entity/statics/furniture/Table.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/entity/statics/tree/Tree.java" beforeDir="false" afterPath="$PROJECT_DIR$/entity/statics/tree/Tree.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/entity/statics/village/Cafe.java" beforeDir="false" afterPath="$PROJECT_DIR$/entity/statics/village/Cafe.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/coffee-beans.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/entity/statics/village/Cafe.java" beforeDir="false" afterPath="$PROJECT_DIR$/entity/statics/village/Market.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/entity/statics/village/House.java" beforeDir="false" afterPath="$PROJECT_DIR$/entity/statics/village/House.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/entity/wearable/WeaponEntity.java" beforeDir="false" afterPath="$PROJECT_DIR$/entity/wearable/WeaponEntity.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/game/GameLogic.java" beforeDir="false" afterPath="$PROJECT_DIR$/game/GameLogic.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/game/GameLoop.java" beforeDir="false" afterPath="$PROJECT_DIR$/game/GameLoop.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/game/Map.java" beforeDir="false" afterPath="$PROJECT_DIR$/game/Map.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/game/settings/Preferences.java" beforeDir="false" afterPath="$PROJECT_DIR$/game/settings/Preferences.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ui/UserInterface.java" beforeDir="false" afterPath="$PROJECT_DIR$/ui/UserInterface.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ui/floatingpane/FloatingPane.java" beforeDir="false" afterPath="$PROJECT_DIR$/ui/floatingpane/FloatingPane.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ui/gamescene/GameCamera.java" beforeDir="false" afterPath="$PROJECT_DIR$/ui/gamescene/GameCamera.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ui/gamescene/GameScene.java" beforeDir="false" afterPath="$PROJECT_DIR$/ui/gamescene/GameScene.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ui/gamescene/GameScreen.java" beforeDir="false" afterPath="$PROJECT_DIR$/ui/gamescene/GameScreen.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ui/menu/Menu.java" beforeDir="false" afterPath="$PROJECT_DIR$/ui/menu/Menu.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/village/HouseMap.java" beforeDir="false" afterPath="$PROJECT_DIR$/village/HouseMap.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/village/Village.java" beforeDir="false" afterPath="$PROJECT_DIR$/village/Village.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/visual/Component.java" beforeDir="false" afterPath="$PROJECT_DIR$/visual/Component.java" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -113,14 +22,35 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="Cafe.java" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/entity/statics/village/Cafe.java">
+      <file leaf-file-name="Market.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/entity/statics/village/Market.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="324">
-              <caret line="69" column="33" lean-forward="true" selection-start-line="69" selection-start-column="33" selection-end-line="69" selection-end-column="33" />
+            <state relative-caret-position="484">
+              <caret line="80" column="29" selection-start-line="80" selection-start-column="29" selection-end-line="80" selection-end-column="29" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Map.java" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/game/Map.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="432">
+              <caret line="474" column="42" selection-start-line="474" selection-start-column="42" selection-end-line="474" selection-end-column="42" />
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="House.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/entity/statics/village/House.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="22">
+              <caret line="116" column="44" selection-start-line="116" selection-start-column="44" selection-end-line="116" selection-end-column="44" />
             </state>
           </provider>
         </entry>
@@ -138,11 +68,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>should</find>
-      <find>buildHouseMap</find>
-      <find>setMAp</find>
-      <find>TriangleMes</find>
-      <find>tipi</find>
       <find>addEn</find>
       <find>heightMatrix</find>
       <find>generate</find>
@@ -168,6 +93,11 @@
       <find>reach</find>
       <find>Reachable</find>
       <find>Collideable</find>
+      <find>accept</find>
+      <find>PHon</find>
+      <find>Phon</find>
+      <find>Draw</find>
+      <find>Component()</find>
     </findStrings>
     <replaceStrings>
       <replace>float</replace>
@@ -193,7 +123,6 @@
         <option value="$PROJECT_DIR$/characteristic/positionnable/Positionnable2D.java" />
         <option value="$PROJECT_DIR$/characteristic/positionnable/Reachable.java" />
         <option value="$PROJECT_DIR$/characteristic/Updateable.java" />
-        <option value="$PROJECT_DIR$/game/Map.java" />
         <option value="$PROJECT_DIR$/characteristic/positionnable/Moveable.java" />
         <option value="$PROJECT_DIR$/characteristic/positionnable/Positionnable.java" />
         <option value="$PROJECT_DIR$/entity/MovingCollidingEntity.java" />
@@ -223,20 +152,22 @@
         <option value="$PROJECT_DIR$/entity/living/human/Villager.java" />
         <option value="$PROJECT_DIR$/entity/statics/StaticVisibleCollidingEntity.java" />
         <option value="$PROJECT_DIR$/entity/statics/furniture/Chair.java" />
-        <option value="$PROJECT_DIR$/entity/statics/village/House.java" />
         <option value="$PROJECT_DIR$/entity/statics/tree/Tree.java" />
         <option value="$PROJECT_DIR$/entity/statics/furniture/Table.java" />
         <option value="$PROJECT_DIR$/ui/menu/Menu.java" />
         <option value="$PROJECT_DIR$/entity/living/human/Human.java" />
         <option value="$PROJECT_DIR$/entity/statics/village/Cafe.java" />
+        <option value="$PROJECT_DIR$/entity/statics/village/House.java" />
+        <option value="$PROJECT_DIR$/entity/statics/village/Market.java" />
+        <option value="$PROJECT_DIR$/game/Map.java" />
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds">
-    <option name="x" value="-7" />
-    <option name="y" value="2" />
-    <option name="width" value="1378" />
-    <option name="height" value="743" />
+  <component name="ProjectFrameBounds" extendedState="6">
+    <option name="x" value="10" />
+    <option name="y" value="52" />
+    <option name="width" value="1386" />
+    <option name="height" value="788" />
   </component>
   <component name="ProjectView">
     <navigator proportions="" version="1">
@@ -244,8 +175,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="AndroidView" />
-      <pane id="Scope" />
       <pane id="PackagesPane" />
       <pane id="ProjectPane">
         <subPane>
@@ -257,34 +186,7 @@
             <path>
               <item name="src" type="b2602c69:ProjectViewProjectNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="animator" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="src" type="b2602c69:ProjectViewProjectNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="app" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="src" type="b2602c69:ProjectViewProjectNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="assets" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="src" type="b2602c69:ProjectViewProjectNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="characteristic" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="src" type="b2602c69:ProjectViewProjectNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="characteristic" type="462c0819:PsiDirectoryNode" />
-              <item name="attachable" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="src" type="b2602c69:ProjectViewProjectNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="characteristic" type="462c0819:PsiDirectoryNode" />
-              <item name="positionnable" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="src" type="b2602c69:ProjectViewProjectNode" />
@@ -385,6 +287,8 @@
           <select />
         </subPane>
       </pane>
+      <pane id="Scope" />
+      <pane id="AndroidView" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -452,29 +356,29 @@
     <option name="totallyTimeSpent" value="47614000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-7" y="2" width="1378" height="743" extended-state="0" />
+    <frame x="-8" y="-8" width="1382" height="754" extended-state="6" />
     <editor active="true" />
     <layout>
       <window_info anchor="right" id="Palette" order="5" />
       <window_info anchor="bottom" id="TODO" order="12" />
-      <window_info anchor="bottom" id="Messages" order="10" weight="0.3280255" />
       <window_info anchor="right" id="Palette&#9;" order="3" />
       <window_info id="Image Layers" order="4" />
       <window_info anchor="right" id="Capture Analysis" order="2" />
       <window_info anchor="bottom" id="Event Log" order="4" side_tool="true" />
       <window_info anchor="right" id="Maven Projects" order="7" />
-      <window_info anchor="bottom" id="Run" order="7" weight="0.3312102" />
+      <window_info anchor="bottom" id="Run" order="7" weight="0.3060921" />
       <window_info anchor="bottom" id="Version Control" order="1" />
       <window_info anchor="bottom" id="Terminal" order="2" />
       <window_info id="Capture Tool" order="2" />
       <window_info id="Designer" order="0" />
-      <window_info content_ui="combo" id="Project" order="5" visible="true" weight="0.17988253" />
+      <window_info content_ui="combo" id="Project" order="5" visible="true" weight="0.17935579" />
       <window_info id="Structure" order="6" side_tool="true" weight="0.25" />
       <window_info anchor="right" id="Ant Build" order="8" weight="0.25" />
       <window_info id="UI Designer" order="1" />
       <window_info anchor="right" id="Theme Preview" order="0" />
       <window_info anchor="bottom" id="Debug" order="8" weight="0.39808917" />
       <window_info id="Favorites" order="3" side_tool="true" />
+      <window_info anchor="bottom" id="Messages" order="10" weight="0.3280255" />
       <window_info anchor="bottom" id="Inspection" order="11" weight="0.4" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="6" type="SLIDING" weight="0.4" />
       <window_info anchor="bottom" id="Docker" order="0" show_stripe_button="false" />
@@ -503,18 +407,21 @@
     </watches-manager>
   </component>
   <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/entity/statics/village/Market.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1518">
+          <caret line="69" column="33" lean-forward="true" selection-start-line="69" selection-start-column="33" selection-end-line="69" selection-end-column="33" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="jar:///usr/lib/jvm/java-8-openjdk-amd64/jre/lib/ext/jfxrt.jar!/com/sun/glass/ui/gtk/GtkApplication.class" />
     <entry file="file://$PROJECT_DIR$/perlin/PerlinNoise.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1782">
           <caret line="85" selection-start-line="85" selection-end-line="85" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/util/PositionGenerator.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1408">
-          <caret line="72" column="25" selection-start-line="72" selection-start-column="25" selection-end-line="72" selection-end-column="25" />
         </state>
       </provider>
     </entry>
@@ -543,16 +450,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="176">
           <caret line="9" column="16" selection-start-line="9" selection-start-column="16" selection-end-line="9" selection-end-column="16" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/game/Map.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-190">
-          <caret line="630" column="22" selection-start-line="630" selection-start-column="22" selection-end-line="630" selection-end-column="22" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -623,13 +520,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1298">
           <caret line="70" column="13" selection-start-line="70" selection-start-column="5" selection-end-line="70" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/characteristic/attachable/Attachable.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="88">
-          <caret line="6" column="17" selection-start-line="6" selection-start-column="17" selection-end-line="6" selection-end-column="17" />
         </state>
       </provider>
     </entry>
@@ -829,13 +719,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/entity/statics/village/House.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2976">
-          <caret line="187" column="26" selection-start-line="187" selection-start-column="20" selection-end-line="187" selection-end-column="26" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/characteristic/positionnable/Reachable.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="132">
@@ -843,13 +726,41 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/assets/coffee-beans.jpg">
-      <provider selected="true" editor-type-id="images" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/entity/statics/village/Cafe.java">
+    <entry file="file://$PROJECT_DIR$/entity/statics/village/Market.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="324">
-          <caret line="69" column="33" lean-forward="true" selection-start-line="69" selection-start-column="33" selection-end-line="69" selection-end-column="33" />
+        <state relative-caret-position="484">
+          <caret line="80" column="29" selection-start-line="80" selection-start-column="29" selection-end-line="80" selection-end-column="29" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/characteristic/attachable/Attachable.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="88">
+          <caret line="6" column="17" selection-start-line="6" selection-start-column="17" selection-end-line="6" selection-end-column="17" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/util/PositionGenerator.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-985">
+          <caret line="12" selection-start-line="12" selection-end-line="12" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/entity/statics/village/House.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="22">
+          <caret line="116" column="44" selection-start-line="116" selection-start-column="44" selection-end-line="116" selection-end-column="44" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/game/Map.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="432">
+          <caret line="474" column="42" selection-start-line="474" selection-start-column="42" selection-end-line="474" selection-end-column="42" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
