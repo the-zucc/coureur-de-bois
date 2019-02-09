@@ -443,9 +443,11 @@ public class Map implements ComponentOwner, Updateable, MessageReceiver{
 
 		int textureSize = 16;
 		float textureDivWidth = 1.0f/textureSize;
-		for(int i = 0; i < textureSize; i++){
-			for(int j = 0; j < textureSize; j++){
-				mesh.getTexCoords().addAll(textureDivWidth*j, textureDivWidth*i);
+		for(int i = 0; i <= textureSize; i++){
+			for(int j = 0; j <= textureSize; j++){
+				mesh.getTexCoords().addAll(
+						textureDivWidth*j, textureDivWidth*i
+				);
 			}
 		}
 		for(float z  = mapHeight/2; z > -mapHeight/2; z-= vertexSeparationHeight, zi++){
@@ -456,10 +458,19 @@ public class Map implements ComponentOwner, Updateable, MessageReceiver{
 				mesh.getPoints().addAll((float)p1.getX(), (float)p1.getY(), (float)p1.getZ());
 				if(zi<rows-1 && xi < cols-1){
 					int idx = xi+(zi*cols);
-					int texCoordIdxTopLeft = (zi*textureSize+xi) % (textureSize*textureSize);
-					int texCoordIdxTopRight = (zi*textureSize+xi+1) % (textureSize*textureSize);
-					int texCoordIdxBottomRight = ((zi+1)*textureSize+xi+1) % (textureSize*textureSize);
-					int texCoordIdxBottomLeft = ((zi+1)*textureSize+xi) % (textureSize*textureSize);
+
+					int texCoordIdxZ = (zi % (textureSize)) * (textureSize+1);
+					int texCoordIdxZPlus1 = ((zi) % (textureSize) + 1) * (textureSize+1);
+
+					int texCoordIdxX = xi % (textureSize);
+					int texCoordIdxXPlus1 = (xi) % (textureSize) + 1;
+
+					int texCoordIdxTopLeft = texCoordIdxZ + texCoordIdxX;
+					int texCoordIdxTopRight = texCoordIdxZ + texCoordIdxXPlus1;
+					int texCoordIdxBottomRight = texCoordIdxZPlus1 + texCoordIdxXPlus1;
+					int texCoordIdxBottomLeft = texCoordIdxZPlus1 + texCoordIdxX;
+
+
 					mesh.getFaces().addAll(idx+1,texCoordIdxTopRight,idx,texCoordIdxTopLeft,idx+cols,texCoordIdxBottomLeft);
 					mesh.getFaces().addAll(idx+cols,texCoordIdxBottomLeft,idx+cols+1,texCoordIdxBottomRight,idx+1,texCoordIdxTopRight);
 				}
@@ -471,7 +482,7 @@ public class Map implements ComponentOwner, Updateable, MessageReceiver{
 		floorMeshView.setDrawMode(DrawMode.FILL);
 		PhongMaterial material = new PhongMaterial();
 		try{
-			Image image = new Image("res/grass.png");
+			Image image = new Image("res/grass_cartoon.png");
 			material.setDiffuseMap(image);
 		}catch(Exception e){
 			e.printStackTrace();

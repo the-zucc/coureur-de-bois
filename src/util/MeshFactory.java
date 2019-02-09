@@ -6,7 +6,7 @@ import javafx.scene.shape.MeshView;
 import javafx.scene.shape.TriangleMesh;
 
 public class MeshFactory {
-    public static MeshView buildRegularPyramid(int sides, float negativeHeight, float radius){
+    public static MeshView buildRegularPyramid(int sides, float negativeHeight, float radius, PhongMaterial material){
         float height = -negativeHeight;
         TriangleMesh mesh = new TriangleMesh();
         double angle = Math.toRadians(360/sides);
@@ -19,15 +19,18 @@ public class MeshFactory {
         }
         mesh.getPoints().addAll(0, height,0);
 
-        mesh.getTexCoords().addAll(0,0);
-
+        mesh.getTexCoords().addAll(
+                0.0f, 0.0f,
+                0.5f, 1.0f,
+                1.0f, 0.0f
+        );
         for (int i = 1; i < sides; i++) {//generate the faces based on the vertices
-            mesh.getFaces().addAll(i,0,i+1,0,sides+1,0);
+            mesh.getFaces().addAll(i,0,i+1,2,sides+1,1);
         }
-        mesh.getFaces().addAll(sides,0, 1, 0, sides+1,0);
+        mesh.getFaces().addAll(sides,0, 1, 2, sides+1,1);
 
         MeshView mv = new MeshView(mesh);
-        mv.setMaterial(new PhongMaterial(Color.PINK));
+        mv.setMaterial(material);
         return mv;
     }
 

@@ -20,9 +20,12 @@ import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
+import javafx.scene.shape.MeshView;
+import javafx.scene.shape.TriangleMesh;
 import visual.Component;
 import javafx.scene.shape.Box;
 import javafx.scene.transform.Rotate;
@@ -95,12 +98,57 @@ public class Tree extends StaticVisibleCollidingEntity implements Reachable{
     public Component buildComponent() {
         Component returnVal = new Component(getId());
 
-        double meter = GameLogic.getMeterLength();
+        float meter = GameLogic.getMeterLength();
         Box trunk = new Box(0.6*meter, 2*meter, 0.6*meter);
-        Box leaves = new Box(2*meter, 1.8*meter, 2*meter);
+        TriangleMesh leaves = new TriangleMesh();
+        float leavesWidth = 2*meter;
+        float leavesLength = leavesWidth;
+        float leavesHeight = 1.8f*meter;
+        float halfWidth = leavesWidth/2;
+        float halfHeight = leavesHeight/2;
+        float halfLength = leavesLength/2;
+        leaves.getPoints().addAll(
+        		-halfWidth, halfHeight, -halfLength,//front left bottom
+				halfWidth, halfHeight, -halfLength,//front right bottom
+				halfWidth, -halfHeight, -halfLength,//front right top
+				-halfWidth, -halfHeight, -halfLength,//front left top
+				halfWidth, halfHeight, halfLength,//rear right bottom
+				-halfWidth, halfHeight, halfLength,//rear left bottom
+				-halfWidth, -halfHeight, halfLength,//rear left top
+				halfWidth, -halfHeight, halfLength//rear right top
+		);
+        leaves.getTexCoords().addAll(
+        		0.0f, 0.0f,
+				1.0f, 0.0f,
+				1.0f, 1.0f,
+				0.0f, 1.0f
+		);
+        leaves.getFaces().addAll(
+        		//front face
+        		0,0, 1,1, 2,2,
+				2,2, 3,3, 0,0,
+				//right face
+				1,0, 4,1, 7,2,
+				7,2, 2,3, 1,0,
+				//rear face
+				4,0, 5,1, 6,2,
+				6,2, 7,3, 4,0,
+				//left face
+				5,0, 0,1, 3,2,
+				3,2, 6,3, 5,0,
+				//top face
+				3,0, 2,1, 7,2,
+				7,2, 6,3, 3,0
+		);
+        leaves.getTexCoords().addAll(0.0f, 0.0f);
+        //Box leaves = new Box(leavesWidth, 1.8*meter, 2*meter);
+		MeshView leavesMeshView = new MeshView(leaves);
 
-        leaves.setTranslateY(-(trunk.getHeight()+leaves.getHeight()/2));
-        leaves.setMaterial(new PhongMaterial(Color.WHITE));
+        leavesMeshView.setTranslateY(-(trunk.getHeight()+halfHeight));
+
+        PhongMaterial material = new PhongMaterial();
+        material.setDiffuseMap(new Image("res/leaves-cartoon-2.png"));
+        leavesMeshView.setMaterial(material);
 
         trunk.setMaterial(new PhongMaterial(Color.SADDLEBROWN));
         trunk.setTranslateY(-trunk.getHeight()/2);
@@ -113,7 +161,7 @@ public class Tree extends StaticVisibleCollidingEntity implements Reachable{
 
         Point3D position = getPosition();
 
-        returnVal.getChildren().addAll(leaves, trunk);
+        returnVal.getChildren().addAll(leavesMeshView, trunk);
         return returnVal;
     }
 

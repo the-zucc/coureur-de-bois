@@ -5,6 +5,7 @@ import game.GameLogic;
 import game.Map;
 import javafx.geometry.Point3D;
 import javafx.scene.Group;
+import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.Box;
@@ -16,14 +17,8 @@ import visual.Component;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class PineTree extends Tree {
-	private PhongMaterial material;
     public PineTree(Point3D position, Map map, Messenger messenger) {
         super(position, map, messenger);
-        if(Math.random() > 0.7) {
-        	material = new PhongMaterial(Color.DARKGREEN);        	
-        }else {
-        	material = new PhongMaterial(Color.WHITE);
-        }
     }
 
     @Override
@@ -46,31 +41,30 @@ public class PineTree extends Tree {
 
     private Component recurseBuildPyramids(String id, float baseSectionHeight, float baseSectionRadius, int sectionCount){
         Component returnVal = new Component(getId());
-
-        returnVal.getChildren().add(pyramidCreate(-baseSectionHeight/3,baseSectionHeight+(float)(0.3*GameLogic.getMeterLength()) ,baseSectionRadius,null, sectionCount));
+        PhongMaterial material = new PhongMaterial();
+        material.setDiffuseMap(new Image("res/leaves-cartoon.png"));
+        returnVal.getChildren().add(pyramidCreate(-baseSectionHeight/3,baseSectionHeight+(float)(0.3*GameLogic.getMeterLength()) ,baseSectionRadius,null, sectionCount, material));
 
         return returnVal;
     }
 
-    private Group pyramidCreate(float translateY, float sectionHeight, float sectionRadius, Group group, int remainingSectionCount){
+    private Group pyramidCreate(float translateY, float sectionHeight, float sectionRadius, Group group, int remainingSectionCount, PhongMaterial material){
         Group returnVal;
         if(group == null) {
             returnVal = new Group();
         }
         else
             returnVal = group;
-
-        MeshView mv1 = MeshFactory.buildRegularPyramid(6, sectionHeight, sectionRadius);
+        MeshView mv1 = MeshFactory.buildRegularPyramid(6, sectionHeight, sectionRadius, material);
         mv1.setRotationAxis(Rotate.Y_AXIS);
         mv1.setRotate(Math.random()*Math.PI*2);
         mv1.setTranslateY(translateY);
         mv1.setMaterial(material);
-        
 
         returnVal.getChildren().add(mv1);
 
         if(remainingSectionCount > 0){
-            return pyramidCreate((float)returnVal.getBoundsInLocal().getMinY()+sectionHeight/2, sectionHeight*0.75f, sectionRadius*0.65f, returnVal, remainingSectionCount-1);
+            return pyramidCreate((float)returnVal.getBoundsInLocal().getMinY()+sectionHeight/2, sectionHeight*0.75f, sectionRadius*0.65f, returnVal, remainingSectionCount-1, material);
         }
         else
             return returnVal;
